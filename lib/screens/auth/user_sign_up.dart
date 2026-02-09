@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../services/auth_service.dart';
+import '../home/home_screen.dart';
 
 class UserSignUpPage extends StatefulWidget {
   const UserSignUpPage({super.key});
@@ -13,6 +15,7 @@ class _UserSignUpPageState extends State<UserSignUpPage> {
   static const muted = Color(0xFF5E6E66);
 
   final _formKey = GlobalKey<FormState>();
+  final _authService = AuthService();
 
   final _nameCtrl = TextEditingController();
   final _emailCtrl = TextEditingController();
@@ -22,6 +25,7 @@ class _UserSignUpPageState extends State<UserSignUpPage> {
 
   bool _hidePass1 = true;
   bool _hidePass2 = true;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -31,6 +35,69 @@ class _UserSignUpPageState extends State<UserSignUpPage> {
     _passCtrl.dispose();
     _confirmCtrl.dispose();
     super.dispose();
+  }
+
+  Future<void> _signUp() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() => _isLoading = true);
+
+    final result = await _authService.createUserAccount(
+      name: _nameCtrl.text.trim(),
+      email: _emailCtrl.text.trim(),
+      phone: _phoneCtrl.text.trim(),
+      password: _passCtrl.text,
+    );
+
+    if (!mounted) return;
+    setState(() => _isLoading = false);
+
+    if (result.isSuccess) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const HomeScreen()),
+        (route) => false,
+      );
+    } else {
+      _showErrorDialog(result.errorMessage!);
+    }
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: const Row(
+            children: [
+              Icon(Icons.error_outline, color: Colors.redAccent),
+              SizedBox(width: 8),
+              Text('خطأ', style: TextStyle(fontWeight: FontWeight.w800)),
+            ],
+          ),
+          content: Text(
+            message,
+            style: const TextStyle(fontSize: 15, height: 1.5),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text(
+                'حسناً',
+                style: TextStyle(
+                  color: primaryGreen,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   InputDecoration _fieldDecoration(String hint, {Widget? suffix}) {
@@ -70,8 +137,14 @@ class _UserSignUpPageState extends State<UserSignUpPage> {
         text: TextSpan(
           style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800),
           children: [
-            TextSpan(text: text, style: const TextStyle(color: muted)),
-            const TextSpan(text: ' *', style: TextStyle(color: Colors.red)),
+            TextSpan(
+              text: text,
+              style: const TextStyle(color: muted),
+            ),
+            const TextSpan(
+              text: ' *',
+              style: TextStyle(color: Colors.red),
+            ),
           ],
         ),
       ),
@@ -109,7 +182,6 @@ class _UserSignUpPageState extends State<UserSignUpPage> {
                 padding: const EdgeInsets.fromLTRB(22, 14, 22, 18),
                 child: Column(
                   children: [
-
                     Row(
                       children: [
                         InkWell(
@@ -161,7 +233,9 @@ class _UserSignUpPageState extends State<UserSignUpPage> {
                             decoration: _fieldDecoration('البريد الإلكتروني'),
                             validator: (v) {
                               final req = _requiredValidator(
-                                  v, 'البريد الإلكتروني مطلوب');
+                                v,
+                                'البريد الإلكتروني مطلوب',
+                              );
                               if (req != null) return req;
                               final value = v!.trim();
                               if (!value.contains('@') ||
@@ -182,11 +256,15 @@ class _UserSignUpPageState extends State<UserSignUpPage> {
                             textInputAction: TextInputAction.next,
                             decoration: _fieldDecoration('رقم الجوال'),
                             validator: (v) {
-                              final req =
-                              _requiredValidator(v, 'رقم الجوال مطلوب');
+                              final req = _requiredValidator(
+                                v,
+                                'رقم الجوال مطلوب',
+                              );
                               if (req != null) return req;
                               final value = v!.trim();
-                              if (value.length < 9) return 'رقم الجوال غير صحيح';
+                              if (value.length < 9) {
+                                return 'رقم الجوال غير صحيح';
+                              }
                               return null;
                             },
                           ),
@@ -273,6 +351,7 @@ class _UserSignUpPageState extends State<UserSignUpPage> {
                               }
                               return null;
                             },
+                            onFieldSubmitted: (_) => _signUp(),
                           ),
 
                           const SizedBox(height: 22),
@@ -289,19 +368,22 @@ class _UserSignUpPageState extends State<UserSignUpPage> {
                                 ),
                                 elevation: 0,
                               ),
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(
-                                      content: Text('تم التحقق ✅ جاهز لإنشاء الحساب'),
+                              onPressed: _isLoading ? null : _signUp,
+                              child: _isLoading
+                                  ? const SizedBox(
+                                      width: 24,
+                                      height: 24,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                        strokeWidth: 2.5,
+                                      ),
+                                    )
+                                  : const Text(
+                                      'تسجيل مستخدم جديد',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w900,
+                                      ),
                                     ),
-                                  );
-                                }
-                              },
-                              child: const Text(
-                                'تسجيل مستخدم جديد',
-                                style: TextStyle(fontWeight: FontWeight.w900),
-                              ),
                             ),
                           ),
 
@@ -323,7 +405,9 @@ class _UserSignUpPageState extends State<UserSignUpPage> {
                                 style: TextButton.styleFrom(
                                   foregroundColor: primaryGreen,
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 6),
+                                    horizontal: 10,
+                                    vertical: 6,
+                                  ),
                                 ),
                                 child: const Text(
                                   'سجل دخول الآن',

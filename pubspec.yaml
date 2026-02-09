@@ -1,17 +1,24 @@
 name: silah_app
 description: "SILAH Flutter application"
-publish_to: 'none'
+publish_to: "none"
 
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.10.7
+  sdk: ^3.9.0
 
 dependencies:
   flutter:
     sdk: flutter
 
   cupertino_icons: ^1.0.8
+  firebase_core: ^4.4.0
+  cloud_firestore: ^6.1.2
+  firebase_messaging: ^16.1.1
+  firebase_storage: ^13.0.6
+  firebase_auth: ^6.1.4
+  google_sign_in: ^7.2.0
+  shared_preferences: ^2.5.4
 
 dev_dependencies:
   flutter_test:
@@ -24,3 +31,14 @@ flutter:
 
   assets:
     - assets/images/silah_logo1.png
+  fonts:
+    - family: Cairo
+      fonts:
+        - asset: assets/fonts/Cairo-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Cairo-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/Cairo-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Cairo-SemiBold.ttf
+          weight: 600

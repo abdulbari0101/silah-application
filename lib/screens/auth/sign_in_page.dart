@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../services/auth_service.dart';
+import '../home/home_screen.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -15,14 +17,77 @@ class _SignInPageState extends State<SignInPage> {
   final _formKey = GlobalKey<FormState>();
   final _loginCtrl = TextEditingController(); // email or phone
   final _passCtrl = TextEditingController();
+  final _authService = AuthService();
 
   bool _hidePass = true;
+  bool _isLoading = false;
 
   @override
   void dispose() {
     _loginCtrl.dispose();
     _passCtrl.dispose();
     super.dispose();
+  }
+
+  Future<void> _signIn() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() => _isLoading = true);
+
+    final result = await _authService.signInWithEmailAndPassword(
+      email: _loginCtrl.text.trim(),
+      password: _passCtrl.text,
+    );
+
+    if (!mounted) return;
+    setState(() => _isLoading = false);
+
+    if (result.isSuccess) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const HomeScreen()),
+        (route) => false,
+      );
+    } else {
+      _showErrorDialog(result.errorMessage!);
+    }
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: const Row(
+            children: [
+              Icon(Icons.error_outline, color: Colors.redAccent),
+              SizedBox(width: 8),
+              Text('خطأ', style: TextStyle(fontWeight: FontWeight.w800)),
+            ],
+          ),
+          content: Text(
+            message,
+            style: const TextStyle(fontSize: 15, height: 1.5),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text(
+                'حسناً',
+                style: TextStyle(
+                  color: primaryGreen,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   InputDecoration _dec(String hint, {Widget? suffix}) {
@@ -139,10 +204,11 @@ class _SignInPageState extends State<SignInPage> {
                           TextFormField(
                             controller: _loginCtrl,
                             textInputAction: TextInputAction.next,
-                            decoration: _dec('البريد الإلكتروني أو رقم الجوال'),
+                            keyboardType: TextInputType.emailAddress,
+                            decoration: _dec('البريد الإلكتروني'),
                             validator: (v) {
                               if (v == null || v.trim().isEmpty) {
-                                return 'الرجاء إدخال البريد أو رقم الجوال';
+                                return 'الرجاء إدخال البريد الإلكتروني';
                               }
                               return null;
                             },
@@ -157,17 +223,22 @@ class _SignInPageState extends State<SignInPage> {
                             decoration: _dec(
                               'كلمة المرور',
                               suffix: IconButton(
-                                onPressed: () => setState(() => _hidePass = !_hidePass),
+                                onPressed: () =>
+                                    setState(() => _hidePass = !_hidePass),
                                 icon: Icon(
-                                  _hidePass ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                                  _hidePass
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.visibility_outlined,
                                   color: const Color(0xFF8FA197),
                                 ),
                               ),
                             ),
                             validator: (v) {
-                              if (v == null || v.isEmpty) return 'الرجاء إدخال كلمة المرور';
+                              if (v == null || v.isEmpty)
+                                return 'الرجاء إدخال كلمة المرور';
                               return null;
                             },
+                            onFieldSubmitted: (_) => _signIn(),
                           ),
 
                           const SizedBox(height: 10),
@@ -177,7 +248,9 @@ class _SignInPageState extends State<SignInPage> {
                             child: TextButton(
                               onPressed: () {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('نسيت كلمة المرور (لاحقًا)')),
+                                  const SnackBar(
+                                    content: Text('نسيت كلمة المرور (لاحقًا)'),
+                                  ),
                                 );
                               },
                               style: TextButton.styleFrom(
@@ -186,7 +259,10 @@ class _SignInPageState extends State<SignInPage> {
                               ),
                               child: const Text(
                                 'هل نسيت كلمة المرور؟',
-                                style: TextStyle(fontWeight: FontWeight.w800, fontSize: 12),
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 12,
+                                ),
                               ),
                             ),
                           ),
@@ -205,20 +281,22 @@ class _SignInPageState extends State<SignInPage> {
                                   borderRadius: BorderRadius.circular(18),
                                 ),
                               ),
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  // رؤوس أقلام:
-                                  // 1) Firebase Auth signInWithEmailAndPassword
-                                  // 2) أو تسجيل بالجوال (لاحقًا)
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('تم تسجيل الدخول ✅')),
-                                  );
-                                }
-                              },
-                              child: const Text(
-                                'تسجيل الدخول',
-                                style: TextStyle(fontWeight: FontWeight.w900),
-                              ),
+                              onPressed: _isLoading ? null : _signIn,
+                              child: _isLoading
+                                  ? const SizedBox(
+                                      width: 24,
+                                      height: 24,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                        strokeWidth: 2.5,
+                                      ),
+                                    )
+                                  : const Text(
+                                      'تسجيل الدخول',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w900,
+                                      ),
+                                    ),
                             ),
                           ),
 
@@ -242,11 +320,17 @@ class _SignInPageState extends State<SignInPage> {
                                 },
                                 style: TextButton.styleFrom(
                                   foregroundColor: primaryGreen,
-                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 10,
+                                    vertical: 6,
+                                  ),
                                 ),
                                 child: const Text(
                                   'سجل الآن',
-                                  style: TextStyle(fontWeight: FontWeight.w900, fontSize: 12),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w900,
+                                    fontSize: 12,
+                                  ),
                                 ),
                               ),
                             ],

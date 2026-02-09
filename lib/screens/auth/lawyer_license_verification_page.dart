@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../services/auth_service.dart';
+import '../home/home_screen.dart';
 
 class LawyerLicenseVerificationPage extends StatefulWidget {
   final String name;
@@ -28,20 +30,24 @@ class LawyerLicenseVerificationPage extends StatefulWidget {
   });
 
   @override
-  State<LawyerLicenseVerificationPage> createState() => _LawyerLicenseVerificationPageState();
+  State<LawyerLicenseVerificationPage> createState() =>
+      _LawyerLicenseVerificationPageState();
 }
 
-class _LawyerLicenseVerificationPageState extends State<LawyerLicenseVerificationPage> {
+class _LawyerLicenseVerificationPageState
+    extends State<LawyerLicenseVerificationPage> {
   static const bg = Color(0xFFE8F3EC);
   static const primaryGreen = Color(0xFF1F6B3B);
   static const muted = Color(0xFF5E6E66);
 
   final _formKey = GlobalKey<FormState>();
+  final _authService = AuthService();
 
   final _licenseCtrl = TextEditingController();
   final _nationalIdCtrl = TextEditingController();
 
   bool _agree = false;
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -50,10 +56,137 @@ class _LawyerLicenseVerificationPageState extends State<LawyerLicenseVerificatio
     super.dispose();
   }
 
+  Future<void> _createLawyerAccount() async {
+    if (!_agree) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('يرجى الموافقة على الشروط والأحكام')),
+      );
+      return;
+    }
+    if (!_formKey.currentState!.validate()) return;
+
+    setState(() => _isLoading = true);
+
+    final result = await _authService.createLawyerAccount(
+      // Personal info
+      name: widget.name,
+      email: widget.email,
+      phone: widget.phone,
+      gender: widget.gender,
+      password: widget.password,
+      // Professional info
+      legalField: widget.legalField,
+      city: widget.city,
+      workplace: widget.workplace,
+      officeName: widget.officeName,
+      experienceYears: widget.experienceYears,
+      // License info
+      licenseNumber: _licenseCtrl.text.trim(),
+      nationalId: _nationalIdCtrl.text.trim(),
+    );
+
+    if (!mounted) return;
+    setState(() => _isLoading = false);
+
+    if (result.isSuccess) {
+      _showSuccessDialog();
+    } else {
+      _showErrorDialog(result.errorMessage!);
+    }
+  }
+
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: const Row(
+            children: [
+              Icon(Icons.check_circle_outline, color: primaryGreen),
+              SizedBox(width: 8),
+              Text(
+                'تم إنشاء الحساب',
+                style: TextStyle(fontWeight: FontWeight.w800),
+              ),
+            ],
+          ),
+          content: const Text(
+            'تم إرسال بيانات التحقق بنجاح.\n'
+            'سيتم مراجعة حسابك وتفعيله خلال فترة قصيرة.',
+            style: TextStyle(fontSize: 15, height: 1.5),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (_) => const HomeScreen()),
+                  (route) => false,
+                );
+              },
+              child: const Text(
+                'تم',
+                style: TextStyle(
+                  color: primaryGreen,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => Directionality(
+        textDirection: TextDirection.rtl,
+        child: AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
+          title: const Row(
+            children: [
+              Icon(Icons.error_outline, color: Colors.redAccent),
+              SizedBox(width: 8),
+              Text('خطأ', style: TextStyle(fontWeight: FontWeight.w800)),
+            ],
+          ),
+          content: Text(
+            message,
+            style: const TextStyle(fontSize: 15, height: 1.5),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text(
+                'حسناً',
+                style: TextStyle(
+                  color: primaryGreen,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   InputDecoration _dec(String hint) {
     return InputDecoration(
       hintText: hint,
-      hintStyle: const TextStyle(color: Color(0xFF9AA8A0), fontWeight: FontWeight.w700),
+      hintStyle: const TextStyle(
+        color: Color(0xFF9AA8A0),
+        fontWeight: FontWeight.w700,
+      ),
       filled: true,
       fillColor: const Color(0xFFF3F7F4),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
@@ -83,8 +216,14 @@ class _LawyerLicenseVerificationPageState extends State<LawyerLicenseVerificatio
         text: TextSpan(
           style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w800),
           children: [
-            TextSpan(text: text, style: const TextStyle(color: muted)),
-            const TextSpan(text: ' *', style: TextStyle(color: Colors.red)),
+            TextSpan(
+              text: text,
+              style: const TextStyle(color: muted),
+            ),
+            const TextSpan(
+              text: ' *',
+              style: TextStyle(color: Colors.red),
+            ),
           ],
         ),
       ),
@@ -109,7 +248,9 @@ class _LawyerLicenseVerificationPageState extends State<LawyerLicenseVerificatio
               height: 140,
               decoration: const BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.vertical(bottom: Radius.circular(34)),
+                borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(34),
+                ),
               ),
             ),
             SafeArea(
@@ -151,8 +292,11 @@ class _LawyerLicenseVerificationPageState extends State<LawyerLicenseVerificatio
                           TextFormField(
                             controller: _licenseCtrl,
                             keyboardType: TextInputType.number,
-                            decoration: _dec('أدخل رقم الترخيص كما هو مسجل في ناجز'),
-                            validator: (v) => _requiredText(v, 'رقم الترخيص مطلوب'),
+                            decoration: _dec(
+                              'أدخل رقم الترخيص كما هو مسجل في ناجز',
+                            ),
+                            validator: (v) =>
+                                _requiredText(v, 'رقم الترخيص مطلوب'),
                           ),
 
                           const SizedBox(height: 14),
@@ -163,7 +307,8 @@ class _LawyerLicenseVerificationPageState extends State<LawyerLicenseVerificatio
                             controller: _nationalIdCtrl,
                             keyboardType: TextInputType.number,
                             decoration: _dec('أدخل رقم الهوية الخاص بك'),
-                            validator: (v) => _requiredText(v, 'رقم الهوية مطلوب'),
+                            validator: (v) =>
+                                _requiredText(v, 'رقم الهوية مطلوب'),
                           ),
 
                           const SizedBox(height: 12),
@@ -172,7 +317,7 @@ class _LawyerLicenseVerificationPageState extends State<LawyerLicenseVerificatio
                             alignment: Alignment.centerRight,
                             child: Text(
                               'سيتم التحقق من البيانات ومراجعتها قبل تفعيل حساب المحامي.\n'
-                                  'قد يتطلب الأمر بعض الوقت.',
+                              'قد يتطلب الأمر بعض الوقت.',
                               style: TextStyle(
                                 color: muted,
                                 fontSize: 12,
@@ -196,27 +341,24 @@ class _LawyerLicenseVerificationPageState extends State<LawyerLicenseVerificatio
                                   borderRadius: BorderRadius.circular(14),
                                 ),
                               ),
-                              onPressed: () {
-                                if (!_agree) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('يرجى الموافقة على الشروط والأحكام')),
-                                  );
-                                  return;
-                                }
-                                if (_formKey.currentState!.validate()) {
-                                  // رؤوس أقلام:
-                                  // 1) إنشاء حساب Firebase Auth بالبريد/كلمة المرور
-                                  // 2) حفظ بيانات المحامي في Firestore (lawyers)
-                                  // 3) license.verified = false (إلى حين مراجعة الإدارة)
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text('تم إرسال بيانات التحقق ✅')),
-                                  );
-                                }
-                              },
-                              child: const Text(
-                                'إنشاء حساب محامي',
-                                style: TextStyle(fontWeight: FontWeight.w900),
-                              ),
+                              onPressed: _isLoading
+                                  ? null
+                                  : _createLawyerAccount,
+                              child: _isLoading
+                                  ? const SizedBox(
+                                      width: 24,
+                                      height: 24,
+                                      child: CircularProgressIndicator(
+                                        color: Colors.white,
+                                        strokeWidth: 2.5,
+                                      ),
+                                    )
+                                  : const Text(
+                                      'إنشاء حساب محامي',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w900,
+                                      ),
+                                    ),
                             ),
                           ),
 
@@ -228,7 +370,8 @@ class _LawyerLicenseVerificationPageState extends State<LawyerLicenseVerificatio
                               Checkbox(
                                 value: _agree,
                                 activeColor: primaryGreen,
-                                onChanged: (v) => setState(() => _agree = v ?? false),
+                                onChanged: (v) =>
+                                    setState(() => _agree = v ?? false),
                               ),
                               Expanded(
                                 child: Padding(
