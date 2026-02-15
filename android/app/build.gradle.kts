@@ -5,12 +5,14 @@ plugins {
     id("dev.flutter.flutter-gradle-plugin")
     // Add the google services gradle plugin
     id("com.google.gms.google-services")
+
+    id("com.google.firebase.crashlytics")
 }
 
 android {
     namespace = "com.example.silah_app"
-    compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    compileSdk = 36
+    ndkVersion = "27.0.12077973"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -53,6 +55,17 @@ dependencies {
   // TODO: Add the dependencies for Firebase products you want to use
   // When using the BoM, don't specify versions in Firebase dependencies
   implementation("com.google.firebase:firebase-analytics")
+
+
+
+    implementation("androidx.window:window:1.0.0")
+    implementation("androidx.window:window-java:1.0.0")
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    implementation("com.squareup.okhttp3:okhttp-tls:4.12.0")
+    implementation("com.google.android.material:material:1.4.0")
+    implementation("com.google.code.gson:gson:2.8.7")
+    implementation("com.airbnb.android:lottie:5.2.0")
 
 
   // Add the dependencies for any other desired Firebase products

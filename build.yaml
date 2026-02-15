@@ -1,0 +1,31 @@
+global_options:
+  dart_mappable_builder:
+    options:
+      caseStyle: none              # keep server keys exactly as sent
+      enumCaseStyle: none
+      ignoreNull: true             # strip nulls on encode
+      generateMethods: [decode, encode, copy, stringify, equals]
+      renameMethods:
+        fromJson: fromJsonString
+        toJson: toJsonString
+        fromMap: fromJson
+        toMap: toJson
+
+targets:
+  $default:
+    builders:
+      dart_mappable_builder|dart_mappable_builder:
+        enabled: true
+        generate_for: [lib/**.dart]
+      copy_with_extension_gen|copy_with_extension_gen:
+        enabled: true
+      json_serializable|json_serializable:
+        enabled: false
+        options:
+          generic_argument_factories: true 
+      retrofit_generator|retrofit_generator:
+        enabled: true
+      drift_dev|drift_dev:
+        enabled: true
+      freezed|freezed:
+        enabled: true
