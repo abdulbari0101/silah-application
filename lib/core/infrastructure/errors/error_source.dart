@@ -1,0 +1,1 @@
+enum ErrorSource { application, server }
