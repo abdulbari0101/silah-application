@@ -10,7 +10,7 @@ import 'package:silah_app/features/auth/presentation/views/registration/models/l
 import 'package:silah_app/features/auth/presentation/views/registration/screens/user_sign_up_screen.dart';
 import 'package:silah_app/features/chats/presentation/view/chats/screens/chats_screen.dart';
 import 'package:silah_app/features/intro/presentation/views/splash/screens/splash_screen.dart';
-import 'package:silah_app/features/intro/presentation/views/welcome/welcome_screen.dart';
+import 'package:silah_app/features/intro/presentation/views/welcome/screens/welcome_screen.dart';
 import 'package:silah_app/features/main/presentation/views/home/screens/home_screen.dart';
 import 'package:silah_app/features/requests/presentation/view/request/screens/requests_screen.dart';
 import 'package:silah_app/features/settings/presentation/views/langauge/screens/language_prefrence_screen.dart';
@@ -21,7 +21,11 @@ import 'route_info.dart';
 
 class AppRoutes {
   // Core
-  static final splash = RouteInfo(name: 'splash', path: '/', builder: () => const SplashScreen());
+  static final splash = RouteInfo(
+    name: 'splash',
+    path: '/',
+    builder: () => const SplashScreen(),
+  );
   static final onboarding = RouteInfo(
     name: 'onboardingScreen',
     path: '/onboarding',
@@ -29,19 +33,36 @@ class AppRoutes {
   );
 
   // Auth
-  static final login = RouteInfo(name: 'login', path: '/login', builder: () => const LoginScreen());
-  static final otp = RouteInfo(name: 'otp', path: '/otp', builder: () => const OTPScreen());
+  static final login = RouteInfo(
+    name: 'login',
+    path: '/login',
+    builder: () => const LoginScreen(),
+  );
+  static final otp = RouteInfo(
+    name: 'otp',
+    path: '/otp',
+    builder: () => const OTPScreen(),
+  );
 
-  static final changePassword = _placeholderRoute('change-password', '/change-password');
-  
-  static final updatePassword = _placeholderRoute('update-password', '/update-password');
+  static final changePassword = _placeholderRoute(
+    'change-password',
+    '/change-password',
+  );
+
+  static final updatePassword = _placeholderRoute(
+    'update-password',
+    '/update-password',
+  );
   static final selfRegisterWizard = RouteInfo(
     name: 'self-Register-wizard',
     path: '/self-Register-wizard',
     builder: () => const AccountTypeScreen(),
   );
-  static final userSignUp =
-      RouteInfo(name: 'userSignUp', path: '/sign-up/user', builder: () => const UserSignUpScreen());
+  static final userSignUp = RouteInfo(
+    name: 'userSignUp',
+    path: '/sign-up/user',
+    builder: () => const UserSignUpScreen(),
+  );
   static final lawyerSignUp = RouteInfo(
     name: 'lawyerSignUp',
     path: '/sign-up/lawyer',
@@ -71,8 +92,16 @@ class AppRoutes {
   );
 
   // Main tabs
-  static final home = RouteInfo(name: 'home', path: '/home', builder: () => const HomeScreen());
-  static final chats = RouteInfo(name: 'chats', path: '/chats', builder: () => const ChatsScreen());
+  static final home = RouteInfo(
+    name: 'home',
+    path: '/home',
+    builder: () => const HomeScreen(),
+  );
+  static final chats = RouteInfo(
+    name: 'chats',
+    path: '/chats',
+    builder: () => const ChatsScreen(),
+  );
   static final requests = RouteInfo(
     name: 'requests',
     path: '/requests',
@@ -98,7 +127,10 @@ class AppRoutes {
     path: '/language',
     builder: () => const LanguagePreferencesScreen(),
   );
-  static final notification = _placeholderRoute('notification', '/notification');
+  static final notification = _placeholderRoute(
+    'notification',
+    '/notification',
+  );
 
   static final success = RouteInfo(
     name: 'success',
@@ -118,7 +150,7 @@ class AppRoutes {
     lawyerSignUp,
     lawyerProfessionalInfo,
     lawyerLicenseVerification,
-  
+
     language,
     notification,
     success,
@@ -172,7 +204,9 @@ class _PlaceholderScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(title)),
-      body: Center(child: Text('$title is not available in the simplified Silah app')),
+      body: Center(
+        child: Text('$title is not available in the simplified Silah app'),
+      ),
     );
   }
 }

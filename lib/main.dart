@@ -23,11 +23,14 @@ import 'package:silah_app/core/presentation/state_magment/blocs/sesstion_bloc/se
 import 'package:silah_app/core/presentation/state_magment/wrapper/sesstion_listener.dart';
 import 'package:silah_app/core/presentation/ui/app/android_app.dart';
 import 'package:silah_app/core/presentation/ui/app/ios_app.dart';
-import 'package:silah_app/firebase_options.dart';
+import 'package:silah_app/features/intro/presentation/views/welcome/screens/welcome_screen.dart';
 import 'package:silah_app/integrations/notifications/local_notification_service.dart';
 import 'package:silah_app/mappers.init.dart';
+import 'package:silah_app/home.dart';
 
 import 'core/bootstrap/app_rebuilder.dart';
+import 'core/config/localization/app_language.dart';
+import 'core/config/theme/roles/shapes.dart';
 import 'core/bootstrap/bootstrap_service.dart';
 import 'core/config/simple_bloc_observer.dart';
 import 'core/config/theme/theme_controller.dart';
@@ -50,7 +53,12 @@ void _handleTopLevelError({
   if (_bootstrapped) {
     // App already running → show non-fatal overlay via UiErrorHost
     UiErrorBus.i.emit(
-      UiError(title: "Unexpected error", message: message, error: error, stack: stack),
+      UiError(
+        title: "Unexpected error",
+        message: message,
+        error: error,
+        stack: stack,
+      ),
     );
     return;
   }
@@ -108,13 +116,39 @@ Future<void> _startApp() async {
     _bootstrapped = true;
   }
 
-  final bootData = await _initStep<BootData?>(
+  // Load boot data (kept for potential future use)
+  await _initStep<BootData?>(
     'loadAndApplyInitialSettings',
     () => timeAsync('loadAndApplyInitialSettings', loadAndApplyInitialSettings),
     fallback: null,
   );
 
-  runApp(AppRebuilder(initialBootData: bootData));
+  runApp(
+    EasyLocalization(
+      supportedLocales: AppLanguage.supportedLocales,
+      path: AppLanguage.translationAssetsPath,
+      useOnlyLangCode: true,
+      startLocale: AppLanguage.fallbackLocale,
+      fallbackLocale: AppLanguage.fallbackLocale,
+      child: Builder(
+        builder: (context) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'SILAH',
+            theme: ThemeData(
+              useMaterial3: true,
+              fontFamily: 'Cairo',
+              extensions: const [ShapeScale()],
+            ),
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
+            home: const WelcomeScreen(),
+          );
+        },
+      ),
+    ),
+  );
 }
 
 // Exposed for fatal-screen retry: rerun bootstrap if it failed, otherwise just reload BootData.
@@ -127,8 +161,14 @@ Future<void> retryStartupFromFatal() async {
 }
 
 Future<void> _initLocalServices() async {
-  await _initStep('LocalNotificationService.init', () => LocalNotificationService().init());
-  await _initStep('dotenv.load', () => dotenv.load(fileName: ApiConstants.getEnvFileName));
+  await _initStep(
+    'LocalNotificationService.init',
+    () => LocalNotificationService().init(),
+  );
+  await _initStep(
+    'dotenv.load',
+    () => dotenv.load(fileName: ApiConstants.getEnvFileName),
+  );
 }
 
 Future<void> _lockOrientation() async {
@@ -143,7 +183,21 @@ Future<void> _lockOrientation() async {
 Future<void> _initFirebase() async {
   await _fatalStep('Firebase.initializeApp', () async {
     if (Firebase.apps.isEmpty) {
-      await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+      if (kIsWeb) {
+        await Firebase.initializeApp(
+          options: const FirebaseOptions(
+            apiKey: "AIzaSyA4DrEz2NzlvxFVPEulE_PXm9IYkfN-eYA",
+            authDomain: "silah-app-9acb6.firebaseapp.com",
+            projectId: "silah-app-9acb6",
+            storageBucket: "silah-app-9acb6.firebasestorage.app",
+            messagingSenderId: "330197769102",
+            appId: "1:330197769102:web:9f34f333b7d0bcd34de2df",
+            measurementId: "G-970DHKL9G1",
+          ),
+        );
+      } else {
+        await Firebase.initializeApp();
+      }
     }
   });
 }
@@ -184,7 +238,12 @@ void _wireCrashlyticsHandlers() {
       AppLogger().uiError(error, tag: 'platform', stack: stack);
     }
     UiErrorBus.i.emit(
-      UiError(title: "Unexpected error", message: error.toString(), error: error, stack: stack),
+      UiError(
+        title: "Unexpected error",
+        message: error.toString(),
+        error: error,
+        stack: stack,
+      ),
     );
     return true; // don’t hard-crash; show overlay instead
   };
@@ -213,7 +272,9 @@ Future<void> _setupNotifications() async {
   await _initStep('notifications.setup', () async {
     final plugin = FlutterLocalNotificationsPlugin();
     await plugin
-        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin
+        >()
         ?.requestNotificationsPermission();
     if (!kIsWeb) await setupFlutterNotifications();
   });
@@ -234,7 +295,10 @@ Future<void> _validatePlatform() async {
 }
 
 Future<void> _initLocalizationAndMappers() async {
-  await _initStep('EasyLocalization.ensureInitialized', EasyLocalization.ensureInitialized);
+  await _initStep(
+    'EasyLocalization.ensureInitialized',
+    EasyLocalization.ensureInitialized,
+  );
   await _initStep('initializeMappers', () async => initializeMappers());
 }
 
@@ -263,7 +327,11 @@ Future<void> _fatalStep(
     await step().timeout(timeout);
   } catch (e, st) {
     _recordFatal(name, e, st);
-    _handleTopLevelError(message: 'Startup step failed: $name', error: e, stack: st);
+    _handleTopLevelError(
+      message: 'Startup step failed: $name',
+      error: e,
+      stack: st,
+    );
     throw e;
   }
 }
@@ -277,9 +345,18 @@ void _recordFatal(String name, Object error, StackTrace stack) {
 }
 
 // fatal UI -------------------------------------------------------------------
-void _mountFatalUI({required String message, required Object error, required StackTrace stack}) {
+void _mountFatalUI({
+  required String message,
+  required Object error,
+  required StackTrace stack,
+}) {
   AppLogger().appError(error, tag: 'fatal_ui', stack: stack);
-  runApp(MaterialApp(debugShowCheckedModeBanner: false, home: BootErrorScreen(message: message)));
+  runApp(
+    MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: BootErrorScreen(message: message),
+    ),
+  );
 }
 
 // app widgets ----------------------------------------------------------------
@@ -297,21 +374,25 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    _themeController = ThemeController(settingBloc: di.locator<AppSettingBloc>());
-    WidgetsBinding.instance.addPostFrameCallback((_) => _themeController.init());
+    _themeController = ThemeController(
+      settingBloc: di.locator<AppSettingBloc>(),
+    );
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => _themeController.init(),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider.value(value: di.locator<AppSettingBloc>()..add(GetAppSettingEvent())),
+        BlocProvider.value(
+          value: di.locator<AppSettingBloc>()..add(GetAppSettingEvent()),
+        ),
         BlocProvider.value(value: di.locator<AppStateBloc>()),
         BlocProvider.value(value: di.locator<SessionBloc>()),
         BlocProvider(create: (_) => di.locator<LoginBloc>()),
         BlocProvider.value(value: di.locator<ItemLoadingCubit>()),
-      
-
       ],
       child: ChangeNotifierProvider.value(
         value: _themeController,

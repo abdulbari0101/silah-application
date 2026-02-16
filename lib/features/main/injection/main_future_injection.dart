@@ -13,17 +13,16 @@ Future<void> initMain() async {
 
   locator.registerLazySingleton(() => HomeBloc());
 
-  locator.registerLazySingleton(
-    () => HomeBloc(),
-  );
-
   // Repo
 
   // Data sources
 
   locator.registerLazySingleton<MainCacheDataSource>(
-    () =>
-        MainCacheDataSourceImpl(logger: locator(), appCache: locator(), identityReader: locator()),
+    () => MainCacheDataSourceImpl(
+      logger: locator(),
+      appCache: locator(),
+      identityReader: locator(),
+    ),
   );
 
   //

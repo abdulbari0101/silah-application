@@ -18,14 +18,9 @@ class WelcomeHeader extends StatelessWidget {
         Text(
           Strings.welcome_to_silah_trusted_platform.tr(),
           textAlign: TextAlign.center,
-          style: context.textTheme.titleLarge?.primary(context),
+          style: context.textTheme.titleMedium?.primary(context),
         ),
         UIConstants.smallHeight,
-        Text(
-          Strings.silah_helps_you_find_the_right_lawyer.tr(),
-          textAlign: TextAlign.center,
-          style: context.textTheme.bodySmall?.onSurfaceVariant(context),
-        ),
       ],
     );
   }

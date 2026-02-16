@@ -314,6 +314,19 @@ class $AssetsLottieGen {
   ];
 }
 
+class $AssetsTranslationsGen {
+  const $AssetsTranslationsGen();
+
+  /// File path: assets/translations/ar.json
+  String get ar => 'assets/translations/ar.json';
+
+  /// File path: assets/translations/en.json
+  String get en => 'assets/translations/en.json';
+
+  /// List of all assets
+  List<String> get values => [ar, en];
+}
+
 class $AssetsFontsCairoGen {
   const $AssetsFontsCairoGen();
 
@@ -443,6 +456,7 @@ class Assets {
   static const $AssetsIconsGen icons = $AssetsIconsGen();
   static const $AssetsImagesGen images = $AssetsImagesGen();
   static const $AssetsLottieGen lottie = $AssetsLottieGen();
+  static const $AssetsTranslationsGen translations = $AssetsTranslationsGen();
   static const $EnvGen env = $EnvGen();
 }
 

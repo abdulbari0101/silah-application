@@ -7,9 +7,6 @@ version: 1.0.0+2
 environment:
   sdk: ^3.8.1
 
-
-
-
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
 # consider running `flutter pub upgrade --major-versions`. Alternatively,
@@ -37,13 +34,11 @@ dependencies:
   another_flushbar:
   connectivity_plus:
 
-
   #geolocator:
   #geocoding: ^2.1.0
   dropdown_button2: ^2.3.9
   # order_tracker:
   image_cropper:
-
 
   # package_info:
   package_info_plus:
@@ -58,7 +53,6 @@ dependencies:
   # carousel_slider:
   easy_localization: ^3.0.8
   # restart_app:
-
 
   # remote data
   retrofit: ^4.9.0
@@ -86,7 +80,7 @@ dependencies:
   path_provider:
   sqlcipher_flutter_libs: ^0.6.8
   image_picker: # ^1.0.4
-  shared_preferences: 
+  shared_preferences:
   flutter_secure_storage: ^9.2.4
   local_auth: ^2.3.0
   dynamic_color: ^1.8.1
@@ -111,23 +105,21 @@ dependencies:
   mobile_scanner: ^7.0.0
   encrypt: ^5.0.3
   pointycastle: ^3.9.1
-  local_session_timeout: ^3.2.0 
+  local_session_timeout: ^3.2.0
   dart_mappable: ^4.6.1
   material_color_utilities: ^0.11.1
   dart_mappable_builder: ^4.6.1
 
- 
 dev_dependencies:
   json_serializable:
   copy_with_extension_gen:
   build_runner: ^2.10.1
- 
-  
+
   flutter_gen_runner: # used to generate assets to use it flutter packages pub run build_runner build
   flutter_flavorizr: # used to create the flavor
   drift_dev: ^2.29.0
   retrofit_generator: ^10.1.2
-  
+
   # change_app_package_name: #com.example.flutter_tamplate  flutter pub run change_app_package_name:main com.new.package.name
   flutter_spinkit:
   # json_annotation:
@@ -135,7 +127,6 @@ dev_dependencies:
   flutter_dotenv: ^5.2.1
   form_validation: ^3.2.0
   # android_intent_plus: ^5.3.0
-  
 
   flutter_localizations:
     sdk: flutter
@@ -186,6 +177,7 @@ flutter:
   assets:
     - env/
     - assets/images/
+    - assets/translations/
     - assets/icons/
     - assets/icons/flags/
     - assets/icons/logo/
@@ -193,7 +185,6 @@ flutter:
     - assets/icons/bottom_navigation/
     - assets/lottie/
     - assets/fonts/cairo/
-
 
     # - assets/country/
 
@@ -209,7 +200,6 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-  
     - family: Cairo
       fonts:
         - asset: assets/fonts/cairo/Cairo-Light.ttf

@@ -15,9 +15,7 @@ import 'received_notification.dart';
 
 @pragma('vm:entry-point')
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   await setupFlutterNotifications();
   showFlutterNotification(message);
@@ -32,7 +30,9 @@ Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 // Create the receive port
 
 @pragma('vm:entry-point')
-void notificationTapBackground(NotificationResponse notificationResponse) async {
+void notificationTapBackground(
+  NotificationResponse notificationResponse,
+) async {
   // ignore: avoid_print
   //await di.init();
 
@@ -43,7 +43,9 @@ void notificationTapBackground(NotificationResponse notificationResponse) async 
   );
   if (notificationResponse.input?.isNotEmpty ?? false) {
     // ignore: avoid_print
-    print('notificationTag action tapped with input: ${notificationResponse.input}');
+    print(
+      'notificationTag action tapped with input: ${notificationResponse.input}',
+    );
   }
 }
 
@@ -65,7 +67,8 @@ Future<void> setupFlutterNotifications() async {
   channel = AndroidNotificationChannel(
     '1401', // id
     'App Notifications', // title
-    description: 'This channel is used for orders and products notifications.', // description
+    description:
+        'This channel is used for orders and products notifications.', // description
     importance: Importance.max,
   );
 
@@ -76,7 +79,9 @@ Future<void> setupFlutterNotifications() async {
   /// We use this channel in the `AndroidManifest.xml` file to override the
   /// default FCM channel to enable heads up notifications.
   await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+      .resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin
+      >()
       ?.createNotificationChannel(channel);
 
   /// Update the iOS foreground notification presentation options to allow
@@ -86,13 +91,13 @@ Future<void> setupFlutterNotifications() async {
     badge: true,
     sound: true,
   );
-  const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings(
-    'icon',
-  );
+  const AndroidInitializationSettings initializationSettingsAndroid =
+      AndroidInitializationSettings('icon');
 
   /// Note: permissions aren't requested here just to demonstrate that can be
   /// done later
-  final DarwinInitializationSettings initializationSettingsDarwin = DarwinInitializationSettings(
+  final DarwinInitializationSettings
+  initializationSettingsDarwin = DarwinInitializationSettings(
     requestAlertPermission: false,
     requestBadgePermission: false,
     requestSoundPermission: false,
@@ -120,22 +125,25 @@ Future<void> setupFlutterNotifications() async {
 
   await flutterLocalNotificationsPlugin.initialize(
     initializationSettings,
-    onDidReceiveNotificationResponse: (NotificationResponse notificationResponse) async {
-      print(
-        "onTapData onDidReceiveNotificationResponse  id = ${notificationResponse.id} , actionId = ${notificationResponse.actionId} , input = ${notificationResponse.input} , payload = ${notificationResponse.payload} , notificationResponseType = ${notificationResponse.notificationResponseType}",
-      );
+    onDidReceiveNotificationResponse:
+        (NotificationResponse notificationResponse) async {
+          print(
+            "onTapData onDidReceiveNotificationResponse  id = ${notificationResponse.id} , actionId = ${notificationResponse.actionId} , input = ${notificationResponse.input} , payload = ${notificationResponse.payload} , notificationResponseType = ${notificationResponse.notificationResponseType}",
+          );
 
-      didReceiveLocalNotificationStream.add(
-        ReceivedNotification(
-          id: notificationResponse.id ?? 0,
-          title: notificationResponse.input,
-          body: null,
-          payload: notificationResponse.payload,
-        ),
-      );
+          didReceiveLocalNotificationStream.add(
+            ReceivedNotification(
+              id: notificationResponse.id ?? 0,
+              title: notificationResponse.input,
+              body: null,
+              payload: notificationResponse.payload,
+            ),
+          );
 
-      print("notificationTag onDidReceiveNotificationResponse ${notificationResponse.toString()}");
-    },
+          print(
+            "notificationTag onDidReceiveNotificationResponse ${notificationResponse.toString()}",
+          );
+        },
     onDidReceiveBackgroundNotificationResponse: notificationTapBackground,
   );
 
