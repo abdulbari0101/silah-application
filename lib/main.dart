@@ -26,8 +26,6 @@ import 'package:silah_app/core/presentation/ui/app/ios_app.dart';
 import 'package:silah_app/features/intro/presentation/views/welcome/screens/welcome_screen.dart';
 import 'package:silah_app/integrations/notifications/local_notification_service.dart';
 import 'package:silah_app/mappers.init.dart';
-import 'package:silah_app/home.dart';
-
 import 'core/bootstrap/app_rebuilder.dart';
 import 'core/config/localization/app_language.dart';
 import 'core/config/theme/roles/shapes.dart';
