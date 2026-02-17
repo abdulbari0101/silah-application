@@ -32,33 +32,42 @@ import 'core/presentation/state_magment/blocs/app_state/state_data/app_auth_stat
     as p22;
 import 'core/presentation/state_magment/blocs/app_state/state_data/app_state_data.dart'
     as p23;
-import 'features/auth/data/models/com_device_reg_resp_wrapper.dart' as p24;
-import 'features/auth/data/models/device_token_model.dart' as p25;
-import 'features/auth/data/models/ex_data_auth_model.dart' as p26;
-import 'features/auth/data/models/request/token_request.dart' as p27;
-import 'features/auth/data/models/self_register_token_model.dart' as p28;
+import 'features/admin/domain/entities/admin_task_entity.dart' as p24;
+import 'features/admin/domain/entities/admin_task_status.dart' as p25;
+import 'features/app_shell/data/models/intro_model.dart' as p26;
+import 'features/app_shell/data/models/intro_response_wrapper.dart' as p27;
+import 'features/app_shell/domain/entities/intro_entity.dart' as p28;
 import 'features/auth/domain/entities/auth_ex_data_entity.dart' as p29;
-import 'features/chats/data/models/chat_item_model.dart' as p30;
-import 'features/chats/domain/entities/chat_item_entity.dart' as p31;
-import 'features/intro/data/models/intro_model.dart' as p32;
-import 'features/intro/data/models/intro_response_wrapper.dart' as p33;
-import 'features/intro/domain/entities/intro_entity.dart' as p34;
-import 'features/main/data/models/notification/notification_model.dart' as p35;
-import 'features/main/domain/entities/notification/notification_entity.dart'
+import 'features/consultations/data/models/request_item_model.dart' as p30;
+import 'features/consultations/domain/entities/request_item_entity.dart' as p31;
+import 'features/discovery/data/models/specification_item_model.dart' as p32;
+import 'features/discovery/domain/entities/specification_item_entity.dart'
+    as p33;
+import 'features/messaging/data/models/chat_item_model.dart' as p34;
+import 'features/messaging/domain/entities/chat_item_entity.dart' as p35;
+import 'features/notifications/data/models/notification/notification_model.dart'
     as p36;
-import 'features/main/domain/entities/notification/notification_group.dart'
+import 'features/notifications/domain/entities/notification/notification_entity.dart'
     as p37;
-import 'features/main/domain/entities/notification/notification_result.dart'
+import 'features/notifications/domain/entities/notification/notification_group.dart'
     as p38;
-import 'features/requests/data/models/request_item_model.dart' as p39;
-import 'features/requests/domain/entities/request_item_entity.dart' as p40;
-import 'features/settings/data/models/settings_response_wrapper.dart' as p41;
-import 'features/specifications/data/models/specification_item_model.dart'
-    as p42;
-import 'features/specifications/domain/entities/specification_item_entity.dart'
-    as p43;
+import 'features/notifications/domain/entities/notification/notification_result.dart'
+    as p39;
+import 'features/profiles/domain/entities/availability_status.dart' as p40;
+import 'features/profiles/domain/entities/lawyer_profile_entity.dart' as p41;
+import 'features/profiles/domain/entities/profile_entity.dart' as p42;
+import 'features/settings/data/models/settings_response_wrapper.dart' as p43;
 import 'features/support/data/models/support_item_model.dart' as p44;
 import 'features/support/domain/entities/support_item_entity.dart' as p45;
+import 'features/training/domain/entities/training_application_entity.dart'
+    as p46;
+import 'features/training/domain/entities/training_application_status.dart'
+    as p47;
+import 'features/training/domain/entities/training_opportunity_entity.dart'
+    as p48;
+import 'features/verification/domain/entities/license_verification_entity.dart'
+    as p49;
+import 'features/verification/domain/entities/verification_status.dart' as p50;
 
 void initializeMappers() {
   p0.PrefsKeyMapper.ensureInitialized();
@@ -102,27 +111,32 @@ void initializeMappers() {
   p21.AppStateLoadedMapper.ensureInitialized();
   p22.UserAuthStatusMapper.ensureInitialized();
   p23.AppStateDataMapper.ensureInitialized();
-  p24.ComDeviceRegRespWrapperMapper.ensureInitialized();
-  p25.DeviceTokenModelMapper.ensureInitialized();
-  p26.ExDataAuthModelMapper.ensureInitialized();
-  p27.TokenRequestMapper.ensureInitialized();
-  p28.SelfRegisterTokenModelMapper.ensureInitialized();
+  p24.AdminTaskEntityMapper.ensureInitialized();
+  p25.AdminTaskStatusMapper.ensureInitialized();
+  p26.IntroModelMapper.ensureInitialized();
+  p27.IntroRespWrapperMapper.ensureInitialized();
+  p28.IntroEntityMapper.ensureInitialized();
   p29.ExDataAuthEntityMapper.ensureInitialized();
-  p30.ChatItemModelMapper.ensureInitialized();
-  p31.ChatItemEntityMapper.ensureInitialized();
-  p32.IntroModelMapper.ensureInitialized();
-  p33.IntroRespWrapperMapper.ensureInitialized();
-  p34.IntroEntityMapper.ensureInitialized();
-  p35.NotificationModelMapper.ensureInitialized();
-  p36.NotificationEntityMapper.ensureInitialized();
-  p37.NotificationGroupMapper.ensureInitialized();
-  p38.NotificationResultMapper.ensureInitialized();
-  p39.RequestItemModelMapper.ensureInitialized();
-  p40.RequestItemEntityMapper.ensureInitialized();
-  p41.SettingsRespWrapperMapper.ensureInitialized();
-  p42.SpecificationItemModelMapper.ensureInitialized();
-  p43.SpecificationItemEntityMapper.ensureInitialized();
+  p30.RequestItemModelMapper.ensureInitialized();
+  p31.RequestItemEntityMapper.ensureInitialized();
+  p32.SpecificationItemModelMapper.ensureInitialized();
+  p33.SpecificationItemEntityMapper.ensureInitialized();
+  p34.ChatItemModelMapper.ensureInitialized();
+  p35.ChatItemEntityMapper.ensureInitialized();
+  p36.NotificationModelMapper.ensureInitialized();
+  p37.NotificationEntityMapper.ensureInitialized();
+  p38.NotificationGroupMapper.ensureInitialized();
+  p39.NotificationResultMapper.ensureInitialized();
+  p40.AvailabilityStatusMapper.ensureInitialized();
+  p41.LawyerProfileEntityMapper.ensureInitialized();
+  p42.ProfileEntityMapper.ensureInitialized();
+  p43.SettingsRespWrapperMapper.ensureInitialized();
   p44.SupportItemModelMapper.ensureInitialized();
   p45.SupportItemEntityMapper.ensureInitialized();
+  p46.TrainingApplicationEntityMapper.ensureInitialized();
+  p47.TrainingApplicationStatusMapper.ensureInitialized();
+  p48.TrainingOpportunityEntityMapper.ensureInitialized();
+  p49.LicenseVerificationEntityMapper.ensureInitialized();
+  p50.VerificationStatusMapper.ensureInitialized();
 }
 

@@ -38,11 +38,6 @@ class AuthMethods {
       return AppRoutes.login;
     }
 
-    // Special case: device change requires phone verification
-    if (loginState is PhoneNumberVerficationRequired) {
-      return AppRoutes.otp;
-    }
-
     final authStatus = appState.data.userAuthStatus;
 
     switch (authStatus) {

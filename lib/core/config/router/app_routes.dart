@@ -1,21 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:silah_app/core/presentation/ui/screen/success/screens/success_screen.dart';
 import 'package:silah_app/features/auth/presentation/views/login/login/screens/login_screen.dart';
-import 'package:silah_app/features/auth/presentation/views/login/otp/screens/otp_screen.dart';
 import 'package:silah_app/features/auth/presentation/views/registration/screens/account_type_screen.dart';
 import 'package:silah_app/features/auth/presentation/views/registration/screens/lawyer_license_verification_screen.dart';
 import 'package:silah_app/features/auth/presentation/views/registration/screens/lawyer_professional_info_screen.dart';
 import 'package:silah_app/features/auth/presentation/views/registration/screens/lawyer_sign_up_screen.dart';
 import 'package:silah_app/features/auth/presentation/views/registration/models/lawyer_registration_data.dart';
 import 'package:silah_app/features/auth/presentation/views/registration/screens/user_sign_up_screen.dart';
-import 'package:silah_app/features/chats/presentation/view/chats/screens/chats_screen.dart';
-import 'package:silah_app/features/intro/presentation/views/splash/screens/splash_screen.dart';
-import 'package:silah_app/features/intro/presentation/views/welcome/screens/welcome_screen.dart';
-import 'package:silah_app/features/main/presentation/views/home/screens/home_screen.dart';
-import 'package:silah_app/features/requests/presentation/view/request/screens/requests_screen.dart';
+import 'package:silah_app/features/messaging/presentation/views/chats/screens/chats_screen.dart';
+import 'package:silah_app/features/app_shell/presentation/views/splash/screens/splash_screen.dart';
+import 'package:silah_app/features/app_shell/presentation/views/welcome/screens/welcome_screen.dart';
+import 'package:silah_app/features/app_shell/presentation/views/home/screens/home_screen.dart';
+import 'package:silah_app/features/consultations/presentation/views/request/screens/requests_screen.dart';
 import 'package:silah_app/features/settings/presentation/views/langauge/screens/language_prefrence_screen.dart';
 import 'package:silah_app/features/settings/presentation/views/settings/screens/settings_screen.dart';
-import 'package:silah_app/features/specifications/presentation/view/specification/screens/specifications_screen.dart';
+import 'package:silah_app/features/discovery/presentation/views/specification/screens/specifications_screen.dart';
 
 import 'route_info.dart';
 
@@ -37,11 +36,6 @@ class AppRoutes {
     name: 'login',
     path: '/login',
     builder: () => const LoginScreen(),
-  );
-  static final otp = RouteInfo(
-    name: 'otp',
-    path: '/otp',
-    builder: () => const OTPScreen(),
   );
 
   static final changePassword = _placeholderRoute(
@@ -142,7 +136,6 @@ class AppRoutes {
     splash,
     onboarding,
     login,
-    otp,
     changePassword,
     updatePassword,
     selfRegisterWizard,
@@ -162,7 +155,6 @@ class AppRoutes {
     splash,
     onboarding,
     login,
-    otp,
     selfRegisterWizard,
     userSignUp,
     lawyerSignUp,

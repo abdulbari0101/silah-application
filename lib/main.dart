@@ -23,7 +23,7 @@ import 'package:silah_app/core/presentation/state_magment/blocs/sesstion_bloc/se
 import 'package:silah_app/core/presentation/state_magment/wrapper/sesstion_listener.dart';
 import 'package:silah_app/core/presentation/ui/app/android_app.dart';
 import 'package:silah_app/core/presentation/ui/app/ios_app.dart';
-import 'package:silah_app/features/intro/presentation/views/welcome/screens/welcome_screen.dart';
+import 'package:silah_app/features/app_shell/presentation/views/welcome/screens/welcome_screen.dart';
 import 'package:silah_app/integrations/notifications/local_notification_service.dart';
 import 'package:silah_app/mappers.init.dart';
 import 'core/bootstrap/app_rebuilder.dart';

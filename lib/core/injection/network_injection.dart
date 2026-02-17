@@ -36,7 +36,7 @@ Future<void> initNetwork() async {
 
     dio.interceptors.addAll([
       HeaderInterceptor(
-        authCacheReader: locator<SesstionReader>(),
+        authCacheReader: locator<SessionReader>(),
         appInfoService: locator<AppInfoService>(),
         logger: locator<AppLogger>(),
       ),
@@ -48,7 +48,7 @@ Future<void> initNetwork() async {
     locator.registerLazySingleton<DioClient>(
       () => DioClient(
         dio: locator<Dio>(),
-        authCacheReader: locator<SesstionReader>(),
+        authCacheReader: locator<SessionReader>(),
         appInfoService: locator<AppInfoService>(),
         logger: locator<AppLogger>(),
       ),

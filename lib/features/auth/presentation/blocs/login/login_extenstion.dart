@@ -21,25 +21,5 @@ extension LoginStateExtension on LoginState {
   String get errorTitle => operationType?.errorTitleKey ?? '';
 
   String? get errorMessage => asError?.message;
-
-  bool get isLoginToken => operationType == LoginOperationType.LoginToken;
-  bool get isLogin => operationType == LoginOperationType.Login;
-  bool get isLoginTokenAfterSelfReg => operationType == LoginOperationType.LoginTokenAfterSelfReg;
-  bool get isRequestPhoneOtp => operationType == LoginOperationType.RequestPhoneOTP;
-  bool get isResendPhoneOtp => operationType == LoginOperationType.ReSendPhoneOTP;
-  bool get isConfirmPhoneOtp => operationType == LoginOperationType.ConfirmPhoneOTP;
-  bool get isChangePassword => operationType == LoginOperationType.ChangePassword;
-  bool get isChangePin => operationType == LoginOperationType.ChangePin;
-
-  bool get isResendPhoneOTPLoading =>
-      this is LoginLoading && operationType == LoginOperationType.ReSendPhoneOTP;
-
-  bool get isRequestPhoneOTPLoading =>
-      this is LoginLoading && operationType == LoginOperationType.RequestPhoneOTP;
-
-  bool get isConfirmPhoneOTPLoading =>
-      this is LoginLoading && operationType == LoginOperationType.ConfirmPhoneOTP;
-
-  bool get isResendOTPLoading => isResendPhoneOTPLoading || isRequestPhoneOTPLoading;
-  bool get isShowButtonLoading => isLoading && !isResendOTPLoading;
+  bool get isShowButtonLoading => isLoading;
 }

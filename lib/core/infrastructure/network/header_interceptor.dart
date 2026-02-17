@@ -7,7 +7,7 @@ import 'package:silah_app/core/infrastructure/system/app_info_service.dart';
 
 
 class HeaderInterceptor extends Interceptor {
-  final SesstionReader authCacheReader;
+  final SessionReader authCacheReader;
   final AppLogger logger;
   final AppInfoService appInfoService;
 

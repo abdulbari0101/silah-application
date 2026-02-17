@@ -16,7 +16,7 @@ import '../errors/exceptions.dart';
 class Executor {
   final Netwokinfo networkInfo;
   final AppLogger logger;
-  final SesstionReader authCacheReader;
+  final SessionReader authCacheReader;
 
   const Executor({required this.networkInfo, required this.logger, required this.authCacheReader});
 

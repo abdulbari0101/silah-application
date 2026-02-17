@@ -4,13 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
 import 'package:silah_app/core/config/router/app_routes.dart';
-import 'package:silah_app/core/injection/injection_container.dart';
 import 'package:silah_app/core/presentation/state_magment/blocs/app_state/app_state_bloc.dart';
 import 'package:silah_app/core/presentation/state_magment/blocs/app_state/state_data/app_auth_status.dart';
 import 'package:silah_app/core/presentation/ui/overlays/dialogs/dialog_service.dart';
 import 'package:silah_app/features/auth/presentation/blocs/login/login_bloc.dart';
-import 'package:silah_app/features/auth/presentation/blocs/login/verfication_reason.dart';
-
 import '../../blocs/login/login_operation_type.dart';
 
 class LoginLogicHandler extends StatelessWidget {
@@ -49,25 +46,6 @@ class LoginLogicHandler extends StatelessWidget {
                 title: Strings.err_login.tr(),
                 desc: state.message,
               );
-            }
-          }
-          if (state is PhoneNumberVerficationRequired) {
-            switch (state.reason) {
-              case VerificationReason.deviceChanged:
-                DialogService.showYesNoDialog(
-                  context,
-                  title: Strings.msg_device_register.tr(),
-                  desc: Strings.msg_change_account_device.tr(),
-                  onYesClick: () {
-                    locator.get<LoginBloc>().add(ConfrimtLogInInNewDevice());
-                  },
-                  onNoClick: () {},
-                );
-                break;
-              case VerificationReason.firstTimeLogin:
-              case VerificationReason.loginConfirmedOnNewDevice:
-                context.pushNamed(AppRoutes.otp.name);
-                break;
             }
           }
 

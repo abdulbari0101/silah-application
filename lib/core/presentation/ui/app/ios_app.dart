@@ -10,7 +10,7 @@ import 'package:silah_app/core/domain/enums/app_theme_mode.dart';
 import 'package:silah_app/core/presentation/state_magment/blocs/app_setting/app_setting_bloc.dart';
 import 'package:silah_app/core/presentation/state_magment/blocs/app_setting/extensions/app_setting_context_extension.dart';
 import 'package:silah_app/core/presentation/ui/widget/wrappers/unified_refresh_wrapper.dart';
-import 'package:silah_app/features/intro/presentation/views/splash/screens/splash_screen.dart';
+import 'package:silah_app/features/app_shell/presentation/views/splash/screens/splash_screen.dart';
 
 import '../../../config/localization/localizations_string_keys.dart';
 import '../../../config/theme/tokens/brands.dart';

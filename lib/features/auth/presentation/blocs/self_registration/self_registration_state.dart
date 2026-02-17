@@ -9,7 +9,7 @@ sealed class SelfRegState extends Equatable {
 }
 
 class SelfRegInitialState extends SelfRegState {
-  SelfRegInitialState():super(operationType: SelfRegOperType.Token);
+  SelfRegInitialState():super(operationType: SelfRegOperType.SelfReqComplete);
   @override
    List<Object?> get props => super.props;
 

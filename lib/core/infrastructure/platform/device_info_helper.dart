@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:silah_app/core/config/extentions/string_validation.dart';
-import 'package:silah_app/core/data/local/cache/readers/auth_readers.dart';
 import 'package:silah_app/core/data/local/cache/readers/setting_reader.dart';
 import 'package:silah_app/core/data/model/api/request/post_request_model.dart';
 import 'package:silah_app/core/domain/repositories/identity_repo.dart';
@@ -12,14 +11,12 @@ import 'package:silah_app/core/infrastructure/platform/app_platform.dart';
 
 class DeviceInfoHelper {
   final DeviceInfoPlugin deviceInfo;
-  final SesstionReader sesstionReader;
   final IdentityRepo identityRepo;
   final SettingReader settingReaer;
   final AppLogger logger;
 
   DeviceInfoHelper({
     required this.deviceInfo,
-    required this.sesstionReader,
     required this.identityRepo,
     required this.settingReaer,
     required this.logger,

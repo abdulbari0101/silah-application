@@ -96,8 +96,8 @@ class _LoginFormState extends State<LoginForm> {
                       // Validate returns true if the form is valid, or false otherwise.
                       if (_formKey.currentState!.validate()) {
                         BlocProvider.of<LoginBloc>(context).add(
-                          LoginToken(
-                            mobile: emailController.text.trim(),
+                          LoginRequested(
+                            email: emailController.text.trim(),
                             password: passwordController.text,
                           ),
                         );

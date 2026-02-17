@@ -1,6 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
-import 'package:silah_app/features/intro/presentation/views/onboarding/widgets/boarding_data.dart';
+import 'package:silah_app/features/app_shell/presentation/views/onboarding/widgets/boarding_data.dart';
 
 import '../../../gen/assets.gen.dart';
 

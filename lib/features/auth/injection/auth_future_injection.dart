@@ -1,6 +1,7 @@
 import 'package:silah_app/core/domain/repositories/identity_repo.dart';
 import 'package:silah_app/core/injection/injection_container.dart';
 
+import 'package:silah_app/features/auth/data/datasources/remote/auth_remote_data_source.dart';
 import 'package:silah_app/features/auth/data/datasources/remote/auth_service.dart';
 import 'package:silah_app/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:silah_app/features/auth/data/repositories/identity_repo_impl.dart';
@@ -14,7 +15,7 @@ import '../domain/repositories/auth_repository.dart';
 Future<void> initAuth() async {
   // Bloc
   locator.registerLazySingleton(
-    () => LoginBloc(repository: locator(), appStateBloc: locator(), settingBloc: locator()),
+    () => LoginBloc(repository: locator(), appStateBloc: locator()),
   );
 
   locator.registerFactory(() => ForgetPassBloc(repository: locator()));
@@ -25,10 +26,17 @@ Future<void> initAuth() async {
     ),
   );
 
+  // Auth services (Firebase)
+  locator.registerLazySingleton(() => AuthService());
+
+  locator.registerLazySingleton<AuthRemoteDataSource>(
+    () => AuthRemoteDataSourceImpl(authService: locator(), logger: locator()),
+  );
+
   // Repo
   locator.registerLazySingleton<AuthRepo>(
     () => AuthRepoImpl(
-      authService: locator(),
+      remoteDS: locator(),
       cacheDS: locator(),
       executor: locator(),
       authIdentityRepo: locator(),
@@ -41,15 +49,9 @@ Future<void> initAuth() async {
     () => IdentityRepoImpl(
       cacheDS: locator(),
       deviceSerialService: locator(),
-      identityReader: locator(),
       logger: locator(),
-      sessionReader: locator(),
     ),
   );
 
   locator.registerLazySingleton<IdentityRepo>(() => locator<AuthIdentityRepo>());
-
-
-  // Auth services (Firebase)
-  locator.registerLazySingleton(() => AuthService());
 }

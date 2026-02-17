@@ -19,8 +19,7 @@ class LoginButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return LoginLogicHandler(
       onError: (operationType, message) {
-        if (operationType == LoginOperationType.LoginToken ||
-            operationType == LoginOperationType.Login)
+        if (operationType == LoginOperationType.signIn)
           DialogService.showErrorDialog(context, title: Strings.err_login.tr(), desc: message);
       },
       child: BlocBuilder<LoginBloc, LoginState>(

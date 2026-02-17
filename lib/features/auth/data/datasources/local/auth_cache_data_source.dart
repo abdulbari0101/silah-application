@@ -5,18 +5,14 @@ import 'package:silah_app/core/data/local/cache/readers/auth_readers.dart';
 import 'package:silah_app/core/data/local/cache/secure/secure_key.dart';
 import 'package:silah_app/core/data/model/api/auth/customer_model.dart';
 import 'package:silah_app/core/data/model/api/auth/token_model.dart';
-import 'package:silah_app/features/auth/data/models/device_token_model.dart';
-
 import '../../../../../core/infrastructure/analytics/logger/app_logger.dart';
 import '../../../../../core/infrastructure/errors/exceptions.dart';
 
-abstract class AuthCacheDataSource implements SesstionReader, IdentityReader {
+abstract class AuthCacheDataSource implements SessionReader, IdentityReader {
   // shared
   Future<void> saveCustomer({required CustomerModel customer, required String userId});
-  Future<void> saveCustMobile({required String mobile, required String userId});
 
-  //Sesstion
-  Future<void> cacheDeviceToken(DeviceTokenModel token);
+  //Session
   Future<void> cacheLoginToken(TokenModel token);
  
   Future<void> clearToken();
@@ -47,11 +43,6 @@ class AuthCacheDataSourceImpl implements AuthCacheDataSource {
   }
 
   @override
-  Future<void> cacheDeviceToken(DeviceTokenModel token) async {
-    await appCache.secure.write(key: SecureKey.deviceToken, value: token.deviceToken ?? '');
-  }
-
-  @override
   Future<void> cacheLoginToken(TokenModel token) async {
     return _cacheDSToken(token, SecureKey.authTokenLogin);
   }
@@ -77,16 +68,6 @@ class AuthCacheDataSourceImpl implements AuthCacheDataSource {
   }
 
   @override
-  Future<bool> hasDeviceToken() async {
-    return appCache.secure.containsKey(key: SecureKey.deviceToken);
-  }
-
-  @override
-  Future<String?> deviceToken() async {
-    return await appCache.secure.read(key: SecureKey.deviceToken);
-  }
-
-  @override
   Future<TokenModel?> loginToken() async {
     return await appCache.secure.readObject(
       key: SecureKey.authTokenLogin,
@@ -99,8 +80,8 @@ class AuthCacheDataSourceImpl implements AuthCacheDataSource {
 
 
   @override
-  Future<bool> saveCustomer({required CustomerModel customer, required String userId}) async {
-    return appCache.secure.writeObject<CustomerModel>(
+  Future<void> saveCustomer({required CustomerModel customer, required String userId}) async {
+    await appCache.secure.writeObject<CustomerModel>(
       key: SecureKey.csr,
       object: customer,
       toJson: (value) => value.toJson(),
@@ -119,23 +100,11 @@ class AuthCacheDataSourceImpl implements AuthCacheDataSource {
   }
 
   @override
-  Future<void> saveCustMobile({required String mobile, required String userId}) async {
-    await appCache.secure.write(key: SecureKey.mb, value: mobile, userId: userId);
-  }
-
-  @override
-  Future<String?> custMobile() async {
-    final userId = await this.userId();
-    return await appCache.secure.read(key: SecureKey.mb, userId: userId);
-  }
-
-  @override
   Future<void> clearToken() async {
     try {
       await appCache.secure.delete(key: SecureKey.authTokenLogin);
       await appCache.secure.delete(key: SecureKey.authTokenReg);
       await appCache.secure.delete(key: SecureKey.fcmToken);
-      await appCache.secure.delete(key: SecureKey.deviceToken);
     } catch (error, stack) {
       logger.cacheError(tag: 'clearToken', error, stack: stack);
       throw SecureStorageException('Failed to clear tokens');

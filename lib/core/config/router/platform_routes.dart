@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:silah_app/features/main/presentation/views/main/screen/main_screen.dart';
+import 'package:silah_app/features/app_shell/presentation/views/main/screen/main_screen.dart';
 
 import 'app_routes.dart';
 

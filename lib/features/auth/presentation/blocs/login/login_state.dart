@@ -20,20 +20,6 @@ class LoginLoading extends LoginState {
   List<Object> get props => [operationType];
 }
 
-
-
-class PhoneNumberVerficationRequired extends LoginState {
-
-final VerificationReason reason;
-
-  const PhoneNumberVerficationRequired({required this.reason});
-
-  @override
-  List<Object> get props => [reason];
-
-}
-
-
 class LoginOperationSuccess extends LoginState {
   final LoginOperationType operationType;
   const LoginOperationSuccess({required this.operationType});

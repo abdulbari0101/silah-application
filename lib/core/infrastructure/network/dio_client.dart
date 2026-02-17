@@ -9,7 +9,7 @@ import 'package:silah_app/core/infrastructure/system/app_info_service.dart';
 
 class DioClient {
   final Dio dio;
-  final SesstionReader authCacheReader;
+  final SessionReader authCacheReader;
   final AppInfoService appInfoService;
   final AppLogger logger;
   SecurityContext? mainContext;

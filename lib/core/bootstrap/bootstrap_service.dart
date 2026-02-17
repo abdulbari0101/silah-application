@@ -19,7 +19,7 @@ Future<BootData?> loadAndApplyInitialSettings() async {
   final logger = di.locator<AppLogger>();
   final settingReader = di.locator<SettingReader>();
 
-  final authReader = di.locator<SesstionReader>();
+  final authReader = di.locator<SessionReader>();
   final appStateBloc = di.locator<AppStateBloc>();
   final settingBloc = di.locator<AppSettingBloc>();
 

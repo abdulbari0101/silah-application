@@ -35,14 +35,13 @@ Future<void> initUtils() async {
       deviceInfo: locator(),
       settingReaer: locator(),
       identityRepo: locator(),
-      sesstionReader: locator(),
       logger: locator(),
     ),
   );
 
   locator.registerLazySingleton<NavigationThemeUtil>(() => NavigationThemeUtil());
 
-  /// locator.registerLazySingleton(() => SesstionReader(appCache: locator()));
+  /// locator.registerLazySingleton(() => SessionReader(appCache: locator()));
 
   locator.registerLazySingleton(
     () => Executor(networkInfo: locator(), logger: locator(), authCacheReader: locator()),
