@@ -1,0 +1,76 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && request.auth.token.role == "admin";
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    match /users/{userId} {
+      allow read, write: if isOwner(userId) || isAdmin();
+    }
+
+    match /lawyers/{lawyerId} {
+      allow read: if true;
+      allow write: if isOwner(lawyerId) || isAdmin();
+    }
+
+    match /license_verifications/{lawyerId} {
+      allow read, write: if isOwner(lawyerId) || isAdmin();
+    }
+
+    match /consultations/{consultationId} {
+      allow create: if isSignedIn() && request.auth.uid == request.resource.data.clientUid;
+      allow read: if isAdmin() || request.auth.uid in [resource.data.clientUid, resource.data.lawyerUid];
+      allow update: if isAdmin() || request.auth.uid in [resource.data.clientUid, resource.data.lawyerUid];
+      allow delete: if isAdmin();
+    }
+
+    match /chats/{chatId} {
+      allow read, write: if isSignedIn() && request.auth.uid in resource.data.participants;
+      match /messages/{messageId} {
+        allow read, write: if isSignedIn() && request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants;
+      }
+    }
+
+    match /training_opportunities/{opportunityId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && request.auth.uid == request.resource.data.lawyerUid || isAdmin();
+    }
+
+    match /training_applications/{applicationId} {
+      allow create: if isSignedIn() && request.auth.uid == request.resource.data.traineeUid;
+      allow read: if isAdmin() || request.auth.uid in [resource.data.traineeUid, resource.data.lawyerUid];
+      allow update: if isAdmin() || request.auth.uid == resource.data.lawyerUid;
+      allow delete: if isAdmin();
+    }
+
+    match /notifications/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      match /items/{itemId} {
+        allow read, write: if isOwner(userId) || isAdmin();
+      }
+    }
+
+    match /support_reports/{reportId} {
+      allow create: if isSignedIn();
+      allow read, update: if isAdmin() || request.auth.uid == resource.data.reporterUid;
+    }
+
+    match /admin_tasks/{taskId} {
+      allow read, write: if isAdmin();
+    }
+
+    match /specializations/{specId} {
+      allow read: if isSignedIn();
+      allow write: if isAdmin();
+    }
+  }
+}

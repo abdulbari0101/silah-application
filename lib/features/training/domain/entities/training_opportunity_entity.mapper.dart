@@ -25,8 +25,8 @@ class TrainingOpportunityEntityMapper
   @override
   final String id = 'TrainingOpportunityEntity';
 
-  static int? _$id(TrainingOpportunityEntity v) => v.id;
-  static const Field<TrainingOpportunityEntity, int> _f$id = Field(
+  static String? _$id(TrainingOpportunityEntity v) => v.id;
+  static const Field<TrainingOpportunityEntity, String> _f$id = Field(
     'id',
     _$id,
     opt: true,
@@ -169,7 +169,7 @@ abstract class TrainingOpportunityEntityCopyWith<
 >
     implements ClassCopyWith<$R, $In, $Out> {
   $R call({
-    int? id,
+    String? id,
     String? lawyerId,
     String? title,
     String? description,

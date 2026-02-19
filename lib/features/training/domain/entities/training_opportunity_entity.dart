@@ -4,7 +4,7 @@ part 'training_opportunity_entity.mapper.dart';
 
 @MappableClass()
 class TrainingOpportunityEntity with TrainingOpportunityEntityMappable {
-  final int? id;
+  final String? id;
   final String? lawyerId;
   final String? title;
   final String? description;

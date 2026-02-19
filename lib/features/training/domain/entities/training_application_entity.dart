@@ -6,14 +6,14 @@ part 'training_application_entity.mapper.dart';
 
 @MappableClass()
 class TrainingApplicationEntity with TrainingApplicationEntityMappable {
-  final int? id;
-  final int? opportunityId;
+  final String? id;
+  final String? opportunityId;
   final String? traineeId;
   final String? fullName;
   final String? university;
   final String? faculty;
   final String? city;
-  final String? graduationYear;
+  final int? graduationYear;
   final String? cvUrl;
   final TrainingApplicationStatus status;
   final String? submittedAt;

@@ -26,18 +26,16 @@ class TrainingApplicationEntityMapper
   @override
   final String id = 'TrainingApplicationEntity';
 
-  static int? _$id(TrainingApplicationEntity v) => v.id;
-  static const Field<TrainingApplicationEntity, int> _f$id = Field(
+  static String? _$id(TrainingApplicationEntity v) => v.id;
+  static const Field<TrainingApplicationEntity, String> _f$id = Field(
     'id',
     _$id,
     opt: true,
   );
-  static int? _$opportunityId(TrainingApplicationEntity v) => v.opportunityId;
-  static const Field<TrainingApplicationEntity, int> _f$opportunityId = Field(
-    'opportunityId',
-    _$opportunityId,
-    opt: true,
-  );
+  static String? _$opportunityId(TrainingApplicationEntity v) =>
+      v.opportunityId;
+  static const Field<TrainingApplicationEntity, String> _f$opportunityId =
+      Field('opportunityId', _$opportunityId, opt: true);
   static String? _$traineeId(TrainingApplicationEntity v) => v.traineeId;
   static const Field<TrainingApplicationEntity, String> _f$traineeId = Field(
     'traineeId',
@@ -68,10 +66,12 @@ class TrainingApplicationEntityMapper
     _$city,
     opt: true,
   );
-  static String? _$graduationYear(TrainingApplicationEntity v) =>
-      v.graduationYear;
-  static const Field<TrainingApplicationEntity, String> _f$graduationYear =
-      Field('graduationYear', _$graduationYear, opt: true);
+  static int? _$graduationYear(TrainingApplicationEntity v) => v.graduationYear;
+  static const Field<TrainingApplicationEntity, int> _f$graduationYear = Field(
+    'graduationYear',
+    _$graduationYear,
+    opt: true,
+  );
   static String? _$cvUrl(TrainingApplicationEntity v) => v.cvUrl;
   static const Field<TrainingApplicationEntity, String> _f$cvUrl = Field(
     'cvUrl',
@@ -202,14 +202,14 @@ abstract class TrainingApplicationEntityCopyWith<
 >
     implements ClassCopyWith<$R, $In, $Out> {
   $R call({
-    int? id,
-    int? opportunityId,
+    String? id,
+    String? opportunityId,
     String? traineeId,
     String? fullName,
     String? university,
     String? faculty,
     String? city,
-    String? graduationYear,
+    int? graduationYear,
     String? cvUrl,
     TrainingApplicationStatus? status,
     String? submittedAt,
