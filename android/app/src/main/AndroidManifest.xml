@@ -12,6 +12,8 @@
         android:label="silah_app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
+        android:screenOrientation="portrait"
+        android:enableOnBackInvokedCallback="true"
         android:usesCleartextTraffic="false"
         >
 

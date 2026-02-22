@@ -43,6 +43,12 @@ class LegalSpecializationModelMapper
     _$nameEn,
     opt: true,
   );
+  static String? _$iconUrl(LegalSpecializationModel v) => v.iconUrl;
+  static const Field<LegalSpecializationModel, String> _f$iconUrl = Field(
+    'iconUrl',
+    _$iconUrl,
+    opt: true,
+  );
   static bool? _$active(LegalSpecializationModel v) => v.active;
   static const Field<LegalSpecializationModel, bool> _f$active = Field(
     'active',
@@ -55,6 +61,7 @@ class LegalSpecializationModelMapper
     #id: _f$id,
     #nameAr: _f$nameAr,
     #nameEn: _f$nameEn,
+    #iconUrl: _f$iconUrl,
     #active: _f$active,
   };
   @override
@@ -65,6 +72,7 @@ class LegalSpecializationModelMapper
       id: data.dec(_f$id),
       nameAr: data.dec(_f$nameAr),
       nameEn: data.dec(_f$nameEn),
+      iconUrl: data.dec(_f$iconUrl),
       active: data.dec(_f$active),
     );
   }
@@ -139,7 +147,13 @@ abstract class LegalSpecializationModelCopyWith<
   $Out
 >
     implements ClassCopyWith<$R, $In, $Out> {
-  $R call({String? id, String? nameAr, String? nameEn, bool? active});
+  $R call({
+    String? id,
+    String? nameAr,
+    String? nameEn,
+    String? iconUrl,
+    bool? active,
+  });
   LegalSpecializationModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
     Then<$Out2, $R2> t,
   );
@@ -159,12 +173,14 @@ class _LegalSpecializationModelCopyWithImpl<$R, $Out>
     Object? id = $none,
     Object? nameAr = $none,
     Object? nameEn = $none,
+    Object? iconUrl = $none,
     Object? active = $none,
   }) => $apply(
     FieldCopyWithData({
       if (id != $none) #id: id,
       if (nameAr != $none) #nameAr: nameAr,
       if (nameEn != $none) #nameEn: nameEn,
+      if (iconUrl != $none) #iconUrl: iconUrl,
       if (active != $none) #active: active,
     }),
   );
@@ -173,6 +189,7 @@ class _LegalSpecializationModelCopyWithImpl<$R, $Out>
     id: data.get(#id, or: $value.id),
     nameAr: data.get(#nameAr, or: $value.nameAr),
     nameEn: data.get(#nameEn, or: $value.nameEn),
+    iconUrl: data.get(#iconUrl, or: $value.iconUrl),
     active: data.get(#active, or: $value.active),
   );
 

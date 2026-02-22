@@ -12,6 +12,11 @@ from ..schemas import (
     ConsultationStatusUpdateResponse,
 )
 from ..services.firestore_service import create_notification
+from ..utils.firebase_logger import (
+    log_firestore_error,
+    log_firestore_request,
+    log_firestore_response,
+)
 from ..utils.responses import success_response
 from ..utils.time import utc_now_iso
 
@@ -27,16 +32,27 @@ def create_consultation(
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden")
 
     db = firestore_client()
+    specialization_value = payload.specialization or payload.specializationId
+    if not specialization_value:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Missing specialization")
+
     record = {
         "clientUid": payload.clientUid,
         "lawyerUid": payload.lawyerUid,
         "caseText": payload.caseText,
+        "specializationId": payload.specializationId,
         "specialization": payload.specialization,
         "status": "pending",
         "createdAt": utc_now_iso(),
     }
-    ref = db.collection("consultations").document()
-    ref.set(record)
+    log_firestore_request("consultations.create", data=record)
+    try:
+        ref = db.collection("consultations").document()
+        ref.set(record)
+        log_firestore_response("consultations.create", doc_id=ref.id)
+    except Exception as exc:
+        log_firestore_error("consultations.create", exc)
+        raise
 
     create_notification(
         payload.lawyerUid,
@@ -56,7 +72,17 @@ def update_consultation_status(
     decoded: dict = Depends(verify_id_token),
 ) -> dict:
     db = firestore_client()
-    doc = db.collection("consultations").document(consultation_id).get()
+    log_firestore_request("consultations.get", consultation_id=consultation_id)
+    try:
+        doc = db.collection("consultations").document(consultation_id).get()
+        log_firestore_response(
+            "consultations.get",
+            consultation_id=consultation_id,
+            exists=doc.exists,
+        )
+    except Exception as exc:
+        log_firestore_error("consultations.get", exc, consultation_id=consultation_id)
+        raise
     if not doc.exists:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Consultation not found")
 
@@ -71,21 +97,41 @@ def update_consultation_status(
         if decoded.get("uid") not in {client_uid, lawyer_uid} and decoded.get("role") != "admin":
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden")
 
-    db.collection("consultations").document(consultation_id).set(
-        {"status": payload.status, "updatedAt": utc_now_iso()},
-        merge=True,
+    log_firestore_request(
+        "consultations.update",
+        consultation_id=consultation_id,
+        status=payload.status,
     )
+    try:
+        db.collection("consultations").document(consultation_id).set(
+            {"status": payload.status, "updatedAt": utc_now_iso()},
+            merge=True,
+        )
+        log_firestore_response("consultations.update", consultation_id=consultation_id)
+    except Exception as exc:
+        log_firestore_error("consultations.update", exc, consultation_id=consultation_id)
+        raise
 
     if payload.status == "accepted":
-        chat_ref = db.collection("chats").document()
-        chat_ref.set(
-            {
-                "participants": [client_uid, lawyer_uid],
-                "consultationId": consultation_id,
-                "lastMessage": None,
-                "updatedAt": utc_now_iso(),
-            }
+        log_firestore_request(
+            "chats.create",
+            consultation_id=consultation_id,
+            participants=[client_uid, lawyer_uid],
         )
+        try:
+            chat_ref = db.collection("chats").document()
+            chat_ref.set(
+                {
+                    "participants": [client_uid, lawyer_uid],
+                    "consultationId": consultation_id,
+                    "lastMessage": None,
+                    "updatedAt": utc_now_iso(),
+                }
+            )
+            log_firestore_response("chats.create", chat_id=chat_ref.id)
+        except Exception as exc:
+            log_firestore_error("chats.create", exc, consultation_id=consultation_id)
+            raise
 
     if payload.status == "accepted":
         create_notification(

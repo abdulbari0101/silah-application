@@ -51,7 +51,8 @@ class ConsultationCreateRequest(BaseModel):
     clientUid: str = Field(..., min_length=1)
     lawyerUid: str = Field(..., min_length=1)
     caseText: str = Field(..., min_length=1)
-    specialization: str = Field(..., min_length=1)
+    specializationId: Optional[str] = None
+    specialization: Optional[str] = None
 
 
 class ConsultationCreateResponse(BaseModel):
@@ -73,7 +74,10 @@ class TrainingApplicationCreateRequest(BaseModel):
     fullName: Optional[str] = None
     university: Optional[str] = None
     faculty: Optional[str] = None
+    cityId: Optional[str] = None
     city: Optional[str] = None
+    areaId: Optional[str] = None
+    area: Optional[str] = None
     graduationYear: Optional[int] = None
 
 
@@ -96,6 +100,15 @@ class SupportReportCreateRequest(BaseModel):
 
 class SupportReportCreateResponse(BaseModel):
     reportId: str
+
+
+class DeviceTokenRequest(BaseModel):
+    deviceToken: str = Field(..., min_length=1)
+    platform: Optional[str] = None
+
+
+class DeviceTokenResponse(BaseModel):
+    status: str
 
 
 class WrappedResponse(BaseModel):

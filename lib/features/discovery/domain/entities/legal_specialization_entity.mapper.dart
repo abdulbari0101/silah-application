@@ -49,6 +49,12 @@ class LegalSpecializationEntityMapper
     _$description,
     opt: true,
   );
+  static String? _$iconUrl(LegalSpecializationEntity v) => v.iconUrl;
+  static const Field<LegalSpecializationEntity, String> _f$iconUrl = Field(
+    'iconUrl',
+    _$iconUrl,
+    opt: true,
+  );
   static List<String>? _$keywords(LegalSpecializationEntity v) => v.keywords;
   static const Field<LegalSpecializationEntity, List<String>> _f$keywords =
       Field('keywords', _$keywords, opt: true);
@@ -59,6 +65,7 @@ class LegalSpecializationEntityMapper
     #code: _f$code,
     #name: _f$name,
     #description: _f$description,
+    #iconUrl: _f$iconUrl,
     #keywords: _f$keywords,
   };
   @override
@@ -70,6 +77,7 @@ class LegalSpecializationEntityMapper
       code: data.dec(_f$code),
       name: data.dec(_f$name),
       description: data.dec(_f$description),
+      iconUrl: data.dec(_f$iconUrl),
       keywords: data.dec(_f$keywords),
     );
   }
@@ -154,6 +162,7 @@ abstract class LegalSpecializationEntityCopyWith<
     String? code,
     String? name,
     String? description,
+    String? iconUrl,
     List<String>? keywords,
   });
   LegalSpecializationEntityCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
@@ -185,6 +194,7 @@ class _LegalSpecializationEntityCopyWithImpl<$R, $Out>
     Object? code = $none,
     Object? name = $none,
     Object? description = $none,
+    Object? iconUrl = $none,
     Object? keywords = $none,
   }) => $apply(
     FieldCopyWithData({
@@ -192,6 +202,7 @@ class _LegalSpecializationEntityCopyWithImpl<$R, $Out>
       if (code != $none) #code: code,
       if (name != $none) #name: name,
       if (description != $none) #description: description,
+      if (iconUrl != $none) #iconUrl: iconUrl,
       if (keywords != $none) #keywords: keywords,
     }),
   );
@@ -202,6 +213,7 @@ class _LegalSpecializationEntityCopyWithImpl<$R, $Out>
         code: data.get(#code, or: $value.code),
         name: data.get(#name, or: $value.name),
         description: data.get(#description, or: $value.description),
+        iconUrl: data.get(#iconUrl, or: $value.iconUrl),
         keywords: data.get(#keywords, or: $value.keywords),
       );
 

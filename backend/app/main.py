@@ -6,8 +6,9 @@ from fastapi.responses import JSONResponse
 
 from .config import settings
 from .firebase import init_firebase
-from .routers import ai, consultations, support, training, verification
+from .routers import ai, consultations, devices, lookups, support, training, verification
 from .utils.responses import error_response, success_response
+from .utils.firebase_logger import setup_firebase_logging
 
 app = FastAPI(title="SILAH Backend", version="0.1.0")
 
@@ -24,6 +25,7 @@ if allowed:
 
 @app.on_event("startup")
 def on_startup() -> None:
+    setup_firebase_logging()
     init_firebase()
 
 
@@ -49,6 +51,8 @@ def health() -> dict:
 
 
 app.include_router(ai.router)
+app.include_router(devices.router)
+app.include_router(lookups.router)
 app.include_router(verification.router)
 app.include_router(consultations.router)
 app.include_router(training.router)

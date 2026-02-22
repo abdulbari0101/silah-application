@@ -12,7 +12,7 @@ class DataPaymentInitial extends SupportState {}
 class DataPaymentLoading extends SupportState {}
 
 class DataPaymentLoaded extends SupportState {
-  final List<SupportItemEntity> data;
+  final List<SupportTicketEntity> data;
 
   const DataPaymentLoaded({required this.data});
 

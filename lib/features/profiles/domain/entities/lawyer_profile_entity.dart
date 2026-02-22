@@ -13,6 +13,7 @@ class LawyerProfileEntity with LawyerProfileEntityMappable {
   final String? city;
   final String? workplace;
   final int? yearsOfExperience;
+  final String? avatarUrl;
   final bool acceptsTrainees;
   final AvailabilityStatus availability;
 
@@ -24,6 +25,7 @@ class LawyerProfileEntity with LawyerProfileEntityMappable {
     this.city,
     this.workplace,
     this.yearsOfExperience,
+    this.avatarUrl,
     this.acceptsTrainees = false,
     this.availability = AvailabilityStatus.available,
   });

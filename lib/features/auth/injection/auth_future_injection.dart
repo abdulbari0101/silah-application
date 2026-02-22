@@ -9,6 +9,7 @@ import 'package:silah_app/features/auth/domain/repositories/identity_base_repo.d
 import 'package:silah_app/features/auth/presentation/blocs/forget_pass/forget_pass_bloc.dart';
 import 'package:silah_app/features/auth/presentation/blocs/login/login_bloc.dart';
 import 'package:silah_app/features/auth/presentation/blocs/self_registration/self_registration_bloc.dart';
+import 'package:silah_app/features/notifications/domain/repositories/device_token_repository.dart';
 
 import '../domain/repositories/auth_repository.dart';
 
@@ -40,6 +41,8 @@ Future<void> initAuth() async {
       cacheDS: locator(),
       executor: locator(),
       authIdentityRepo: locator(),
+      deviceTokenRepository: locator<DeviceTokenRepository>(),
+      settingReader: locator(),
     ),
   );
 

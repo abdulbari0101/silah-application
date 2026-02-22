@@ -28,7 +28,7 @@ ThemeData buildTheme(
   bool harmonizeBrandWithScheme = true, // <- NEW
 }) {
   // 1) Resolve ColorScheme: dynamic (Android) or brand fallback.
-  final baseScheme = schemeOverride ?? buildScheme(t, brightness);
+  final baseScheme = schemeOverride ?? buildScheme(brightness);
 
   // 2) Build a brand palette and (optionally) harmonize its extra colors
   //    with the resolved scheme’s primary (Material 3 guidance).

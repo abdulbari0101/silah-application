@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
+import 'package:silah_app/core/infrastructure/analytics/logger/app_logger.dart';
 import 'package:silah_app/core/infrastructure/errors/error_codes.dart';
 import 'package:silah_app/core/infrastructure/errors/exceptions.dart';
 import 'package:silah_app/features/auth/data/models/auth_user_model.dart';
@@ -12,17 +13,14 @@ class AuthService {
   final FirebaseFirestore _firestore;
 
   AuthService({FirebaseAuth? auth, FirebaseFirestore? firestore})
-      : _auth = auth ?? FirebaseAuth.instance,
-        _firestore = firestore ?? FirebaseFirestore.instance;
+    : _auth = auth ?? FirebaseAuth.instance,
+      _firestore = firestore ?? FirebaseFirestore.instance;
 
   User? get currentUser => _auth.currentUser;
 
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
-  Future<AuthUserModel> signIn({
-    required String email,
-    required String password,
-  }) async {
+  Future<AuthUserModel> signIn({required String email, required String password}) async {
     final credential = await _auth.signInWithEmailAndPassword(
       email: email.trim(),
       password: password,
@@ -32,6 +30,8 @@ class AuthService {
     final profile = await _fetchProfile(user.uid);
     final idToken = await _safeIdToken(user);
 
+    AppLogger().networkInfo("token = $idToken", tag: "signIn");
+
     return _buildUserModel(user: user, profile: profile, idToken: idToken);
   }
 
@@ -40,6 +40,7 @@ class AuthService {
     required String email,
     required String phone,
     required String password,
+    String? avatarUrl,
   }) async {
     final credential = await _auth.createUserWithEmailAndPassword(
       email: email.trim(),
@@ -53,13 +54,18 @@ class AuthService {
       'name': name.trim(),
       'email': email.trim(),
       'phone': phone.trim(),
+      'avatarUrl': avatarUrl,
       'accountType': 'user',
       'createdAt': FieldValue.serverTimestamp(),
     };
     await _firestore.collection('users').doc(user.uid).set(profile);
 
     final idToken = await _safeIdToken(user);
-    return _buildUserModel(user: user, profile: _ProfileData(AuthAccountType.user, profile), idToken: idToken);
+    return _buildUserModel(
+      user: user,
+      profile: _ProfileData(AuthAccountType.user, profile),
+      idToken: idToken,
+    );
   }
 
   Future<AuthUserModel> registerLawyer({
@@ -67,14 +73,20 @@ class AuthService {
     required String email,
     required String phone,
     required String gender,
+    String? genderId,
     required String password,
     required String legalField,
+    String? legalFieldId,
     required String city,
+    String? cityId,
+    String? areaId,
     required String workplace,
+    String? workDestinationId,
     required String officeName,
     String? experienceYears,
     required String licenseNumber,
     required String nationalId,
+    String? avatarUrl,
   }) async {
     final credential = await _auth.createUserWithEmailAndPassword(
       email: email.trim(),
@@ -89,13 +101,19 @@ class AuthService {
       'email': email.trim(),
       'phone': phone.trim(),
       'gender': gender,
+      'genderId': genderId,
       'legalField': legalField,
+      'legalFieldId': legalFieldId,
       'city': city,
+      'cityId': cityId,
+      'areaId': areaId,
       'workplace': workplace,
+      'workDestinationId': workDestinationId,
       'officeName': officeName.trim(),
       'experienceYears': experienceYears?.trim() ?? '',
       'licenseNumber': licenseNumber.trim(),
       'nationalId': nationalId.trim(),
+      'avatarUrl': avatarUrl,
       'accountType': 'lawyer',
       'verified': false,
       'createdAt': FieldValue.serverTimestamp(),
@@ -103,7 +121,11 @@ class AuthService {
     await _firestore.collection('lawyers').doc(user.uid).set(profile);
 
     final idToken = await _safeIdToken(user);
-    return _buildUserModel(user: user, profile: _ProfileData(AuthAccountType.lawyer, profile), idToken: idToken);
+    return _buildUserModel(
+      user: user,
+      profile: _ProfileData(AuthAccountType.lawyer, profile),
+      idToken: idToken,
+    );
   }
 
   Future<void> sendPasswordResetEmail({required String email}) async {

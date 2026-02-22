@@ -44,7 +44,7 @@ Future<void> initUtils() async {
   /// locator.registerLazySingleton(() => SessionReader(appCache: locator()));
 
   locator.registerLazySingleton(
-    () => Executor(networkInfo: locator(), logger: locator(), authCacheReader: locator()),
+    () => Executor(networkInfo: locator(), logger: locator()),
   );
 
   locator.registerLazySingleton(() => SessionTimeoutService());

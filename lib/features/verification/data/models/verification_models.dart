@@ -15,6 +15,7 @@ class VerificationRequestModel with VerificationRequestModelMappable {
     required this.nationalId,
     required this.lawyerUid,
   });
+
 }
 
 @MappableClass(ignoreNull: true)

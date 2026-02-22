@@ -8,13 +8,13 @@ import 'package:silah_app/core/infrastructure/errors/error_utils.dart';
 import 'package:silah_app/core/infrastructure/errors/failures.dart';
 import 'package:silah_app/core/presentation/state_magment/bloc_utils/bloc_utils.dart';
 import 'package:silah_app/features/discovery/domain/entities/specification_item_entity.dart';
-import 'package:silah_app/features/discovery/domain/repositories/specifications_repository.dart';
+import 'package:silah_app/features/discovery/domain/repositories/discovery_repository.dart';
 
 part 'specifications_event.dart';
 part 'specifications_state.dart';
 
 class SpecificationsBloc extends Bloc<SpecificationsEvent, SpecificationsState> {
-  final SpecificationsRepository repository;
+  final DiscoveryRepository repository;
   PostRequestEntity postRequest = PostRequestEntity();
 
   SpecificationsBloc({required this.repository}) : super(DataPaymentInitial()) {
@@ -30,7 +30,7 @@ class SpecificationsBloc extends Bloc<SpecificationsEvent, SpecificationsState> 
   ) async {
     emit(DataPaymentLoading());
 
-    final result = await repository.Specification(PostRequestEntity());
+    final result = await repository.fetchSpecializations();
 
     result.fold((failure) => _emitFailure(failure, emit), (data) {
       emit(DataPaymentLoaded(data: []));

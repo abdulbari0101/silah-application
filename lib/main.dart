@@ -130,19 +130,7 @@ Future<void> _startApp() async {
       fallbackLocale: AppLanguage.fallbackLocale,
       child: Builder(
         builder: (context) {
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'SILAH',
-            theme: ThemeData(
-              useMaterial3: true,
-              fontFamily: 'Cairo',
-              extensions: const [ShapeScale()],
-            ),
-            localizationsDelegates: context.localizationDelegates,
-            supportedLocales: context.supportedLocales,
-            locale: context.locale,
-            home: const WelcomeScreen(),
-          );
+          return MyApp();
         },
       ),
     ),

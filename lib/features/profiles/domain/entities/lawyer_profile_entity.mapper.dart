@@ -63,6 +63,12 @@ class LawyerProfileEntityMapper extends ClassMapperBase<LawyerProfileEntity> {
     _$yearsOfExperience,
     opt: true,
   );
+  static String? _$avatarUrl(LawyerProfileEntity v) => v.avatarUrl;
+  static const Field<LawyerProfileEntity, String> _f$avatarUrl = Field(
+    'avatarUrl',
+    _$avatarUrl,
+    opt: true,
+  );
   static bool _$acceptsTrainees(LawyerProfileEntity v) => v.acceptsTrainees;
   static const Field<LawyerProfileEntity, bool> _f$acceptsTrainees = Field(
     'acceptsTrainees',
@@ -89,6 +95,7 @@ class LawyerProfileEntityMapper extends ClassMapperBase<LawyerProfileEntity> {
     #city: _f$city,
     #workplace: _f$workplace,
     #yearsOfExperience: _f$yearsOfExperience,
+    #avatarUrl: _f$avatarUrl,
     #acceptsTrainees: _f$acceptsTrainees,
     #availability: _f$availability,
   };
@@ -104,6 +111,7 @@ class LawyerProfileEntityMapper extends ClassMapperBase<LawyerProfileEntity> {
       city: data.dec(_f$city),
       workplace: data.dec(_f$workplace),
       yearsOfExperience: data.dec(_f$yearsOfExperience),
+      avatarUrl: data.dec(_f$avatarUrl),
       acceptsTrainees: data.dec(_f$acceptsTrainees),
       availability: data.dec(_f$availability),
     );
@@ -189,6 +197,7 @@ abstract class LawyerProfileEntityCopyWith<
     String? city,
     String? workplace,
     int? yearsOfExperience,
+    String? avatarUrl,
     bool? acceptsTrainees,
     AvailabilityStatus? availability,
   });
@@ -223,6 +232,7 @@ class _LawyerProfileEntityCopyWithImpl<$R, $Out>
     Object? city = $none,
     Object? workplace = $none,
     Object? yearsOfExperience = $none,
+    Object? avatarUrl = $none,
     bool? acceptsTrainees,
     AvailabilityStatus? availability,
   }) => $apply(
@@ -234,6 +244,7 @@ class _LawyerProfileEntityCopyWithImpl<$R, $Out>
       if (city != $none) #city: city,
       if (workplace != $none) #workplace: workplace,
       if (yearsOfExperience != $none) #yearsOfExperience: yearsOfExperience,
+      if (avatarUrl != $none) #avatarUrl: avatarUrl,
       if (acceptsTrainees != null) #acceptsTrainees: acceptsTrainees,
       if (availability != null) #availability: availability,
     }),
@@ -250,6 +261,7 @@ class _LawyerProfileEntityCopyWithImpl<$R, $Out>
       #yearsOfExperience,
       or: $value.yearsOfExperience,
     ),
+    avatarUrl: data.get(#avatarUrl, or: $value.avatarUrl),
     acceptsTrainees: data.get(#acceptsTrainees, or: $value.acceptsTrainees),
     availability: data.get(#availability, or: $value.availability),
   );

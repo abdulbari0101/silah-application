@@ -31,7 +31,7 @@ class Settings(BaseSettings):
 
     allow_mock_najiz: bool = Field(default=True, validation_alias="SILAH_ALLOW_MOCK_NAJIZ")
 
-    model_config = SettingsConfigDict(env_file=".env", case_sensitive=False)
+    model_config = SettingsConfigDict(env_file="env/.env", case_sensitive=False)
 
 
 settings = Settings()

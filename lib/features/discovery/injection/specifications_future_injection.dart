@@ -4,8 +4,8 @@ import 'package:silah_app/core/injection/injection_container.dart';
 import 'package:silah_app/features/discovery/data/datasources/local/specifications_local_data_source.dart';
 import 'package:silah_app/features/discovery/data/datasources/remote/specifications_remote_data_source.dart';
 import 'package:silah_app/features/discovery/data/datasources/remote/specifications_service.dart';
-import 'package:silah_app/features/discovery/data/repositories/specifications_repository_impl.dart';
-import 'package:silah_app/features/discovery/domain/repositories/specifications_repository.dart';
+import 'package:silah_app/features/discovery/data/repositories/discovery_repository_impl.dart';
+import 'package:silah_app/features/discovery/domain/repositories/discovery_repository.dart';
 import 'package:silah_app/features/discovery/presentation/blocs/specifications/specifications_bloc.dart';
 //! Features -Specifications
 
@@ -15,13 +15,8 @@ Future<void> initSpecifications() async {
   locator.registerLazySingleton(() => SpecificationsBloc(repository: locator()));
 
   // Repo
-  locator.registerLazySingleton<SpecificationsRepository>(
-    () => SpecificationsRepositoryoImpl(
-      remoteDS: locator(),
-      executor: locator(),
-      localDS: locator(),
-      deviceInfoHelper: locator(),
-    ),
+  locator.registerLazySingleton<DiscoveryRepository>(
+    () => DiscoveryRepositoryImpl(aiRemoteDataSource: locator(), executor: locator()),
   );
 
   // Data sources

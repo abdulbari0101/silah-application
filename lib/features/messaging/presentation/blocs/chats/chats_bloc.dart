@@ -8,13 +8,14 @@ import 'package:silah_app/core/infrastructure/errors/error_utils.dart';
 import 'package:silah_app/core/infrastructure/errors/failures.dart';
 import 'package:silah_app/core/presentation/state_magment/bloc_utils/bloc_utils.dart';
 import 'package:silah_app/features/messaging/domain/entities/chat_item_entity.dart';
-import 'package:silah_app/features/messaging/domain/repositories/chat_repository.dart';
+import 'package:silah_app/features/messaging/domain/entities/message_entity.dart';
+import 'package:silah_app/features/messaging/domain/repositories/messaging_repository.dart';
 
 part 'chats_event.dart';
 part 'chats_state.dart';
 
 class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
-  final ChatsRepository repository;
+  final MessagingRepository repository;
   PostRequestEntity postRequest = PostRequestEntity();
 
   ChatsBloc({required this.repository}) : super(DataChatInitial()) {
@@ -27,7 +28,7 @@ class ChatsBloc extends Bloc<ChatsEvent, ChatsState> {
   Future<void> _onChatsEvent(LoadChats event, Emitter<ChatsState> emit) async {
     emit(DataChatLoading());
 
-    final result = await repository.Chat(PostRequestEntity());
+    final result = await repository.sendMessage(MessageEntity());
 
     result.fold((failure) => _emitFailure(failure, emit), (data) {
       emit(DataChatLoaded(data: []));

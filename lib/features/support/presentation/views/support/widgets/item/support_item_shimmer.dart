@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:silah_app/core/config/theme/extentions/theme_context_extension.dart';
-import 'package:silah_app/features/support/domain/entities/support_item_entity.dart';
+import 'package:silah_app/features/support/domain/entities/support_ticket_entity.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import 'support_item.dart';
@@ -20,7 +20,7 @@ class SupportItemShimmer extends StatelessWidget {
         highlightColor: colors.shimmerHighlight,
         duration: const Duration(milliseconds: 1200),
       ),
-      child: SupportItem(item: SupportItemEntity(name: 'name'), enabled: false),
+      child: SupportItem(item: SupportTicketEntity(description: 'name'), enabled: false),
     );
   }
 }

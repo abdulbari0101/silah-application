@@ -21,6 +21,7 @@ migrate_working_dir/
 assets/certs/
 lib/scripts/
 env/
+*/env/
 
 
 # The .vscode folder contains launch configuration and tasks you configure in
@@ -142,4 +143,5 @@ docs/
 
 *.md
 
+*.env
 assets/demo

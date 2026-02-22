@@ -10,20 +10,27 @@ abstract class AuthRemoteDataSource {
     required String email,
     required String phone,
     required String password,
+    String? avatarUrl,
   });
   Future<AuthUserModel> registerLawyer({
     required String name,
     required String email,
     required String phone,
     required String gender,
+    String? genderId,
     required String password,
     required String legalField,
+    String? legalFieldId,
     required String city,
+    String? cityId,
+    String? areaId,
     required String workplace,
+    String? workDestinationId,
     required String officeName,
     String? experienceYears,
     required String licenseNumber,
     required String nationalId,
+    String? avatarUrl,
   });
   Future<void> sendPasswordReset({required String email});
   Future<void> signOut();
@@ -52,6 +59,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String email,
     required String phone,
     required String password,
+    String? avatarUrl,
   }) =>
       firebaseCall<AuthUserModel>(
         method: 'AuthRemoteDataSource.registerUser',
@@ -61,6 +69,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           email: email,
           phone: phone,
           password: password,
+          avatarUrl: avatarUrl,
         ),
       );
 
@@ -70,14 +79,20 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     required String email,
     required String phone,
     required String gender,
+    String? genderId,
     required String password,
     required String legalField,
+    String? legalFieldId,
     required String city,
+    String? cityId,
+    String? areaId,
     required String workplace,
+    String? workDestinationId,
     required String officeName,
     String? experienceYears,
     required String licenseNumber,
     required String nationalId,
+    String? avatarUrl,
   }) =>
       firebaseCall<AuthUserModel>(
         method: 'AuthRemoteDataSource.registerLawyer',
@@ -87,14 +102,20 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           email: email,
           phone: phone,
           gender: gender,
+          genderId: genderId,
           password: password,
           legalField: legalField,
+          legalFieldId: legalFieldId,
           city: city,
+          cityId: cityId,
+          areaId: areaId,
           workplace: workplace,
+          workDestinationId: workDestinationId,
           officeName: officeName,
           experienceYears: experienceYears,
           licenseNumber: licenseNumber,
           nationalId: nationalId,
+          avatarUrl: avatarUrl,
         ),
       );
 

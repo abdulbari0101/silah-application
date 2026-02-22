@@ -59,7 +59,7 @@ class HomeGreetingCard extends StatelessWidget {
             if (showEmail) ...[
               UIConstants.xsmallHeight,
               Text(
-                email!,
+                email,
                 textAlign: TextAlign.center,
                 style: context.textTheme.bodySmall?.onSurfaceVariant(context),
               ),

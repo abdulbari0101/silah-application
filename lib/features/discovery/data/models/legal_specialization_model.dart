@@ -8,12 +8,14 @@ class LegalSpecializationModel with LegalSpecializationModelMappable {
   final String? id;
   final String? nameAr;
   final String? nameEn;
+  final String? iconUrl;
   final bool? active;
 
   const LegalSpecializationModel({
     this.id,
     this.nameAr,
     this.nameEn,
+    this.iconUrl,
     this.active,
   });
 
@@ -22,6 +24,7 @@ class LegalSpecializationModel with LegalSpecializationModelMappable {
         code: nameEn,
         name: (nameAr?.isNotEmpty == true) ? nameAr : nameEn,
         description: null,
+        iconUrl: iconUrl,
         keywords: null,
       );
 }

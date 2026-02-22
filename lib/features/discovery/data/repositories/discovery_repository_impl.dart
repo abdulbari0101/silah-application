@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:silah_app/core/infrastructure/errors/failures.dart';
 import 'package:silah_app/core/infrastructure/system/executor.dart';
 import 'package:silah_app/core/infrastructure/network/firebase_call.dart';
@@ -17,15 +16,13 @@ class DiscoveryRepositoryImpl implements DiscoveryRepository {
   final AiRemoteDataSource aiRemoteDataSource;
   final Executor executor;
   final FirebaseFirestore firestore;
-  final FirebaseAuth auth;
 
   DiscoveryRepositoryImpl({
     required this.aiRemoteDataSource,
     required this.executor,
     FirebaseFirestore? firestore,
-    FirebaseAuth? auth,
-  })  : firestore = firestore ?? FirebaseFirestore.instance,
-        auth = auth ?? FirebaseAuth.instance;
+  
+  })  : firestore = firestore ?? FirebaseFirestore.instance;
 
   @override
   Future<Either<Failure, List<LegalSpecializationEntity>>> fetchSpecializations() {
@@ -41,6 +38,7 @@ class DiscoveryRepositoryImpl implements DiscoveryRepository {
                     id: doc.id,
                     nameAr: doc.data()['nameAr'] as String?,
                     nameEn: doc.data()['nameEn'] as String?,
+                    iconUrl: doc.data()['iconUrl'] as String?,
                     active: doc.data()['active'] as bool?,
                   ).toEntity())
               .toList();

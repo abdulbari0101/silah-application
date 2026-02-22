@@ -1,42 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:silah_app/core/infrastructure/platform/app_platform.dart';
+import 'package:silah_app/core/injection/injection_container.dart';
+import 'package:silah_app/core/presentation/state_magment/wrapper/app_setting_bloc_builder.dart';
+import 'package:silah_app/features/app_shell/presentation/blocs/home_bloc/home_bloc.dart';
+import 'package:silah_app/features/app_shell/presentation/views/main/screen/android_nav_wrapper.dart';
+import 'package:silah_app/features/app_shell/presentation/views/main/screen/ios_nav_wrapper.dart';
 
-class MainScreen extends StatelessWidget {
-  const MainScreen({super.key, required this.navigationShell});
+class MainScreen extends StatefulWidget {
+  final Widget child;
+  final StatefulNavigationShell? navigationShell;
 
-  final StatefulNavigationShell navigationShell;
+  const MainScreen({super.key, required this.child, this.navigationShell});
 
-  void _onItemTapped(int index) {
-    navigationShell.goBranch(index, initialLocation: index == navigationShell.currentIndex);
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    final items = <_TabItem>[
-      const _TabItem(icon: Icons.home_outlined, label: 'Home'),
-      const _TabItem(icon: Icons.chat_bubble_outline, label: 'Chats'),
-      const _TabItem(icon: Icons.assignment_outlined, label: 'Requests'),
-      const _TabItem(icon: Icons.description_outlined, label: 'Specs'),
-      const _TabItem(icon: Icons.support_agent_outlined, label: 'Support'),
-      const _TabItem(icon: Icons.settings_outlined, label: 'Settings'),
-    ];
-
-    return Scaffold(
-      body: navigationShell,
-      bottomNavigationBar: NavigationBar(
-        selectedIndex: navigationShell.currentIndex,
-        onDestinationSelected: _onItemTapped,
-        destinations: [
-          for (final item in items)
-            NavigationDestination(icon: Icon(item.icon), label: item.label),
-        ],
-      ),
+    return Builder(
+      builder: (context) {
+        return MultiBlocProvider(
+          providers: [BlocProvider<HomeBloc>.value(value: locator<HomeBloc>())],
+    
+          child: AppSettingBlocBuilder(
+            child: AppPlatform(
+              ios: IOSNavWrapper(navigationShell: widget.navigationShell),
+              android: AndroidNavWrapper(
+                child: widget.child,
+                navigationShell: widget.navigationShell,
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
-}
-
-class _TabItem {
-  const _TabItem({required this.icon, required this.label});
-  final IconData icon;
-  final String label;
 }

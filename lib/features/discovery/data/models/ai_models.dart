@@ -23,6 +23,7 @@ class AiClassifyRequestModel with AiClassifyRequestModelMappable {
       lang: entity.languageCode,
     );
   }
+
 }
 
 @MappableClass(ignoreNull: true)
@@ -59,6 +60,7 @@ class AiRecommendRequestModel with AiRecommendRequestModelMappable {
   factory AiRecommendRequestModel.fromEntity(AiClassificationRequestEntity entity) {
     return AiRecommendRequestModel(caseText: entity.prompt);
   }
+
 }
 
 @MappableClass(ignoreNull: true)
@@ -67,6 +69,7 @@ class AiRecommendFiltersModel with AiRecommendFiltersModelMappable {
   final String? availability;
 
   const AiRecommendFiltersModel({this.city, this.availability});
+
 }
 
 @MappableClass(ignoreNull: true)

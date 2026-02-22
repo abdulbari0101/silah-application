@@ -1,30 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:silah_app/core/presentation/ui/screen/success/screens/success_screen.dart';
+import 'package:silah_app/features/app_shell/presentation/views/home/screens/home_screen.dart';
+import 'package:silah_app/features/app_shell/presentation/views/splash/screens/splash_screen.dart';
+import 'package:silah_app/features/app_shell/presentation/views/welcome/screens/welcome_screen.dart';
 import 'package:silah_app/features/auth/presentation/views/login/login/screens/login_screen.dart';
+import 'package:silah_app/features/auth/presentation/views/registration/models/lawyer_registration_data.dart';
 import 'package:silah_app/features/auth/presentation/views/registration/screens/account_type_screen.dart';
 import 'package:silah_app/features/auth/presentation/views/registration/screens/lawyer_license_verification_screen.dart';
 import 'package:silah_app/features/auth/presentation/views/registration/screens/lawyer_professional_info_screen.dart';
 import 'package:silah_app/features/auth/presentation/views/registration/screens/lawyer_sign_up_screen.dart';
-import 'package:silah_app/features/auth/presentation/views/registration/models/lawyer_registration_data.dart';
 import 'package:silah_app/features/auth/presentation/views/registration/screens/user_sign_up_screen.dart';
+import 'package:silah_app/features/consultations/presentation/views/requests/screens/requests_screen.dart';
+import 'package:silah_app/features/discovery/presentation/views/specification/screens/specifications_screen.dart';
 import 'package:silah_app/features/messaging/presentation/views/chats/screens/chats_screen.dart';
-import 'package:silah_app/features/app_shell/presentation/views/splash/screens/splash_screen.dart';
-import 'package:silah_app/features/app_shell/presentation/views/welcome/screens/welcome_screen.dart';
-import 'package:silah_app/features/app_shell/presentation/views/home/screens/home_screen.dart';
-import 'package:silah_app/features/consultations/presentation/views/request/screens/requests_screen.dart';
 import 'package:silah_app/features/settings/presentation/views/langauge/screens/language_prefrence_screen.dart';
 import 'package:silah_app/features/settings/presentation/views/settings/screens/settings_screen.dart';
-import 'package:silah_app/features/discovery/presentation/views/specification/screens/specifications_screen.dart';
 
 import 'route_info.dart';
 
 class AppRoutes {
   // Core
-  static final splash = RouteInfo(
-    name: 'splash',
-    path: '/',
-    builder: () => const SplashScreen(),
-  );
+  static final splash = RouteInfo(name: 'splash', path: '/', builder: () => const SplashScreen());
   static final onboarding = RouteInfo(
     name: 'onboardingScreen',
     path: '/onboarding',
@@ -32,21 +28,11 @@ class AppRoutes {
   );
 
   // Auth
-  static final login = RouteInfo(
-    name: 'login',
-    path: '/login',
-    builder: () => const LoginScreen(),
-  );
+  static final login = RouteInfo(name: 'login', path: '/login', builder: () => const LoginScreen());
 
-  static final changePassword = _placeholderRoute(
-    'change-password',
-    '/change-password',
-  );
+  static final changePassword = _placeholderRoute('change-password', '/change-password');
 
-  static final updatePassword = _placeholderRoute(
-    'update-password',
-    '/update-password',
-  );
+  static final updatePassword = _placeholderRoute('update-password', '/update-password');
   static final selfRegisterWizard = RouteInfo(
     name: 'self-Register-wizard',
     path: '/self-Register-wizard',
@@ -84,23 +70,16 @@ class AppRoutes {
       return const LawyerSignUpScreen();
     },
   );
-
+  
   // Main tabs
-  static final home = RouteInfo(
-    name: 'home',
-    path: '/home',
-    builder: () => const HomeScreen(),
-  );
-  static final chats = RouteInfo(
-    name: 'chats',
-    path: '/chats',
-    builder: () => const ChatsScreen(),
-  );
+  static final home = RouteInfo(name: 'home', path: '/home', builder: () => const HomeScreen());
+  static final messages = RouteInfo(name: 'messages', path: '/messages', builder: () => const MessagesScreen());
   static final requests = RouteInfo(
     name: 'requests',
     path: '/requests',
     builder: () => const RequestsScreen(),
   );
+
   static final specifications = RouteInfo(
     name: 'specifications',
     path: '/specifications',
@@ -113,7 +92,7 @@ class AppRoutes {
   );
 
   /// Tabs used by the main shell (bottom navigation).
-  static final tabRoutes = [home, chats, requests, specifications, settings];
+  static final tabRoutes = [home, requests, messages, settings];
 
   // Additional screens
   static final language = RouteInfo(
@@ -121,10 +100,7 @@ class AppRoutes {
     path: '/language',
     builder: () => const LanguagePreferencesScreen(),
   );
-  static final notification = _placeholderRoute(
-    'notification',
-    '/notification',
-  );
+  static final notification = _placeholderRoute('notification', '/notification');
 
   static final success = RouteInfo(
     name: 'success',
@@ -133,7 +109,6 @@ class AppRoutes {
   );
 
   static final allRoutes = [
-    splash,
     onboarding,
     login,
     changePassword,
@@ -143,7 +118,7 @@ class AppRoutes {
     lawyerSignUp,
     lawyerProfessionalInfo,
     lawyerLicenseVerification,
-
+    specifications,
     language,
     notification,
     success,
@@ -196,9 +171,7 @@ class _PlaceholderScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(title)),
-      body: Center(
-        child: Text('$title is not available in the simplified Silah app'),
-      ),
+      body: Center(child: Text('$title is not available in the simplified Silah app')),
     );
   }
 }

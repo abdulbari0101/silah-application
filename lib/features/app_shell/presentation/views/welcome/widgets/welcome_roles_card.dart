@@ -17,7 +17,7 @@ class WelcomeRolesCard extends StatelessWidget {
         vertical: UIConstants.bigPadding,
       ),
       decoration: BoxDecoration(
-        color: context.colors.surfaceVariant,
+        color: context.colors.surfaceContainerHighest,
         borderRadius: context.shapes.brLg,
       ),
       child: Column(

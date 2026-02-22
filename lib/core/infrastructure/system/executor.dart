@@ -2,8 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:silah_app/core/config/constants/api_constants.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
-import 'package:silah_app/core/data/local/cache/readers/auth_readers.dart';
-
 import 'package:silah_app/core/infrastructure/analytics/logger/app_log_group.dart';
 import 'package:silah_app/core/infrastructure/analytics/logger/app_logger.dart';
 import 'package:silah_app/core/infrastructure/analytics/logger/loggable_exception.dart';
@@ -16,9 +14,8 @@ import '../errors/exceptions.dart';
 class Executor {
   final Netwokinfo networkInfo;
   final AppLogger logger;
-  final SessionReader authCacheReader;
 
-  const Executor({required this.networkInfo, required this.logger, required this.authCacheReader});
+  const Executor({required this.networkInfo, required this.logger});
 
   Future<Either<Failure, T>> runOffline<T>(
     Future<T> Function() action, {
@@ -64,8 +61,6 @@ class Executor {
       return Left(UnexpectedFailure(e.toString()));
     }
   }
-
-
 
   void logError({required String from, required Object e, StackTrace? stack}) {
     final group = (e is LoggableException) ? e.logGroup : AppLogGroup.app;

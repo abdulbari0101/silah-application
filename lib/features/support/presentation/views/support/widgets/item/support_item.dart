@@ -3,13 +3,13 @@ import 'package:silah_app/core/config/constants/ui_constants.dart';
 import 'package:silah_app/core/config/theme/extentions/theme_context_extension.dart';
 import 'package:silah_app/core/presentation/ui/widget/buttons/card_button.dart';
 import 'package:silah_app/core/presentation/ui/widget/icons/app_svg_icon.dart';
-import 'package:silah_app/features/support/domain/entities/support_item_entity.dart';
+import 'package:silah_app/features/support/domain/entities/support_ticket_entity.dart';
 import 'package:silah_app/gen/assets.gen.dart';
 
 class SupportItem extends StatelessWidget {
   const SupportItem({super.key, required this.item, this.onTap, this.enabled = true});
 
-  final SupportItemEntity item;
+  final SupportTicketEntity item;
   final VoidCallback? onTap;
   final bool enabled;
 
@@ -34,7 +34,7 @@ class SupportItem extends StatelessWidget {
           ),
           UIConstants.smallHeight,
           Text(
-            item.name ?? "",
+            item.description ?? "",
             textAlign: TextAlign.center,
             maxLines: 2,
             overflow: TextOverflow.ellipsis,

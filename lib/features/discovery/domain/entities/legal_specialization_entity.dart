@@ -8,6 +8,7 @@ class LegalSpecializationEntity with LegalSpecializationEntityMappable {
   final String? code;
   final String? name;
   final String? description;
+  final String? iconUrl;
   final List<String>? keywords;
 
   const LegalSpecializationEntity({
@@ -15,6 +16,7 @@ class LegalSpecializationEntity with LegalSpecializationEntityMappable {
     this.code,
     this.name,
     this.description,
+    this.iconUrl,
     this.keywords,
   });
 }

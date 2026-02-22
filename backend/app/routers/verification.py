@@ -6,6 +6,11 @@ from ..auth import ensure_same_user_or_admin, require_admin, verify_id_token
 from ..firebase import firestore_client
 from ..schemas import VerificationRequest, VerificationResponse, VerificationReviewRequest
 from ..services.firestore_service import create_admin_task, set_user_verified
+from ..utils.firebase_logger import (
+    log_firestore_error,
+    log_firestore_request,
+    log_firestore_response,
+)
 from ..services.verification import mock_najiz_check
 from ..utils.responses import success_response
 from ..utils.time import utc_now_iso
@@ -31,10 +36,29 @@ def request_verification(
         "requestedAt": utc_now_iso(),
         "verifiedAt": utc_now_iso() if status_value == "verified" else None,
     }
-    db.collection("license_verifications").document(payload.lawyerUid).set(verification_doc, merge=True)
+    log_firestore_request(
+        "license_verifications.upsert",
+        lawyer_uid=payload.lawyerUid,
+        data=verification_doc,
+    )
+    try:
+        db.collection("license_verifications").document(payload.lawyerUid).set(
+            verification_doc,
+            merge=True,
+        )
+        log_firestore_response("license_verifications.upsert", lawyer_uid=payload.lawyerUid)
+    except Exception as exc:
+        log_firestore_error("license_verifications.upsert", exc, lawyer_uid=payload.lawyerUid)
+        raise
 
     if status_value == "verified":
-        db.collection("lawyers").document(payload.lawyerUid).set({"verified": True}, merge=True)
+        log_firestore_request("lawyers.update", lawyer_uid=payload.lawyerUid, verified=True)
+        try:
+            db.collection("lawyers").document(payload.lawyerUid).set({"verified": True}, merge=True)
+            log_firestore_response("lawyers.update", lawyer_uid=payload.lawyerUid)
+        except Exception as exc:
+            log_firestore_error("lawyers.update", exc, lawyer_uid=payload.lawyerUid)
+            raise
         try:
             set_user_verified(payload.lawyerUid, True)
         except Exception:
@@ -59,16 +83,41 @@ def review_verification(
         "reviewNotes": payload.reviewNotes,
         "verifiedAt": utc_now_iso(),
     }
-    db.collection("license_verifications").document(payload.lawyerUid).set(update_data, merge=True)
+    log_firestore_request(
+        "license_verifications.review",
+        lawyer_uid=payload.lawyerUid,
+        data=update_data,
+    )
+    try:
+        db.collection("license_verifications").document(payload.lawyerUid).set(
+            update_data,
+            merge=True,
+        )
+        log_firestore_response("license_verifications.review", lawyer_uid=payload.lawyerUid)
+    except Exception as exc:
+        log_firestore_error("license_verifications.review", exc, lawyer_uid=payload.lawyerUid)
+        raise
 
     if status_value == "verified":
-        db.collection("lawyers").document(payload.lawyerUid).set({"verified": True}, merge=True)
+        log_firestore_request("lawyers.update", lawyer_uid=payload.lawyerUid, verified=True)
+        try:
+            db.collection("lawyers").document(payload.lawyerUid).set({"verified": True}, merge=True)
+            log_firestore_response("lawyers.update", lawyer_uid=payload.lawyerUid)
+        except Exception as exc:
+            log_firestore_error("lawyers.update", exc, lawyer_uid=payload.lawyerUid)
+            raise
         try:
             set_user_verified(payload.lawyerUid, True)
         except Exception:
             pass
     else:
-        db.collection("lawyers").document(payload.lawyerUid).set({"verified": False}, merge=True)
+        log_firestore_request("lawyers.update", lawyer_uid=payload.lawyerUid, verified=False)
+        try:
+            db.collection("lawyers").document(payload.lawyerUid).set({"verified": False}, merge=True)
+            log_firestore_response("lawyers.update", lawyer_uid=payload.lawyerUid)
+        except Exception as exc:
+            log_firestore_error("lawyers.update", exc, lawyer_uid=payload.lawyerUid)
+            raise
         try:
             set_user_verified(payload.lawyerUid, False)
         except Exception:

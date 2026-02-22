@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart' hide Headers;
 import 'package:retrofit/retrofit.dart';
-import 'package:silah_app/core/data/model/api/base/base_api_response.dart';
 import 'package:silah_app/core/data/model/api/base/data_response_wrapper.dart';
 import 'package:silah_app/core/data/model/api/data_model.dart';
 import 'package:silah_app/core/data/model/api/request/post_request_model.dart';
@@ -12,6 +11,4 @@ part 'support_service.g.dart';
 abstract class SupportService {
   factory SupportService(Dio dio, {String? baseUrl}) = _SupportService;
 
-  @POST('Support')
-  Future<BaseApiResponse<DataRespWrapper>> support(@Body() PostRequestModel request);
 }

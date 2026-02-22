@@ -534,7 +534,6 @@ class Strings {
   static const String years_of_experience_10 = "years_of_experience_10";
   static const String years_of_experience_9 = "years_of_experience_9";
 
-  static var chats;
 }
 
 

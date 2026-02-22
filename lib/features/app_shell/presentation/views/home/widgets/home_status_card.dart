@@ -12,7 +12,7 @@ class HomeStatusCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(UIConstants.mediumPadding),
       decoration: BoxDecoration(
-        color: context.colors.surfaceVariant,
+        color: context.colors.surfaceContainerHighest,
         borderRadius: context.shapes.brMd,
       ),
       child: Row(

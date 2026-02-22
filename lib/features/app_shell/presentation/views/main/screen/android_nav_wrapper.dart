@@ -52,10 +52,24 @@ class _ScaffoldBody extends StatelessWidget {
     ),
 
     NavItemData(
-      routeName: AppRoutes.home.name,
+      routeName: AppRoutes.requests.name,
+      selectedIconAsset: Assets.icons.bottomNavigation.requests,
+      unselectedIconAsset: Assets.icons.bottomNavigation.requests,
+      labelKey: Strings.my_requests,
+    ),
+
+    NavItemData(
+      routeName: AppRoutes.messages.name,
       selectedIconAsset: Assets.icons.bottomNavigation.chats,
       unselectedIconAsset: Assets.icons.bottomNavigation.chats,
-      labelKey: Strings.cp_more,
+      labelKey: Strings.messages,
+    ),
+
+    NavItemData(
+      routeName: AppRoutes.settings.name,
+      selectedIconAsset: Assets.icons.bottomNavigation.account,
+      unselectedIconAsset: Assets.icons.bottomNavigation.account,
+      labelKey: Strings.my_account,
     ),
   ];
 

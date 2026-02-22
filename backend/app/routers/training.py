@@ -11,6 +11,11 @@ from ..schemas import (
     TrainingApplicationStatusUpdateResponse,
 )
 from ..services.firestore_service import create_notification
+from ..utils.firebase_logger import (
+    log_firestore_error,
+    log_firestore_request,
+    log_firestore_response,
+)
 from ..utils.responses import success_response
 from ..utils.time import utc_now_iso
 
@@ -26,7 +31,17 @@ def create_training_application(
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden")
 
     db = firestore_client()
-    opp_doc = db.collection("training_opportunities").document(payload.opportunityId).get()
+    log_firestore_request("training_opportunities.get", opportunity_id=payload.opportunityId)
+    try:
+        opp_doc = db.collection("training_opportunities").document(payload.opportunityId).get()
+        log_firestore_response(
+            "training_opportunities.get",
+            opportunity_id=payload.opportunityId,
+            exists=opp_doc.exists,
+        )
+    except Exception as exc:
+        log_firestore_error("training_opportunities.get", exc, opportunity_id=payload.opportunityId)
+        raise
     if not opp_doc.exists:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Opportunity not found")
 
@@ -40,14 +55,23 @@ def create_training_application(
         "fullName": payload.fullName,
         "university": payload.university,
         "faculty": payload.faculty,
+        "cityId": payload.cityId,
         "city": payload.city,
+        "areaId": payload.areaId,
+        "area": payload.area,
         "graduationYear": payload.graduationYear,
         "cvUrl": payload.cvUrl,
         "status": "pending",
         "submittedAt": utc_now_iso(),
     }
-    ref = db.collection("training_applications").document()
-    ref.set(record)
+    log_firestore_request("training_applications.create", data=record)
+    try:
+        ref = db.collection("training_applications").document()
+        ref.set(record)
+        log_firestore_response("training_applications.create", application_id=ref.id)
+    except Exception as exc:
+        log_firestore_error("training_applications.create", exc)
+        raise
 
     if lawyer_uid:
         create_notification(
@@ -68,7 +92,17 @@ def update_training_application_status(
     decoded: dict = Depends(verify_id_token),
 ) -> dict:
     db = firestore_client()
-    doc = db.collection("training_applications").document(application_id).get()
+    log_firestore_request("training_applications.get", application_id=application_id)
+    try:
+        doc = db.collection("training_applications").document(application_id).get()
+        log_firestore_response(
+            "training_applications.get",
+            application_id=application_id,
+            exists=doc.exists,
+        )
+    except Exception as exc:
+        log_firestore_error("training_applications.get", exc, application_id=application_id)
+        raise
     if not doc.exists:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Application not found")
 
@@ -79,10 +113,20 @@ def update_training_application_status(
     if decoded.get("role") != "admin" and decoded.get("uid") != lawyer_uid:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden")
 
-    db.collection("training_applications").document(application_id).set(
-        {"status": payload.status, "updatedAt": utc_now_iso()},
-        merge=True,
+    log_firestore_request(
+        "training_applications.update",
+        application_id=application_id,
+        status=payload.status,
     )
+    try:
+        db.collection("training_applications").document(application_id).set(
+            {"status": payload.status, "updatedAt": utc_now_iso()},
+            merge=True,
+        )
+        log_firestore_response("training_applications.update", application_id=application_id)
+    except Exception as exc:
+        log_firestore_error("training_applications.update", exc, application_id=application_id)
+        raise
 
     if trainee_uid:
         create_notification(

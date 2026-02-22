@@ -4,6 +4,7 @@ import 'package:silah_app/core/config/localization/localizations_string_keys.dar
 import 'package:silah_app/core/data/model/api/auth/customer_model.dart';
 import 'package:silah_app/core/data/model/api/auth/token_model.dart';
 import 'package:silah_app/core/domain/entities/api/auth/customer_entity.dart';
+import 'package:silah_app/core/data/local/cache/readers/setting_reader.dart';
 import 'package:silah_app/core/infrastructure/errors/error_codes.dart';
 import 'package:silah_app/core/infrastructure/errors/exceptions.dart';
 import 'package:silah_app/core/infrastructure/errors/failures.dart';
@@ -15,11 +16,14 @@ import 'package:silah_app/features/auth/domain/entities/auth_ex_data_entity.dart
 import 'package:silah_app/features/auth/domain/entities/self_registration_payload.dart';
 import 'package:silah_app/features/auth/domain/repositories/auth_repository.dart';
 import 'package:silah_app/features/auth/domain/repositories/identity_base_repo.dart';
+import 'package:silah_app/features/notifications/domain/repositories/device_token_repository.dart';
 
 class AuthRepoImpl implements AuthRepo {
   final AuthRemoteDataSource remoteDS;
   final AuthCacheDataSource cacheDS;
   final AuthIdentityRepo authIdentityRepo;
+  final DeviceTokenRepository deviceTokenRepository;
+  final SettingReader settingReader;
   final Executor executor;
 
   AuthRepoImpl({
@@ -27,6 +31,8 @@ class AuthRepoImpl implements AuthRepo {
     required this.cacheDS,
     required this.executor,
     required this.authIdentityRepo,
+    required this.deviceTokenRepository,
+    required this.settingReader,
   });
 
   @override
@@ -58,27 +64,33 @@ class AuthRepoImpl implements AuthRepo {
             email: payload.email,
             phone: payload.phone,
             password: payload.password,
+            avatarUrl: payload.avatarUrl,
           );
         } else {
           final gender = payload.gender?.trim();
+          final genderId = payload.genderId?.trim();
           final legalField = payload.legalField?.trim();
+          final legalFieldId = payload.legalFieldId?.trim();
           final city = payload.city?.trim();
+          final cityId = payload.cityId?.trim();
+          final areaId = payload.areaId?.trim();
           final workplace = payload.workplace?.trim();
+          final workDestinationId = payload.workDestinationId?.trim();
           final officeName = payload.officeName?.trim();
           final licenseNumber = payload.licenseNumber?.trim();
           final nationalId = payload.nationalId?.trim();
 
-          if (gender == null ||
-              legalField == null ||
-              city == null ||
-              workplace == null ||
+          if ((gender == null && genderId == null) ||
+              (legalField == null && legalFieldId == null) ||
+              (city == null && cityId == null) ||
+              (workplace == null && workDestinationId == null) ||
               officeName == null ||
               licenseNumber == null ||
               nationalId == null ||
-              gender.isEmpty ||
-              legalField.isEmpty ||
-              city.isEmpty ||
-              workplace.isEmpty ||
+              ((gender?.isEmpty ?? true) && (genderId?.isEmpty ?? true)) ||
+              ((legalField?.isEmpty ?? true) && (legalFieldId?.isEmpty ?? true)) ||
+              ((city?.isEmpty ?? true) && (cityId?.isEmpty ?? true)) ||
+              ((workplace?.isEmpty ?? true) && (workDestinationId?.isEmpty ?? true)) ||
               officeName.isEmpty ||
               licenseNumber.isEmpty ||
               nationalId.isEmpty) {
@@ -89,15 +101,21 @@ class AuthRepoImpl implements AuthRepo {
             name: name,
             email: payload.email,
             phone: payload.phone,
-            gender: gender,
+            gender: gender ?? genderId ?? '',
+            genderId: genderId,
             password: payload.password,
-            legalField: legalField,
-            city: city,
-            workplace: workplace,
+            legalField: legalField ?? legalFieldId ?? '',
+            legalFieldId: legalFieldId,
+            city: city ?? cityId ?? '',
+            cityId: cityId,
+            areaId: areaId,
+            workplace: workplace ?? workDestinationId ?? '',
+            workDestinationId: workDestinationId,
             officeName: officeName,
             experienceYears: payload.experienceYears,
             licenseNumber: licenseNumber,
             nationalId: nationalId,
+            avatarUrl: payload.avatarUrl,
           );
         }
 
@@ -135,7 +153,19 @@ class AuthRepoImpl implements AuthRepo {
     final customer = authUser.toCustomerEntity();
     final userId = await authIdentityRepo.generateAndSaveUserId(customer);
     await _cacheSession(customer: customer, userId: userId, idToken: authUser.idToken);
+    await _syncDeviceToken();
     return ExDataAuthEntity(customer: customer);
+  }
+
+  Future<void> _syncDeviceToken() async {
+    try {
+      final token = await settingReader.fcmToken();
+      if (token == null || token.trim().isEmpty) return;
+      final result = await deviceTokenRepository.registerDeviceToken(deviceToken: token.trim());
+      result.fold((_) => null, (_) => null);
+    } catch (_) {
+      // ignore push token sync failures
+    }
   }
 
   Future<void> _cacheSession({
