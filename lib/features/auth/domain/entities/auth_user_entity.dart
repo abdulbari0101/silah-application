@@ -12,11 +12,14 @@ class AuthUserEntity with AuthUserEntityMappable {
   final String? email;
   final String? phone;
   final AuthAccountType accountType;
+    final Map<String, dynamic>? profile;
+
   const AuthUserEntity({
     this.uid,
     this.fullName,
     this.email,
     this.phone,
     this.accountType = AuthAccountType.user,
+    this.profile,
   });
 }

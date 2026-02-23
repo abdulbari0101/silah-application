@@ -100,6 +100,12 @@ class AuthUserEntityMapper extends ClassMapperBase<AuthUserEntity> {
     opt: true,
     def: AuthAccountType.user,
   );
+  static Map<String, dynamic>? _$profile(AuthUserEntity v) => v.profile;
+  static const Field<AuthUserEntity, Map<String, dynamic>> _f$profile = Field(
+    'profile',
+    _$profile,
+    opt: true,
+  );
 
   @override
   final MappableFields<AuthUserEntity> fields = const {
@@ -108,6 +114,7 @@ class AuthUserEntityMapper extends ClassMapperBase<AuthUserEntity> {
     #email: _f$email,
     #phone: _f$phone,
     #accountType: _f$accountType,
+    #profile: _f$profile,
   };
   @override
   final bool ignoreNull = true;
@@ -119,6 +126,7 @@ class AuthUserEntityMapper extends ClassMapperBase<AuthUserEntity> {
       email: data.dec(_f$email),
       phone: data.dec(_f$phone),
       accountType: data.dec(_f$accountType),
+      profile: data.dec(_f$profile),
     );
   }
 
@@ -148,12 +156,11 @@ mixin AuthUserEntityMappable {
   }
 
   AuthUserEntityCopyWith<AuthUserEntity, AuthUserEntity, AuthUserEntity>
-  get copyWith =>
-      _AuthUserEntityCopyWithImpl<AuthUserEntity, AuthUserEntity>(
-        this as AuthUserEntity,
-        $identity,
-        $identity,
-      );
+  get copyWith => _AuthUserEntityCopyWithImpl<AuthUserEntity, AuthUserEntity>(
+    this as AuthUserEntity,
+    $identity,
+    $identity,
+  );
   @override
   String toString() {
     return AuthUserEntityMapper.ensureInitialized().stringifyValue(
@@ -185,12 +192,15 @@ extension AuthUserEntityValueCopy<$R, $Out>
 
 abstract class AuthUserEntityCopyWith<$R, $In extends AuthUserEntity, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
+  MapCopyWith<$R, String, dynamic, ObjectCopyWith<$R, dynamic, dynamic>>?
+  get profile;
   $R call({
     String? uid,
     String? fullName,
     String? email,
     String? phone,
     AuthAccountType? accountType,
+    Map<String, dynamic>? profile,
   });
   AuthUserEntityCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
     Then<$Out2, $R2> t,
@@ -206,19 +216,30 @@ class _AuthUserEntityCopyWithImpl<$R, $Out>
   late final ClassMapperBase<AuthUserEntity> $mapper =
       AuthUserEntityMapper.ensureInitialized();
   @override
+  MapCopyWith<$R, String, dynamic, ObjectCopyWith<$R, dynamic, dynamic>>?
+  get profile => $value.profile != null
+      ? MapCopyWith(
+          $value.profile!,
+          (v, t) => ObjectCopyWith(v, $identity, t),
+          (v) => call(profile: v),
+        )
+      : null;
+  @override
   $R call({
     Object? uid = $none,
     Object? fullName = $none,
     Object? email = $none,
     Object? phone = $none,
-    Object? accountType = $none,
+    AuthAccountType? accountType,
+    Object? profile = $none,
   }) => $apply(
     FieldCopyWithData({
       if (uid != $none) #uid: uid,
       if (fullName != $none) #fullName: fullName,
       if (email != $none) #email: email,
       if (phone != $none) #phone: phone,
-      if (accountType != $none) #accountType: accountType,
+      if (accountType != null) #accountType: accountType,
+      if (profile != $none) #profile: profile,
     }),
   );
   @override
@@ -228,6 +249,7 @@ class _AuthUserEntityCopyWithImpl<$R, $Out>
     email: data.get(#email, or: $value.email),
     phone: data.get(#phone, or: $value.phone),
     accountType: data.get(#accountType, or: $value.accountType),
+    profile: data.get(#profile, or: $value.profile),
   );
 
   @override
@@ -235,3 +257,4 @@ class _AuthUserEntityCopyWithImpl<$R, $Out>
     Then<$Out2, $R2> t,
   ) => _AuthUserEntityCopyWithImpl<$R2, $Out2>($value, $cast, t);
 }
+

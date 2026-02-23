@@ -187,8 +187,7 @@ extension UpdateSessionValueCopy<$R, $Out>
 
 abstract class UpdateSessionCopyWith<$R, $In extends UpdateSession, $Out>
     implements AppStateEventCopyWith<$R, $In, $Out> {
-  AuthUserEntityCopyWith<$R, AuthUserEntity, AuthUserEntity>?
-  get authData;
+  AuthUserEntityCopyWith<$R, AuthUserEntity, AuthUserEntity>? get authData;
   @override
   $R call({
     AuthUserEntity? authData,
@@ -207,8 +206,8 @@ class _UpdateSessionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<UpdateSession> $mapper =
       UpdateSessionMapper.ensureInitialized();
   @override
-  AuthUserEntityCopyWith<$R, AuthUserEntity, AuthUserEntity>?
-  get authData => $value.authData?.copyWith.$chain((v) => call(authData: v));
+  AuthUserEntityCopyWith<$R, AuthUserEntity, AuthUserEntity>? get authData =>
+      $value.authData?.copyWith.$chain((v) => call(authData: v));
   @override
   $R call({
     Object? authData = $none,
@@ -347,8 +346,7 @@ extension UserLoggedInValueCopy<$R, $Out>
 
 abstract class UserLoggedInCopyWith<$R, $In extends UserLoggedIn, $Out>
     implements AppStateEventCopyWith<$R, $In, $Out> {
-  AuthUserEntityCopyWith<$R, AuthUserEntity, AuthUserEntity>?
-  get authData;
+  AuthUserEntityCopyWith<$R, AuthUserEntity, AuthUserEntity>? get authData;
   @override
   $R call({AuthUserEntity? authData, UserAuthStatus? userAuthStatus});
   UserLoggedInCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
@@ -363,8 +361,8 @@ class _UserLoggedInCopyWithImpl<$R, $Out>
   late final ClassMapperBase<UserLoggedIn> $mapper =
       UserLoggedInMapper.ensureInitialized();
   @override
-  AuthUserEntityCopyWith<$R, AuthUserEntity, AuthUserEntity>?
-  get authData => $value.authData?.copyWith.$chain((v) => call(authData: v));
+  AuthUserEntityCopyWith<$R, AuthUserEntity, AuthUserEntity>? get authData =>
+      $value.authData?.copyWith.$chain((v) => call(authData: v));
   @override
   $R call({Object? authData = $none, Object? userAuthStatus = $none}) => $apply(
     FieldCopyWithData({

@@ -59,7 +59,7 @@ class _LawyerLicenseVerificationFormState extends State<LawyerLicenseVerificatio
       phone: personal.phone,
       password: personal.password,
       gender: personal.gender,
-      legalField: widget.professionalInfo.legalField,
+      legalFields: [widget.professionalInfo.legalField],
       city: widget.professionalInfo.city,
       workplace: widget.professionalInfo.workplace,
       officeName: widget.professionalInfo.officeName,

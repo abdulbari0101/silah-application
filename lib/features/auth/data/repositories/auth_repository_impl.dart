@@ -67,8 +67,14 @@ class AuthRepoImpl implements AuthRepo {
       } else {
         final gender = payload.gender?.trim();
         final genderId = payload.genderId?.trim();
-        final legalField = payload.legalField?.trim();
-        final legalFieldId = payload.legalFieldId?.trim();
+        final legalFields = payload.legalFields
+            ?.map((value) => value.trim())
+            .where((value) => value.isNotEmpty)
+            .toList();
+        final legalFieldIds = payload.legalFieldIds
+            ?.map((value) => value.trim())
+            .where((value) => value.isNotEmpty)
+            .toList();
         final city = payload.city?.trim();
         final cityId = payload.cityId?.trim();
         final areaId = payload.areaId?.trim();
@@ -79,14 +85,14 @@ class AuthRepoImpl implements AuthRepo {
         final nationalId = payload.nationalId?.trim();
 
         if ((gender == null && genderId == null) ||
-            (legalField == null && legalFieldId == null) ||
+            ((legalFields == null || legalFields.isEmpty) &&
+                (legalFieldIds == null || legalFieldIds.isEmpty)) ||
             (city == null && cityId == null) ||
             (workplace == null && workDestinationId == null) ||
             officeName == null ||
             licenseNumber == null ||
             nationalId == null ||
             ((gender?.isEmpty ?? true) && (genderId?.isEmpty ?? true)) ||
-            ((legalField?.isEmpty ?? true) && (legalFieldId?.isEmpty ?? true)) ||
             ((city?.isEmpty ?? true) && (cityId?.isEmpty ?? true)) ||
             ((workplace?.isEmpty ?? true) && (workDestinationId?.isEmpty ?? true)) ||
             officeName.isEmpty ||
@@ -94,6 +100,12 @@ class AuthRepoImpl implements AuthRepo {
             nationalId.isEmpty) {
           throw AuthException(Strings.error_fill_form.tr(), ErrorCodes.badRequest400);
         }
+
+        final resolvedLegalFields = (legalFieldIds != null && legalFieldIds.isNotEmpty)
+            ? legalFieldIds
+            : (legalFields ?? const <String>[]);
+        final primaryLegalField =
+            resolvedLegalFields.isNotEmpty ? resolvedLegalFields.first : null;
 
         final model = AuthUserModel(
           accountType: AuthAccountType.lawyer,
@@ -104,8 +116,10 @@ class AuthRepoImpl implements AuthRepo {
           profile: {
             'gender': gender ?? genderId ?? '',
             'genderId': genderId,
-            'legalField': legalField ?? legalFieldId ?? '',
-            'legalFieldId': legalFieldId,
+            'legalField': primaryLegalField,
+            'legalFields': legalFields,
+            'legalFieldIds': legalFieldIds,
+            'specializations': resolvedLegalFields,
             'city': city ?? cityId ?? '',
             'cityId': cityId,
             'areaId': areaId,

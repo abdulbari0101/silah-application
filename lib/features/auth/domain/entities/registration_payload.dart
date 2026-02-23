@@ -1,4 +1,12 @@
-class RegistrationPayload {
+import 'package:dart_mappable/dart_mappable.dart';
+
+part 'registration_payload.mapper.dart';
+
+@MappableEnum(caseStyle: CaseStyle.lowerCase)
+enum RegistrationAccountType { user, lawyer }
+
+@MappableClass(ignoreNull: true)
+class RegistrationPayload with RegistrationPayloadMappable {
   final RegistrationAccountType accountType;
   final String firstName;
   final String lastName;
@@ -9,8 +17,8 @@ class RegistrationPayload {
   // Lawyer-only fields (optional for user registrations).
   final String? gender;
   final String? genderId;
-  final String? legalField;
-  final String? legalFieldId;
+  final List<String>? legalFields;
+  final List<String>? legalFieldIds;
   final String? city;
   final String? cityId;
   final String? areaId;
@@ -31,8 +39,8 @@ class RegistrationPayload {
     required this.password,
     this.gender,
     this.genderId,
-    this.legalField,
-    this.legalFieldId,
+    this.legalFields,
+    this.legalFieldIds,
     this.city,
     this.cityId,
     this.areaId,
@@ -50,5 +58,3 @@ class RegistrationPayload {
     return parts.isEmpty ? '' : parts.join(' ');
   }
 }
-
-enum RegistrationAccountType { user, lawyer }

@@ -94,7 +94,7 @@ class AuthCacheDataSourceImpl implements AuthCacheDataSource {
     final userId = await this.userId();
     return await appCache.secure.readObject<AuthUserModel>(
       key: SecureKey.csr,
-      fromJson: (json) => AuthUserModel.fromJson(json),
+      fromJson: (json) => AuthUserModelMapper.fromJson(json),
       userId: userId,
     );
   }

@@ -1,5 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:silah_app/core/data/model/api/base/response_wrapper.dart';
+import 'package:silah_app/core/data/model/api/result_model.dart';
 import 'package:silah_app/features/training/domain/entities/training_application_entity.dart';
 import 'package:silah_app/features/training/domain/entities/training_application_status.dart';
 
@@ -43,7 +44,6 @@ class TrainingApplicationCreateRequestModel with TrainingApplicationCreateReques
     );
   }
 
-  Map<String, dynamic> toJson() => toMap();
 }
 
 @MappableClass(ignoreNull: true)
@@ -69,7 +69,6 @@ class TrainingApplicationStatusUpdateRequestModel
   ) =>
       TrainingApplicationStatusUpdateRequestModel(status: status.name);
 
-  Map<String, dynamic> toJson() => toMap();
 }
 
 @MappableClass(ignoreNull: true)

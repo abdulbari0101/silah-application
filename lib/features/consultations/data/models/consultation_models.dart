@@ -1,5 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:silah_app/core/data/model/api/base/response_wrapper.dart';
+import 'package:silah_app/core/data/model/api/result_model.dart';
 import 'package:silah_app/features/consultations/domain/entities/consultation_request_entity.dart';
 import 'package:silah_app/features/consultations/domain/entities/consultation_status.dart';
 
@@ -30,8 +31,6 @@ class ConsultationCreateRequestModel with ConsultationCreateRequestModelMappable
       specialization: entity.specializationId,
     );
   }
-
-  Map<String, dynamic> toJson() => toMap();
 }
 
 @MappableClass(ignoreNull: true)
@@ -39,10 +38,7 @@ class ConsultationCreateResponseModel extends BaseRespWrapper
     with ConsultationCreateResponseModelMappable {
   final String? consultationId;
 
-  const ConsultationCreateResponseModel({
-    required super.result,
-    this.consultationId,
-  });
+  const ConsultationCreateResponseModel({required super.result, this.consultationId});
 }
 
 @MappableClass(ignoreNull: true)
@@ -54,8 +50,6 @@ class ConsultationStatusUpdateRequestModel with ConsultationStatusUpdateRequestM
   factory ConsultationStatusUpdateRequestModel.fromStatus(ConsultationStatus status) {
     return ConsultationStatusUpdateRequestModel(status: status.name);
   }
-
-  Map<String, dynamic> toJson() => toMap();
 }
 
 @MappableClass(ignoreNull: true)
@@ -63,8 +57,5 @@ class ConsultationStatusUpdateResponseModel extends BaseRespWrapper
     with ConsultationStatusUpdateResponseModelMappable {
   final String? status;
 
-  const ConsultationStatusUpdateResponseModel({
-    required super.result,
-    this.status,
-  });
+  const ConsultationStatusUpdateResponseModel({required super.result, this.status});
 }

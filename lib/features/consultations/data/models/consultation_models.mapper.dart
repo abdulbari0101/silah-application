@@ -34,16 +34,25 @@ class ConsultationCreateRequestModelMapper
   static String _$caseText(ConsultationCreateRequestModel v) => v.caseText;
   static const Field<ConsultationCreateRequestModel, String> _f$caseText =
       Field('caseText', _$caseText);
-  static String _$specialization(ConsultationCreateRequestModel v) =>
+  static String? _$specializationId(ConsultationCreateRequestModel v) =>
+      v.specializationId;
+  static const Field<ConsultationCreateRequestModel, String>
+  _f$specializationId = Field(
+    'specializationId',
+    _$specializationId,
+    opt: true,
+  );
+  static String? _$specialization(ConsultationCreateRequestModel v) =>
       v.specialization;
   static const Field<ConsultationCreateRequestModel, String> _f$specialization =
-      Field('specialization', _$specialization);
+      Field('specialization', _$specialization, opt: true);
 
   @override
   final MappableFields<ConsultationCreateRequestModel> fields = const {
     #clientUid: _f$clientUid,
     #lawyerUid: _f$lawyerUid,
     #caseText: _f$caseText,
+    #specializationId: _f$specializationId,
     #specialization: _f$specialization,
   };
   @override
@@ -54,6 +63,7 @@ class ConsultationCreateRequestModelMapper
       clientUid: data.dec(_f$clientUid),
       lawyerUid: data.dec(_f$lawyerUid),
       caseText: data.dec(_f$caseText),
+      specializationId: data.dec(_f$specializationId),
       specialization: data.dec(_f$specialization),
     );
   }
@@ -140,6 +150,7 @@ abstract class ConsultationCreateRequestModelCopyWith<
     String? clientUid,
     String? lawyerUid,
     String? caseText,
+    String? specializationId,
     String? specialization,
   });
   ConsultationCreateRequestModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
@@ -169,13 +180,15 @@ class _ConsultationCreateRequestModelCopyWithImpl<$R, $Out>
     String? clientUid,
     String? lawyerUid,
     String? caseText,
-    String? specialization,
+    Object? specializationId = $none,
+    Object? specialization = $none,
   }) => $apply(
     FieldCopyWithData({
       if (clientUid != null) #clientUid: clientUid,
       if (lawyerUid != null) #lawyerUid: lawyerUid,
       if (caseText != null) #caseText: caseText,
-      if (specialization != null) #specialization: specialization,
+      if (specializationId != $none) #specializationId: specializationId,
+      if (specialization != $none) #specialization: specialization,
     }),
   );
   @override
@@ -184,6 +197,10 @@ class _ConsultationCreateRequestModelCopyWithImpl<$R, $Out>
         clientUid: data.get(#clientUid, or: $value.clientUid),
         lawyerUid: data.get(#lawyerUid, or: $value.lawyerUid),
         caseText: data.get(#caseText, or: $value.caseText),
+        specializationId: data.get(
+          #specializationId,
+          or: $value.specializationId,
+        ),
         specialization: data.get(#specialization, or: $value.specialization),
       );
 
