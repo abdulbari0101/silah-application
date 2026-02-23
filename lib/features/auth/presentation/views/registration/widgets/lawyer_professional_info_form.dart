@@ -6,8 +6,45 @@ import 'package:silah_app/core/config/localization/localizations_string_keys.dar
 import 'package:silah_app/core/config/validators/form_validators.dart';
 import 'package:silah_app/core/presentation/state_magment/cubits/form_cubit.dart';
 import 'package:silah_app/core/presentation/ui/widget/buttons/primary_button_with_form_cubit.dart';
+import 'package:silah_app/core/presentation/ui/widget/drop_down/f_drop_down.dart';
 import 'package:silah_app/core/presentation/ui/widget/text_fields/f_text2_feild.dart';
 import 'package:silah_app/features/auth/presentation/views/registration/models/lawyer_registration_data.dart';
+
+const List<String> _legalSpecializations = [
+  'الأحوال الشخصية',
+  'القضايا التجارية',
+  'الخلافات العمالية',
+  'الجرائم المعلوماتية',
+  'القضايا العقارية',
+];
+
+const List<String> _saudiCities = [
+  'الرياض',
+  'جدة',
+  'مكة المكرمة',
+  'المدينة المنورة',
+  'الدمام',
+  'الخبر',
+  'الظهران',
+  'الأحساء',
+  'الطائف',
+  'تبوك',
+  'بريدة',
+  'خميس مشيط',
+  'حائل',
+  'نجران',
+  'جازان',
+  'أبها',
+  'ينبع',
+  'عرعر',
+  'سكاكا',
+  'الباحة',
+];
+
+const List<String> _workplaceOptions = [
+  'أملك مكتب محاماة',
+  'أعمل لدى مكتب محاماة',
+];
 
 class LawyerProfessionalInfoForm extends StatefulWidget {
   final LawyerPersonalInfo personalInfo;
@@ -20,16 +57,22 @@ class LawyerProfessionalInfoForm extends StatefulWidget {
   });
 
   @override
-  State<LawyerProfessionalInfoForm> createState() => _LawyerProfessionalInfoFormState();
+  State<LawyerProfessionalInfoForm> createState() =>
+      _LawyerProfessionalInfoFormState();
 }
 
-class _LawyerProfessionalInfoFormState extends State<LawyerProfessionalInfoForm> {
+class _LawyerProfessionalInfoFormState
+    extends State<LawyerProfessionalInfoForm> {
   final _formKey = GlobalKey<FormState>();
   final _legalFieldCtrl = TextEditingController();
   final _cityCtrl = TextEditingController();
   final _workplaceCtrl = TextEditingController();
   final _officeNameCtrl = TextEditingController();
   final _experienceCtrl = TextEditingController();
+
+  String? _selectedLegalField;
+  String? _selectedCity;
+  String? _selectedWorkplace;
 
   @override
   void dispose() {
@@ -67,38 +110,66 @@ class _LawyerProfessionalInfoFormState extends State<LawyerProfessionalInfoForm>
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      onChanged: () => context.read<FormCubit>().updateValidity(_isFormComplete()),
+      onChanged: () =>
+          context.read<FormCubit>().updateValidity(_isFormComplete()),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          FTextField(
-            controller: _legalFieldCtrl,
-            labelText: Strings.specializations.tr(),
-            hintText: Strings.search_for_lawyer_or_specialization.tr(),
-            textInputAction: TextInputAction.next,
-            validator: validateJustRequired,
+          FDropDown<String>(
+            items: _legalSpecializations,
+            initialValue: _selectedLegalField,
+            labelBuilder: (item) => item,
+            label: Strings.specializations.tr(),
+            hintText: Strings.choose_specialization.tr(),
+            validator: (value) =>
+                value == null ? validateJustRequired(null) : null,
+            onChanged: (value) {
+              setState(() {
+                _selectedLegalField = value;
+                _legalFieldCtrl.text = value ?? '';
+              });
+              context.read<FormCubit>().updateValidity(_isFormComplete());
+            },
           ),
           UIConstants.mediumHeight,
-          FTextField(
-            controller: _cityCtrl,
-            labelText: Strings.label_city.tr(),
+          FDropDown<String>(
+            items: _saudiCities,
+            initialValue: _selectedCity,
+            labelBuilder: (item) => item,
+            label: Strings.label_city.tr(),
             hintText: Strings.label_city.tr(),
-            textInputAction: TextInputAction.next,
-            validator: validateJustRequired,
+            validator: (value) =>
+                value == null ? validateJustRequired(null) : null,
+            onChanged: (value) {
+              setState(() {
+                _selectedCity = value;
+                _cityCtrl.text = value ?? '';
+              });
+              context.read<FormCubit>().updateValidity(_isFormComplete());
+            },
           ),
           UIConstants.mediumHeight,
-          FTextField(
-            controller: _workplaceCtrl,
-            labelText: Strings.law_firm.tr(),
-            hintText: Strings.law_firm.tr(),
-            textInputAction: TextInputAction.next,
-            validator: validateJustRequired,
+          FDropDown<String>(
+            items: _workplaceOptions,
+            initialValue: _selectedWorkplace,
+            labelBuilder: (item) => item,
+            label: Strings.label_workplace.tr(),
+            hintText: Strings.label_workplace.tr(),
+            validator: (value) =>
+                value == null ? validateJustRequired(null) : null,
+            onChanged: (value) {
+              setState(() {
+                _selectedWorkplace = value;
+                _workplaceCtrl.text = value ?? '';
+              });
+              context.read<FormCubit>().updateValidity(_isFormComplete());
+            },
           ),
           UIConstants.mediumHeight,
           FTextField(
             controller: _officeNameCtrl,
-            labelText: Strings.label_name.tr(),
-            hintText: Strings.law_firm.tr(),
+            labelText: Strings.label_office_name.tr(),
+            hintText: Strings.label_office_name.tr(),
             textInputAction: TextInputAction.next,
             validator: validateJustRequired,
           ),
