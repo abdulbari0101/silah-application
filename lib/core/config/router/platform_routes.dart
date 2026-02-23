@@ -11,7 +11,7 @@ List<RouteBase> getPlatformRoutes(GlobalKey<NavigatorState> rootKey) {
       builder: (context, state, navigationShell) =>
           MainScreen(navigationShell: navigationShell, child: const SizedBox()),
       branches: [
-        for (final r in AppRoutes.tabRoutes)
+        for (final r in AppRoutes.shellTabRoutes)
           StatefulShellBranch(
             routes: [GoRoute(path: r.path, name: r.name, builder: (_, __) => r.builder!())],
           ),

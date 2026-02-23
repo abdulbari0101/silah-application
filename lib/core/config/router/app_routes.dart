@@ -15,6 +15,7 @@ import 'package:silah_app/features/discovery/presentation/views/specification/sc
 import 'package:silah_app/features/messaging/presentation/views/chats/screens/chats_screen.dart';
 import 'package:silah_app/features/settings/presentation/views/langauge/screens/language_prefrence_screen.dart';
 import 'package:silah_app/features/settings/presentation/views/settings/screens/settings_screen.dart';
+import 'package:silah_app/features/training/presentation/views/trainees/screens/trainees_screen.dart';
 
 import 'route_info.dart';
 
@@ -85,6 +86,11 @@ class AppRoutes {
     path: '/specifications',
     builder: () => const SpecificationsScreen(),
   );
+  static final trainees = RouteInfo(
+    name: 'trainees',
+    path: '/trainees',
+    builder: () => const TraineesScreen(),
+  );
   static final settings = RouteInfo(
     name: 'settings',
     path: '/settings',
@@ -93,6 +99,7 @@ class AppRoutes {
 
   /// Tabs used by the main shell (bottom navigation).
   static final tabRoutes = [home, requests, messages, settings];
+  static final shellTabRoutes = [...tabRoutes, specifications, trainees];
 
   // Additional screens
   static final language = RouteInfo(
@@ -119,6 +126,7 @@ class AppRoutes {
     lawyerProfessionalInfo,
     lawyerLicenseVerification,
     specifications,
+    trainees,
     language,
     notification,
     success,

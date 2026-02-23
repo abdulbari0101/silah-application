@@ -2,51 +2,32 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
-import 'package:silah_app/core/config/router/app_routes.dart';
 import 'package:silah_app/core/config/theme/extentions/theme_context_extension.dart';
 import 'package:silah_app/core/presentation/ui/widget/icons/app_svg_icon.dart';
 import 'package:silah_app/features/app_shell/presentation/views/main/widget/navigation/nav_item_data.dart';
-import 'package:silah_app/gen/assets.gen.dart';
 
 class IOSNavWrapper extends StatelessWidget {
-  const IOSNavWrapper({super.key, required this.navigationShell});
+  const IOSNavWrapper({super.key, required this.navigationShell, required this.items});
 
   final StatefulNavigationShell? navigationShell;
+  final List<NavItemData> items;
 
-  static final List<NavItemData> _tabs = [
-    NavItemData(
-      routeName: AppRoutes.home.name,
-      selectedIconAsset: Assets.icons.bottomNavigation.home,
-      unselectedIconAsset: Assets.icons.bottomNavigation.home,
-      labelKey: Strings.home,
-    ),
-
-    NavItemData(
-      routeName: AppRoutes.requests.name,
-      selectedIconAsset: Assets.icons.bottomNavigation.requests,
-      unselectedIconAsset: Assets.icons.bottomNavigation.requests,
-      labelKey: Strings.my_requests,
-    ),
-
-    NavItemData(
-      routeName: AppRoutes.messages.name,
-      selectedIconAsset: Assets.icons.bottomNavigation.chats,
-      unselectedIconAsset: Assets.icons.bottomNavigation.chats,
-      labelKey: Strings.messages,
-    ),
-
-    NavItemData(
-      routeName: AppRoutes.settings.name,
-      selectedIconAsset: Assets.icons.bottomNavigation.account,
-      unselectedIconAsset: Assets.icons.bottomNavigation.account,
-      labelKey: Strings.my_account,
-    ),
-  ];
+  int _currentIndex() {
+    final shell = navigationShell;
+    if (shell == null) return 0;
+    final branchIndex = shell.currentIndex;
+    for (var i = 0; i < items.length; i++) {
+      final targetBranch = items[i].branchIndex ?? i;
+      if (targetBranch == branchIndex) return i;
+    }
+    return 0;
+  }
 
   void _handleTap(int idx) {
-    if (idx != navigationShell?.currentIndex) {
-      navigationShell?.goBranch(idx);
+    final shell = navigationShell;
+    final targetBranch = items[idx].branchIndex ?? idx;
+    if (targetBranch != shell?.currentIndex) {
+      shell?.goBranch(targetBranch);
     } else {
       // Optionally pop to root of current branch here if you wish.
     }
@@ -54,6 +35,7 @@ class IOSNavWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentIndex = _currentIndex();
     return Scaffold(
       body: navigationShell,
 
@@ -61,12 +43,12 @@ class IOSNavWrapper extends StatelessWidget {
         backgroundColor: context.colors.surfaceContainerLow,
         activeColor: context.colors.onPrimaryContainer,
         inactiveColor: context.colors.onSurfaceVariant,
-        currentIndex: navigationShell?.currentIndex ?? 0,
+        currentIndex: currentIndex,
         onTap: _handleTap,
 
         items: [
-          for (var i = 0; i < _tabs.length; i++)
-            _buildTab(context, _tabs[i], i == navigationShell?.currentIndex),
+          for (var i = 0; i < items.length; i++)
+            _buildTab(context, items[i], i == currentIndex),
         ],
       ),
     );

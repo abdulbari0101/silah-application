@@ -4,6 +4,7 @@ class NavItemData {
     required this.selectedIconAsset,
     required this.unselectedIconAsset,
     required this.labelKey,
+    this.branchIndex,
   });
 
   final String routeName;
@@ -13,4 +14,6 @@ class NavItemData {
   final String unselectedIconAsset;
 
   final String labelKey;
+
+  final int? branchIndex;
 }

@@ -1,7 +1,5 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart' show BlocProvider;
-import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
 import 'package:silah_app/core/injection/injection_container.dart';
 import 'package:silah_app/core/presentation/ui/widget/wrappers/platform_screen_wrapper.dart';
 import 'package:silah_app/features/messaging/presentation/blocs/chats/chats_bloc.dart';
@@ -15,7 +13,7 @@ class MessagesScreen extends StatelessWidget {
     return BlocProvider(
       create: (_) => ChatsBloc(repository: locator()),
 
-      child: PlatformScreenWrapper(title: Strings.messages.tr(), body: const ChatsBody()),
+      child: PlatformScreenWrapper( body: const ChatsBody()),
     );
   }
 }

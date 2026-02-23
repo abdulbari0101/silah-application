@@ -69,6 +69,7 @@ class AuthUserModelMapper extends ClassMapperBase<AuthUserModel> {
     'profile',
     _$profile,
     opt: true,
+    hook: FirestoreValueHook(),
   );
 
   @override

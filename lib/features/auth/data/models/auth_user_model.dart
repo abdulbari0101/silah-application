@@ -1,4 +1,5 @@
 import 'package:dart_mappable/dart_mappable.dart';
+import 'package:silah_app/core/foundation/mapping/mapping_hooks.dart';
 import 'package:silah_app/features/auth/domain/entities/auth_user_entity.dart';
 
 part 'auth_user_model.mapper.dart';
@@ -12,6 +13,7 @@ class AuthUserModel with AuthUserModelMappable {
   final AuthAccountType accountType;
   final String? password;
   final String? idToken;
+  @MappableField(hook: FirestoreValueHook())
   final Map<String, dynamic>? profile;
 
   const AuthUserModel({

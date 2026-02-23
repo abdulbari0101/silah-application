@@ -14,7 +14,12 @@ class AndroidBottomNavBar extends StatelessWidget {
 
   int _currentIndex(BuildContext context) {
     if (navigationShell != null) {
-      return navigationShell!.currentIndex;
+      final branchIndex = navigationShell!.currentIndex;
+      for (var i = 0; i < items.length; i++) {
+        final targetBranch = items[i].branchIndex ?? i;
+        if (targetBranch == branchIndex) return i;
+      }
+      return 0;
     }
     final router = GoRouter.of(context);
     final location = router.routerDelegate.currentConfiguration.fullPath;
@@ -27,8 +32,9 @@ class AndroidBottomNavBar extends StatelessWidget {
 
   void _onTap(BuildContext context, int index) {
     if (navigationShell != null) {
-      if (navigationShell!.currentIndex != index) {
-        navigationShell!.goBranch(index);
+      final targetBranch = items[index].branchIndex ?? index;
+      if (navigationShell!.currentIndex != targetBranch) {
+        navigationShell!.goBranch(targetBranch);
       }
       return;
     }
