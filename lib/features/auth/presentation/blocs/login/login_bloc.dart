@@ -38,12 +38,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         emit: emit,
         operationType: LoginOperationType.signIn,
       ),
-      (authExData) {
-        logger.blocDebug("authExData.customer = ${authExData.customer}");
+      (authUser) {
+        logger.blocDebug("authUser = $authUser");
 
         appStateBloc.add(
           UserLoggedIn(
-            authData: authExData,
+            authData: authUser,
             userAuthStatus: UserAuthStatus.loggedInUnverifiedAccount,
           ),
         );

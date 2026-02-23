@@ -1,14 +1,14 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:silah_app/core/config/extentions/string_validation.dart';
-import 'package:silah_app/core/domain/entities/api/auth/customer_entity.dart';
 import 'package:silah_app/core/presentation/state_magment/blocs/app_state/state_data/app_auth_status.dart';
+import 'package:silah_app/features/auth/domain/entities/auth_user_entity.dart';
 
 part 'app_state_data.mapper.dart';
 
 @MappableClass()
 class AppStateData with AppStateDataMappable {
   final bool isLoggedIn;
-  final CustomerEntity? customer; // local or remoteDS
+  final AuthUserEntity? customer; // local or remoteDS
   final UserAuthStatus userAuthStatus;
 
   AppStateData({
@@ -21,9 +21,9 @@ class AppStateData with AppStateDataMappable {
            userAuthStatus ??
            computeUserAuthStatus(
              isLoggedIn: isLoggedIn,
-             isDeviceVerified: customer?.mobileNo.isNotNullOrEmpty ?? false,
+             isDeviceVerified: customer?.phone.isNotNullOrEmpty ?? false,
              isAccountVerified: false,
-             wasLoggedInBefore: customer?.mobileNo.isNotNullOrEmpty ?? false,
+             wasLoggedInBefore: customer?.phone.isNotNullOrEmpty ?? false,
            );
 
   static UserAuthStatus computeUserAuthStatus({

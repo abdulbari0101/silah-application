@@ -8,8 +8,8 @@ import 'package:silah_app/core/config/router/app_routes.dart';
 import 'package:silah_app/core/injection/injection_container.dart';
 import 'package:silah_app/core/presentation/state_magment/cubits/form_cubit.dart';
 import 'package:silah_app/core/presentation/ui/overlays/dialogs/dialog_service.dart';
-import 'package:silah_app/features/auth/presentation/blocs/self_registration/self_reg_operation_type.dart';
-import 'package:silah_app/features/auth/presentation/blocs/self_registration/self_registration_bloc.dart';
+import 'package:silah_app/features/auth/presentation/blocs/registration/registration_bloc.dart';
+import 'package:silah_app/features/auth/presentation/blocs/registration/registration_operation_type.dart';
 
 import '../widgets/auth_footer_link.dart';
 import '../widgets/auth_form_scaffold.dart';
@@ -22,20 +22,16 @@ class UserSignUpScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (_) => locator<SelfRegBloc>()),
+        BlocProvider(create: (_) => locator<RegistrationBloc>()),
         BlocProvider(create: (_) => FormCubit()),
       ],
-      child: BlocListener<SelfRegBloc, SelfRegState>(
+      child: BlocListener<RegistrationBloc, RegistrationState>(
         listener: (context, state) {
-          if (state is SelfRegError) {
-            DialogService.showErrorDialog(
-              context,
-              title: Strings.error.tr(),
-              desc: state.message,
-            );
+          if (state is RegistrationError) {
+            DialogService.showErrorDialog(context, title: Strings.error.tr(), desc: state.message);
           }
-          if (state is SelfRegStepSuccess &&
-              state.operationType == SelfRegOperType.SelfReqComplete) {
+          if (state is RegistrationStepSuccess &&
+              state.operationType == RegistrationOperType.SelfReqComplete) {
             context.goNamed(AppRoutes.home.name);
           }
         },

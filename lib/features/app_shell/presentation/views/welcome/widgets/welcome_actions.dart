@@ -18,7 +18,7 @@ class WelcomeActions extends StatelessWidget {
       children: [
         PrimaryButton(
           text: Strings.start_now.tr(),
-          onTap: () => context.pushNamed(AppRoutes.selfRegisterWizard.name),
+          onTap: () => context.pushNamed(AppRoutes.RegistrationisterWizard.name),
         ),
         UIConstants.mediumHeight,
         Row(

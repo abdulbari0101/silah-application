@@ -1,5 +1,5 @@
-import 'package:silah_app/core/domain/entities/api/auth/customer_entity.dart';
 import 'package:silah_app/core/domain/repositories/identity_repo.dart';
+import 'package:silah_app/features/auth/domain/entities/auth_user_entity.dart';
 
 abstract class AuthIdentityRepo implements IdentityRepo {
   // serial number
@@ -8,7 +8,7 @@ abstract class AuthIdentityRepo implements IdentityRepo {
 
   // use cCode (non changable value)
   // used to store favorites , contacts , other non user shared values
-  Future<String> generateAndSaveUserId(CustomerEntity customer);
+  Future<String> generateAndSaveUserId(AuthUserEntity customer);
 }
 
 

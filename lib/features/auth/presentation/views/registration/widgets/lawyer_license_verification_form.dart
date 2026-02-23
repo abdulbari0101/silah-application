@@ -7,13 +7,13 @@ import 'package:silah_app/core/config/validators/form_validators.dart';
 import 'package:silah_app/core/presentation/state_magment/cubits/form_cubit.dart';
 import 'package:silah_app/core/presentation/ui/widget/buttons/primary_button_with_form_cubit.dart';
 import 'package:silah_app/core/presentation/ui/widget/text_fields/f_text2_feild.dart';
-import 'package:silah_app/features/auth/domain/entities/self_registration_payload.dart';
+import 'package:silah_app/features/auth/domain/entities/registration_payload.dart';
 import 'package:silah_app/features/auth/presentation/views/registration/models/lawyer_registration_data.dart';
 
 class LawyerLicenseVerificationForm extends StatefulWidget {
   final LawyerProfessionalInfo professionalInfo;
   final bool isLoading;
-  final void Function(SelfRegistrationPayload payload) onSubmit;
+  final void Function(RegistrationPayload payload) onSubmit;
 
   const LawyerLicenseVerificationForm({
     super.key,
@@ -51,8 +51,8 @@ class _LawyerLicenseVerificationFormState extends State<LawyerLicenseVerificatio
     final firstName = parts.isNotEmpty ? parts.first : fullName;
     final lastName = parts.length > 1 ? parts.sublist(1).join(' ') : '';
 
-    final payload = SelfRegistrationPayload(
-      accountType: SelfRegAccountType.lawyer,
+    final payload = RegistrationPayload(
+      accountType: RegistrationAccountType.lawyer,
       firstName: firstName,
       lastName: lastName,
       email: personal.email,

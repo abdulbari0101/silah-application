@@ -8,39 +8,34 @@ import 'package:silah_app/core/infrastructure/errors/failures.dart';
 import 'package:silah_app/core/presentation/state_magment/bloc_utils/bloc_utils.dart';
 import 'package:silah_app/core/presentation/state_magment/blocs/app_state/app_state_bloc.dart';
 import 'package:silah_app/core/presentation/state_magment/blocs/app_state/state_data/app_auth_status.dart';
-import 'package:silah_app/features/auth/domain/entities/self_registration_payload.dart';
+import 'package:silah_app/features/auth/domain/entities/registration_payload.dart';
 import 'package:silah_app/features/auth/domain/repositories/auth_repository.dart';
 
-import 'self_reg_operation_type.dart';
+import 'registration_operation_type.dart';
 
-part 'self_registration_event.dart';
-part 'self_registration_state.dart';
+part 'registration_event.dart';
+part 'registration_state.dart';
 
-class SelfRegBloc extends Bloc<SelfRegEvent, SelfRegState> {
+class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
   final AuthRepo repository;
   final AppStateBloc appStateBloc;
-  SelfRegBloc({
-    required this.repository,
-    required this.appStateBloc,
-  }) : super(SelfRegInitialState()) {
-    on<SelfRegComplete>(_handleCompleteRegistration);
+  RegistrationBloc({required this.repository, required this.appStateBloc})
+    : super(RegistrationInitialState()) {
+    on<RegisterUser>(_handleRegisterUser);
   }
 
-  Future<void> _handleCompleteRegistration(
-    SelfRegComplete event,
-    Emitter<SelfRegState> emit,
-  ) async {
-    emit(const SelfRegInProgress(operationType: SelfRegOperType.SelfReqComplete));
+  Future<void> _handleRegisterUser(RegisterUser event, Emitter<RegistrationState> emit) async {
+    emit(const RegistrationInProgress(operationType: RegistrationOperType.SelfReqComplete));
 
     final result = await repository.register(event.payload);
     result.fold(
       (failure) => _emitFailure(
         failure: failure,
         emit: emit,
-        operationType: SelfRegOperType.SelfReqComplete,
+        operationType: RegistrationOperType.SelfReqComplete,
       ),
       (authData) {
-        emit(const SelfRegStepSuccess(operationType: SelfRegOperType.SelfReqComplete));
+        emit(const RegistrationStepSuccess(operationType: RegistrationOperType.SelfReqComplete));
         appStateBloc.add(
           UserLoggedIn(
             authData: authData,
@@ -53,14 +48,14 @@ class SelfRegBloc extends Bloc<SelfRegEvent, SelfRegState> {
 
   Future<void> _emitFailure({
     required Failure failure,
-    required Emitter<SelfRegState> emit,
-    required SelfRegOperType operationType,
+    required Emitter<RegistrationState> emit,
+    required RegistrationOperType operationType,
   }) async {
     emit(
       BlocUtils.handleFailure(
         includeCodeLine: false,
         failure: failure,
-        onError: (msg) => SelfRegError(operationType: operationType, message: msg),
+        onError: (msg) => RegistrationError(operationType: operationType, message: msg),
         codeToMessageMap: codeToMessageMap,
       ),
     );

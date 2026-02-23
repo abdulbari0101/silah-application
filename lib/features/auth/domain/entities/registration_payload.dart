@@ -1,5 +1,5 @@
-class SelfRegistrationPayload {
-  final SelfRegAccountType accountType;
+class RegistrationPayload {
+  final RegistrationAccountType accountType;
   final String firstName;
   final String lastName;
   final String email;
@@ -22,7 +22,7 @@ class SelfRegistrationPayload {
   final String? nationalId;
   final String? avatarUrl;
 
-  const SelfRegistrationPayload({
+  const RegistrationPayload({
     required this.accountType,
     required this.firstName,
     required this.lastName,
@@ -51,4 +51,4 @@ class SelfRegistrationPayload {
   }
 }
 
-enum SelfRegAccountType { user, lawyer }
+enum RegistrationAccountType { user, lawyer }

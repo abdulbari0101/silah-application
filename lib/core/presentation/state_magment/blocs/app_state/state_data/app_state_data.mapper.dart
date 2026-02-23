@@ -15,7 +15,7 @@ class AppStateDataMapper extends ClassMapperBase<AppStateData> {
   static AppStateDataMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = AppStateDataMapper._());
-      CustomerEntityMapper.ensureInitialized();
+      AuthUserEntityMapper.ensureInitialized();
       UserAuthStatusMapper.ensureInitialized();
     }
     return _instance!;
@@ -31,8 +31,8 @@ class AppStateDataMapper extends ClassMapperBase<AppStateData> {
     opt: true,
     def: false,
   );
-  static CustomerEntity? _$customer(AppStateData v) => v.customer;
-  static const Field<AppStateData, CustomerEntity> _f$customer = Field(
+  static AuthUserEntity? _$customer(AppStateData v) => v.customer;
+  static const Field<AppStateData, AuthUserEntity> _f$customer = Field(
     'customer',
     _$customer,
     opt: true,
@@ -123,10 +123,10 @@ extension AppStateDataValueCopy<$R, $Out>
 
 abstract class AppStateDataCopyWith<$R, $In extends AppStateData, $Out>
     implements ClassCopyWith<$R, $In, $Out> {
-  CustomerEntityCopyWith<$R, CustomerEntity, CustomerEntity>? get customer;
+  AuthUserEntityCopyWith<$R, AuthUserEntity, AuthUserEntity>? get customer;
   $R call({
     bool? isLoggedIn,
-    CustomerEntity? customer,
+    AuthUserEntity? customer,
     UserAuthStatus? userAuthStatus,
   });
   AppStateDataCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
@@ -141,7 +141,7 @@ class _AppStateDataCopyWithImpl<$R, $Out>
   late final ClassMapperBase<AppStateData> $mapper =
       AppStateDataMapper.ensureInitialized();
   @override
-  CustomerEntityCopyWith<$R, CustomerEntity, CustomerEntity>? get customer =>
+  AuthUserEntityCopyWith<$R, AuthUserEntity, AuthUserEntity>? get customer =>
       $value.customer?.copyWith.$chain((v) => call(customer: v));
   @override
   $R call({

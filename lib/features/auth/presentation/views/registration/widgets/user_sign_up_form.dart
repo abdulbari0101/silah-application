@@ -9,8 +9,8 @@ import 'package:silah_app/core/presentation/ui/widget/buttons/primary_button_wit
 import 'package:silah_app/core/presentation/ui/widget/text_fields/f_email_field.dart';
 import 'package:silah_app/core/presentation/ui/widget/text_fields/f_password_field.dart';
 import 'package:silah_app/core/presentation/ui/widget/text_fields/f_text2_feild.dart';
-import 'package:silah_app/features/auth/domain/entities/self_registration_payload.dart';
-import 'package:silah_app/features/auth/presentation/blocs/self_registration/self_registration_bloc.dart';
+import 'package:silah_app/features/auth/domain/entities/registration_payload.dart';
+import 'package:silah_app/features/auth/presentation/blocs/registration/registration_bloc.dart';
 
 class UserSignUpForm extends StatefulWidget {
   const UserSignUpForm({super.key});
@@ -54,8 +54,8 @@ class _UserSignUpFormState extends State<UserSignUpForm> {
     final firstName = parts.isNotEmpty ? parts.first : fullName;
     final lastName = parts.length > 1 ? parts.sublist(1).join(' ') : '';
 
-    final payload = SelfRegistrationPayload(
-      accountType: SelfRegAccountType.user,
+    final payload = RegistrationPayload(
+      accountType: RegistrationAccountType.user,
       firstName: firstName,
       lastName: lastName,
       email: _emailCtrl.text.trim(),
@@ -63,7 +63,7 @@ class _UserSignUpFormState extends State<UserSignUpForm> {
       password: _passCtrl.text,
     );
 
-    context.read<SelfRegBloc>().add(SelfRegComplete(payload: payload));
+    context.read<RegistrationBloc>().add(RegisterUser(payload: payload));
   }
 
   @override
@@ -104,7 +104,8 @@ class _UserSignUpFormState extends State<UserSignUpForm> {
             label: Strings.password.tr(),
             hintText: Strings.password.tr(),
             textInputAction: TextInputAction.next,
-            validator: (value) => validateNewPassword(newValue: value, label: Strings.password.tr()),
+            validator: (value) =>
+                validateNewPassword(newValue: value, label: Strings.password.tr()),
           ),
           UIConstants.mediumHeight,
           FPasswordField(
@@ -120,9 +121,9 @@ class _UserSignUpFormState extends State<UserSignUpForm> {
             onSubmitted: (_) => _submit(),
           ),
           UIConstants.xbigHeight,
-          BlocBuilder<SelfRegBloc, SelfRegState>(
+          BlocBuilder<RegistrationBloc, RegistrationState>(
             builder: (context, state) {
-              final isLoading = state is SelfRegInProgress;
+              final isLoading = state is RegistrationInProgress;
               return PrimaryButtonWithFormCubit(
                 text: Strings.register_new_user.tr(),
                 isLoading: isLoading,

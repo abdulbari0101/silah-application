@@ -7,7 +7,7 @@ import '../../models/intro_response_wrapper.dart';
 import 'intro_service.dart';
 
 abstract class IntroRemoteDataSource {
-  Future<BaseApiResponse<IntroRespWrapper>> doSomething(PostRequestModel request);
+
 }
 
 class IntroRemoteDataSourceImpl implements IntroRemoteDataSource {
@@ -16,11 +16,5 @@ class IntroRemoteDataSourceImpl implements IntroRemoteDataSource {
 
   IntroRemoteDataSourceImpl({required this.introService, required this.logger});
 
-  @override
-  Future<BaseApiResponse<IntroRespWrapper>> doSomething(PostRequestModel request) =>
-      handleBaseApiResponse<IntroRespWrapper>(
-        method: 'doSomething',
-        logger: logger,
-        call: () => introService.doSomething(request),
-      );
+
 }

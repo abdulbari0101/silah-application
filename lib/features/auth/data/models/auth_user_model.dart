@@ -1,48 +1,74 @@
-import 'package:silah_app/core/domain/entities/api/auth/customer_entity.dart';
-
-enum AuthAccountType { user, lawyer }
+import 'package:silah_app/features/auth/domain/entities/auth_user_entity.dart';
 
 class AuthUserModel {
-  final String uid;
+  final String? uid;
   final String? fullName;
   final String? email;
   final String? phone;
   final AuthAccountType accountType;
+  final String? password;
   final String? idToken;
   final Map<String, dynamic>? profile;
 
   const AuthUserModel({
-    required this.uid,
+    this.uid,
     required this.accountType,
     this.fullName,
     this.email,
     this.phone,
+    this.password,
     this.idToken,
     this.profile,
   });
 
-  CustomerEntity toCustomerEntity() {
-    final resolvedName = fullName?.trim() ?? '';
-    final parts = resolvedName.split(RegExp(r'\\s+')).where((p) => p.isNotEmpty).toList();
-    final firstName = parts.isNotEmpty ? parts.first : resolvedName;
-    final lastName = parts.length > 1 ? parts.sublist(1).join(' ') : '';
+  AuthUserEntity toEntity() => AuthUserEntity(
+        uid: uid,
+        accountType: accountType,
+        fullName: fullName,
+        email: email,
+        phone: phone,
+      );
 
-    return CustomerEntity(
-      fullName: resolvedName.isEmpty ? null : resolvedName,
-      firstName: firstName.isEmpty ? null : firstName,
-      lastName: lastName.isEmpty ? null : lastName,
+  Map<String, dynamic> toJson() => {
+        'uid': uid,
+        'fullName': fullName,
+        'email': email,
+        'phone': phone,
+        'accountType': accountType.name,
+      };
+
+  factory AuthUserModel.fromJson(Map<String, dynamic> json) {
+    final email = (json['email'] ?? json['EMAIL']) as String?;
+    final phone = (json['phone'] ?? json['mMobileNo']) as String?;
+    final fullName = (json['fullName'] ?? json['NAME']) as String?;
+    final typeName = json['accountType'] ?? json['typeName'] ?? json['TYPENAME'];
+    final typeNo = json['typeNo'] ?? json['TYPENO'];
+
+    String? uid = json['uid'] as String?;
+    uid ??= json['cCode'] as String? ?? json['CCODE'] as String?;
+    uid ??= json['shortCode'] as String? ?? json['SHORTCODE'] as String?;
+    uid ??= email ?? phone;
+
+    return AuthUserModel(
+      uid: uid,
+      accountType: parseAccountType(typeName ?? typeNo),
+      fullName: fullName,
       email: email,
-      mobileNo: phone ?? email,
-      typeName: accountType.name,
-      typeNo: accountType == AuthAccountType.user ? 1 : 2,
+      phone: phone,
     );
   }
 
-  static AuthAccountType parseAccountType(String? value) {
-    switch (value?.toLowerCase()) {
+  static AuthAccountType parseAccountType(dynamic value) {
+    if (value is AuthAccountType) return value;
+    if (value is int) {
+      return value == 2 ? AuthAccountType.lawyer : AuthAccountType.user;
+    }
+    switch (value?.toString().toLowerCase()) {
       case 'lawyer':
+      case '2':
         return AuthAccountType.lawyer;
       case 'user':
+      case '1':
       default:
         return AuthAccountType.user;
     }

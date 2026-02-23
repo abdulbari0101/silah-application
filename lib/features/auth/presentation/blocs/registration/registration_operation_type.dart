@@ -1,6 +1,6 @@
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
 
-enum SelfRegOperType {
+enum RegistrationOperType {
   SelfReqComplete;
 
   String get errorTitleKey {

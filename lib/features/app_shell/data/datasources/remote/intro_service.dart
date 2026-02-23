@@ -12,6 +12,4 @@ part 'intro_service.g.dart';
 abstract class IntroService {
   factory IntroService(Dio dio, {String? baseUrl}) = _IntroService;
 
-  @POST('Client/doSomething')
-  Future<BaseApiResponse<IntroRespWrapper>> doSomething(@Body() PostRequestModel request);
 }

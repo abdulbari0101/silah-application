@@ -1,6 +1,7 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:silah_app/core/data/model/api/base/response_wrapper.dart';
-import 'package:silah_app/core/data/model/api/result_model.dart';
+import 'package:silah_app/features/consultations/domain/entities/consultation_request_entity.dart';
+import 'package:silah_app/features/consultations/domain/entities/consultation_status.dart';
 
 part 'consultation_models.mapper.dart';
 
@@ -9,14 +10,28 @@ class ConsultationCreateRequestModel with ConsultationCreateRequestModelMappable
   final String clientUid;
   final String lawyerUid;
   final String caseText;
-  final String specialization;
+  final String? specializationId;
+  final String? specialization;
 
   const ConsultationCreateRequestModel({
     required this.clientUid,
     required this.lawyerUid,
     required this.caseText,
-    required this.specialization,
+    this.specializationId,
+    this.specialization,
   });
+
+  factory ConsultationCreateRequestModel.fromEntity(ConsultationRequestEntity entity) {
+    return ConsultationCreateRequestModel(
+      clientUid: entity.clientId ?? '',
+      lawyerUid: entity.lawyerId ?? '',
+      caseText: entity.description ?? '',
+      specializationId: entity.specializationId,
+      specialization: entity.specializationId,
+    );
+  }
+
+  Map<String, dynamic> toJson() => toMap();
 }
 
 @MappableClass(ignoreNull: true)
@@ -35,6 +50,12 @@ class ConsultationStatusUpdateRequestModel with ConsultationStatusUpdateRequestM
   final String status;
 
   const ConsultationStatusUpdateRequestModel({required this.status});
+
+  factory ConsultationStatusUpdateRequestModel.fromStatus(ConsultationStatus status) {
+    return ConsultationStatusUpdateRequestModel(status: status.name);
+  }
+
+  Map<String, dynamic> toJson() => toMap();
 }
 
 @MappableClass(ignoreNull: true)

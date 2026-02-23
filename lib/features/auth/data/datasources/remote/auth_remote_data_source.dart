@@ -5,33 +5,8 @@ import 'package:silah_app/features/auth/data/models/auth_user_model.dart';
 
 abstract class AuthRemoteDataSource {
   Future<AuthUserModel> signIn({required String email, required String password});
-  Future<AuthUserModel> registerUser({
-    required String name,
-    required String email,
-    required String phone,
-    required String password,
-    String? avatarUrl,
-  });
-  Future<AuthUserModel> registerLawyer({
-    required String name,
-    required String email,
-    required String phone,
-    required String gender,
-    String? genderId,
-    required String password,
-    required String legalField,
-    String? legalFieldId,
-    required String city,
-    String? cityId,
-    String? areaId,
-    required String workplace,
-    String? workDestinationId,
-    required String officeName,
-    String? experienceYears,
-    required String licenseNumber,
-    required String nationalId,
-    String? avatarUrl,
-  });
+  Future<AuthUserModel> registerUser({required AuthUserModel user});
+  Future<AuthUserModel> registerLawyer({required AuthUserModel user});
   Future<void> sendPasswordReset({required String email});
   Future<void> signOut();
 }
@@ -54,69 +29,19 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       );
 
   @override
-  Future<AuthUserModel> registerUser({
-    required String name,
-    required String email,
-    required String phone,
-    required String password,
-    String? avatarUrl,
-  }) =>
+  Future<AuthUserModel> registerUser({required AuthUserModel user}) =>
       firebaseCall<AuthUserModel>(
         method: 'AuthRemoteDataSource.registerUser',
         logger: logger,
-        call: () => authService.registerUser(
-          name: name,
-          email: email,
-          phone: phone,
-          password: password,
-          avatarUrl: avatarUrl,
-        ),
+        call: () => authService.registerUser(request: user),
       );
 
   @override
-  Future<AuthUserModel> registerLawyer({
-    required String name,
-    required String email,
-    required String phone,
-    required String gender,
-    String? genderId,
-    required String password,
-    required String legalField,
-    String? legalFieldId,
-    required String city,
-    String? cityId,
-    String? areaId,
-    required String workplace,
-    String? workDestinationId,
-    required String officeName,
-    String? experienceYears,
-    required String licenseNumber,
-    required String nationalId,
-    String? avatarUrl,
-  }) =>
+  Future<AuthUserModel> registerLawyer({required AuthUserModel user}) =>
       firebaseCall<AuthUserModel>(
         method: 'AuthRemoteDataSource.registerLawyer',
         logger: logger,
-        call: () => authService.registerLawyer(
-          name: name,
-          email: email,
-          phone: phone,
-          gender: gender,
-          genderId: genderId,
-          password: password,
-          legalField: legalField,
-          legalFieldId: legalFieldId,
-          city: city,
-          cityId: cityId,
-          areaId: areaId,
-          workplace: workplace,
-          workDestinationId: workDestinationId,
-          officeName: officeName,
-          experienceYears: experienceYears,
-          licenseNumber: licenseNumber,
-          nationalId: nationalId,
-          avatarUrl: avatarUrl,
-        ),
+        call: () => authService.registerLawyer(request: user),
       );
 
   @override

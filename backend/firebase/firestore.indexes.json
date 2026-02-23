@@ -11,6 +11,16 @@
       ]
     },
     {
+      "collectionGroup": "lawyers",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "verified", "order": "ASCENDING" },
+        { "fieldPath": "cityId", "order": "ASCENDING" },
+        { "fieldPath": "availability", "order": "ASCENDING" },
+        { "fieldPath": "specializations", "arrayConfig": "CONTAINS" }
+      ]
+    },
+    {
       "collectionGroup": "training_opportunities",
       "queryScope": "COLLECTION",
       "fields": [

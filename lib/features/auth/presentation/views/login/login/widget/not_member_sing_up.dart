@@ -20,7 +20,7 @@ class NotMemberSignUp extends StatelessWidget {
         InkWell(
           child: Text(Strings.sign_up.tr(), style: context.textTheme.titleMedium),
           onTap: () {
-            context.pushNamed(AppRoutes.selfRegisterWizard.name);
+            context.pushNamed(AppRoutes.RegistrationisterWizard.name);
           },
         ),
       ],

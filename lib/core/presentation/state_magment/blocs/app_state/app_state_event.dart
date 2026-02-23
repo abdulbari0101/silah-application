@@ -8,7 +8,7 @@ sealed class AppStateEvent  with AppStateEventMappable {
 
 @MappableClass(discriminatorValue: 'update_session')
 class UpdateSession extends AppStateEvent with UpdateSessionMappable {
-  final ExDataAuthEntity? authData;
+  final AuthUserEntity? authData;
   final bool? isLoggedIn;
   final UserAuthStatus? userAuthStatus;
 
@@ -18,7 +18,7 @@ class UpdateSession extends AppStateEvent with UpdateSessionMappable {
 
 @MappableClass(discriminatorValue: 'user_logged_in')
 class UserLoggedIn extends AppStateEvent with UserLoggedInMappable {
-  final ExDataAuthEntity? authData;
+  final AuthUserEntity? authData;
   final UserAuthStatus? userAuthStatus;
 
   const UserLoggedIn({
@@ -35,7 +35,7 @@ class UserLoggedIn extends AppStateEvent with UserLoggedInMappable {
 
 @MappableClass(discriminatorValue: 'inject_data_before_app_start')
 class InjectDataBeforeAppStart extends AppStateEvent with InjectDataBeforeAppStartMappable {
-  final CustomerEntity? customer;
+  final AuthUserEntity? customer;
 
   const InjectDataBeforeAppStart({required this.customer});
 

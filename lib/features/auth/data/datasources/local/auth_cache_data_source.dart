@@ -3,14 +3,14 @@ import 'package:silah_app/core/data/local/cache/app_cache.dart';
 import 'package:silah_app/core/data/local/cache/base/key_value_store_ex.dart';
 import 'package:silah_app/core/data/local/cache/readers/auth_readers.dart';
 import 'package:silah_app/core/data/local/cache/secure/secure_key.dart';
-import 'package:silah_app/core/data/model/api/auth/customer_model.dart';
 import 'package:silah_app/core/data/model/api/auth/token_model.dart';
+import 'package:silah_app/features/auth/data/models/auth_user_model.dart';
 import '../../../../../core/infrastructure/analytics/logger/app_logger.dart';
 import '../../../../../core/infrastructure/errors/exceptions.dart';
 
 abstract class AuthCacheDataSource implements SessionReader, IdentityReader {
   // shared
-  Future<void> saveCustomer({required CustomerModel customer, required String userId});
+  Future<void> saveCustomer({required AuthUserModel customer, required String userId});
 
   //Session
   Future<void> cacheLoginToken(TokenModel token);
@@ -80,8 +80,8 @@ class AuthCacheDataSourceImpl implements AuthCacheDataSource {
 
 
   @override
-  Future<void> saveCustomer({required CustomerModel customer, required String userId}) async {
-    await appCache.secure.writeObject<CustomerModel>(
+  Future<void> saveCustomer({required AuthUserModel customer, required String userId}) async {
+    await appCache.secure.writeObject<AuthUserModel>(
       key: SecureKey.csr,
       object: customer,
       toJson: (value) => value.toJson(),
@@ -90,11 +90,11 @@ class AuthCacheDataSourceImpl implements AuthCacheDataSource {
   }
 
   @override
-  Future<CustomerModel?> customer() async {
+  Future<AuthUserModel?> customer() async {
     final userId = await this.userId();
-    return await appCache.secure.readObject<CustomerModel>(
+    return await appCache.secure.readObject<AuthUserModel>(
       key: SecureKey.csr,
-      fromJson: (json) => CustomerModelMapper.fromJson(json),
+      fromJson: (json) => AuthUserModel.fromJson(json),
       userId: userId,
     );
   }

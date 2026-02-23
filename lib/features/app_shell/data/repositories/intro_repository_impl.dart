@@ -24,23 +24,5 @@ class IntroRepoImpl implements IntroRepo {
     required this.deviceInfoHelper,
   });
 
-  @override
-  Future<Either<Failure, List<IntroEntity>>> doSomething(PostRequestEntity parmas) async {
-    return executor.runOnline(() async {
-      final PostRequestModel request = await deviceInfoHelper.buildBaseRequest(
-        PostRequestModel.fromEntity(parmas),
-      );
 
-      final response = await remoteDS.doSomething(request);
-      final Intro = response.Intro;
-
-      if (Intro == null) {
-        throw MissingDataException("Intro is missing");
-      }
-
-      //await cacheDS.cacheSomething(name);
-
-      return Intro.map((e) => e.toEntity()).toList();
-    }, from: "IntroRepoImpl.doSomething");
-  }
 }

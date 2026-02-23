@@ -6,6 +6,7 @@ import 'package:silah_app/core/infrastructure/analytics/logger/app_logger.dart';
 import 'package:silah_app/core/infrastructure/errors/error_codes.dart';
 import 'package:silah_app/core/infrastructure/errors/exceptions.dart';
 import 'package:silah_app/features/auth/data/models/auth_user_model.dart';
+import 'package:silah_app/features/auth/domain/entities/auth_user_entity.dart';
 
 /// Firebase-backed authentication & profile service.
 class AuthService {
@@ -35,94 +36,68 @@ class AuthService {
     return _buildUserModel(user: user, profile: profile, idToken: idToken);
   }
 
-  Future<AuthUserModel> registerUser({
-    required String name,
-    required String email,
-    required String phone,
-    required String password,
-    String? avatarUrl,
-  }) async {
+  Future<AuthUserModel> registerUser({required AuthUserModel request}) async {
+    final email = _requireValue(request.email, Strings.error_self_reg.tr()).trim();
+    final password = _requireValue(request.password, Strings.error_self_reg.tr());
+    final name = request.fullName?.trim() ?? '';
+    final phone = request.phone?.trim() ?? '';
+    final profile = _buildProfile(
+      user: request,
+      accountType: AuthAccountType.user,
+      extra: {
+        'name': name,
+        'email': email,
+        'phone': phone,
+      },
+    );
+
     final credential = await _auth.createUserWithEmailAndPassword(
-      email: email.trim(),
+      email: email,
       password: password,
     );
 
-    final user = _requireUser(credential.user, Strings.error_self_reg.tr());
-    await user.updateDisplayName(name.trim());
+    final firebaseUser = _requireUser(credential.user, Strings.error_self_reg.tr());
+    await firebaseUser.updateDisplayName(name);
 
-    final profile = {
-      'name': name.trim(),
-      'email': email.trim(),
-      'phone': phone.trim(),
-      'avatarUrl': avatarUrl,
-      'accountType': 'user',
-      'createdAt': FieldValue.serverTimestamp(),
-    };
-    await _firestore.collection('users').doc(user.uid).set(profile);
+    await _firestore.collection('users').doc(firebaseUser.uid).set(profile);
 
-    final idToken = await _safeIdToken(user);
+    final idToken = await _safeIdToken(firebaseUser);
     return _buildUserModel(
-      user: user,
+      user: firebaseUser,
       profile: _ProfileData(AuthAccountType.user, profile),
       idToken: idToken,
     );
   }
 
-  Future<AuthUserModel> registerLawyer({
-    required String name,
-    required String email,
-    required String phone,
-    required String gender,
-    String? genderId,
-    required String password,
-    required String legalField,
-    String? legalFieldId,
-    required String city,
-    String? cityId,
-    String? areaId,
-    required String workplace,
-    String? workDestinationId,
-    required String officeName,
-    String? experienceYears,
-    required String licenseNumber,
-    required String nationalId,
-    String? avatarUrl,
-  }) async {
+  Future<AuthUserModel> registerLawyer({required AuthUserModel request}) async {
+    final email = _requireValue(request.email, Strings.error_self_reg.tr()).trim();
+    final password = _requireValue(request.password, Strings.error_self_reg.tr());
+    final name = request.fullName?.trim() ?? '';
+    final phone = request.phone?.trim() ?? '';
+    final profile = _buildProfile(
+      user: request,
+      accountType: AuthAccountType.lawyer,
+      extra: {
+        'name': name,
+        'email': email,
+        'phone': phone,
+        'verified': false,
+      },
+    );
+
     final credential = await _auth.createUserWithEmailAndPassword(
-      email: email.trim(),
+      email: email,
       password: password,
     );
 
-    final user = _requireUser(credential.user, Strings.error_self_reg.tr());
-    await user.updateDisplayName(name.trim());
+    final firebaseUser = _requireUser(credential.user, Strings.error_self_reg.tr());
+    await firebaseUser.updateDisplayName(name);
 
-    final profile = {
-      'name': name.trim(),
-      'email': email.trim(),
-      'phone': phone.trim(),
-      'gender': gender,
-      'genderId': genderId,
-      'legalField': legalField,
-      'legalFieldId': legalFieldId,
-      'city': city,
-      'cityId': cityId,
-      'areaId': areaId,
-      'workplace': workplace,
-      'workDestinationId': workDestinationId,
-      'officeName': officeName.trim(),
-      'experienceYears': experienceYears?.trim() ?? '',
-      'licenseNumber': licenseNumber.trim(),
-      'nationalId': nationalId.trim(),
-      'avatarUrl': avatarUrl,
-      'accountType': 'lawyer',
-      'verified': false,
-      'createdAt': FieldValue.serverTimestamp(),
-    };
-    await _firestore.collection('lawyers').doc(user.uid).set(profile);
+    await _firestore.collection('lawyers').doc(firebaseUser.uid).set(profile);
 
-    final idToken = await _safeIdToken(user);
+    final idToken = await _safeIdToken(firebaseUser);
     return _buildUserModel(
-      user: user,
+      user: firebaseUser,
       profile: _ProfileData(AuthAccountType.lawyer, profile),
       idToken: idToken,
     );
@@ -169,6 +144,34 @@ class AuthService {
       idToken: idToken,
       profile: data,
     );
+  }
+
+  Map<String, dynamic> _buildProfile({
+    required AuthUserModel user,
+    required AuthAccountType accountType,
+    Map<String, dynamic>? extra,
+  }) {
+    final profile = <String, dynamic>{};
+    if (user.profile != null) {
+      profile.addAll(user.profile!);
+    }
+    if (extra != null) {
+      profile.addAll(extra);
+    }
+
+    profile.remove('password');
+    profile['accountType'] = accountType.name;
+    profile['createdAt'] = FieldValue.serverTimestamp();
+    profile.removeWhere((key, value) => value == null);
+    return profile;
+  }
+
+  String _requireValue(String? value, String message) {
+    final trimmed = value?.trim() ?? '';
+    if (trimmed.isEmpty) {
+      throw AuthException(message, ErrorCodes.badRequest400);
+    }
+    return trimmed;
   }
 
   User _requireUser(User? user, String message) {

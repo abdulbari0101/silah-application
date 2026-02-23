@@ -22,7 +22,7 @@ final GoRouter appRouter = GoRouter(
       AppRoutes.splash.path,
       AppRoutes.onboarding.path,
       AppRoutes.login.path,
-      AppRoutes.selfRegisterWizard.path,
+      AppRoutes.RegistrationisterWizard.path,
       AppRoutes.userSignUp.path,
       AppRoutes.lawyerSignUp.path,
       AppRoutes.lawyerProfessionalInfo.path,
@@ -46,8 +46,8 @@ final GoRouter appRouter = GoRouter(
       AppRoutes.login,
       AppRoutes.changePassword,
       AppRoutes.updatePassword,
-  
-      AppRoutes.selfRegisterWizard,
+
+      AppRoutes.RegistrationisterWizard,
       AppRoutes.userSignUp,
       AppRoutes.lawyerSignUp,
       AppRoutes.lawyerProfessionalInfo,

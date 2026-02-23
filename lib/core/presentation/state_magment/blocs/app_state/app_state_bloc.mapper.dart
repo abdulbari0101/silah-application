@@ -72,7 +72,7 @@ class UpdateSessionMapper extends SubClassMapperBase<UpdateSession> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = UpdateSessionMapper._());
       AppStateEventMapper.ensureInitialized().addSubMapper(_instance!);
-      ExDataAuthEntityMapper.ensureInitialized();
+      AuthUserEntityMapper.ensureInitialized();
       UserAuthStatusMapper.ensureInitialized();
     }
     return _instance!;
@@ -81,8 +81,8 @@ class UpdateSessionMapper extends SubClassMapperBase<UpdateSession> {
   @override
   final String id = 'UpdateSession';
 
-  static ExDataAuthEntity? _$authData(UpdateSession v) => v.authData;
-  static const Field<UpdateSession, ExDataAuthEntity> _f$authData = Field(
+  static AuthUserEntity? _$authData(UpdateSession v) => v.authData;
+  static const Field<UpdateSession, AuthUserEntity> _f$authData = Field(
     'authData',
     _$authData,
     opt: true,
@@ -187,11 +187,11 @@ extension UpdateSessionValueCopy<$R, $Out>
 
 abstract class UpdateSessionCopyWith<$R, $In extends UpdateSession, $Out>
     implements AppStateEventCopyWith<$R, $In, $Out> {
-  ExDataAuthEntityCopyWith<$R, ExDataAuthEntity, ExDataAuthEntity>?
+  AuthUserEntityCopyWith<$R, AuthUserEntity, AuthUserEntity>?
   get authData;
   @override
   $R call({
-    ExDataAuthEntity? authData,
+    AuthUserEntity? authData,
     bool? isLoggedIn,
     UserAuthStatus? userAuthStatus,
   });
@@ -207,7 +207,7 @@ class _UpdateSessionCopyWithImpl<$R, $Out>
   late final ClassMapperBase<UpdateSession> $mapper =
       UpdateSessionMapper.ensureInitialized();
   @override
-  ExDataAuthEntityCopyWith<$R, ExDataAuthEntity, ExDataAuthEntity>?
+  AuthUserEntityCopyWith<$R, AuthUserEntity, AuthUserEntity>?
   get authData => $value.authData?.copyWith.$chain((v) => call(authData: v));
   @override
   $R call({
@@ -242,7 +242,7 @@ class UserLoggedInMapper extends SubClassMapperBase<UserLoggedIn> {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = UserLoggedInMapper._());
       AppStateEventMapper.ensureInitialized().addSubMapper(_instance!);
-      ExDataAuthEntityMapper.ensureInitialized();
+      AuthUserEntityMapper.ensureInitialized();
       UserAuthStatusMapper.ensureInitialized();
     }
     return _instance!;
@@ -251,8 +251,8 @@ class UserLoggedInMapper extends SubClassMapperBase<UserLoggedIn> {
   @override
   final String id = 'UserLoggedIn';
 
-  static ExDataAuthEntity? _$authData(UserLoggedIn v) => v.authData;
-  static const Field<UserLoggedIn, ExDataAuthEntity> _f$authData = Field(
+  static AuthUserEntity? _$authData(UserLoggedIn v) => v.authData;
+  static const Field<UserLoggedIn, AuthUserEntity> _f$authData = Field(
     'authData',
     _$authData,
   );
@@ -347,10 +347,10 @@ extension UserLoggedInValueCopy<$R, $Out>
 
 abstract class UserLoggedInCopyWith<$R, $In extends UserLoggedIn, $Out>
     implements AppStateEventCopyWith<$R, $In, $Out> {
-  ExDataAuthEntityCopyWith<$R, ExDataAuthEntity, ExDataAuthEntity>?
+  AuthUserEntityCopyWith<$R, AuthUserEntity, AuthUserEntity>?
   get authData;
   @override
-  $R call({ExDataAuthEntity? authData, UserAuthStatus? userAuthStatus});
+  $R call({AuthUserEntity? authData, UserAuthStatus? userAuthStatus});
   UserLoggedInCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
 
@@ -363,7 +363,7 @@ class _UserLoggedInCopyWithImpl<$R, $Out>
   late final ClassMapperBase<UserLoggedIn> $mapper =
       UserLoggedInMapper.ensureInitialized();
   @override
-  ExDataAuthEntityCopyWith<$R, ExDataAuthEntity, ExDataAuthEntity>?
+  AuthUserEntityCopyWith<$R, AuthUserEntity, AuthUserEntity>?
   get authData => $value.authData?.copyWith.$chain((v) => call(authData: v));
   @override
   $R call({Object? authData = $none, Object? userAuthStatus = $none}) => $apply(
@@ -395,7 +395,7 @@ class InjectDataBeforeAppStartMapper
         _instance = InjectDataBeforeAppStartMapper._(),
       );
       AppStateEventMapper.ensureInitialized().addSubMapper(_instance!);
-      CustomerEntityMapper.ensureInitialized();
+      AuthUserEntityMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -403,8 +403,8 @@ class InjectDataBeforeAppStartMapper
   @override
   final String id = 'InjectDataBeforeAppStart';
 
-  static CustomerEntity? _$customer(InjectDataBeforeAppStart v) => v.customer;
-  static const Field<InjectDataBeforeAppStart, CustomerEntity> _f$customer =
+  static AuthUserEntity? _$customer(InjectDataBeforeAppStart v) => v.customer;
+  static const Field<InjectDataBeforeAppStart, AuthUserEntity> _f$customer =
       Field('customer', _$customer);
 
   @override
@@ -496,9 +496,9 @@ abstract class InjectDataBeforeAppStartCopyWith<
   $Out
 >
     implements AppStateEventCopyWith<$R, $In, $Out> {
-  CustomerEntityCopyWith<$R, CustomerEntity, CustomerEntity>? get customer;
+  AuthUserEntityCopyWith<$R, AuthUserEntity, AuthUserEntity>? get customer;
   @override
-  $R call({CustomerEntity? customer});
+  $R call({AuthUserEntity? customer});
   InjectDataBeforeAppStartCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
     Then<$Out2, $R2> t,
   );
@@ -514,7 +514,7 @@ class _InjectDataBeforeAppStartCopyWithImpl<$R, $Out>
   late final ClassMapperBase<InjectDataBeforeAppStart> $mapper =
       InjectDataBeforeAppStartMapper.ensureInitialized();
   @override
-  CustomerEntityCopyWith<$R, CustomerEntity, CustomerEntity>? get customer =>
+  AuthUserEntityCopyWith<$R, AuthUserEntity, AuthUserEntity>? get customer =>
       $value.customer?.copyWith.$chain((v) => call(customer: v));
   @override
   $R call({Object? customer = $none}) =>

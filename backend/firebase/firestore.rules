@@ -72,5 +72,25 @@ service cloud.firestore {
       allow read: if isSignedIn();
       allow write: if isAdmin();
     }
+
+    match /genders/{genderId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /areas/{areaId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /cities/{cityId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /work_destinations/{workDestinationId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
   }
 }

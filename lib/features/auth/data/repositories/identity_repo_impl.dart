@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
-import 'package:silah_app/core/domain/entities/api/auth/customer_entity.dart';
 import 'package:silah_app/core/infrastructure/analytics/logger/app_logger.dart';
 import 'package:silah_app/core/infrastructure/platform/device_serial_service.dart';
 import 'package:silah_app/features/auth/data/datasources/local/auth_cache_data_source.dart';
+import 'package:silah_app/features/auth/domain/entities/auth_user_entity.dart';
 import 'package:silah_app/features/auth/domain/repositories/identity_base_repo.dart';
 
 class IdentityRepoImpl implements AuthIdentityRepo {
@@ -30,8 +30,8 @@ class IdentityRepoImpl implements AuthIdentityRepo {
   Future<String?> userId() => _cacheDS.userId();
 
   @override
-  Future<String> generateAndSaveUserId(CustomerEntity customer) async {
-    final rawValue = customer.cCode ?? customer.shortCode ?? customer.mobileNo ?? '';
+  Future<String> generateAndSaveUserId(AuthUserEntity customer) async {
+    final rawValue = customer.uid ?? customer.email ?? customer.phone ?? '';
     final userId = _generateCode(rawValue);
     await _cacheDS.saveUserId(userId: userId);
     return userId;

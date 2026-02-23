@@ -1,10 +1,9 @@
 import 'package:bloc/bloc.dart';
 import 'package:dart_mappable/dart_mappable.dart';
-import 'package:silah_app/core/domain/entities/api/auth/customer_entity.dart';
 import 'package:silah_app/core/presentation/state_magment/blocs/app_state/state_data/app_auth_status.dart';
 import 'package:silah_app/core/presentation/state_magment/blocs/app_state/state_data/app_state_data.dart';
 
-import 'package:silah_app/features/auth/domain/entities/auth_ex_data_entity.dart';
+import 'package:silah_app/features/auth/domain/entities/auth_user_entity.dart';
 
 part 'app_state_bloc.mapper.dart';
 part 'app_state_event.dart';
@@ -20,7 +19,7 @@ class AppStateBloc extends Bloc<AppStateEvent, AppStateState> {
 
   void _handleUpdateSession(UpdateSession event, Emitter<AppStateState> emit) {
     final updated = state.data.copyWith(
-      customer: event.authData?.customer ?? state.data.customer,
+      customer: event.authData ?? state.data.customer,
      
       isLoggedIn: event.isLoggedIn ?? state.data.isLoggedIn,
       userAuthStatus: event.userAuthStatus ?? state.data.userAuthStatus,
@@ -30,7 +29,7 @@ class AppStateBloc extends Bloc<AppStateEvent, AppStateState> {
 
   void _handleUserLoggedIn(UserLoggedIn event, Emitter<AppStateState> emit) {
     final updated = state.data.copyWith(
-      customer: event.authData?.customer,
+      customer: event.authData,
       isLoggedIn: true,
       userAuthStatus: event.userAuthStatus,
     );
@@ -51,7 +50,7 @@ class AppStateBloc extends Bloc<AppStateEvent, AppStateState> {
         isLoggedIn: false,
         isDeviceVerified: false,
         isAccountVerified: false,
-        wasLoggedInBefore: event.customer?.mobileNo != null,
+        wasLoggedInBefore: event.customer?.phone != null,
       ),
       customer: event.customer,
     );

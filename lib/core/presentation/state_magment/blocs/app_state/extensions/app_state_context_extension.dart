@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:silah_app/core/domain/entities/api/auth/customer_entity.dart';
 import 'package:silah_app/core/presentation/state_magment/blocs/app_state/app_state_bloc.dart';
 import 'package:silah_app/core/presentation/state_magment/blocs/app_state/state_data/app_auth_status.dart';
 import 'package:silah_app/core/presentation/state_magment/blocs/app_state/state_data/app_state_data.dart';
+import 'package:silah_app/features/auth/domain/entities/auth_user_entity.dart';
 
 
 extension AppStateContext on BuildContext {
@@ -15,7 +15,7 @@ extension AppStateContext on BuildContext {
   /// Reads whether the user is logged in
   bool get isLoggedIn => appStateData.isLoggedIn;
 
-  CustomerEntity? get customer => appStateData.customer;
+  AuthUserEntity? get customer => appStateData.customer;
 
 
 

@@ -33,7 +33,7 @@ class AppRoutes {
   static final changePassword = _placeholderRoute('change-password', '/change-password');
 
   static final updatePassword = _placeholderRoute('update-password', '/update-password');
-  static final selfRegisterWizard = RouteInfo(
+  static final RegistrationisterWizard = RouteInfo(
     name: 'self-Register-wizard',
     path: '/self-Register-wizard',
     builder: () => const AccountTypeScreen(),
@@ -113,7 +113,7 @@ class AppRoutes {
     login,
     changePassword,
     updatePassword,
-    selfRegisterWizard,
+    RegistrationisterWizard,
     userSignUp,
     lawyerSignUp,
     lawyerProfessionalInfo,
@@ -130,7 +130,7 @@ class AppRoutes {
     splash,
     onboarding,
     login,
-    selfRegisterWizard,
+    RegistrationisterWizard,
     userSignUp,
     lawyerSignUp,
     lawyerProfessionalInfo,
@@ -146,7 +146,7 @@ class AppRoutes {
     splash,
     onboarding,
     login,
-    selfRegisterWizard,
+    RegistrationisterWizard,
     userSignUp,
     lawyerSignUp,
     lawyerProfessionalInfo,

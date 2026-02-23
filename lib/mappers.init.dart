@@ -6,7 +6,6 @@
 
 import 'core/data/local/cache/prefs/prefs_key.dart' as p0;
 import 'core/data/local/cache/secure/secure_key.dart' as p1;
-import 'core/data/model/api/auth/customer_model.dart' as p2;
 import 'core/data/model/api/auth/token_model.dart' as p3;
 import 'core/data/model/api/base/data_response_wrapper.dart' as p4;
 import 'core/data/model/api/base/response_wrapper.dart' as p5;
@@ -37,7 +36,7 @@ import 'features/admin/domain/entities/admin_task_status.dart' as p25;
 import 'features/app_shell/data/models/intro_model.dart' as p26;
 import 'features/app_shell/data/models/intro_response_wrapper.dart' as p27;
 import 'features/app_shell/domain/entities/intro_entity.dart' as p28;
-import 'features/auth/domain/entities/auth_ex_data_entity.dart' as p29;
+import 'features/auth/domain/entities/auth_user_entity.dart' as p69;
 import 'features/consultations/data/models/consultation_models.dart' as p30;
 import 'features/consultations/domain/entities/case_attachment_entity.dart'
     as p31;
@@ -97,7 +96,6 @@ import 'features/verification/domain/entities/verification_status.dart' as p68;
 void initializeMappers() {
   p0.PrefsKeyMapper.ensureInitialized();
   p1.SecureKeyMapper.ensureInitialized();
-  p2.CustomerModelMapper.ensureInitialized();
   p3.TokenModelMapper.ensureInitialized();
   p4.DataRespWrapperMapper.ensureInitialized();
   p5.BaseRespWrapperMapper.ensureInitialized();
@@ -141,7 +139,8 @@ void initializeMappers() {
   p26.IntroModelMapper.ensureInitialized();
   p27.IntroRespWrapperMapper.ensureInitialized();
   p28.IntroEntityMapper.ensureInitialized();
-  p29.ExDataAuthEntityMapper.ensureInitialized();
+  p69.AuthAccountTypeMapper.ensureInitialized();
+  p69.AuthUserEntityMapper.ensureInitialized();
   p30.ConsultationCreateRequestModelMapper.ensureInitialized();
   p30.ConsultationCreateResponseModelMapper.ensureInitialized();
   p30.ConsultationStatusUpdateRequestModelMapper.ensureInitialized();
