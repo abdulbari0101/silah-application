@@ -16,7 +16,7 @@ Future<void> initSpecifications() async {
 
   // Repo
   locator.registerLazySingleton<DiscoveryRepository>(
-    () => DiscoveryRepositoryImpl(aiRemoteDataSource: locator(), executor: locator()),
+    () => DiscoveryRepositoryImpl(remoteDataSource: locator(), executor: locator()),
   );
 
   // Data sources

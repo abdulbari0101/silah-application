@@ -19,16 +19,16 @@ class _SpecificationsService implements SpecificationsService {
 
   final ParseErrorLogger? errorLogger;
 
-  Future<dynamic> _specification(PostRequestModel request) async {
+  Future<dynamic> _classify(AiClassifyRequestModel request) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
     final _data = request;
-    final _options = _setStreamType<DataRespWrapper<DataModel>>(
+    final _options = _setStreamType<AiClassifyResponseModel>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            'Specification',
+            '/ai/classify',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -40,9 +40,36 @@ class _SpecificationsService implements SpecificationsService {
   }
 
   @override
-  Future<DataRespWrapper<DataModel>> specification(PostRequestModel request) {
-    return JsonBodyMappableAdapter<DataRespWrapper<DataModel>>().adapt(
-      () => _specification(request),
+  Future<AiClassifyResponseModel> classify(AiClassifyRequestModel request) {
+    return JsonBodyMappableAdapter<AiClassifyResponseModel>().adapt(
+      () => _classify(request),
+    );
+  }
+
+  Future<dynamic> _recommend(AiRecommendRequestModel request) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = request;
+    final _options = _setStreamType<AiRecommendResponseModel>(
+      Options(method: 'POST', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/ai/recommend',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
+    return _value;
+  }
+
+  @override
+  Future<AiRecommendResponseModel> recommend(AiRecommendRequestModel request) {
+    return JsonBodyMappableAdapter<AiRecommendResponseModel>().adapt(
+      () => _recommend(request),
     );
   }
 

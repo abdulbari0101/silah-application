@@ -11,6 +11,7 @@ import 'package:silah_app/features/auth/presentation/views/registration/screens/
 import 'package:silah_app/features/auth/presentation/views/registration/screens/lawyer_sign_up_screen.dart';
 import 'package:silah_app/features/auth/presentation/views/registration/screens/user_sign_up_screen.dart';
 import 'package:silah_app/features/consultations/presentation/views/requests/screens/requests_screen.dart';
+import 'package:silah_app/features/discovery/presentation/views/ai_consultation/screens/ai_consultation_screen.dart';
 import 'package:silah_app/features/discovery/presentation/views/specification/screens/specifications_screen.dart';
 import 'package:silah_app/features/messaging/presentation/views/chats/screens/chats_screen.dart';
 import 'package:silah_app/features/settings/presentation/views/langauge/screens/language_prefrence_screen.dart';
@@ -96,6 +97,11 @@ class AppRoutes {
     path: '/settings',
     builder: () => const SettingsScreen(),
   );
+  static final ai_consultation = RouteInfo(
+    name: 'ai-consultation',
+    path: '/ai-consultation',
+    builder: () => const AiConsultationScreen(),
+  );
 
   /// Tabs used by the main shell (bottom navigation).
   static final tabRoutes = [home, requests, messages, settings];
@@ -130,6 +136,8 @@ class AppRoutes {
     language,
     notification,
     success,
+
+    ai_consultation, 
     ...tabRoutes,
   ];
 

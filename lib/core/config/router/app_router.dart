@@ -55,6 +55,7 @@ final GoRouter appRouter = GoRouter(
       AppRoutes.language,
       AppRoutes.notification,
       AppRoutes.success,
+      AppRoutes.ai_consultation,
     ].map(
       (route) => GoRoute(
         path: route.path,

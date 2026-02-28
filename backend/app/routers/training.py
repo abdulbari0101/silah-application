@@ -80,6 +80,11 @@ def create_training_application(
             message="A trainee applied for your training opportunity.",
             data={"type": "training", "applicationId": ref.id},
         )
+    try:
+        db.collection("users").document(payload.traineeUid).set({"isTrainee": True}, merge=True)
+    except Exception:
+        # non-blocking: do not fail application if profile update fails
+        pass
 
     response = TrainingApplicationCreateResponse(applicationId=ref.id)
     return success_response(response.model_dump())

@@ -5,6 +5,7 @@ import 'package:silah_app/core/config/localization/localizations_string_keys.dar
 import 'package:silah_app/core/infrastructure/analytics/logger/app_logger.dart';
 import 'package:silah_app/core/infrastructure/errors/error_codes.dart';
 import 'package:silah_app/core/infrastructure/errors/exceptions.dart';
+import 'package:silah_app/core/infrastructure/network/firestore_helpers.dart';
 import 'package:silah_app/features/auth/data/models/auth_user_model.dart';
 import 'package:silah_app/features/auth/domain/entities/auth_user_entity.dart';
 
@@ -85,6 +86,15 @@ class AuthService {
       },
     );
 
+    final resolvedLegalFieldIds = await _resolveLegalFieldIds(profile);
+    profile
+      ..remove('legalFields')
+      ..remove('legalField')
+      ..remove('specializations');
+    if (resolvedLegalFieldIds.isNotEmpty) {
+      profile['legalFieldIds'] = resolvedLegalFieldIds;
+    }
+
     final credential = await _auth.createUserWithEmailAndPassword(
       email: email,
       password: password,
@@ -164,6 +174,50 @@ class AuthService {
     profile['createdAt'] = FieldValue.serverTimestamp();
     profile.removeWhere((key, value) => value == null);
     return profile;
+  }
+
+  Future<List<String>> _resolveLegalFieldIds(Map<String, dynamic> profile) async {
+    final ids = _parseStringList(profile['legalFieldIds']);
+    if (ids.isNotEmpty) return ids;
+
+    final names = _parseStringList(profile['legalFields']);
+    if (names.isEmpty) return const <String>[];
+
+    final snapshot = await _firestore.collection('specializations').get();
+    final lookup = <String, String>{};
+    for (final doc in snapshot.docs) {
+      final data = doc.data();
+      final nameAr = (data['nameAr'] as String?)?.trim();
+      final nameEn = (data['nameEn'] as String?)?.trim();
+      if (nameAr != null && nameAr.isNotEmpty) {
+        lookup[nameAr.toLowerCase()] = doc.id;
+      }
+      if (nameEn != null && nameEn.isNotEmpty) {
+        lookup[nameEn.toLowerCase()] = doc.id;
+      }
+    }
+
+    final resolved = <String>[];
+    for (final name in names) {
+      final id = lookup[name.toLowerCase()];
+      if (id != null && !resolved.contains(id)) {
+        resolved.add(id);
+      }
+    }
+
+    return resolved.isEmpty ? names : resolved;
+  }
+
+  List<String> _parseStringList(dynamic value) {
+    final list = parseFirestoreStringList(value) ?? const <String>[];
+    if (list.isNotEmpty) {
+      return list.map((item) => item.trim()).where((item) => item.isNotEmpty).toList();
+    }
+    if (value is String) {
+      final trimmed = value.trim();
+      return trimmed.isEmpty ? const <String>[] : <String>[trimmed];
+    }
+    return const <String>[];
   }
 
   String _requireValue(String? value, String message) {

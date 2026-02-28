@@ -16,6 +16,8 @@ class AiRecommendationEntityMapper
   static AiRecommendationEntityMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = AiRecommendationEntityMapper._());
+      LegalSpecializationEntityMapper.ensureInitialized();
+      LawyerProfileEntityMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -23,23 +25,20 @@ class AiRecommendationEntityMapper
   @override
   final String id = 'AiRecommendationEntity';
 
-  static String? _$specialization(AiRecommendationEntity v) => v.specialization;
-  static const Field<AiRecommendationEntity, String> _f$specialization = Field(
-    'specialization',
-    _$specialization,
-    opt: true,
-  );
-  static List<String>? _$lawyerIds(AiRecommendationEntity v) => v.lawyerIds;
-  static const Field<AiRecommendationEntity, List<String>> _f$lawyerIds = Field(
-    'lawyerIds',
-    _$lawyerIds,
-    opt: true,
-  );
+  static LegalSpecializationEntity? _$specialization(
+    AiRecommendationEntity v,
+  ) => v.specialization;
+  static const Field<AiRecommendationEntity, LegalSpecializationEntity>
+  _f$specialization = Field('specialization', _$specialization, opt: true);
+  static List<LawyerProfileEntity>? _$lawyers(AiRecommendationEntity v) =>
+      v.lawyers;
+  static const Field<AiRecommendationEntity, List<LawyerProfileEntity>>
+  _f$lawyers = Field('lawyers', _$lawyers, opt: true);
 
   @override
   final MappableFields<AiRecommendationEntity> fields = const {
     #specialization: _f$specialization,
-    #lawyerIds: _f$lawyerIds,
+    #lawyers: _f$lawyers,
   };
   @override
   final bool ignoreNull = true;
@@ -47,7 +46,7 @@ class AiRecommendationEntityMapper
   static AiRecommendationEntity _instantiate(DecodingData data) {
     return AiRecommendationEntity(
       specialization: data.dec(_f$specialization),
-      lawyerIds: data.dec(_f$lawyerIds),
+      lawyers: data.dec(_f$lawyers),
     );
   }
 
@@ -121,8 +120,22 @@ abstract class AiRecommendationEntityCopyWith<
   $Out
 >
     implements ClassCopyWith<$R, $In, $Out> {
-  ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>? get lawyerIds;
-  $R call({String? specialization, List<String>? lawyerIds});
+  LegalSpecializationEntityCopyWith<
+    $R,
+    LegalSpecializationEntity,
+    LegalSpecializationEntity
+  >?
+  get specialization;
+  ListCopyWith<
+    $R,
+    LawyerProfileEntity,
+    LawyerProfileEntityCopyWith<$R, LawyerProfileEntity, LawyerProfileEntity>
+  >?
+  get lawyers;
+  $R call({
+    LegalSpecializationEntity? specialization,
+    List<LawyerProfileEntity>? lawyers,
+  });
   AiRecommendationEntityCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
     Then<$Out2, $R2> t,
   );
@@ -138,26 +151,37 @@ class _AiRecommendationEntityCopyWithImpl<$R, $Out>
   late final ClassMapperBase<AiRecommendationEntity> $mapper =
       AiRecommendationEntityMapper.ensureInitialized();
   @override
-  ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>? get lawyerIds =>
-      $value.lawyerIds != null
+  LegalSpecializationEntityCopyWith<
+    $R,
+    LegalSpecializationEntity,
+    LegalSpecializationEntity
+  >?
+  get specialization =>
+      $value.specialization?.copyWith.$chain((v) => call(specialization: v));
+  @override
+  ListCopyWith<
+    $R,
+    LawyerProfileEntity,
+    LawyerProfileEntityCopyWith<$R, LawyerProfileEntity, LawyerProfileEntity>
+  >?
+  get lawyers => $value.lawyers != null
       ? ListCopyWith(
-          $value.lawyerIds!,
-          (v, t) => ObjectCopyWith(v, $identity, t),
-          (v) => call(lawyerIds: v),
+          $value.lawyers!,
+          (v, t) => v.copyWith.$chain(t),
+          (v) => call(lawyers: v),
         )
       : null;
   @override
-  $R call({Object? specialization = $none, Object? lawyerIds = $none}) =>
-      $apply(
-        FieldCopyWithData({
-          if (specialization != $none) #specialization: specialization,
-          if (lawyerIds != $none) #lawyerIds: lawyerIds,
-        }),
-      );
+  $R call({Object? specialization = $none, Object? lawyers = $none}) => $apply(
+    FieldCopyWithData({
+      if (specialization != $none) #specialization: specialization,
+      if (lawyers != $none) #lawyers: lawyers,
+    }),
+  );
   @override
   AiRecommendationEntity $make(CopyWithData data) => AiRecommendationEntity(
     specialization: data.get(#specialization, or: $value.specialization),
-    lawyerIds: data.get(#lawyerIds, or: $value.lawyerIds),
+    lawyers: data.get(#lawyers, or: $value.lawyers),
   );
 
   @override

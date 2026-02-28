@@ -33,7 +33,14 @@ class SpecificationsBloc extends Bloc<SpecificationsEvent, SpecificationsState> 
     final result = await repository.fetchSpecializations();
 
     result.fold((failure) => _emitFailure(failure, emit), (data) {
-      emit(DataPaymentLoaded(data: []));
+      final items = data
+          .map(
+            (spec) => SpecificationItemEntity(
+              name: spec.name ?? spec.code ?? spec.id,
+            ),
+          )
+          .toList();
+      emit(DataPaymentLoaded(data: items));
     });
   }
 

@@ -10,6 +10,8 @@ class ProfileEntity with ProfileEntityMappable {
   final String? phone;
   final String? city;
   final String? avatarUrl;
+  final String? accountType;
+  final bool isTrainee;
 
   const ProfileEntity({
     this.id,
@@ -18,5 +20,7 @@ class ProfileEntity with ProfileEntityMappable {
     this.phone,
     this.city,
     this.avatarUrl,
+    this.accountType,
+    this.isTrainee = false,
   });
 }

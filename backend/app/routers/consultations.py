@@ -11,7 +11,7 @@ from ..schemas import (
     ConsultationStatusUpdateRequest,
     ConsultationStatusUpdateResponse,
 )
-from ..services.firestore_service import create_notification
+from ..services.firestore_service import create_notification, get_active_specializations
 from ..utils.firebase_logger import (
     log_firestore_error,
     log_firestore_request,
@@ -32,16 +32,18 @@ def create_consultation(
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden")
 
     db = firestore_client()
-    specialization_value = payload.specialization or payload.specializationId
+    specialization_value = payload.specializationId or payload.specialization
     if not specialization_value:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Missing specialization")
+    specialization_id = _resolve_specialization_id(db, specialization_value)
+    if not specialization_id:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Invalid specialization")
 
     record = {
         "clientUid": payload.clientUid,
         "lawyerUid": payload.lawyerUid,
         "caseText": payload.caseText,
-        "specializationId": payload.specializationId,
-        "specialization": payload.specialization,
+        "specializationId": specialization_id,
         "status": "pending",
         "createdAt": utc_now_iso(),
     }
@@ -63,6 +65,22 @@ def create_consultation(
 
     response = ConsultationCreateResponse(consultationId=ref.id)
     return success_response(response.model_dump())
+
+
+def _resolve_specialization_id(db: firestore.Client, value: str) -> str | None:
+    normalized = value.strip().lower()
+    items = get_active_specializations(db)
+    for item in items:
+        item_id = str(item.get("id") or "").strip()
+        if item_id and item_id.lower() == normalized:
+            return item_id
+        name_en = str(item.get("nameEn") or "").strip()
+        if name_en and name_en.lower() == normalized:
+            return item_id
+        name_ar = str(item.get("nameAr") or "").strip()
+        if name_ar and name_ar.lower() == normalized:
+            return item_id
+    return None
 
 
 @router.patch("/{consultation_id}")

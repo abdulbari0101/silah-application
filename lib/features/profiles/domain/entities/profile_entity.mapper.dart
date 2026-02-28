@@ -58,6 +58,19 @@ class ProfileEntityMapper extends ClassMapperBase<ProfileEntity> {
     _$avatarUrl,
     opt: true,
   );
+  static String? _$accountType(ProfileEntity v) => v.accountType;
+  static const Field<ProfileEntity, String> _f$accountType = Field(
+    'accountType',
+    _$accountType,
+    opt: true,
+  );
+  static bool _$isTrainee(ProfileEntity v) => v.isTrainee;
+  static const Field<ProfileEntity, bool> _f$isTrainee = Field(
+    'isTrainee',
+    _$isTrainee,
+    opt: true,
+    def: false,
+  );
 
   @override
   final MappableFields<ProfileEntity> fields = const {
@@ -67,6 +80,8 @@ class ProfileEntityMapper extends ClassMapperBase<ProfileEntity> {
     #phone: _f$phone,
     #city: _f$city,
     #avatarUrl: _f$avatarUrl,
+    #accountType: _f$accountType,
+    #isTrainee: _f$isTrainee,
   };
   @override
   final bool ignoreNull = true;
@@ -79,6 +94,8 @@ class ProfileEntityMapper extends ClassMapperBase<ProfileEntity> {
       phone: data.dec(_f$phone),
       city: data.dec(_f$city),
       avatarUrl: data.dec(_f$avatarUrl),
+      accountType: data.dec(_f$accountType),
+      isTrainee: data.dec(_f$isTrainee),
     );
   }
 
@@ -151,6 +168,8 @@ abstract class ProfileEntityCopyWith<$R, $In extends ProfileEntity, $Out>
     String? phone,
     String? city,
     String? avatarUrl,
+    String? accountType,
+    bool? isTrainee,
   });
   ProfileEntityCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
@@ -171,6 +190,8 @@ class _ProfileEntityCopyWithImpl<$R, $Out>
     Object? phone = $none,
     Object? city = $none,
     Object? avatarUrl = $none,
+    Object? accountType = $none,
+    bool? isTrainee,
   }) => $apply(
     FieldCopyWithData({
       if (id != $none) #id: id,
@@ -179,6 +200,8 @@ class _ProfileEntityCopyWithImpl<$R, $Out>
       if (phone != $none) #phone: phone,
       if (city != $none) #city: city,
       if (avatarUrl != $none) #avatarUrl: avatarUrl,
+      if (accountType != $none) #accountType: accountType,
+      if (isTrainee != null) #isTrainee: isTrainee,
     }),
   );
   @override
@@ -189,6 +212,8 @@ class _ProfileEntityCopyWithImpl<$R, $Out>
     phone: data.get(#phone, or: $value.phone),
     city: data.get(#city, or: $value.city),
     avatarUrl: data.get(#avatarUrl, or: $value.avatarUrl),
+    accountType: data.get(#accountType, or: $value.accountType),
+    isTrainee: data.get(#isTrainee, or: $value.isTrainee),
   );
 
   @override

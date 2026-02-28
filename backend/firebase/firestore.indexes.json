@@ -7,7 +7,7 @@
         { "fieldPath": "verified", "order": "ASCENDING" },
         { "fieldPath": "city", "order": "ASCENDING" },
         { "fieldPath": "availability", "order": "ASCENDING" },
-        { "fieldPath": "specializations", "arrayConfig": "CONTAINS" }
+        { "fieldPath": "legalFieldIds", "arrayConfig": "CONTAINS" }
       ]
     },
     {
@@ -17,7 +17,24 @@
         { "fieldPath": "verified", "order": "ASCENDING" },
         { "fieldPath": "cityId", "order": "ASCENDING" },
         { "fieldPath": "availability", "order": "ASCENDING" },
-        { "fieldPath": "specializations", "arrayConfig": "CONTAINS" }
+        { "fieldPath": "legalFieldIds", "arrayConfig": "CONTAINS" }
+      ]
+    },
+    {
+      "collectionGroup": "chats",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "participants", "arrayConfig": "CONTAINS" },
+        { "fieldPath": "updatedAt", "order": "DESCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "training_applications",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "lawyerUid", "order": "ASCENDING" },
+        { "fieldPath": "status", "order": "ASCENDING" },
+        { "fieldPath": "submittedAt", "order": "DESCENDING" }
       ]
     },
     {

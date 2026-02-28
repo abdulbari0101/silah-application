@@ -1,50 +1,28 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:silah_app/core/infrastructure/errors/failures.dart';
 import 'package:silah_app/core/infrastructure/system/executor.dart';
-import 'package:silah_app/core/infrastructure/network/firebase_call.dart';
-import 'package:silah_app/features/discovery/data/datasources/remote/ai_remote_data_source.dart';
 import 'package:silah_app/features/discovery/data/models/ai_models.dart';
-import 'package:silah_app/features/discovery/data/models/legal_specialization_model.dart';
+import 'package:silah_app/features/discovery/data/datasources/remote/specifications_remote_data_source.dart';
 import 'package:silah_app/features/discovery/domain/entities/ai_classification_request_entity.dart';
 import 'package:silah_app/features/discovery/domain/entities/ai_classification_result_entity.dart';
 import 'package:silah_app/features/discovery/domain/entities/ai_recommendation_entity.dart';
+import 'package:silah_app/features/discovery/domain/entities/discovery_request_entity.dart';
 import 'package:silah_app/features/discovery/domain/entities/legal_specialization_entity.dart';
 import 'package:silah_app/features/discovery/domain/repositories/discovery_repository.dart';
 
 class DiscoveryRepositoryImpl implements DiscoveryRepository {
-  final AiRemoteDataSource aiRemoteDataSource;
+  final SpecificationsRemoteDataSource remoteDataSource;
   final Executor executor;
-  final FirebaseFirestore firestore;
 
   DiscoveryRepositoryImpl({
-    required this.aiRemoteDataSource,
+    required this.remoteDataSource,
     required this.executor,
-    FirebaseFirestore? firestore,
-  
-  })  : firestore = firestore ?? FirebaseFirestore.instance;
+  });
 
   @override
   Future<Either<Failure, List<LegalSpecializationEntity>>> fetchSpecializations() {
     return executor.runOnline(() async {
-      final result = await firebaseCall<List<LegalSpecializationEntity>>(
-        method: 'DiscoveryRepository.fetchSpecializations',
-        logger: executor.logger,
-        call: () async {
-          final snapshot =
-              await firestore.collection('specializations').where('active', isEqualTo: true).get();
-          return snapshot.docs
-              .map((doc) => LegalSpecializationModel(
-                    id: doc.id,
-                    nameAr: doc.data()['nameAr'] as String?,
-                    nameEn: doc.data()['nameEn'] as String?,
-                    iconUrl: doc.data()['iconUrl'] as String?,
-                    active: doc.data()['active'] as bool?,
-                  ).toEntity())
-              .toList();
-        },
-      );
-      return result;
+      return remoteDataSource.fetchSpecializations();
     }, from: 'DiscoveryRepository.fetchSpecializations');
   }
 
@@ -53,7 +31,7 @@ class DiscoveryRepositoryImpl implements DiscoveryRepository {
     AiClassificationRequestEntity request,
   ) {
     return executor.runOnline(() async {
-      final response = await aiRemoteDataSource.classify(
+      final response = await remoteDataSource.classify(
         AiClassifyRequestModel.fromEntity(request),
       );
       return response.toEntity();
@@ -65,10 +43,59 @@ class DiscoveryRepositoryImpl implements DiscoveryRepository {
     AiClassificationRequestEntity request,
   ) {
     return executor.runOnline(() async {
-      final response = await aiRemoteDataSource.recommend(
+      final response = await remoteDataSource.recommend(
         AiRecommendRequestModel.fromEntity(request),
       );
-      return response.toEntity();
+      final base = response.toEntity();
+
+      final lawyerIds = response.lawyerIds ?? const <String>[];
+      if (lawyerIds.isNotEmpty) {
+        final lawyers = await remoteDataSource.fetchLawyersBySpecialization(
+          DiscoveryRequestEntity(lawyerIds: lawyerIds),
+        );
+        return AiRecommendationEntity(
+          specialization: base.specialization,
+          lawyers: lawyers,
+        );
+      }
+
+      final specializationId = response.specializationId ?? base.specialization?.id;
+      if (specializationId != null && specializationId.trim().isNotEmpty) {
+        final lawyers = await remoteDataSource.fetchLawyersBySpecialization(
+          DiscoveryRequestEntity(
+            specializationId: specializationId,
+            specializationName: base.specialization?.name,
+          ),
+        );
+        return AiRecommendationEntity(
+          specialization: base.specialization,
+          lawyers: lawyers,
+        );
+      }
+
+      return base;
     }, from: 'DiscoveryRepository.recommendLawyers');
+  }
+
+  @override
+  Future<Either<Failure, List<DiscoveryRequestEntity>>> fetchLawyersBySpecialization(
+    DiscoveryRequestEntity request,
+  ) {
+    return executor.runOnline(() async {
+      final lawyers = await remoteDataSource.fetchLawyersBySpecialization(request);
+      return lawyers
+          .map(
+            (lawyer) => DiscoveryRequestEntity(
+              specializationId: request.specializationId,
+              specializationName: request.specializationName,
+              lawyerIds: request.lawyerIds,
+              cityId: request.cityId,
+              availability: request.availability,
+              limit: request.limit,
+              lawyer: lawyer,
+            ),
+          )
+          .toList();
+    }, from: 'DiscoveryRepository.fetchLawyersBySpecialization');
   }
 }

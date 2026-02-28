@@ -4,6 +4,7 @@ import 'package:silah_app/core/config/constants/ui_constants.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
 import 'package:silah_app/core/presentation/ui/widget/text/section_title.dart';
 import 'package:silah_app/features/settings/presentation/views/settings/widget/app_settings.dart';
+import 'package:silah_app/features/settings/presentation/views/settings/widget/my_account_section.dart';
 
 class Body extends StatelessWidget {
   const Body({super.key});
@@ -18,6 +19,10 @@ class Body extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
+            UIConstants.bigHeight,
+            SectionTitle(title: Strings.my_account.tr()),
+            UIConstants.mediumHeight,
+            const MyAccountSection(),
             UIConstants.bigHeight,
 
             SectionTitle(title: Strings.personal_settings.tr()),

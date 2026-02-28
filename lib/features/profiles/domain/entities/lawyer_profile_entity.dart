@@ -9,7 +9,7 @@ class LawyerProfileEntity with LawyerProfileEntityMappable {
   final String? id;
   final String? fullName;
   final String? licenseNumber;
-  final List<String>? specializations;
+  final List<String>? legalFieldIds;
   final String? city;
   final String? workplace;
   final int? yearsOfExperience;
@@ -21,7 +21,7 @@ class LawyerProfileEntity with LawyerProfileEntityMappable {
     this.id,
     this.fullName,
     this.licenseNumber,
-    this.specializations,
+    this.legalFieldIds,
     this.city,
     this.workplace,
     this.yearsOfExperience,

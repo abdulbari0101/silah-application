@@ -61,6 +61,7 @@ class AuthRepoImpl implements AuthRepo {
           password: payload.password,
           profile: {
             'avatarUrl': payload.avatarUrl,
+            'isTrainee': false,
           },
         );
         authUser = await remoteDS.registerUser(user: model);
@@ -101,12 +102,6 @@ class AuthRepoImpl implements AuthRepo {
           throw AuthException(Strings.error_fill_form.tr(), ErrorCodes.badRequest400);
         }
 
-        final resolvedLegalFields = (legalFieldIds != null && legalFieldIds.isNotEmpty)
-            ? legalFieldIds
-            : (legalFields ?? const <String>[]);
-        final primaryLegalField =
-            resolvedLegalFields.isNotEmpty ? resolvedLegalFields.first : null;
-
         final model = AuthUserModel(
           accountType: AuthAccountType.lawyer,
           fullName: name,
@@ -116,10 +111,8 @@ class AuthRepoImpl implements AuthRepo {
           profile: {
             'gender': gender ?? genderId ?? '',
             'genderId': genderId,
-            'legalField': primaryLegalField,
             'legalFields': legalFields,
             'legalFieldIds': legalFieldIds,
-            'specializations': resolvedLegalFields,
             'city': city ?? cityId ?? '',
             'cityId': cityId,
             'areaId': areaId,

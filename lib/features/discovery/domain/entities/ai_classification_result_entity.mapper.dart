@@ -18,6 +18,7 @@ class AiClassificationResultEntityMapper
       MapperContainer.globals.use(
         _instance = AiClassificationResultEntityMapper._(),
       );
+      LegalSpecializationEntityMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -25,10 +26,11 @@ class AiClassificationResultEntityMapper
   @override
   final String id = 'AiClassificationResultEntity';
 
-  static String? _$specializationId(AiClassificationResultEntity v) =>
-      v.specializationId;
-  static const Field<AiClassificationResultEntity, String> _f$specializationId =
-      Field('specializationId', _$specializationId, opt: true);
+  static LegalSpecializationEntity? _$specialization(
+    AiClassificationResultEntity v,
+  ) => v.specialization;
+  static const Field<AiClassificationResultEntity, LegalSpecializationEntity>
+  _f$specialization = Field('specialization', _$specialization, opt: true);
   static String? _$specializationName(AiClassificationResultEntity v) =>
       v.specializationName;
   static const Field<AiClassificationResultEntity, String>
@@ -46,7 +48,7 @@ class AiClassificationResultEntityMapper
 
   @override
   final MappableFields<AiClassificationResultEntity> fields = const {
-    #specializationId: _f$specializationId,
+    #specialization: _f$specialization,
     #specializationName: _f$specializationName,
     #confidence: _f$confidence,
     #keywords: _f$keywords,
@@ -56,7 +58,7 @@ class AiClassificationResultEntityMapper
 
   static AiClassificationResultEntity _instantiate(DecodingData data) {
     return AiClassificationResultEntity(
-      specializationId: data.dec(_f$specializationId),
+      specialization: data.dec(_f$specialization),
       specializationName: data.dec(_f$specializationName),
       confidence: data.dec(_f$confidence),
       keywords: data.dec(_f$keywords),
@@ -136,9 +138,15 @@ abstract class AiClassificationResultEntityCopyWith<
   $Out
 >
     implements ClassCopyWith<$R, $In, $Out> {
+  LegalSpecializationEntityCopyWith<
+    $R,
+    LegalSpecializationEntity,
+    LegalSpecializationEntity
+  >?
+  get specialization;
   ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>? get keywords;
   $R call({
-    String? specializationId,
+    LegalSpecializationEntity? specialization,
     String? specializationName,
     double? confidence,
     List<String>? keywords,
@@ -166,6 +174,14 @@ class _AiClassificationResultEntityCopyWithImpl<$R, $Out>
   late final ClassMapperBase<AiClassificationResultEntity> $mapper =
       AiClassificationResultEntityMapper.ensureInitialized();
   @override
+  LegalSpecializationEntityCopyWith<
+    $R,
+    LegalSpecializationEntity,
+    LegalSpecializationEntity
+  >?
+  get specialization =>
+      $value.specialization?.copyWith.$chain((v) => call(specialization: v));
+  @override
   ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>? get keywords =>
       $value.keywords != null
       ? ListCopyWith(
@@ -176,13 +192,13 @@ class _AiClassificationResultEntityCopyWithImpl<$R, $Out>
       : null;
   @override
   $R call({
-    Object? specializationId = $none,
+    Object? specialization = $none,
     Object? specializationName = $none,
     Object? confidence = $none,
     Object? keywords = $none,
   }) => $apply(
     FieldCopyWithData({
-      if (specializationId != $none) #specializationId: specializationId,
+      if (specialization != $none) #specialization: specialization,
       if (specializationName != $none) #specializationName: specializationName,
       if (confidence != $none) #confidence: confidence,
       if (keywords != $none) #keywords: keywords,
@@ -191,10 +207,7 @@ class _AiClassificationResultEntityCopyWithImpl<$R, $Out>
   @override
   AiClassificationResultEntity $make(CopyWithData data) =>
       AiClassificationResultEntity(
-        specializationId: data.get(
-          #specializationId,
-          or: $value.specializationId,
-        ),
+        specialization: data.get(#specialization, or: $value.specialization),
         specializationName: data.get(
           #specializationName,
           or: $value.specializationName,

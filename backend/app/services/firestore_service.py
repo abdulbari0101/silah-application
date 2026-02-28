@@ -26,7 +26,13 @@ def get_active_specializations(db: firestore.Client | None = None) -> list[dict]
     log_firestore_request("specializations.query", filters={"active": True})
     try:
         docs = db.collection("specializations").where("active", "==", True).stream()
-        items = [doc.to_dict() for doc in docs if doc.exists]
+        items = []
+        for doc in docs:
+            if not doc.exists:
+                continue
+            data = doc.to_dict() or {}
+            data["id"] = doc.id
+            items.append(data)
         log_firestore_response("specializations.query", count=len(items))
     except Exception as exc:
         log_firestore_error("specializations.query", exc)
@@ -41,8 +47,11 @@ def get_specialization_names(db: firestore.Client | None = None) -> list[str]:
     names = []
     for item in items:
         name_en = item.get("nameEn")
+        name_ar = item.get("nameAr")
         if name_en:
             names.append(str(name_en))
+        if name_ar and str(name_ar) not in names:
+            names.append(str(name_ar))
     return names or DEFAULT_SPECIALIZATIONS
 
 
@@ -75,17 +84,11 @@ def find_verified_lawyers(
     if specialization and specialization != "unknown":
         for query in queries:
             try:
-                docs = query.where("specializations", "array_contains", specialization).stream()
+                docs = query.where("legalFieldIds", "array_contains", specialization).stream()
                 for doc in docs:
                     lawyer_ids.add(doc.id)
             except Exception as exc:
-                log_firestore_error("lawyers.query.specializations", exc)
-            try:
-                docs = query.where("legalField", "==", specialization).stream()
-                for doc in docs:
-                    lawyer_ids.add(doc.id)
-            except Exception as exc:
-                log_firestore_error("lawyers.query.legalField", exc)
+                log_firestore_error("lawyers.query.legalFieldIds", exc)
 
     log_firestore_response("lawyers.query", count=len(lawyer_ids))
     return sorted(lawyer_ids)

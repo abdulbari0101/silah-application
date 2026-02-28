@@ -1,10 +1,8 @@
 import 'package:dio/dio.dart' hide Headers;
 import 'package:retrofit/retrofit.dart';
 import 'package:silah_app/core/data/model/api/base/base_api_response.dart';
-import 'package:silah_app/core/data/model/api/base/data_response_wrapper.dart';
-import 'package:silah_app/core/data/model/api/data_model.dart';
-import 'package:silah_app/core/data/model/api/request/post_request_model.dart';
 import 'package:silah_app/core/infrastructure/network/adapters/json_body_mappable_adapter.dart';
+import 'package:silah_app/features/discovery/data/models/ai_models.dart';
 
 part 'specifications_service.g.dart';
 
@@ -12,6 +10,13 @@ part 'specifications_service.g.dart';
 abstract class SpecificationsService {
   factory SpecificationsService(Dio dio, {String? baseUrl}) = _SpecificationsService;
 
-  @POST('Specification')
-  Future<BaseApiResponse<DataRespWrapper>> specification(@Body() PostRequestModel request);
+  @POST('/ai/classify')
+  Future<BaseApiResponse<AiClassifyResponseModel>> classify(
+    @Body() AiClassifyRequestModel request,
+  );
+
+  @POST('/ai/recommend')
+  Future<BaseApiResponse<AiRecommendResponseModel>> recommend(
+    @Body() AiRecommendRequestModel request,
+  );
 }

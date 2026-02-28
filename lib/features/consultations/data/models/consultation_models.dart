@@ -28,7 +28,7 @@ class ConsultationCreateRequestModel with ConsultationCreateRequestModelMappable
       lawyerUid: entity.lawyerId ?? '',
       caseText: entity.description ?? '',
       specializationId: entity.specializationId,
-      specialization: entity.specializationId,
+      specialization: null,
     );
   }
 }

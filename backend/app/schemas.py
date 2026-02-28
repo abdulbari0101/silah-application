@@ -10,7 +10,15 @@ class AIClassifyRequest(BaseModel):
     lang: str = Field(default="ar")
 
 
-class AIClassifyResponse(BaseModel):
+class LegalSpecializationPayload(BaseModel):
+    id: Optional[str] = None
+    nameAr: Optional[str] = None
+    nameEn: Optional[str] = None
+    iconUrl: Optional[str] = None
+    active: Optional[bool] = None
+
+
+class AIClassifyResult(BaseModel):
     specialization: str
     confidence: float
     reason: str
@@ -27,8 +35,16 @@ class AIRecommendRequest(BaseModel):
 
 
 class AIRecommendResponse(BaseModel):
-    specialization: str
+    specialization: Optional[LegalSpecializationPayload] = None
+    specializationId: Optional[str] = None
     lawyerIds: list[str]
+
+
+class AIClassifyResponse(BaseModel):
+    specialization: Optional[LegalSpecializationPayload] = None
+    specializationId: Optional[str] = None
+    confidence: float
+    reason: str
 
 
 class VerificationRequest(BaseModel):

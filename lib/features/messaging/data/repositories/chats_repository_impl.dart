@@ -34,8 +34,9 @@ class MessagingRepositoryoImpl implements MessagingRepository {
 
   @override
   Future<Either<Failure, List<ChatThreadEntity>>> fetchThreads() {
-    // TODO: implement fetchThreads
-    throw UnimplementedError();
+    return executor.runOnline(() async {
+      return remoteDS.fetchThreads();
+    }, from: 'MessagingRepository.fetchThreads');
   }
 
   @override

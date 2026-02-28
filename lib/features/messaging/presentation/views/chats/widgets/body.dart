@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:silah_app/core/config/constants/ui_constants.dart';
-import 'package:silah_app/features/messaging/presentation/blocs/chats/chats_bloc.dart';
+import 'package:silah_app/features/messaging/presentation/cubits/chat_threads/chat_threads_cubit.dart';
 import 'package:silah_app/features/messaging/presentation/views/chats/widgets/chats_builder.dart';
 
 class ChatsBody extends StatelessWidget {
@@ -13,7 +13,7 @@ class ChatsBody extends StatelessWidget {
     if (onRefresh != null) {
       onRefresh!.call();
     } else {
-      context.read<ChatsBloc>().add(LoadChats());
+      await context.read<ChatThreadsCubit>().load();
     }
   }
 
@@ -25,7 +25,7 @@ class ChatsBody extends StatelessWidget {
         onRefresh: () => _handleRefresh(context),
         child: Padding(
           padding: const EdgeInsets.all(UIConstants.mediumPadding),
-          child: const OperatorsBuilder(),
+          child: const ChatThreadsBuilder(),
         ),
       ),
     );

@@ -151,6 +151,8 @@ class Strings {
   static const String logout_message = "logout_message";
   static const String welcome = "welcome";
   static const String welcome_back = "welcome_back";
+  static const String home_greeting = "home_greeting";
+  static const String home_subtitle_user = "home_subtitle_user";
   static const String password = "password";
   static const String not_a_member = "not_a_member";
   static const String or = "or";
@@ -526,9 +528,13 @@ class Strings {
   static const String log_in_now = "log_in_now";
   static const String log_out = "log_out";
   static const String messages = "messages";
+  static const String today_summary = "today_summary";
   static const String mobile_number_required = "mobile_number_required";
   static const String my_account = "my_account";
   static const String my_requests = "my_requests";
+  static const String account_type_admin = "account_type_admin";
+  static const String account_type_user = "account_type_user";
+  static const String account_type_lawyer = "account_type_lawyer";
   static const String name_example_1 = "name_example_1";
   static const String new_consultations = "new_consultations";
   static const String no_account_question = "no_account_question";
@@ -564,6 +570,31 @@ class Strings {
       "provide_legal_services_and_training";
   static const String trainees = "trainees";
   static const String training_requests = "training_requests";
+  static const String trainee_toggle_title = "trainee_toggle_title";
+  static const String trainee_toggle_subtitle = "trainee_toggle_subtitle";
+  static const String trainee_prompt_title = "trainee_prompt_title";
+  static const String trainee_prompt_description = "trainee_prompt_description";
+  static const String trainee_prompt_action = "trainee_prompt_action";
+
+  static const String status_pending = "status_pending";
+  static const String status_accepted = "status_accepted";
+  static const String status_rejected = "status_rejected";
+  static const String status_active = "status_active";
+  static const String status_closed = "status_closed";
+  static const String status_cancelled = "status_cancelled";
+
+  static const String action_accept = "action_accept";
+  static const String action_reject = "action_reject";
+  static const String action_close = "action_close";
+  static const String action_confirm = "action_confirm";
+  static const String action_cancel = "action_cancel";
+
+  static const String confirm_action_title = "confirm_action_title";
+  static const String confirm_accept_request = "confirm_accept_request";
+  static const String confirm_reject_request = "confirm_reject_request";
+  static const String confirm_close_request = "confirm_close_request";
+  static const String confirm_accept_application = "confirm_accept_application";
+  static const String confirm_reject_application = "confirm_reject_application";
 
   static const String user_role_info = "user_role_info";
   static const String valid_license = "valid_license";

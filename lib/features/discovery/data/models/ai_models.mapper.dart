@@ -166,6 +166,7 @@ class AiClassifyResponseModelMapper
       );
       BaseRespWrapperMapper.ensureInitialized();
       ResultModelMapper.ensureInitialized();
+      LegalSpecializationModelMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -179,13 +180,15 @@ class AiClassifyResponseModelMapper
     _$result,
     key: r'Result',
   );
-  static String? _$specialization(AiClassifyResponseModel v) =>
-      v.specialization;
-  static const Field<AiClassifyResponseModel, String> _f$specialization = Field(
-    'specialization',
-    _$specialization,
-    opt: true,
-  );
+  static LegalSpecializationModel? _$specialization(
+    AiClassifyResponseModel v,
+  ) => v.specialization;
+  static const Field<AiClassifyResponseModel, LegalSpecializationModel>
+  _f$specialization = Field('specialization', _$specialization, opt: true);
+  static String? _$specializationId(AiClassifyResponseModel v) =>
+      v.specializationId;
+  static const Field<AiClassifyResponseModel, String> _f$specializationId =
+      Field('specializationId', _$specializationId, opt: true);
   static double? _$confidence(AiClassifyResponseModel v) => v.confidence;
   static const Field<AiClassifyResponseModel, double> _f$confidence = Field(
     'confidence',
@@ -203,6 +206,7 @@ class AiClassifyResponseModelMapper
   final MappableFields<AiClassifyResponseModel> fields = const {
     #result: _f$result,
     #specialization: _f$specialization,
+    #specializationId: _f$specializationId,
     #confidence: _f$confidence,
     #reason: _f$reason,
   };
@@ -213,6 +217,7 @@ class AiClassifyResponseModelMapper
     return AiClassifyResponseModel(
       result: data.dec(_f$result),
       specialization: data.dec(_f$specialization),
+      specializationId: data.dec(_f$specializationId),
       confidence: data.dec(_f$confidence),
       reason: data.dec(_f$reason),
     );
@@ -290,10 +295,17 @@ abstract class AiClassifyResponseModelCopyWith<
     implements BaseRespWrapperCopyWith<$R, $In, $Out> {
   @override
   ResultModelCopyWith<$R, ResultModel, ResultModel>? get result;
+  LegalSpecializationModelCopyWith<
+    $R,
+    LegalSpecializationModel,
+    LegalSpecializationModel
+  >?
+  get specialization;
   @override
   $R call({
     ResultModel? result,
-    String? specialization,
+    LegalSpecializationModel? specialization,
+    String? specializationId,
     double? confidence,
     String? reason,
   });
@@ -315,15 +327,25 @@ class _AiClassifyResponseModelCopyWithImpl<$R, $Out>
   ResultModelCopyWith<$R, ResultModel, ResultModel>? get result =>
       $value.result?.copyWith.$chain((v) => call(result: v));
   @override
+  LegalSpecializationModelCopyWith<
+    $R,
+    LegalSpecializationModel,
+    LegalSpecializationModel
+  >?
+  get specialization =>
+      $value.specialization?.copyWith.$chain((v) => call(specialization: v));
+  @override
   $R call({
     Object? result = $none,
     Object? specialization = $none,
+    Object? specializationId = $none,
     Object? confidence = $none,
     Object? reason = $none,
   }) => $apply(
     FieldCopyWithData({
       if (result != $none) #result: result,
       if (specialization != $none) #specialization: specialization,
+      if (specializationId != $none) #specializationId: specializationId,
       if (confidence != $none) #confidence: confidence,
       if (reason != $none) #reason: reason,
     }),
@@ -332,6 +354,7 @@ class _AiClassifyResponseModelCopyWithImpl<$R, $Out>
   AiClassifyResponseModel $make(CopyWithData data) => AiClassifyResponseModel(
     result: data.get(#result, or: $value.result),
     specialization: data.get(#specialization, or: $value.specialization),
+    specializationId: data.get(#specializationId, or: $value.specializationId),
     confidence: data.get(#confidence, or: $value.confidence),
     reason: data.get(#reason, or: $value.reason),
   );
@@ -663,6 +686,7 @@ class AiRecommendResponseModelMapper
       );
       BaseRespWrapperMapper.ensureInitialized();
       ResultModelMapper.ensureInitialized();
+      LegalSpecializationModelMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -676,10 +700,15 @@ class AiRecommendResponseModelMapper
     _$result,
     key: r'Result',
   );
-  static String? _$specialization(AiRecommendResponseModel v) =>
-      v.specialization;
-  static const Field<AiRecommendResponseModel, String> _f$specialization =
-      Field('specialization', _$specialization, opt: true);
+  static LegalSpecializationModel? _$specialization(
+    AiRecommendResponseModel v,
+  ) => v.specialization;
+  static const Field<AiRecommendResponseModel, LegalSpecializationModel>
+  _f$specialization = Field('specialization', _$specialization, opt: true);
+  static String? _$specializationId(AiRecommendResponseModel v) =>
+      v.specializationId;
+  static const Field<AiRecommendResponseModel, String> _f$specializationId =
+      Field('specializationId', _$specializationId, opt: true);
   static List<String>? _$lawyerIds(AiRecommendResponseModel v) => v.lawyerIds;
   static const Field<AiRecommendResponseModel, List<String>> _f$lawyerIds =
       Field('lawyerIds', _$lawyerIds, opt: true);
@@ -688,6 +717,7 @@ class AiRecommendResponseModelMapper
   final MappableFields<AiRecommendResponseModel> fields = const {
     #result: _f$result,
     #specialization: _f$specialization,
+    #specializationId: _f$specializationId,
     #lawyerIds: _f$lawyerIds,
   };
   @override
@@ -697,6 +727,7 @@ class AiRecommendResponseModelMapper
     return AiRecommendResponseModel(
       result: data.dec(_f$result),
       specialization: data.dec(_f$specialization),
+      specializationId: data.dec(_f$specializationId),
       lawyerIds: data.dec(_f$lawyerIds),
     );
   }
@@ -773,11 +804,18 @@ abstract class AiRecommendResponseModelCopyWith<
     implements BaseRespWrapperCopyWith<$R, $In, $Out> {
   @override
   ResultModelCopyWith<$R, ResultModel, ResultModel>? get result;
+  LegalSpecializationModelCopyWith<
+    $R,
+    LegalSpecializationModel,
+    LegalSpecializationModel
+  >?
+  get specialization;
   ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>? get lawyerIds;
   @override
   $R call({
     ResultModel? result,
-    String? specialization,
+    LegalSpecializationModel? specialization,
+    String? specializationId,
     List<String>? lawyerIds,
   });
   AiRecommendResponseModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
@@ -798,6 +836,14 @@ class _AiRecommendResponseModelCopyWithImpl<$R, $Out>
   ResultModelCopyWith<$R, ResultModel, ResultModel>? get result =>
       $value.result?.copyWith.$chain((v) => call(result: v));
   @override
+  LegalSpecializationModelCopyWith<
+    $R,
+    LegalSpecializationModel,
+    LegalSpecializationModel
+  >?
+  get specialization =>
+      $value.specialization?.copyWith.$chain((v) => call(specialization: v));
+  @override
   ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>? get lawyerIds =>
       $value.lawyerIds != null
       ? ListCopyWith(
@@ -810,11 +856,13 @@ class _AiRecommendResponseModelCopyWithImpl<$R, $Out>
   $R call({
     Object? result = $none,
     Object? specialization = $none,
+    Object? specializationId = $none,
     Object? lawyerIds = $none,
   }) => $apply(
     FieldCopyWithData({
       if (result != $none) #result: result,
       if (specialization != $none) #specialization: specialization,
+      if (specializationId != $none) #specializationId: specializationId,
       if (lawyerIds != $none) #lawyerIds: lawyerIds,
     }),
   );
@@ -822,6 +870,7 @@ class _AiRecommendResponseModelCopyWithImpl<$R, $Out>
   AiRecommendResponseModel $make(CopyWithData data) => AiRecommendResponseModel(
     result: data.get(#result, or: $value.result),
     specialization: data.get(#specialization, or: $value.specialization),
+    specializationId: data.get(#specializationId, or: $value.specializationId),
     lawyerIds: data.get(#lawyerIds, or: $value.lawyerIds),
   );
 

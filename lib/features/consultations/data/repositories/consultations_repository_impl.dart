@@ -1,10 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:silah_app/core/infrastructure/errors/exceptions.dart';
 import 'package:silah_app/core/infrastructure/errors/failures.dart';
-import 'package:silah_app/core/infrastructure/network/firebase_call.dart';
-import 'package:silah_app/core/infrastructure/network/firestore_helpers.dart';
 import 'package:silah_app/core/infrastructure/system/executor.dart';
 import 'package:silah_app/features/consultations/data/datasources/remote/consultations_remote_data_source.dart';
 import 'package:silah_app/features/consultations/data/models/consultation_models.dart';
@@ -15,16 +11,11 @@ import 'package:silah_app/features/consultations/domain/repositories/consultatio
 class ConsultationsRepositoryImpl implements ConsultationsRepository {
   final ConsultationsRemoteDataSource remoteDataSource;
   final Executor executor;
-  final FirebaseFirestore firestore;
-  final FirebaseAuth auth;
 
   ConsultationsRepositoryImpl({
     required this.remoteDataSource,
     required this.executor,
-    FirebaseFirestore? firestore,
-    FirebaseAuth? auth,
-  })  : firestore = firestore ?? FirebaseFirestore.instance,
-        auth = auth ?? FirebaseAuth.instance;
+  });
 
   @override
   Future<Either<Failure, ConsultationRequestEntity>> createRequest(
@@ -47,7 +38,6 @@ class ConsultationsRepositoryImpl implements ConsultationsRepository {
           lawyerUid: request.lawyerId!,
           caseText: request.description!,
           specializationId: request.specializationId,
-          specialization: request.specializationId,
         ),
       );
 
@@ -65,31 +55,12 @@ class ConsultationsRepositoryImpl implements ConsultationsRepository {
   @override
   Future<Either<Failure, List<ConsultationRequestEntity>>> fetchMyRequests() {
     return executor.runOnline(() async {
-      final uid = auth.currentUser?.uid;
+      final uid = remoteDataSource.currentUserId();
       if (uid == null) {
         throw const MissingDataException('Missing user id');
       }
 
-      return firebaseCall<List<ConsultationRequestEntity>>(
-        method: 'ConsultationsRepository.fetchMyRequests',
-        logger: executor.logger,
-        payload: {'uid': uid},
-        call: () async {
-          final results = <String, ConsultationRequestEntity>{};
-          final clientSnap =
-              await firestore.collection('consultations').where('clientUid', isEqualTo: uid).get();
-          for (final doc in clientSnap.docs) {
-            results[doc.id] = _mapDoc(doc);
-          }
-
-          final lawyerSnap =
-              await firestore.collection('consultations').where('lawyerUid', isEqualTo: uid).get();
-          for (final doc in lawyerSnap.docs) {
-            results[doc.id] = _mapDoc(doc);
-          }
-          return results.values.toList();
-        },
-      );
+      return remoteDataSource.fetchRequestsByUser(uid);
     }, from: 'ConsultationsRepository.fetchMyRequests');
   }
 
@@ -113,16 +84,7 @@ class ConsultationsRepositoryImpl implements ConsultationsRepository {
   @override
   Future<Either<Failure, ConsultationRequestEntity>> fetchRequestById(String requestId) {
     return executor.runOnline(() async {
-      final result = await firebaseCall<ConsultationRequestEntity?>(
-        method: 'ConsultationsRepository.fetchRequestById',
-        logger: executor.logger,
-        payload: {'requestId': requestId},
-        call: () async {
-          final doc = await firestore.collection('consultations').doc(requestId).get();
-          if (!doc.exists) return null;
-          return _mapDoc(doc);
-        },
-      );
+      final result = await remoteDataSource.fetchRequestById(requestId);
       return result ??
           ConsultationRequestEntity(
             id: requestId,
@@ -133,35 +95,10 @@ class ConsultationsRepositoryImpl implements ConsultationsRepository {
 
   Future<ConsultationRequestEntity?> _fetchByIdInternal(String requestId) async {
     try {
-      return await firebaseCall<ConsultationRequestEntity?>(
-        method: 'ConsultationsRepository._fetchByIdInternal',
-        logger: executor.logger,
-        payload: {'requestId': requestId},
-        call: () async {
-          final doc = await firestore.collection('consultations').doc(requestId).get();
-          if (!doc.exists) return null;
-          return _mapDoc(doc);
-        },
-      );
+      return await remoteDataSource.fetchRequestById(requestId);
     } catch (_) {
       return null;
     }
-  }
-
-  ConsultationRequestEntity _mapDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
-    final data = doc.data() ?? const <String, dynamic>{};
-    return ConsultationRequestEntity(
-      id: doc.id,
-      clientId: data['clientUid'] as String?,
-      lawyerId: data['lawyerUid'] as String?,
-      specializationId:
-          (data['specializationId'] as String?) ?? (data['specialization'] as String?),
-      description: data['caseText'] as String?,
-      status: _parseStatus(data['status'] as String?) ?? ConsultationStatus.pending,
-      createdAt: parseFirestoreTimestamp(data['createdAt']),
-      updatedAt: parseFirestoreTimestamp(data['updatedAt']),
-      closedAt: parseFirestoreTimestamp(data['closedAt']),
-    );
   }
 
   ConsultationStatus? _parseStatus(String? value) {
@@ -170,8 +107,12 @@ class ConsultationsRepositoryImpl implements ConsultationsRepository {
         return ConsultationStatus.accepted;
       case 'rejected':
         return ConsultationStatus.rejected;
+      case 'active':
+        return ConsultationStatus.active;
       case 'closed':
         return ConsultationStatus.closed;
+      case 'cancelled':
+        return ConsultationStatus.cancelled;
       case 'pending':
         return ConsultationStatus.pending;
       default:

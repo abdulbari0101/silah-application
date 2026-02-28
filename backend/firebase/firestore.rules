@@ -28,8 +28,12 @@ service cloud.firestore {
 
     match /consultations/{consultationId} {
       allow create: if isSignedIn() && request.auth.uid == request.resource.data.clientUid;
-      allow read: if isAdmin() || request.auth.uid in [resource.data.clientUid, resource.data.lawyerUid];
-      allow update: if isAdmin() || request.auth.uid in [resource.data.clientUid, resource.data.lawyerUid];
+      allow get: if isAdmin() || request.auth.uid == resource.data.clientUid || request.auth.uid == resource.data.lawyerUid;
+      allow list: if isAdmin() || (isSignedIn() && (
+        request.query.where('clientUid', '==', request.auth.uid) ||
+        request.query.where('lawyerUid', '==', request.auth.uid)
+      ));
+      allow update: if isAdmin() || request.auth.uid == resource.data.clientUid || request.auth.uid == resource.data.lawyerUid;
       allow delete: if isAdmin();
     }
 

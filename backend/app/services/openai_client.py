@@ -6,7 +6,7 @@ from typing import Iterable
 import requests
 
 from ..config import settings
-from ..schemas import AIClassifyResponse
+from ..schemas import AIClassifyResult
 
 
 class OpenAIClassifier:
@@ -18,10 +18,10 @@ class OpenAIClassifier:
         self.max_tokens = settings.openai_max_tokens
         self.temperature = settings.openai_temperature
 
-    def classify(self, case_text: str, specializations: Iterable[str]) -> AIClassifyResponse:
+    def classify(self, case_text: str, specializations: Iterable[str]) -> AIClassifyResult:
         allowed = [s for s in specializations if s]
         if not self.api_key or not allowed:
-            return AIClassifyResponse(
+            return AIClassifyResult(
                 specialization="unknown",
                 confidence=0.0,
                 reason="missing_api_key_or_specializations",
@@ -66,7 +66,7 @@ class OpenAIClassifier:
             content = _extract_content(data)
             return _parse_ai_content(content, allowed)
         except Exception:
-            return AIClassifyResponse(
+            return AIClassifyResult(
                 specialization="unknown",
                 confidence=0.0,
                 reason="classification_failed",
@@ -80,14 +80,14 @@ def _extract_content(data: dict) -> str:
         return ""
 
 
-def _parse_ai_content(content: str, allowed: list[str]) -> AIClassifyResponse:
+def _parse_ai_content(content: str, allowed: list[str]) -> AIClassifyResult:
     try:
         payload = json.loads(content)
         specialization = str(payload.get("specialization", "")).strip()
         confidence = float(payload.get("confidence", 0.0))
         reason = str(payload.get("reason", ""))
     except Exception:
-        return AIClassifyResponse(
+        return AIClassifyResult(
             specialization="unknown",
             confidence=0.0,
             reason="invalid_json",
@@ -98,7 +98,7 @@ def _parse_ai_content(content: str, allowed: list[str]) -> AIClassifyResponse:
     if confidence < 0 or confidence > 1:
         confidence = 0.0
 
-    return AIClassifyResponse(
+    return AIClassifyResult(
         specialization=specialization,
         confidence=confidence,
         reason=reason or "ok",

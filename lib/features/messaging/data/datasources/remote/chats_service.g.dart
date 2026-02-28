@@ -19,33 +19,6 @@ class _ChatsService implements ChatsService {
 
   final ParseErrorLogger? errorLogger;
 
-  Future<dynamic> _chat(PostRequestModel request) async {
-    final _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
-    final _headers = <String, dynamic>{};
-    final _data = request;
-    final _options = _setStreamType<DataRespWrapper<DataModel>>(
-      Options(method: 'POST', headers: _headers, extra: _extra)
-          .compose(
-            _dio.options,
-            'Chat',
-            queryParameters: queryParameters,
-            data: _data,
-          )
-          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
-    );
-    final _result = await _dio.fetch(_options);
-    final _value = _result.data;
-    return _value;
-  }
-
-  @override
-  Future<DataRespWrapper<DataModel>> chat(PostRequestModel request) {
-    return JsonBodyMappableAdapter<DataRespWrapper<DataModel>>().adapt(
-      () => _chat(request),
-    );
-  }
-
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||
