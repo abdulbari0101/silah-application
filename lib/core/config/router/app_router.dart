@@ -56,6 +56,9 @@ final GoRouter appRouter = GoRouter(
       AppRoutes.notification,
       AppRoutes.success,
       AppRoutes.ai_consultation,
+      AppRoutes.searchFilter,
+      AppRoutes.searchResults,
+      AppRoutes.lawyerProfile,
     ].map(
       (route) => GoRoute(
         path: route.path,

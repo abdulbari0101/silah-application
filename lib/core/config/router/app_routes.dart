@@ -12,11 +12,16 @@ import 'package:silah_app/features/auth/presentation/views/registration/screens/
 import 'package:silah_app/features/auth/presentation/views/registration/screens/user_sign_up_screen.dart';
 import 'package:silah_app/features/consultations/presentation/views/requests/screens/requests_screen.dart';
 import 'package:silah_app/features/discovery/presentation/views/ai_consultation/screens/ai_consultation_screen.dart';
+import 'package:silah_app/features/discovery/presentation/views/search/screens/search_filter_screen.dart';
+import 'package:silah_app/features/discovery/presentation/views/search/screens/search_results_screen.dart';
 import 'package:silah_app/features/discovery/presentation/views/specification/screens/specifications_screen.dart';
 import 'package:silah_app/features/messaging/presentation/views/chats/screens/chats_screen.dart';
+import 'package:silah_app/features/profiles/domain/entities/lawyer_profile_entity.dart';
+import 'package:silah_app/features/profiles/presentation/views/lawyer_profile/screens/lawyer_profile_screen.dart';
 import 'package:silah_app/features/settings/presentation/views/langauge/screens/language_prefrence_screen.dart';
 import 'package:silah_app/features/settings/presentation/views/settings/screens/settings_screen.dart';
 import 'package:silah_app/features/training/presentation/views/trainees/screens/trainees_screen.dart';
+import 'package:silah_app/features/discovery/domain/entities/legal_specialization_entity.dart';
 
 import 'route_info.dart';
 
@@ -102,6 +107,42 @@ class AppRoutes {
     path: '/ai-consultation',
     builder: () => const AiConsultationScreen(),
   );
+  static final searchFilter = RouteInfo(
+    name: 'search-filter',
+    path: '/search',
+    builder: () => const SearchFilterScreen(),
+  );
+  static final searchResults = RouteInfo(
+    name: 'search-results',
+    path: '/search-results',
+    stateBuilder: (state) {
+      final extra = state.extra;
+      if (extra is LegalSpecializationEntity) {
+        return SearchResultsScreen(specialization: extra);
+      }
+      return const SearchFilterScreen();
+    },
+  );
+  static final lawyerProfile = RouteInfo(
+    name: 'lawyer-profile',
+    path: '/lawyer-profile',
+    stateBuilder: (state) {
+      final extra = state.extra;
+      if (extra is Map<String, dynamic>) {
+        final lawyer = extra['lawyer'];
+        final specialization = extra['specialization'];
+        if (lawyer is LawyerProfileEntity) {
+          return LawyerProfileScreen(
+            lawyer: lawyer,
+            specialization: specialization is String ? specialization : null,
+          );
+        }
+      } else if (extra is LawyerProfileEntity) {
+        return LawyerProfileScreen(lawyer: extra);
+      }
+      return const SearchFilterScreen();
+    },
+  );
 
   /// Tabs used by the main shell (bottom navigation).
   static final tabRoutes = [home, requests, messages, settings];
@@ -138,6 +179,9 @@ class AppRoutes {
     success,
 
     ai_consultation, 
+    searchFilter,
+    searchResults,
+    lawyerProfile,
     ...tabRoutes,
   ];
 

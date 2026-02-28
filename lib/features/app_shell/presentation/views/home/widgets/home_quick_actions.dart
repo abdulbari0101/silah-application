@@ -100,6 +100,12 @@ class HomeQuickActions extends StatelessWidget {
             route: AppRoutes.requests,
           ),
           _HomeAction(
+            title: Strings.specializations.tr(),
+            subtitle: Strings.search_for_lawyer_or_specialization.tr(),
+            icon: Icons.search_outlined,
+            route: AppRoutes.searchFilter,
+          ),
+          _HomeAction(
             title: Strings.messages.tr(),
             subtitle: Strings.incoming_requests.tr(),
             icon: Icons.chat_bubble_outline,

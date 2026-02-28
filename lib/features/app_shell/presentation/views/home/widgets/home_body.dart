@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:silah_app/core/config/constants/ui_constants.dart';
+import 'package:silah_app/core/config/router/app_routes.dart';
 import 'package:silah_app/core/injection/injection_container.dart';
 import 'package:silah_app/core/presentation/state_magment/blocs/app_state/app_state_bloc.dart';
 import 'package:silah_app/core/presentation/ui/overlays/toasts.dart';
@@ -89,9 +91,7 @@ class _HomeContentState extends State<_HomeContent> {
         onRefresh: _onRefresh,
         child: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
-          child: ScreenPaddingWrapper(
-            child: content,
-          ),
+          child: ScreenPaddingWrapper(child: content),
         ),
       ),
     );
@@ -112,10 +112,7 @@ class _DefaultHomeContent extends StatelessWidget {
         const HomeGreetingCard(),
         UIConstants.bigHeight,
         const HomeQuickActions(),
-        if (showTraineePrompt) ...[
-          UIConstants.bigHeight,
-          const HomeTraineePromptCard(),
-        ],
+        if (showTraineePrompt) ...[UIConstants.bigHeight, const HomeTraineePromptCard()],
         UIConstants.bigHeight,
         const HomeStatusCard(),
         UIConstants.xbigHeight,
@@ -139,15 +136,16 @@ class _UserHomeContent extends StatelessWidget {
         UIConstants.bigHeight,
         const HomeUserHeader(),
         UIConstants.bigHeight,
-        const HomeSearchBar(),
+        HomeSearchBar(
+          onTap: () {
+            context.pushNamed(AppRoutes.searchFilter.name);
+          },
+        ),
         UIConstants.bigHeight,
         const HomeAiPromptCard(),
         UIConstants.smallHeight,
         const HomeCarouselDots(),
-        if (showTraineePrompt) ...[
-          UIConstants.bigHeight,
-          const HomeTraineePromptCard(),
-        ],
+        if (showTraineePrompt) ...[UIConstants.bigHeight, const HomeTraineePromptCard()],
         UIConstants.bigHeight,
         const HomeCurrentRequestsSection(),
         UIConstants.xbigHeight,

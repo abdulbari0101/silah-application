@@ -120,10 +120,7 @@ return initial(_that);case _ConsultationRequestsLoading():
 return loading(_that);case _ConsultationRequestsLoaded():
 return loaded(_that);case _ConsultationRequestsEmpty():
 return empty(_that);case _ConsultationRequestsError():
-return error(_that);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return error(_that);}
 }
 /// A variant of `map` that fallback to returning `null`.
 ///
@@ -194,10 +191,7 @@ return initial(_that.filter);case _ConsultationRequestsLoading():
 return loading(_that.filter);case _ConsultationRequestsLoaded():
 return loaded(_that.filter,_that.requests,_that.updatingId);case _ConsultationRequestsEmpty():
 return empty(_that.filter);case _ConsultationRequestsError():
-return error(_that.filter,_that.message);case _:
-  throw StateError('Unexpected subclass');
-
-}
+return error(_that.filter,_that.message);}
 }
 /// A variant of `when` that fallback to returning `null`
 ///
