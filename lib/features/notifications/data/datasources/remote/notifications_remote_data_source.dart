@@ -4,7 +4,8 @@ import 'notifications_service.dart';
 
 abstract class NotificationsRemoteDataSource {}
 
-class NotificationsRemoteDataSourceImpl implements NotificationsRemoteDataSource {
+class NotificationsRemoteDataSourceImpl
+    implements NotificationsRemoteDataSource {
   final NotificationsService notificationsService;
   final AppLogger logger;
 

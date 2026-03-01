@@ -9,9 +9,13 @@ class LawyerProfileEntity with LawyerProfileEntityMappable {
   final String? id;
   final String? fullName;
   final String? licenseNumber;
+  final List<String>? legalFields;
   final List<String>? legalFieldIds;
   final String? city;
+  final String? cityId;
+  final String? areaId;
   final String? workplace;
+  final String? workDestinationId;
   final int? yearsOfExperience;
   final String? avatarUrl;
   final bool acceptsTrainees;
@@ -21,9 +25,13 @@ class LawyerProfileEntity with LawyerProfileEntityMappable {
     this.id,
     this.fullName,
     this.licenseNumber,
+    this.legalFields,
     this.legalFieldIds,
     this.city,
+    this.cityId,
+    this.areaId,
     this.workplace,
+    this.workDestinationId,
     this.yearsOfExperience,
     this.avatarUrl,
     this.acceptsTrainees = false,

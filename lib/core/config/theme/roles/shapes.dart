@@ -12,12 +12,12 @@ class ShapeTokens {
   final double radiusXXl;
 
   const ShapeTokens({
-    this.radiusXs = 6,
-    this.radiusSm = 8,
-    this.radiusMd = 12,
-    this.radiusLg = 16,
-    this.radiusXl = 20,
-    this.radiusXXl = 25,
+    this.radiusXs = 8,
+    this.radiusSm = 12,
+    this.radiusMd = 16,
+    this.radiusLg = 20,
+    this.radiusXl = 24,
+    this.radiusXXl = 28,
   });
 
   /// BorderRadius helpers (when only a radius is needed).
@@ -77,12 +77,12 @@ class ShapeScale extends ThemeExtension<ShapeScale> {
   final double radiusXXl;
 
   const ShapeScale({
-    this.radiusXs = 6,
-    this.radiusSm = 8,
-    this.radiusMd = 12,
-    this.radiusLg = 16,
-    this.radiusXl = 20,
-    this.radiusXXl = 25,
+    this.radiusXs = 8,
+    this.radiusSm = 12,
+    this.radiusMd = 16,
+    this.radiusLg = 20,
+    this.radiusXl = 24,
+    this.radiusXXl = 28,
   });
 
   BorderRadius get brXs => BorderRadius.circular(radiusXs);

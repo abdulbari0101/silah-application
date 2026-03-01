@@ -18,16 +18,7 @@ final GoRouter appRouter = GoRouter(
 
     final isLoggedIn = blocState.data.isLoggedIn;
     final currentPath = state.uri.path;
-    final authPaths = {
-      AppRoutes.splash.path,
-      AppRoutes.onboarding.path,
-      AppRoutes.login.path,
-      AppRoutes.RegistrationisterWizard.path,
-      AppRoutes.userSignUp.path,
-      AppRoutes.lawyerSignUp.path,
-      AppRoutes.lawyerProfessionalInfo.path,
-      AppRoutes.lawyerLicenseVerification.path,
-    };
+    final authPaths = {for (final r in AppRoutes.firstTimeGuestRoutes) r.path};
 
     if (!isLoggedIn && !authPaths.contains(currentPath)) {
       return AppRoutes.login.path;
@@ -40,26 +31,7 @@ final GoRouter appRouter = GoRouter(
     return null;
   },
   routes: [
-    ...[
-      AppRoutes.splash,
-      AppRoutes.onboarding,
-      AppRoutes.login,
-      AppRoutes.changePassword,
-      AppRoutes.updatePassword,
-
-      AppRoutes.RegistrationisterWizard,
-      AppRoutes.userSignUp,
-      AppRoutes.lawyerSignUp,
-      AppRoutes.lawyerProfessionalInfo,
-      AppRoutes.lawyerLicenseVerification,
-      AppRoutes.language,
-      AppRoutes.notification,
-      AppRoutes.success,
-      AppRoutes.ai_consultation,
-      AppRoutes.searchFilter,
-      AppRoutes.searchResults,
-      AppRoutes.lawyerProfile,
-    ].map(
+    ...AppRoutes.allRoutes.map(
       (route) => GoRoute(
         path: route.path,
         name: route.name,

@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:silah_app/core/infrastructure/analytics/logger/app_logger.dart';
+import 'package:silah_app/core/infrastructure/errors/exceptions.dart';
 import 'package:silah_app/core/infrastructure/errors/failures.dart';
 import 'package:silah_app/core/infrastructure/platform/device_info_helper.dart';
 import 'package:silah_app/core/infrastructure/system/executor.dart';
@@ -27,9 +28,10 @@ class MessagingRepositoryoImpl implements MessagingRepository {
   });
 
   @override
-  Future<Either<Failure, List<MessageEntity>>> fetchMessages(int threadId) {
-    // TODO: implement fetchMessages
-    throw UnimplementedError();
+  Future<Either<Failure, List<MessageEntity>>> fetchMessages(String threadId) {
+    return executor.runOnline(() async {
+      return remoteDS.fetchMessages(threadId);
+    }, from: 'MessagingRepository.fetchMessages');
   }
 
   @override
@@ -41,8 +43,13 @@ class MessagingRepositoryoImpl implements MessagingRepository {
 
   @override
   Future<Either<Failure, MessageEntity>> sendMessage(MessageEntity message) {
-    // TODO: implement sendMessage
-    throw UnimplementedError();
+    return executor.runOnline(() async {
+      final threadId = message.threadId;
+      if (threadId == null || threadId.isEmpty) {
+        throw const MissingDataException('Missing thread id');
+      }
+      return remoteDS.sendMessage(threadId, message);
+    }, from: 'MessagingRepository.sendMessage');
   }
 
 

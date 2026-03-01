@@ -9,11 +9,15 @@ class SupportReportRequestModel with SupportReportRequestModelMappable {
   final String reporterUid;
   final String details;
 
-  const SupportReportRequestModel({required this.reporterUid, required this.details});
+  const SupportReportRequestModel({
+    required this.reporterUid,
+    required this.details,
+  });
 }
 
 @MappableClass(ignoreNull: true)
-class SupportReportResponseModel extends BaseRespWrapper with SupportReportResponseModelMappable {
+class SupportReportResponseModel extends BaseRespWrapper
+    with SupportReportResponseModelMappable {
   final String? reportId;
 
   const SupportReportResponseModel({required super.result, this.reportId});

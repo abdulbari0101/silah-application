@@ -24,8 +24,15 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
     on<RegisterUser>(_handleRegisterUser);
   }
 
-  Future<void> _handleRegisterUser(RegisterUser event, Emitter<RegistrationState> emit) async {
-    emit(const RegistrationInProgress(operationType: RegistrationOperType.SelfReqComplete));
+  Future<void> _handleRegisterUser(
+    RegisterUser event,
+    Emitter<RegistrationState> emit,
+  ) async {
+    emit(
+      const RegistrationInProgress(
+        operationType: RegistrationOperType.SelfReqComplete,
+      ),
+    );
 
     final result = await repository.register(event.payload);
     result.fold(
@@ -35,7 +42,11 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         operationType: RegistrationOperType.SelfReqComplete,
       ),
       (authData) {
-        emit(const RegistrationStepSuccess(operationType: RegistrationOperType.SelfReqComplete));
+        emit(
+          const RegistrationStepSuccess(
+            operationType: RegistrationOperType.SelfReqComplete,
+          ),
+        );
         appStateBloc.add(
           UserLoggedIn(
             authData: authData,
@@ -55,7 +66,8 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       BlocUtils.handleFailure(
         includeCodeLine: false,
         failure: failure,
-        onError: (msg) => RegistrationError(operationType: operationType, message: msg),
+        onError: (msg) =>
+            RegistrationError(operationType: operationType, message: msg),
         codeToMessageMap: codeToMessageMap,
       ),
     );

@@ -21,7 +21,7 @@ abstract class TrainingRemoteDataSource {
     TrainingApplicationStatusUpdateRequestModel request,
   );
 
-  Future<List<TrainingOpportunityEntity>> fetchOpportunities();
+  Future<List<TrainingOpportunityEntity>> fetchOpportunities({String? lawyerUid});
   Future<List<TrainingApplicationEntity>> fetchMyApplications(String traineeUid);
   Future<List<TrainingApplicationEntity>> fetchApplicationsForLawyer(String lawyerUid);
   String? currentUserId();
@@ -63,13 +63,19 @@ class TrainingRemoteDataSourceImpl implements TrainingRemoteDataSource {
       );
 
   @override
-  Future<List<TrainingOpportunityEntity>> fetchOpportunities() {
+  Future<List<TrainingOpportunityEntity>> fetchOpportunities({String? lawyerUid}) {
     return firebaseCall<List<TrainingOpportunityEntity>>(
       method: 'TrainingRemoteDataSource.fetchOpportunities',
       logger: logger,
       call: () async {
-        final snapshot =
-            await firestore.collection('training_opportunities').where('isOpen', isEqualTo: true).get();
+        Query<Map<String, dynamic>> query = firestore
+            .collection('training_opportunities')
+            .where('isOpen', isEqualTo: true);
+        final resolvedLawyerUid = lawyerUid?.trim();
+        if (resolvedLawyerUid != null && resolvedLawyerUid.isNotEmpty) {
+          query = query.where('lawyerUid', isEqualTo: resolvedLawyerUid);
+        }
+        final snapshot = await query.get();
         return snapshot.docs.map(_mapOpportunityDoc).toList();
       },
     );

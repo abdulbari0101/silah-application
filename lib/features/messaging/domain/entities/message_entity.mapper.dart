@@ -23,10 +23,14 @@ class MessageEntityMapper extends ClassMapperBase<MessageEntity> {
   @override
   final String id = 'MessageEntity';
 
-  static int? _$id(MessageEntity v) => v.id;
-  static const Field<MessageEntity, int> _f$id = Field('id', _$id, opt: true);
-  static int? _$threadId(MessageEntity v) => v.threadId;
-  static const Field<MessageEntity, int> _f$threadId = Field(
+  static String? _$id(MessageEntity v) => v.id;
+  static const Field<MessageEntity, String> _f$id = Field(
+    'id',
+    _$id,
+    opt: true,
+  );
+  static String? _$threadId(MessageEntity v) => v.threadId;
+  static const Field<MessageEntity, String> _f$threadId = Field(
     'threadId',
     _$threadId,
     opt: true,
@@ -162,8 +166,8 @@ abstract class MessageEntityCopyWith<$R, $In extends MessageEntity, $Out>
   ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>?
   get attachmentUrls;
   $R call({
-    int? id,
-    int? threadId,
+    String? id,
+    String? threadId,
     String? senderId,
     String? body,
     MessageType? type,

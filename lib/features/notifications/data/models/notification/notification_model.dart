@@ -46,12 +46,13 @@ class NotificationModel with NotificationModelMappable {
     isSeen: isSeen,
   );
 
-  factory NotificationModel.fromEntity(NotificationEntity entity) => NotificationModel(
-    id: entity.id,
-    timestamp: entity.timestamp,
-    languageCode: entity.languageCode,
-    message: entity.message,
-    serviceNo: entity.serviceNo,
-    isSeen: entity.isSeen,
-  );
+  factory NotificationModel.fromEntity(NotificationEntity entity) =>
+      NotificationModel(
+        id: entity.id,
+        timestamp: entity.timestamp,
+        languageCode: entity.languageCode,
+        message: entity.message,
+        serviceNo: entity.serviceNo,
+        isSeen: entity.isSeen,
+      );
 }

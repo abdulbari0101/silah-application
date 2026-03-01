@@ -19,9 +19,11 @@ class TrainingRepositoryImpl implements TrainingRepository {
   });
 
   @override
-  Future<Either<Failure, List<TrainingOpportunityEntity>>> fetchOpportunities() {
+  Future<Either<Failure, List<TrainingOpportunityEntity>>> fetchOpportunities({
+    String? lawyerUid,
+  }) {
     return executor.runOnline(() async {
-      return remoteDataSource.fetchOpportunities();
+      return remoteDataSource.fetchOpportunities(lawyerUid: lawyerUid);
     }, from: 'TrainingRepository.fetchOpportunities');
   }
 

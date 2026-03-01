@@ -14,13 +14,20 @@ import 'package:silah_app/features/profiles/domain/entities/lawyer_profile_entit
 import 'specifications_service.dart';
 
 abstract class SpecificationsRemoteDataSource {
-  Future<BaseApiResponse<AiClassifyResponseModel>> classify(AiClassifyRequestModel request);
-  Future<BaseApiResponse<AiRecommendResponseModel>> recommend(AiRecommendRequestModel request);
+  Future<BaseApiResponse<AiClassifyResponseModel>> classify(
+    AiClassifyRequestModel request,
+  );
+  Future<BaseApiResponse<AiRecommendResponseModel>> recommend(
+    AiRecommendRequestModel request,
+  );
   Future<List<LegalSpecializationEntity>> fetchSpecializations();
-  Future<List<LawyerProfileEntity>> fetchLawyersBySpecialization(DiscoveryRequestEntity request);
+  Future<List<LawyerProfileEntity>> fetchLawyersBySpecialization(
+    DiscoveryRequestEntity request,
+  );
 }
 
-class SpecificationsRemoteDataSourceImpl implements SpecificationsRemoteDataSource {
+class SpecificationsRemoteDataSourceImpl
+    implements SpecificationsRemoteDataSource {
   final SpecificationsService specificationsService;
   final AppLogger logger;
   final FirebaseFirestore firestore;
@@ -32,20 +39,22 @@ class SpecificationsRemoteDataSourceImpl implements SpecificationsRemoteDataSour
   }) : firestore = firestore ?? FirebaseFirestore.instance;
 
   @override
-  Future<BaseApiResponse<AiClassifyResponseModel>> classify(AiClassifyRequestModel request) =>
-      handleBaseApiResponse<AiClassifyResponseModel>(
-        method: 'SpecificationsRemoteDataSource.classify',
-        logger: logger,
-        call: () => specificationsService.classify(request),
-      );
+  Future<BaseApiResponse<AiClassifyResponseModel>> classify(
+    AiClassifyRequestModel request,
+  ) => handleBaseApiResponse<AiClassifyResponseModel>(
+    method: 'SpecificationsRemoteDataSource.classify',
+    logger: logger,
+    call: () => specificationsService.classify(request),
+  );
 
   @override
-  Future<BaseApiResponse<AiRecommendResponseModel>> recommend(AiRecommendRequestModel request) =>
-      handleBaseApiResponse<AiRecommendResponseModel>(
-        method: 'SpecificationsRemoteDataSource.recommend',
-        logger: logger,
-        call: () => specificationsService.recommend(request),
-      );
+  Future<BaseApiResponse<AiRecommendResponseModel>> recommend(
+    AiRecommendRequestModel request,
+  ) => handleBaseApiResponse<AiRecommendResponseModel>(
+    method: 'SpecificationsRemoteDataSource.recommend',
+    logger: logger,
+    call: () => specificationsService.recommend(request),
+  );
 
   @override
   Future<List<LegalSpecializationEntity>> fetchSpecializations() {
@@ -53,16 +62,20 @@ class SpecificationsRemoteDataSourceImpl implements SpecificationsRemoteDataSour
       method: 'SpecificationsRemoteDataSource.fetchSpecializations',
       logger: logger,
       call: () async {
-        final snapshot =
-            await firestore.collection('specializations').where('active', isEqualTo: true).get();
+        final snapshot = await firestore
+            .collection('specializations')
+            .where('active', isEqualTo: true)
+            .get();
         return snapshot.docs
-            .map((doc) => LegalSpecializationModel(
-                  id: doc.id,
-                  nameAr: doc.data()['nameAr'] as String?,
-                  nameEn: doc.data()['nameEn'] as String?,
-                  iconUrl: doc.data()['iconUrl'] as String?,
-                  active: doc.data()['active'] as bool?,
-                ).toEntity())
+            .map(
+              (doc) => LegalSpecializationModel(
+                id: doc.id,
+                nameAr: doc.data()['nameAr'] as String?,
+                nameEn: doc.data()['nameEn'] as String?,
+                iconUrl: doc.data()['iconUrl'] as String?,
+                active: doc.data()['active'] as bool?,
+              ).toEntity(),
+            )
             .toList();
       },
     );
@@ -90,29 +103,41 @@ class SpecificationsRemoteDataSourceImpl implements SpecificationsRemoteDataSour
           return _applyLimit(results, request.limit);
         }
 
-        Query<Map<String, dynamic>> baseQuery = firestore.collection('lawyers');
+        Query<Map<String, dynamic>> baseQuery = firestore
+            .collection('lawyers')
+            .where('verified', isEqualTo: true);
         final specializationId = request.specializationId?.trim();
         if (specializationId == null || specializationId.isEmpty) {
           return <LawyerProfileEntity>[];
         }
 
-        final cityId = request.cityId?.trim();
-        if (cityId != null && cityId.isNotEmpty) {
-          baseQuery = baseQuery.where('cityId', isEqualTo: cityId);
-        }
-
         final availability = request.availability?.trim();
         if (availability != null && availability.isNotEmpty) {
-          baseQuery = baseQuery.where('availability', isEqualTo: availability.toLowerCase());
+          baseQuery = baseQuery.where(
+            'availability',
+            isEqualTo: availability.toLowerCase(),
+          );
         }
 
         final results = <String, LawyerProfileEntity>{};
-        final docs = await _fetchLawyersByFields(
-          baseQuery,
-          specializationId,
-          arrayFields: const ['legalFieldIds'],
-        );
-        results.addAll(docs);
+        final cityId = request.cityId?.trim();
+        final queries = <Query<Map<String, dynamic>>>[];
+        if (cityId != null && cityId.isNotEmpty) {
+          queries
+            ..add(baseQuery.where('cityId', isEqualTo: cityId))
+            ..add(baseQuery.where('city', isEqualTo: cityId));
+        } else {
+          queries.add(baseQuery);
+        }
+
+        for (final query in queries) {
+          final docs = await _fetchLawyersByFields(
+            query,
+            specializationId,
+            arrayFields: const ['legalFieldIds'],
+          );
+          results.addAll(docs);
+        }
 
         final data = results.values.toList();
         return _applyLimit(data, request.limit);
@@ -128,26 +153,38 @@ class SpecificationsRemoteDataSourceImpl implements SpecificationsRemoteDataSour
           .collection('lawyers')
           .where(FieldPath.documentId, whereIn: chunk)
           .get();
-      results.addAll(snapshot.docs.map(_mapLawyerDoc));
+      for (final doc in snapshot.docs) {
+        final data = doc.data();
+        if (data['verified'] != true) continue;
+        results.add(_mapLawyerDoc(doc));
+      }
     }
     return results;
   }
 
-  List<LawyerProfileEntity> _applyLimit(List<LawyerProfileEntity> data, int? limit) {
+  List<LawyerProfileEntity> _applyLimit(
+    List<LawyerProfileEntity> data,
+    int? limit,
+  ) {
     if (limit == null || limit <= 0 || data.length <= limit) return data;
     return data.sublist(0, limit);
   }
 
   List<String> _sanitizeIds(List<String>? ids) {
     if (ids == null || ids.isEmpty) return const <String>[];
-    final sanitized = ids.map((value) => value.trim()).where((value) => value.isNotEmpty).toSet();
+    final sanitized = ids
+        .map((value) => value.trim())
+        .where((value) => value.isNotEmpty)
+        .toSet();
     return sanitized.toList();
   }
 
   List<List<String>> _chunk(List<String> values, int size) {
     final chunks = <List<String>>[];
     for (var i = 0; i < values.length; i += size) {
-      chunks.add(values.sublist(i, i + size > values.length ? values.length : i + size));
+      chunks.add(
+        values.sublist(i, i + size > values.length ? values.length : i + size),
+      );
     }
     return chunks;
   }
@@ -174,20 +211,34 @@ class SpecificationsRemoteDataSourceImpl implements SpecificationsRemoteDataSour
     return results;
   }
 
-  LawyerProfileEntity _mapLawyerDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
+  LawyerProfileEntity _mapLawyerDoc(
+    DocumentSnapshot<Map<String, dynamic>> doc,
+  ) {
     final data = doc.data() ?? const <String, dynamic>{};
     final availabilityValue = (data['availability'] as String?)?.trim();
     final legalFieldIds = parseFirestoreStringList(data['legalFieldIds']);
+    final legalFields = parseFirestoreStringList(data['legalFields']);
+    final cityId = (data['cityId'] as String?)?.trim();
+    final cityName = (data['city'] as String?)?.trim();
+    final workDestinationId = (data['workDestinationId'] as String?)?.trim();
+    final workplaceName = (data['workplace'] as String?)?.trim();
 
     return LawyerProfileEntity(
       id: doc.id,
       fullName: (data['name'] as String?) ?? (data['fullName'] as String?),
       licenseNumber: data['licenseNumber'] as String?,
+      legalFields: legalFields,
       legalFieldIds: legalFieldIds,
-      city: (data['city'] as String?) ?? (data['cityId'] as String?),
-      workplace: (data['workplace'] as String?) ?? (data['workDestinationId'] as String?),
+      city: (cityName != null && cityName.isNotEmpty) ? cityName : cityId,
+      cityId: cityId,
+      areaId: (data['areaId'] as String?)?.trim(),
+      workplace: (workplaceName != null && workplaceName.isNotEmpty)
+          ? workplaceName
+          : workDestinationId,
+      workDestinationId: workDestinationId,
       yearsOfExperience:
-          parseFirestoreInt(data['experienceYears']) ?? parseFirestoreInt(data['yearsOfExperience']),
+          parseFirestoreInt(data['experienceYears']) ??
+          parseFirestoreInt(data['yearsOfExperience']),
       avatarUrl: data['avatarUrl'] as String?,
       acceptsTrainees: data['acceptsTrainees'] as bool? ?? false,
       availability: _parseAvailability(availabilityValue),

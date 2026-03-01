@@ -21,17 +21,24 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   final AppStateBloc appStateBloc;
   final AppLogger logger = locator.get<AppLogger>();
 
-  LoginBloc({required this.repository, required this.appStateBloc}) : super(LoginInitial()) {
+  LoginBloc({required this.repository, required this.appStateBloc})
+    : super(LoginInitial()) {
     on<LoginRequested>(
       _handleLogin,
       transformer: BlocUtils.debounce(const Duration(milliseconds: 200)),
     );
   }
 
-  Future<void> _handleLogin(LoginRequested event, Emitter<LoginState> emit) async {
+  Future<void> _handleLogin(
+    LoginRequested event,
+    Emitter<LoginState> emit,
+  ) async {
     emit(const LoginLoading(operationType: LoginOperationType.signIn));
 
-    final result = await repository.signIn(email: event.email, password: event.password);
+    final result = await repository.signIn(
+      email: event.email,
+      password: event.password,
+    );
     result.fold(
       (failure) => _emitFailure(
         failure: failure,
@@ -48,7 +55,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
           ),
         );
 
-        emit(const LoginOperationSuccess(operationType: LoginOperationType.signIn));
+        emit(
+          const LoginOperationSuccess(operationType: LoginOperationType.signIn),
+        );
       },
     );
   }
@@ -62,7 +71,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       BlocUtils.handleFailure(
         includeCodeLine: false,
         failure: failure,
-        onError: (msg) => LoginError(message: msg, operationType: operationType),
+        onError: (msg) =>
+            LoginError(message: msg, operationType: operationType),
         codeToMessageMap: codeToMessageMap,
       ),
     );

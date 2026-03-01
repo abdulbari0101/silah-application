@@ -11,7 +11,7 @@ import 'package:silah_app/core/presentation/ui/overlays/dialogs/dialog_service.d
 import 'package:silah_app/features/auth/presentation/blocs/registration/registration_bloc.dart';
 import 'package:silah_app/features/auth/presentation/blocs/registration/registration_operation_type.dart';
 
-import '../widgets/auth_footer_link.dart';
+import '../../shared/widget/auth_footer_link.dart';
 import '../widgets/auth_form_scaffold.dart';
 import '../widgets/user_sign_up_form.dart';
 
@@ -28,7 +28,11 @@ class UserSignUpScreen extends StatelessWidget {
       child: BlocListener<RegistrationBloc, RegistrationState>(
         listener: (context, state) {
           if (state is RegistrationError) {
-            DialogService.showErrorDialog(context, title: Strings.error.tr(), desc: state.message);
+            DialogService.showErrorDialog(
+              context,
+              title: Strings.error.tr(),
+              desc: state.message,
+            );
           }
           if (state is RegistrationStepSuccess &&
               state.operationType == RegistrationOperType.SelfReqComplete) {

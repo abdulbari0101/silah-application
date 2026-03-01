@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:silah_app/core/config/theme/roles/shapes.dart';
 
 CardThemeData buildCardTheme(ColorScheme cs, ShapeScale shapes) =>
-    CardThemeData(elevation: 1, shape: shapes.roundedLg);
+    CardThemeData(elevation: 1, shape: shapes.roundedLg, color: cs.surfaceContainerLow);
 
 DialogThemeData buildDialogTheme(ColorScheme cs, ShapeScale shapes) => DialogThemeData(
   shape: shapes.roundedXl,
@@ -30,7 +30,7 @@ DialogThemeData buildDialogTheme(ColorScheme cs, ShapeScale shapes) => DialogThe
 
 BottomSheetThemeData buildBottomSheetTheme(ColorScheme cs, ShapeScale shapes) =>
     BottomSheetThemeData(
-      backgroundColor: cs.surface,
-      modalBackgroundColor: cs.surface,
+      backgroundColor: cs.surfaceContainerHighest,
+      modalBackgroundColor: cs.surfaceContainerHighest,
       shape: shapes.roundedXl,
     );

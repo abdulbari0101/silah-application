@@ -40,7 +40,9 @@ class NewThem extends StatelessWidget {
           Expanded(
             child: Text(
               Strings.dark_mode.tr(),
-              style: context.textTheme.labelLarge?.copyWith(color: context.colors.onSurface),
+              style: context.textTheme.labelLarge?.copyWith(
+                color: context.colors.onSurface,
+              ),
             ),
           ),
         ],

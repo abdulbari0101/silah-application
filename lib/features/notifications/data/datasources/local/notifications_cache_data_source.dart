@@ -7,7 +7,9 @@ import 'package:silah_app/features/notifications/data/models/notification/notifi
 import '../../../../../core/infrastructure/analytics/logger/app_logger.dart';
 
 abstract class NotificationsCacheDataSource {
-  Future<void> savePendingSeenNotifications(List<NotificationModel> notifications);
+  Future<void> savePendingSeenNotifications(
+    List<NotificationModel> notifications,
+  );
   Future<List<String>> getPendingSeenNotificationIds();
 }
 
@@ -23,9 +25,14 @@ class NotificationsCacheDataSourceImpl extends NotificationsCacheDataSource {
   });
 
   @override
-  Future<void> savePendingSeenNotifications(List<NotificationModel> notifications) async {
+  Future<void> savePendingSeenNotifications(
+    List<NotificationModel> notifications,
+  ) async {
     final userId = await identityReader.userId();
-    await appCache.prefs.delete(key: PrefsKey.notificationsPendingSeen, userId: userId);
+    await appCache.prefs.delete(
+      key: PrefsKey.notificationsPendingSeen,
+      userId: userId,
+    );
 
     final groupUnseenIds = notifications
         .where((notification) => notification.isSeen == false)
@@ -40,6 +47,9 @@ class NotificationsCacheDataSourceImpl extends NotificationsCacheDataSource {
   @override
   Future<List<String>> getPendingSeenNotificationIds() async {
     final userId = await identityReader.userId();
-    return appCache.prefs.readStringList(key: PrefsKey.notificationsPendingSeen, userId: userId);
+    return appCache.prefs.readStringList(
+      key: PrefsKey.notificationsPendingSeen,
+      userId: userId,
+    );
   }
 }

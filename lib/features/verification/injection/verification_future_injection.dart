@@ -19,11 +19,15 @@ Future<void> initVerification() async {
 
   // Data sources
   locator.registerLazySingleton<VerificationRemoteDataSource>(
-    () => VerificationRemoteDataSourceImpl(service: locator(), logger: locator()),
+    () =>
+        VerificationRemoteDataSourceImpl(service: locator(), logger: locator()),
   );
 
   // Services
   locator.registerLazySingleton(
-    () => VerificationService(locator<DioClient>().dio, baseUrl: ApiConstants.baseUrl),
+    () => VerificationService(
+      locator<DioClient>().dio,
+      baseUrl: ApiConstants.baseUrl,
+    ),
   );
 }

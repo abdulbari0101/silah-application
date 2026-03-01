@@ -41,6 +41,12 @@ class LawyerProfileEntityMapper extends ClassMapperBase<LawyerProfileEntity> {
     _$licenseNumber,
     opt: true,
   );
+  static List<String>? _$legalFields(LawyerProfileEntity v) => v.legalFields;
+  static const Field<LawyerProfileEntity, List<String>> _f$legalFields = Field(
+    'legalFields',
+    _$legalFields,
+    opt: true,
+  );
   static List<String>? _$legalFieldIds(LawyerProfileEntity v) =>
       v.legalFieldIds;
   static const Field<LawyerProfileEntity, List<String>> _f$legalFieldIds =
@@ -51,10 +57,29 @@ class LawyerProfileEntityMapper extends ClassMapperBase<LawyerProfileEntity> {
     _$city,
     opt: true,
   );
+  static String? _$cityId(LawyerProfileEntity v) => v.cityId;
+  static const Field<LawyerProfileEntity, String> _f$cityId = Field(
+    'cityId',
+    _$cityId,
+    opt: true,
+  );
+  static String? _$areaId(LawyerProfileEntity v) => v.areaId;
+  static const Field<LawyerProfileEntity, String> _f$areaId = Field(
+    'areaId',
+    _$areaId,
+    opt: true,
+  );
   static String? _$workplace(LawyerProfileEntity v) => v.workplace;
   static const Field<LawyerProfileEntity, String> _f$workplace = Field(
     'workplace',
     _$workplace,
+    opt: true,
+  );
+  static String? _$workDestinationId(LawyerProfileEntity v) =>
+      v.workDestinationId;
+  static const Field<LawyerProfileEntity, String> _f$workDestinationId = Field(
+    'workDestinationId',
+    _$workDestinationId,
     opt: true,
   );
   static int? _$yearsOfExperience(LawyerProfileEntity v) => v.yearsOfExperience;
@@ -91,9 +116,13 @@ class LawyerProfileEntityMapper extends ClassMapperBase<LawyerProfileEntity> {
     #id: _f$id,
     #fullName: _f$fullName,
     #licenseNumber: _f$licenseNumber,
+    #legalFields: _f$legalFields,
     #legalFieldIds: _f$legalFieldIds,
     #city: _f$city,
+    #cityId: _f$cityId,
+    #areaId: _f$areaId,
     #workplace: _f$workplace,
+    #workDestinationId: _f$workDestinationId,
     #yearsOfExperience: _f$yearsOfExperience,
     #avatarUrl: _f$avatarUrl,
     #acceptsTrainees: _f$acceptsTrainees,
@@ -107,9 +136,13 @@ class LawyerProfileEntityMapper extends ClassMapperBase<LawyerProfileEntity> {
       id: data.dec(_f$id),
       fullName: data.dec(_f$fullName),
       licenseNumber: data.dec(_f$licenseNumber),
+      legalFields: data.dec(_f$legalFields),
       legalFieldIds: data.dec(_f$legalFieldIds),
       city: data.dec(_f$city),
+      cityId: data.dec(_f$cityId),
+      areaId: data.dec(_f$areaId),
       workplace: data.dec(_f$workplace),
+      workDestinationId: data.dec(_f$workDestinationId),
       yearsOfExperience: data.dec(_f$yearsOfExperience),
       avatarUrl: data.dec(_f$avatarUrl),
       acceptsTrainees: data.dec(_f$acceptsTrainees),
@@ -187,15 +220,20 @@ abstract class LawyerProfileEntityCopyWith<
   $Out
 >
     implements ClassCopyWith<$R, $In, $Out> {
+  ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>? get legalFields;
   ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>?
   get legalFieldIds;
   $R call({
     String? id,
     String? fullName,
     String? licenseNumber,
+    List<String>? legalFields,
     List<String>? legalFieldIds,
     String? city,
+    String? cityId,
+    String? areaId,
     String? workplace,
+    String? workDestinationId,
     int? yearsOfExperience,
     String? avatarUrl,
     bool? acceptsTrainees,
@@ -216,6 +254,15 @@ class _LawyerProfileEntityCopyWithImpl<$R, $Out>
       LawyerProfileEntityMapper.ensureInitialized();
   @override
   ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>?
+  get legalFields => $value.legalFields != null
+      ? ListCopyWith(
+          $value.legalFields!,
+          (v, t) => ObjectCopyWith(v, $identity, t),
+          (v) => call(legalFields: v),
+        )
+      : null;
+  @override
+  ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>?
   get legalFieldIds => $value.legalFieldIds != null
       ? ListCopyWith(
           $value.legalFieldIds!,
@@ -228,9 +275,13 @@ class _LawyerProfileEntityCopyWithImpl<$R, $Out>
     Object? id = $none,
     Object? fullName = $none,
     Object? licenseNumber = $none,
+    Object? legalFields = $none,
     Object? legalFieldIds = $none,
     Object? city = $none,
+    Object? cityId = $none,
+    Object? areaId = $none,
     Object? workplace = $none,
+    Object? workDestinationId = $none,
     Object? yearsOfExperience = $none,
     Object? avatarUrl = $none,
     bool? acceptsTrainees,
@@ -240,9 +291,13 @@ class _LawyerProfileEntityCopyWithImpl<$R, $Out>
       if (id != $none) #id: id,
       if (fullName != $none) #fullName: fullName,
       if (licenseNumber != $none) #licenseNumber: licenseNumber,
+      if (legalFields != $none) #legalFields: legalFields,
       if (legalFieldIds != $none) #legalFieldIds: legalFieldIds,
       if (city != $none) #city: city,
+      if (cityId != $none) #cityId: cityId,
+      if (areaId != $none) #areaId: areaId,
       if (workplace != $none) #workplace: workplace,
+      if (workDestinationId != $none) #workDestinationId: workDestinationId,
       if (yearsOfExperience != $none) #yearsOfExperience: yearsOfExperience,
       if (avatarUrl != $none) #avatarUrl: avatarUrl,
       if (acceptsTrainees != null) #acceptsTrainees: acceptsTrainees,
@@ -254,9 +309,16 @@ class _LawyerProfileEntityCopyWithImpl<$R, $Out>
     id: data.get(#id, or: $value.id),
     fullName: data.get(#fullName, or: $value.fullName),
     licenseNumber: data.get(#licenseNumber, or: $value.licenseNumber),
+    legalFields: data.get(#legalFields, or: $value.legalFields),
     legalFieldIds: data.get(#legalFieldIds, or: $value.legalFieldIds),
     city: data.get(#city, or: $value.city),
+    cityId: data.get(#cityId, or: $value.cityId),
+    areaId: data.get(#areaId, or: $value.areaId),
     workplace: data.get(#workplace, or: $value.workplace),
+    workDestinationId: data.get(
+      #workDestinationId,
+      or: $value.workDestinationId,
+    ),
     yearsOfExperience: data.get(
       #yearsOfExperience,
       or: $value.yearsOfExperience,

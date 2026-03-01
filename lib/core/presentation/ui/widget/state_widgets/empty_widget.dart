@@ -1,47 +1,61 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:lottie/lottie.dart';
+import 'package:flutter/material.dart';
 import 'package:silah_app/core/config/constants/ui_constants.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
 import 'package:silah_app/core/config/theme/extentions/theme_context_extension.dart';
 import 'package:silah_app/core/presentation/ui/responsive/dimensions.dart';
-import 'package:silah_app/gen/assets.gen.dart';
 
 class EmptyWidget extends StatelessWidget {
-  const EmptyWidget({super.key, this.height, this.width, this.title, this.retryWidget});
+  const EmptyWidget({
+    super.key,
+    this.height,
+    this.width,
+    this.title,
+    this.subtitle,
+    this.retryWidget,
+    this.icon,
+  });
 
   final double? height;
   final double? width;
   final Widget? retryWidget;
-
   final String? title;
+  final String? subtitle;
+  final IconData? icon;
   @override
   Widget build(BuildContext context) {
+    final iconSize = width ?? 96;
+    final bodyHeight = height ?? AppDimension(context).height / 2;
     return Container(
-      height: height != null ? height! + 80 : AppDimension(context).height / 1.5,
+      constraints: BoxConstraints(minHeight: bodyHeight),
       alignment: Alignment.center,
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(
-            child: Lottie.asset(
-              context.themeValue(light: Assets.lottie.empty1, dark: Assets.lottie.empty1),
-              height: height ?? 200,
-              fit: BoxFit.contain,
-              width: width ?? 200,
-              repeat: true,
+          Icon(
+            icon ?? Icons.inbox_outlined,
+            size: iconSize,
+            color: context.colors.onSurfaceVariant.withAlphaOpacity(0.5),
+          ),
+          UIConstants.mediumHeight,
+          Text(
+            title ?? Strings.no_data_to_display.tr(),
+            textAlign: TextAlign.center,
+            style: context.textTheme.bodyMedium?.copyWith(
+              fontWeight: FontWeight.w600,
             ),
           ),
-          Expanded(
-            child: Column(
-              children: [
-                Text(title ?? Strings.no_data_to_display.tr(), style: context.textTheme.bodyMedium),
-                UIConstants.smallHeight,
-                if (retryWidget != null) retryWidget!,
-              ],
+          if (subtitle != null && subtitle!.trim().isNotEmpty) ...[
+            UIConstants.xsmallHeight,
+            Text(
+              subtitle!,
+              textAlign: TextAlign.center,
+              style: context.textTheme.bodySmall?.copyWith(
+                color: context.colors.onSurfaceVariant,
+              ),
             ),
-          ),
+          ],
+          if (retryWidget != null) ...[UIConstants.mediumHeight, retryWidget!],
         ],
       ),
     );

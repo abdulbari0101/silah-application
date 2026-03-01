@@ -24,7 +24,8 @@ class IdentityRepoImpl implements AuthIdentityRepo {
   Future<String?> deviceId() => _cacheDS.deviceSerialId();
 
   @override
-  Future<void> saveDeviceId(String serial) => _cacheDS.saveDeviceSerialId(serial: serial);
+  Future<void> saveDeviceId(String serial) =>
+      _cacheDS.saveDeviceSerialId(serial: serial);
 
   @override
   Future<String?> userId() => _cacheDS.userId();
@@ -47,7 +48,8 @@ class IdentityRepoImpl implements AuthIdentityRepo {
     final existing = await _cacheDS.deviceSerialId();
     if (existing != null && existing.isNotEmpty) return existing;
 
-    final either = await _deviceSerialService.create(); // returns Either<Failure,String>
+    final either = await _deviceSerialService
+        .create(); // returns Either<Failure,String>
     return either.fold(
       (err) {
         _log.appError(tag: 'IdentityRepo.getOrCreateDeviceId', err);
@@ -66,5 +68,4 @@ class IdentityRepoImpl implements AuthIdentityRepo {
 
     return "$serial";
   }
-
 }

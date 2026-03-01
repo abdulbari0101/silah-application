@@ -12,10 +12,14 @@ class LawyerProfileDetailsCard extends StatelessWidget {
     super.key,
     required this.lawyer,
     this.specialization,
+    this.onRequestConsultation,
+    this.onRequestTraining,
   });
 
   final LawyerProfileEntity lawyer;
   final String? specialization;
+  final VoidCallback? onRequestConsultation;
+  final VoidCallback? onRequestTraining;
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +80,7 @@ class LawyerProfileDetailsCard extends StatelessWidget {
                   text: Strings.request_consultation.tr(),
                   icon: Icons.chat_bubble_outline,
                   expand: true,
-                  onTap: null,
+                  onTap: onRequestConsultation,
                 ),
               ),
               UIConstants.mediumWidth,
@@ -85,7 +89,7 @@ class LawyerProfileDetailsCard extends StatelessWidget {
                   text: Strings.request_training.tr(),
                   icon: Icons.send_rounded,
                   expand: true,
-                  onTap: null,
+                  onTap: onRequestTraining,
                 ),
               ),
             ],

@@ -53,7 +53,8 @@ class VerificationRepositoryImpl implements VerificationRepository {
       }
 
       final result = await remoteDataSource.fetchVerificationStatus(uid);
-      return result ?? const LicenseVerificationEntity(status: VerificationStatus.pending);
+      return result ??
+          const LicenseVerificationEntity(status: VerificationStatus.pending);
     }, from: 'VerificationRepository.fetchVerificationStatus');
   }
 

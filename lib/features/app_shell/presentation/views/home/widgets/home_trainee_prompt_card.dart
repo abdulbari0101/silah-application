@@ -15,21 +15,24 @@ class HomeTraineePromptCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(UIConstants.mediumPadding),
       decoration: BoxDecoration(
-        color: context.colors.primaryContainer.withAlphaOpacity(0.35),
-        borderRadius: context.shapes.brMd,
-        border: Border.all(color: context.colors.primary.withAlphaOpacity(0.2)),
+        color: context.colors.surfaceContainerLow,
+        borderRadius: context.shapes.brLg,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             Strings.trainee_prompt_title.tr(),
-            style: context.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
+            style: context.textTheme.titleSmall?.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
           ),
           UIConstants.smallHeight,
           Text(
             Strings.trainee_prompt_description.tr(),
-            style: context.textTheme.bodySmall?.copyWith(color: context.colors.onSurfaceVariant),
+            style: context.textTheme.bodySmall?.copyWith(
+              color: context.colors.onSurfaceVariant,
+            ),
           ),
           UIConstants.mediumHeight,
           PrimaryButton(

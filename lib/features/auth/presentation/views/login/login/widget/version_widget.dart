@@ -37,7 +37,9 @@ class VersionWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: UIConstants.mediumPadding),
+          padding: const EdgeInsets.symmetric(
+            horizontal: UIConstants.mediumPadding,
+          ),
           child: Text(error, style: context.textTheme.bodySmall),
         ),
       ],
@@ -50,7 +52,9 @@ class VersionWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(horizontal: UIConstants.mediumPadding),
+          padding: const EdgeInsets.symmetric(
+            horizontal: UIConstants.mediumPadding,
+          ),
           child: RichText(
             text: TextSpan(
               style: context.textTheme.bodySmall,

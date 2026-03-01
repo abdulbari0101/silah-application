@@ -4,16 +4,13 @@ import 'package:silah_app/core/config/theme/extentions/color_extantion.dart';
 import 'package:silah_app/core/config/theme/extentions/theme_context_extension.dart';
 
 const double _kBtnHeight = UIConstants.buttonHeight;
-const double _kRadius = 16;
 const EdgeInsets _kPadding = EdgeInsets.symmetric(horizontal: 16);
 
 ButtonStyle _baseFilled(ColorScheme cs, TextTheme text) {
   return ButtonStyle(
     minimumSize: WidgetStateProperty.all(const Size.fromHeight(_kBtnHeight)),
     padding: WidgetStateProperty.all(_kPadding),
-    shape: WidgetStateProperty.all(
-      RoundedRectangleBorder(borderRadius: BorderRadius.circular(_kRadius)),
-    ),
+    shape: const WidgetStatePropertyAll(StadiumBorder()),
     // Label-2 15/18, make CTAs SemiBold
     textStyle: WidgetStateProperty.all(text.labelLarge?.copyWith(fontWeight: FontWeight.w600)),
     // Colors per state
@@ -49,9 +46,7 @@ ButtonStyle _baseOutlined(ColorScheme cs, TextTheme text) {
   return ButtonStyle(
     minimumSize: WidgetStateProperty.all(const Size.fromHeight(_kBtnHeight)),
     padding: WidgetStateProperty.all(_kPadding),
-    shape: WidgetStateProperty.all(
-      RoundedRectangleBorder(borderRadius: BorderRadius.circular(_kRadius)),
-    ),
+    shape: const WidgetStatePropertyAll(StadiumBorder()),
     // textStyle: WidgetStateProperty.all(const TextStyle(fontWeight: FontWeight.w600)),
     textStyle: WidgetStateProperty.all(text.labelLarge?.copyWith(fontWeight: FontWeight.w600)),
     foregroundColor: WidgetStateProperty.resolveWith((states) {

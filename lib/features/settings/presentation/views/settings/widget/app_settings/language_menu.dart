@@ -37,7 +37,9 @@ class _LanguageMenuState extends State<LanguageMenu> {
     return TextButton(
       style: TextButton.styleFrom(
         foregroundColor: context.colors.primary,
-        padding: EdgeInsets.symmetric(horizontal: UIConstants.mediumPadding).copyWith(top: 16),
+        padding: EdgeInsets.symmetric(
+          horizontal: UIConstants.mediumPadding,
+        ).copyWith(top: 16),
       ),
       onPressed: () {
         context.pushTo(AppRoutes.language);
@@ -50,7 +52,10 @@ class _LanguageMenuState extends State<LanguageMenu> {
               Icon(
                 Icons.language,
                 size: iconSize,
-                color: context.themeValue(light: context.colors.primary, dark: Colors.white),
+                color: context.themeValue(
+                  light: context.colors.primary,
+                  dark: Colors.white,
+                ),
               ),
               // AppSvgIcon(
               //   assetName: Assets.icons.icLanguage,
@@ -59,7 +64,10 @@ class _LanguageMenuState extends State<LanguageMenu> {
               // ),
               SizedBox(width: AppDimension(context).width * 0.06),
               Expanded(
-                child: Text(Strings.et_change_lang.tr(), style: context.textTheme.labelLarge),
+                child: Text(
+                  Strings.et_change_lang.tr(),
+                  style: context.textTheme.labelLarge,
+                ),
               ),
               Text(languge.name, style: context.textTheme.bodyMedium),
               ArrowNextIcon(size: SizeIcon.SIZE_18),

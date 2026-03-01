@@ -5,7 +5,9 @@ import 'package:silah_app/features/training/domain/entities/training_application
 import 'package:silah_app/features/training/domain/entities/training_opportunity_entity.dart';
 
 abstract class TrainingRepository {
-  Future<Either<Failure, List<TrainingOpportunityEntity>>> fetchOpportunities();
+  Future<Either<Failure, List<TrainingOpportunityEntity>>> fetchOpportunities({
+    String? lawyerUid,
+  });
 
   Future<Either<Failure, TrainingApplicationEntity>> submitApplication(
     TrainingApplicationEntity application,

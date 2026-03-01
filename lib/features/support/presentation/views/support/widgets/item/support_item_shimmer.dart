@@ -20,7 +20,10 @@ class SupportItemShimmer extends StatelessWidget {
         highlightColor: colors.shimmerHighlight,
         duration: const Duration(milliseconds: 1200),
       ),
-      child: SupportItem(item: SupportTicketEntity(description: 'name'), enabled: false),
+      child: SupportItem(
+        item: SupportTicketEntity(description: 'name'),
+        enabled: false,
+      ),
     );
   }
 }

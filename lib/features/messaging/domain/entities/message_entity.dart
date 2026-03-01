@@ -6,8 +6,8 @@ part 'message_entity.mapper.dart';
 
 @MappableClass()
 class MessageEntity with MessageEntityMappable {
-  final int? id;
-  final int? threadId;
+  final String? id;
+  final String? threadId;
   final String? senderId;
   final String? body;
   final MessageType type;

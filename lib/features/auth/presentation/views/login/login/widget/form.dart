@@ -68,9 +68,9 @@ class _LoginFormState extends State<LoginForm> {
               onChanged: () {
                 context.read<FormCubit>().updateValidity(_isFormComplete());
               },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
                   FEmailField(
                     controller: emailController,
                     hintText: Strings.email_address.tr(),
@@ -84,9 +84,9 @@ class _LoginFormState extends State<LoginForm> {
                     label: Strings.password.tr(),
                     hintText: Strings.msg_enter_password.tr(),
                     prefixIcon: Icon(Icons.lock_outline_rounded),
-                    validator: (p0) =>
-                        validateCurrentPassword(currentPassword: passwordController.text),
-                   
+                    validator: (p0) => validateCurrentPassword(
+                      currentPassword: passwordController.text,
+                    ),
 
                     textInputAction: TextInputAction.done,
                   ),

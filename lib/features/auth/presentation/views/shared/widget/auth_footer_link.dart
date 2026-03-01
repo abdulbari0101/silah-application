@@ -19,13 +19,23 @@ class AuthFooterLink extends StatelessWidget {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(leadingText, style: context.textTheme.bodySmall),
+        Text(
+          leadingText,
+          style: context.textTheme.bodySmall?.copyWith(
+            color: context.colors.onSurfaceVariant,
+          ),
+        ),
         UIConstants.smallWidth,
-        TextButton(
+        FilledButton.tonal(
           onPressed: onTap,
+          style: FilledButton.styleFrom(
+            padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
+            minimumSize: const Size(0, 34),
+            shape: const StadiumBorder(),
+          ),
           child: Text(
             actionText,
-            style: context.textTheme.titleSmall?.copyWith(color: context.colors.primary),
+            style: context.textTheme.labelLarge,
           ),
         ),
       ],

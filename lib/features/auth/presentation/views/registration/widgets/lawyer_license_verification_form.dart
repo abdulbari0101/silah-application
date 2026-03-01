@@ -23,10 +23,12 @@ class LawyerLicenseVerificationForm extends StatefulWidget {
   });
 
   @override
-  State<LawyerLicenseVerificationForm> createState() => _LawyerLicenseVerificationFormState();
+  State<LawyerLicenseVerificationForm> createState() =>
+      _LawyerLicenseVerificationFormState();
 }
 
-class _LawyerLicenseVerificationFormState extends State<LawyerLicenseVerificationForm> {
+class _LawyerLicenseVerificationFormState
+    extends State<LawyerLicenseVerificationForm> {
   final _formKey = GlobalKey<FormState>();
   final _licenseCtrl = TextEditingController();
   final _nationalIdCtrl = TextEditingController();
@@ -39,7 +41,8 @@ class _LawyerLicenseVerificationFormState extends State<LawyerLicenseVerificatio
   }
 
   bool _isFormComplete() {
-    return _licenseCtrl.text.trim().isNotEmpty && _nationalIdCtrl.text.trim().isNotEmpty;
+    return _licenseCtrl.text.trim().isNotEmpty &&
+        _nationalIdCtrl.text.trim().isNotEmpty;
   }
 
   void _submit() {
@@ -47,7 +50,10 @@ class _LawyerLicenseVerificationFormState extends State<LawyerLicenseVerificatio
 
     final personal = widget.professionalInfo.personal;
     final fullName = personal.fullName.trim();
-    final parts = fullName.split(RegExp(r'\s+')).where((p) => p.isNotEmpty).toList();
+    final parts = fullName
+        .split(RegExp(r'\s+'))
+        .where((p) => p.isNotEmpty)
+        .toList();
     final firstName = parts.isNotEmpty ? parts.first : fullName;
     final lastName = parts.length > 1 ? parts.sublist(1).join(' ') : '';
 
@@ -59,9 +65,16 @@ class _LawyerLicenseVerificationFormState extends State<LawyerLicenseVerificatio
       phone: personal.phone,
       password: personal.password,
       gender: personal.gender,
+      genderId: personal.genderId,
       legalFields: [widget.professionalInfo.legalField],
+      legalFieldIds: widget.professionalInfo.legalFieldId != null
+          ? [widget.professionalInfo.legalFieldId!]
+          : null,
       city: widget.professionalInfo.city,
+      cityId: widget.professionalInfo.cityId,
+      areaId: widget.professionalInfo.areaId,
       workplace: widget.professionalInfo.workplace,
+      workDestinationId: widget.professionalInfo.workDestinationId,
       officeName: widget.professionalInfo.officeName,
       experienceYears: widget.professionalInfo.experienceYears,
       licenseNumber: _licenseCtrl.text.trim(),
@@ -75,7 +88,8 @@ class _LawyerLicenseVerificationFormState extends State<LawyerLicenseVerificatio
   Widget build(BuildContext context) {
     return Form(
       key: _formKey,
-      onChanged: () => context.read<FormCubit>().updateValidity(_isFormComplete()),
+      onChanged: () =>
+          context.read<FormCubit>().updateValidity(_isFormComplete()),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

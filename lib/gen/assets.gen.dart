@@ -402,6 +402,14 @@ class $AssetsIconsFlagsGen {
 class $AssetsIconsLogoGen {
   const $AssetsIconsLogoGen();
 
+  /// File path: assets/icons/logo/app_icon.png
+  AssetGenImage get appIcon =>
+      const AssetGenImage('assets/icons/logo/app_icon.png');
+
+  /// File path: assets/icons/logo/app_icon_foreground.png
+  AssetGenImage get appIconForeground =>
+      const AssetGenImage('assets/icons/logo/app_icon_foreground.png');
+
   /// File path: assets/icons/logo/logo.png
   AssetGenImage get logoPng =>
       const AssetGenImage('assets/icons/logo/logo.png');
@@ -410,7 +418,7 @@ class $AssetsIconsLogoGen {
   String get logoSvg => 'assets/icons/logo/logo.svg';
 
   /// List of all assets
-  List<dynamic> get values => [logoPng, logoSvg];
+  List<dynamic> get values => [appIcon, appIconForeground, logoPng, logoSvg];
 }
 
 class $AssetsIconsNavigationGen {

@@ -8,7 +8,8 @@ sealed class RegistrationState extends Equatable {
 }
 
 class RegistrationInitialState extends RegistrationState {
-  RegistrationInitialState() : super(operationType: RegistrationOperType.SelfReqComplete);
+  RegistrationInitialState()
+    : super(operationType: RegistrationOperType.SelfReqComplete);
   @override
   List<Object?> get props => super.props;
 }
@@ -30,7 +31,10 @@ class RegistrationStepSuccess extends RegistrationState {
 
 class RegistrationError extends RegistrationState {
   final String message;
-  const RegistrationError({required super.operationType, required this.message});
+  const RegistrationError({
+    required super.operationType,
+    required this.message,
+  });
 
   @override
   List<Object?> get props => [...super.props, message];

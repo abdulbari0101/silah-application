@@ -15,15 +15,12 @@ class VerificationRequestModel with VerificationRequestModelMappable {
     required this.nationalId,
     required this.lawyerUid,
   });
-
 }
 
 @MappableClass(ignoreNull: true)
-class VerificationResponseModel extends BaseRespWrapper with VerificationResponseModelMappable {
+class VerificationResponseModel extends BaseRespWrapper
+    with VerificationResponseModelMappable {
   final String? status;
 
-  const VerificationResponseModel({
-    required super.result,
-    this.status,
-  });
+  const VerificationResponseModel({required super.result, this.status});
 }

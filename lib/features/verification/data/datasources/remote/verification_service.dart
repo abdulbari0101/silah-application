@@ -8,7 +8,8 @@ part 'verification_service.g.dart';
 
 @RestApi(parser: Parser.JsonSerializable, callAdapter: JsonBodyMappableAdapter)
 abstract class VerificationService {
-  factory VerificationService(Dio dio, {String? baseUrl}) = _VerificationService;
+  factory VerificationService(Dio dio, {String? baseUrl}) =
+      _VerificationService;
 
   @POST('/verification/request')
   Future<BaseApiResponse<VerificationResponseModel>> requestVerification(

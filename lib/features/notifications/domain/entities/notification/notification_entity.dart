@@ -1,5 +1,6 @@
 import 'package:dart_mappable/dart_mappable.dart';
 part 'notification_entity.mapper.dart';
+
 @MappableClass()
 class NotificationEntity with NotificationEntityMappable {
   final String? timestamp;
@@ -20,6 +21,4 @@ class NotificationEntity with NotificationEntityMappable {
     this.id,
     this.isSeen = false,
   });
-
-  
 }

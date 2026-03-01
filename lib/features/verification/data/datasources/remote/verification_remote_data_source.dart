@@ -30,18 +30,17 @@ class VerificationRemoteDataSourceImpl implements VerificationRemoteDataSource {
     required this.logger,
     FirebaseFirestore? firestore,
     FirebaseAuth? auth,
-  })  : firestore = firestore ?? FirebaseFirestore.instance,
-        auth = auth ?? FirebaseAuth.instance;
+  }) : firestore = firestore ?? FirebaseFirestore.instance,
+       auth = auth ?? FirebaseAuth.instance;
 
   @override
   Future<BaseApiResponse<VerificationResponseModel>> requestVerification(
     VerificationRequestModel request,
-  ) =>
-      handleBaseApiResponse<VerificationResponseModel>(
-        method: 'VerificationRemoteDataSource.requestVerification',
-        logger: logger,
-        call: () => service.requestVerification(request),
-      );
+  ) => handleBaseApiResponse<VerificationResponseModel>(
+    method: 'VerificationRemoteDataSource.requestVerification',
+    logger: logger,
+    call: () => service.requestVerification(request),
+  );
 
   @override
   Future<LicenseVerificationEntity?> fetchVerificationStatus(String lawyerUid) {
@@ -50,7 +49,10 @@ class VerificationRemoteDataSourceImpl implements VerificationRemoteDataSource {
       logger: logger,
       payload: {'uid': lawyerUid},
       call: () async {
-        final doc = await firestore.collection('license_verifications').doc(lawyerUid).get();
+        final doc = await firestore
+            .collection('license_verifications')
+            .doc(lawyerUid)
+            .get();
         if (!doc.exists) return null;
 
         final data = doc.data() ?? const <String, dynamic>{};

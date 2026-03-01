@@ -34,11 +34,8 @@ class MyAccountSection extends StatelessWidget {
               errorMessage: message,
             );
           },
-          loaded: (profile, isSaving) => _buildProfileCard(
-            context,
-            profile,
-            isSaving: isSaving ?? false,
-          ),
+          loaded: (profile, isSaving) =>
+              _buildProfileCard(context, profile, isSaving: isSaving ?? false),
         );
       },
     );
@@ -50,8 +47,9 @@ class MyAccountSection extends StatelessWidget {
     required bool isSaving,
     String? errorMessage,
   }) {
-    final name =
-        profile.name?.trim().isNotEmpty == true ? profile.name!.trim() : Strings.user.tr();
+    final name = profile.name?.trim().isNotEmpty == true
+        ? profile.name!.trim()
+        : Strings.user.tr();
     final email = profile.email?.trim();
     final phone = profile.phone?.trim();
     final accountTypeLabel = _accountTypeLabel(context, profile.accountType);
@@ -80,20 +78,23 @@ class MyAccountSection extends StatelessWidget {
                     if (email != null && email.isNotEmpty)
                       Text(
                         email,
-                        style:
-                            context.textTheme.bodySmall?.copyWith(color: context.colors.onSurfaceVariant),
+                        style: context.textTheme.bodySmall?.copyWith(
+                          color: context.colors.onSurfaceVariant,
+                        ),
                       ),
                     if ((phone ?? '').isNotEmpty)
                       Text(
                         phone!,
-                        style:
-                            context.textTheme.bodySmall?.copyWith(color: context.colors.onSurfaceVariant),
+                        style: context.textTheme.bodySmall?.copyWith(
+                          color: context.colors.onSurfaceVariant,
+                        ),
                       ),
                     if (accountTypeLabel != null)
                       Text(
                         '${Strings.account_type.tr()}: $accountTypeLabel',
-                        style:
-                            context.textTheme.labelSmall?.copyWith(color: context.colors.onSurfaceVariant),
+                        style: context.textTheme.labelSmall?.copyWith(
+                          color: context.colors.onSurfaceVariant,
+                        ),
                       ),
                   ],
                 ),
@@ -110,7 +111,8 @@ class MyAccountSection extends StatelessWidget {
             value: profile.isTrainee,
             onChanged: isSaving
                 ? null
-                : (value) => context.read<ProfileCubit>().updateIsTrainee(value),
+                : (value) =>
+                      context.read<ProfileCubit>().updateIsTrainee(value),
           ),
           if (isSaving)
             Padding(
@@ -125,7 +127,9 @@ class MyAccountSection extends StatelessWidget {
             UIConstants.smallHeight,
             Text(
               errorMessage,
-              style: context.textTheme.labelSmall?.copyWith(color: context.colors.error),
+              style: context.textTheme.labelSmall?.copyWith(
+                color: context.colors.error,
+              ),
             ),
           ],
         ],

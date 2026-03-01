@@ -50,7 +50,10 @@ class _UserSignUpFormState extends State<UserSignUpForm> {
     if (!_formKey.currentState!.validate()) return;
 
     final fullName = _nameCtrl.text.trim();
-    final parts = fullName.split(RegExp(r'\s+')).where((p) => p.isNotEmpty).toList();
+    final parts = fullName
+        .split(RegExp(r'\s+'))
+        .where((p) => p.isNotEmpty)
+        .toList();
     final firstName = parts.isNotEmpty ? parts.first : fullName;
     final lastName = parts.length > 1 ? parts.sublist(1).join(' ') : '';
 
@@ -71,7 +74,8 @@ class _UserSignUpFormState extends State<UserSignUpForm> {
     return Form(
       key: _formKey,
       autovalidateMode: AutovalidateMode.disabled,
-      onChanged: () => context.read<FormCubit>().updateValidity(_isFormComplete()),
+      onChanged: () =>
+          context.read<FormCubit>().updateValidity(_isFormComplete()),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -104,8 +108,10 @@ class _UserSignUpFormState extends State<UserSignUpForm> {
             label: Strings.password.tr(),
             hintText: Strings.password.tr(),
             textInputAction: TextInputAction.next,
-            validator: (value) =>
-                validateNewPassword(newValue: value, label: Strings.password.tr()),
+            validator: (value) => validateNewPassword(
+              newValue: value,
+              label: Strings.password.tr(),
+            ),
           ),
           UIConstants.mediumHeight,
           FPasswordField(

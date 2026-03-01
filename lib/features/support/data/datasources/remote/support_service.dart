@@ -7,5 +7,4 @@ part 'support_service.g.dart';
 @RestApi(parser: Parser.JsonSerializable, callAdapter: JsonBodyMappableAdapter)
 abstract class SupportService {
   factory SupportService(Dio dio, {String? baseUrl}) = _SupportService;
-
 }

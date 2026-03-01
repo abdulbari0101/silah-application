@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:silah_app/core/infrastructure/analytics/logger/app_logger.dart';
+import 'package:silah_app/core/infrastructure/errors/exceptions.dart';
 import 'package:silah_app/core/infrastructure/errors/failures.dart';
 import 'package:silah_app/core/infrastructure/platform/device_info_helper.dart';
 import 'package:silah_app/core/infrastructure/system/executor.dart';
@@ -25,16 +26,40 @@ class SupportTicketsRepositoryoImpl implements SupportTicketsRepository {
     required this.deviceInfoHelper,
   });
 
-
   @override
   Future<Either<Failure, List<SupportTicketEntity>>> fetchTickets() {
-    // TODO: implement fetchTickets
-    throw UnimplementedError();
+    return executor.runOffline(
+      () => localDS.fetchTickets(),
+      from: 'SupportTicketsRepository.fetchTickets',
+    );
   }
 
   @override
-  Future<Either<Failure, SupportTicketEntity>> submitTicket(SupportTicketEntity ticket) {
-    // TODO: implement submitTicket
-    throw UnimplementedError();
+  Future<Either<Failure, SupportTicketEntity>> submitTicket(
+    SupportTicketEntity ticket,
+  ) {
+    return executor.runOffline(() async {
+      final description = ticket.description?.trim();
+      if (description == null || description.isEmpty) {
+        throw const MissingDataException('Missing support ticket description');
+      }
+
+      final now = DateTime.now();
+      final createdAt = ticket.createdAt ?? now.toIso8601String();
+      final updatedAt = ticket.updatedAt ?? createdAt;
+      final id = ticket.id ?? now.microsecondsSinceEpoch.toString();
+
+      final stored = SupportTicketEntity(
+        id: id,
+        subject: ticket.subject,
+        description: description,
+        status: ticket.status,
+        attachmentUrls: ticket.attachmentUrls,
+        createdAt: createdAt,
+        updatedAt: updatedAt,
+      );
+
+      return localDS.saveTicket(stored);
+    }, from: 'SupportTicketsRepository.submitTicket');
   }
 }

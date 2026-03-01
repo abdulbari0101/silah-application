@@ -15,7 +15,8 @@ class RequestsScreen extends StatelessWidget {
     return BlocProvider(
       create: (_) => ConsultationRequestsCubit(repository: locator())..load(),
       child: PlatformScreenWrapper(
-        title: Strings.my_requests.tr(),
+        title: Strings.orders.tr(),
+
         body: const RequestsBody(),
       ),
     );

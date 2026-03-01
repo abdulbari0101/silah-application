@@ -8,12 +8,15 @@ import 'package:silah_app/gen/assets.gen.dart';
 enum AppUserRole { user, lawyer, admin }
 
 AppUserRole resolveAppUserRole(AuthUserEntity? user) {
-  final profileAccountType = user?.profile?['accountType']?.toString().toLowerCase();
+  final profileAccountType = user?.profile?['accountType']
+      ?.toString()
+      .toLowerCase();
   final isAdmin = profileAccountType == 'admin';
   if (isAdmin) return AppUserRole.admin;
 
   final isLawyer =
-      profileAccountType == 'lawyer' || user?.accountType == AuthAccountType.lawyer;
+      profileAccountType == 'lawyer' ||
+      user?.accountType == AuthAccountType.lawyer;
   if (isLawyer) return AppUserRole.lawyer;
 
   // Trainee is a user with an enabled trainee flag.
@@ -40,7 +43,7 @@ class NavItemsBuilder {
     ),
     _tab(
       route: AppRoutes.requests,
-      labelKey: Strings.my_requests,
+      labelKey: Strings.orders,
       icon: Assets.icons.bottomNavigation.requests,
     ),
     _tab(
@@ -63,7 +66,7 @@ class NavItemsBuilder {
     ),
     _tab(
       route: AppRoutes.requests,
-      labelKey: Strings.my_requests,
+      labelKey: Strings.orders,
       icon: Assets.icons.bottomNavigation.requests,
     ),
     _tab(

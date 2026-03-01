@@ -7,7 +7,7 @@ import 'package:silah_app/core/config/theme/extentions/text_styling_extantion.da
 import 'package:silah_app/core/config/theme/roles/shapes.dart';
 
 OutlineInputBorder buildInputBorder(Color color, ShapeScale shapes) => OutlineInputBorder(
-  borderRadius: shapes.brMd,
+  borderRadius: shapes.brLg,
   borderSide: BorderSide(color: color, width: 1),
 );
 

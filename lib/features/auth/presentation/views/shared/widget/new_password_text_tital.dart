@@ -5,7 +5,11 @@ class PasswordScreensTextTital extends StatelessWidget {
   final String tital;
   final String subTital;
 
-  const PasswordScreensTextTital({super.key, required this.tital, required this.subTital});
+  const PasswordScreensTextTital({
+    super.key,
+    required this.tital,
+    required this.subTital,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -12,17 +12,20 @@ part 'consultation_requests_cubit.freezed.dart';
 
 @freezed
 sealed class ConsultationRequestsState with _$ConsultationRequestsState {
-  const factory ConsultationRequestsState.initial({required ConsultationStatus filter}) =
-      _ConsultationRequestsInitial;
-  const factory ConsultationRequestsState.loading({required ConsultationStatus filter}) =
-      _ConsultationRequestsLoading;
+  const factory ConsultationRequestsState.initial({
+    required ConsultationStatus filter,
+  }) = _ConsultationRequestsInitial;
+  const factory ConsultationRequestsState.loading({
+    required ConsultationStatus filter,
+  }) = _ConsultationRequestsLoading;
   const factory ConsultationRequestsState.loaded({
     required ConsultationStatus filter,
     required List<ConsultationRequestEntity> requests,
     String? updatingId,
   }) = _ConsultationRequestsLoaded;
-  const factory ConsultationRequestsState.empty({required ConsultationStatus filter}) =
-      _ConsultationRequestsEmpty;
+  const factory ConsultationRequestsState.empty({
+    required ConsultationStatus filter,
+  }) = _ConsultationRequestsEmpty;
   const factory ConsultationRequestsState.error({
     required ConsultationStatus filter,
     required String message,
@@ -31,7 +34,11 @@ sealed class ConsultationRequestsState with _$ConsultationRequestsState {
 
 class ConsultationRequestsCubit extends Cubit<ConsultationRequestsState> {
   ConsultationRequestsCubit({required this.repository})
-    : super(const ConsultationRequestsState.initial(filter: ConsultationStatus.pending));
+    : super(
+        const ConsultationRequestsState.initial(
+          filter: ConsultationStatus.pending,
+        ),
+      );
 
   final ConsultationsRepository repository;
   ConsultationStatus _filter = ConsultationStatus.pending;
@@ -41,8 +48,12 @@ class ConsultationRequestsCubit extends Cubit<ConsultationRequestsState> {
     emit(ConsultationRequestsState.loading(filter: _filter));
     final result = await repository.fetchMyRequests();
     result.fold(
-      (failure) =>
-          emit(ConsultationRequestsState.error(filter: _filter, message: _mapFailure(failure))),
+      (failure) => emit(
+        ConsultationRequestsState.error(
+          filter: _filter,
+          message: _mapFailure(failure),
+        ),
+      ),
       (data) {
         _requests = data;
         _emitFiltered();
@@ -66,10 +77,16 @@ class ConsultationRequestsCubit extends Cubit<ConsultationRequestsState> {
 
     final result = await repository.updateRequestStatus(requestId, status);
     result.fold(
-      (failure) =>
-          emit(ConsultationRequestsState.error(filter: _filter, message: _mapFailure(failure))),
+      (failure) => emit(
+        ConsultationRequestsState.error(
+          filter: _filter,
+          message: _mapFailure(failure),
+        ),
+      ),
       (updated) {
-        _requests = _requests.map((item) => item.id == updated.id ? updated : item).toList();
+        _requests = _requests
+            .map((item) => item.id == updated.id ? updated : item)
+            .toList();
         _emitFiltered();
       },
     );
@@ -84,7 +101,8 @@ class ConsultationRequestsCubit extends Cubit<ConsultationRequestsState> {
       case ConsultationStatus.pending:
         return request.status == ConsultationStatus.pending;
       case ConsultationStatus.accepted:
-        return request.status == ConsultationStatus.accepted;
+        return request.status == ConsultationStatus.accepted ||
+            request.status == ConsultationStatus.active;
       case ConsultationStatus.closed:
         return request.status == ConsultationStatus.closed ||
             request.status == ConsultationStatus.rejected ||
@@ -103,7 +121,9 @@ class ConsultationRequestsCubit extends Cubit<ConsultationRequestsState> {
     if (filtered.isEmpty) {
       emit(ConsultationRequestsState.empty(filter: _filter));
     } else {
-      emit(ConsultationRequestsState.loaded(filter: _filter, requests: filtered));
+      emit(
+        ConsultationRequestsState.loaded(filter: _filter, requests: filtered),
+      );
     }
   }
 

@@ -1,8 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:silah_app/core/config/constants/ui_constants.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
+import 'package:silah_app/core/config/router/app_routes.dart';
 import 'package:silah_app/core/config/theme/extentions/text_styling_extantion.dart';
 import 'package:silah_app/core/config/theme/extentions/theme_context_extension.dart';
 import 'package:silah_app/core/presentation/ui/widget/buttons/primary_button_with_progress.dart';
@@ -11,6 +13,7 @@ import 'package:silah_app/core/presentation/ui/widget/state_widgets/error_widget
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/progress_state_widget.dart';
 import 'package:silah_app/features/messaging/domain/entities/chat_thread_entity.dart';
 import 'package:silah_app/features/messaging/presentation/cubits/chat_threads/chat_threads_cubit.dart';
+import 'package:silah_app/features/messaging/presentation/views/conversation/models/chat_conversation_args.dart';
 
 class ChatThreadsBuilder extends StatelessWidget {
   const ChatThreadsBuilder({super.key});
@@ -85,77 +88,84 @@ class _ChatThreadTile extends StatelessWidget {
     final participants = thread.participantIds ?? const <String>[];
     final subtitle = lastMessage.isNotEmpty ? lastMessage : Strings.messages.tr();
 
-    return Card(
-      elevation: 0,
-      color: context.colors.surface,
-      shape: context.shapes.roundedMd,
-      child: Padding(
-        padding: const EdgeInsets.all(UIConstants.mediumPadding),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            CircleAvatar(
-              radius: 20,
-              backgroundColor: context.colors.primaryContainer,
-              child: Icon(
-                Icons.chat_bubble_outline,
-                color: context.colors.primary,
-                size: 20,
+    return InkWell(
+      borderRadius: context.shapes.brMd,
+      onTap: () => context.pushNamed(
+        AppRoutes.chatThread.name,
+        extra: ChatConversationArgs(thread: thread),
+      ),
+      child: Card(
+        elevation: 0,
+        color: context.colors.surface,
+        shape: context.shapes.roundedMd,
+        child: Padding(
+          padding: const EdgeInsets.all(UIConstants.mediumPadding),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CircleAvatar(
+                radius: 20,
+                backgroundColor: context.colors.primaryContainer,
+                child: Icon(
+                  Icons.chat_bubble_outline,
+                  color: context.colors.primary,
+                  size: 20,
+                ),
               ),
-            ),
-            UIConstants.mediumWidth,
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    Strings.messages.tr(),
-                    style: context.textTheme.titleSmall,
-                  ),
-                  UIConstants.xsmallHeight,
-                  Text(
-                    subtitle,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: context.textTheme.bodySmall,
-                  ),
-                  if (participants.isNotEmpty) ...[
+              UIConstants.mediumWidth,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      Strings.messages.tr(),
+                      style: context.textTheme.titleSmall,
+                    ),
                     UIConstants.xsmallHeight,
                     Text(
-                      '${Strings.user.tr()}: ${participants.length}',
+                      subtitle,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: context.textTheme.bodySmall,
+                    ),
+                    if (participants.isNotEmpty) ...[
+                      UIConstants.xsmallHeight,
+                      Text(
+                        '${Strings.user.tr()}: ${participants.length}',
+                        style: context.textTheme.labelSmall?.onSurfaceVariant(context),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  if (updatedAt.isNotEmpty)
+                    Text(
+                      updatedAt,
                       style: context.textTheme.labelSmall?.onSurfaceVariant(context),
+                    ),
+                  if (thread.unreadCount > 0) ...[
+                    UIConstants.smallHeight,
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: context.colors.primary,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        thread.unreadCount.toString(),
+                        style: context.textTheme.labelSmall?.copyWith(
+                          color: context.colors.onPrimary,
+                        ),
+                      ),
                     ),
                   ],
                 ],
               ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                if (updatedAt.isNotEmpty)
-                  Text(
-                    updatedAt,
-                    style: context.textTheme.labelSmall?.onSurfaceVariant(context),
-                  ),
-                if (thread.unreadCount > 0) ...[
-                  UIConstants.smallHeight,
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: context.colors.primary,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      thread.unreadCount.toString(),
-                      style: context.textTheme.labelSmall?.copyWith(
-                        color: context.colors.onPrimary,
-                      ),
-                    ),
-                  ),
-                ],
-              ],
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

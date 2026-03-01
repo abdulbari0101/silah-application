@@ -18,7 +18,10 @@ class NotMemberSignUp extends StatelessWidget {
         UIConstants.bigHeight,
 
         InkWell(
-          child: Text(Strings.sign_up.tr(), style: context.textTheme.titleMedium),
+          child: Text(
+            Strings.sign_up.tr(),
+            style: context.textTheme.titleMedium,
+          ),
           onTap: () {
             context.pushNamed(AppRoutes.RegistrationisterWizard.name);
           },

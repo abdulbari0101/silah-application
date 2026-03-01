@@ -40,12 +40,18 @@ class ProfileMenu extends StatelessWidget {
                   ? Icon(
                       iconData,
                       size: iconSize,
-                      color: context.themeValue(light: context.colors.primary, dark: Colors.white),
+                      color: context.themeValue(
+                        light: context.colors.primary,
+                        dark: Colors.white,
+                      ),
                     )
                   : SizedBox(
                       width: iconSize,
                       height: iconSize,
-                      child: AppSvgIcon(assetName: iconSvg!, fit: BoxFit.contain),
+                      child: AppSvgIcon(
+                        assetName: iconSvg!,
+                        fit: BoxFit.contain,
+                      ),
                     ),
               const SizedBox(width: 20),
               Expanded(child: Text(text, style: context.textTheme.labelLarge!)),
@@ -61,7 +67,9 @@ class ProfileMenu extends StatelessWidget {
             margin: const EdgeInsets.only(top: 16),
             width: double.infinity,
             height: 0.1,
-            color: isLast ? null : context.colors.blackOrWhite.withAlphaOpacity(0.7),
+            color: isLast
+                ? null
+                : context.colors.blackOrWhite.withAlphaOpacity(0.7),
           ),
         ],
       ),

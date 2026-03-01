@@ -1,42 +1,326 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:silah_app/core/config/constants/ui_constants.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
-import 'package:silah_app/core/presentation/ui/widget/text/section_title.dart';
-import 'package:silah_app/features/settings/presentation/views/settings/widget/app_settings.dart';
-import 'package:silah_app/features/settings/presentation/views/settings/widget/my_account_section.dart';
+import 'package:silah_app/core/config/router/app_routes.dart';
+import 'package:silah_app/core/config/theme/extentions/theme_context_extension.dart';
+import 'package:silah_app/core/infrastructure/errors/error_utils.dart';
+import 'package:silah_app/core/injection/injection_container.dart';
+import 'package:silah_app/core/presentation/state_magment/bloc_utils/bloc_utils.dart';
+import 'package:silah_app/core/presentation/state_magment/blocs/app_setting/extensions/app_setting_context_extension.dart';
+import 'package:silah_app/core/presentation/state_magment/blocs/app_state/app_state_bloc.dart';
+import 'package:silah_app/core/presentation/state_magment/blocs/app_state/state_data/app_auth_status.dart';
+import 'package:silah_app/core/presentation/ui/overlays/toasts.dart';
+import 'package:silah_app/core/presentation/ui/widget/cards/custom_card.dart';
+import 'package:silah_app/core/presentation/ui/widget/headers/curved_header_container.dart';
+import 'package:silah_app/core/presentation/ui/widget/state_widgets/error_widget.dart';
+import 'package:silah_app/core/presentation/ui/widget/state_widgets/progress_state_widget.dart';
+import 'package:silah_app/features/auth/domain/repositories/auth_repository.dart';
+import 'package:silah_app/features/profiles/domain/entities/profile_entity.dart';
+import 'package:silah_app/features/profiles/presentation/cubits/profile/profile_cubit.dart';
 
 class Body extends StatelessWidget {
   const Body({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(UIConstants.defaultPadding),
+    return BlocBuilder<ProfileCubit, ProfileState>(
+      builder: (context, state) {
+        return state.when(
+          initial: () => const Center(child: ProgressStateWidget()),
+          loading: () => const Center(child: ProgressStateWidget()),
+          error: (message, profile) {
+            if (profile == null) {
+              return CustomeErrorWidget(
+                message: message,
+                onRetry: () => context.read<ProfileCubit>().load(),
+              );
+            }
+            return _buildContent(
+              context,
+              profile,
+              isSaving: false,
+              errorMessage: message,
+            );
+          },
+          loaded: (profile, isSaving) =>
+              _buildContent(context, profile, isSaving: isSaving ?? false),
+        );
+      },
+    );
+  }
+
+  Widget _buildContent(
+    BuildContext context,
+    ProfileEntity profile, {
+    required bool isSaving,
+    String? errorMessage,
+  }) {
+    final name = profile.name?.trim().isNotEmpty == true
+        ? profile.name!.trim()
+        : Strings.user.tr();
+    final email = profile.email?.trim();
+    final accountType = profile.accountType?.toLowerCase();
+    final isAdmin = accountType == 'admin';
+    final isLawyer = accountType == 'lawyer';
+
+    return SafeArea(
       child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            UIConstants.bigHeight,
-            SectionTitle(title: Strings.my_account.tr()),
-            UIConstants.mediumHeight,
-            const MyAccountSection(),
-            UIConstants.bigHeight,
-
-            SectionTitle(title: Strings.personal_settings.tr()),
-
-            UIConstants.bigHeight,
-            //MainHeadLine(title: Strings.settings.tr()),
-            SectionTitle(title: Strings.app_settings.tr()),
-            UIConstants.bigHeight,
-            AppSettings(),
-
-            // ThemeMenu(),
+            CurvedHeaderContainer(
+              padding: const EdgeInsetsDirectional.fromSTEB(
+                UIConstants.screenHorizantalPadding,
+                UIConstants.bigPadding,
+                UIConstants.screenHorizantalPadding,
+                UIConstants.bigPadding,
+              ),
+              child: _buildHeader(context, name: name, email: email),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: UIConstants.screenHorizantalPadding,
+                vertical: UIConstants.bigPadding,
+              ),
+              child: Column(
+                children: [
+                  CustomCard(
+                    innerWidget: Column(
+                      children: [
+                        _buildTile(
+                          context,
+                          title: Strings.personal_information.tr(),
+                          icon: Icons.person_outline,
+                          onTap: () =>
+                              context.pushNamed(AppRoutes.personalInfo.name),
+                        ),
+                        _buildDivider(),
+                        _buildToggleTile(
+                          context,
+                          title: Strings.legal_trainee_profile.tr(),
+                          icon: Icons.school_outlined,
+                          value: profile.isTrainee,
+                          onChanged: isSaving
+                              ? null
+                              : (value) => context
+                                    .read<ProfileCubit>()
+                                    .updateIsTrainee(value),
+                        ),
+                        _buildDivider(),
+                        if (isLawyer) ...[
+                          _buildTile(
+                            context,
+                            title: Strings.verification_status.tr(),
+                            icon: Icons.verified_user_outlined,
+                            onTap: () => context.pushNamed(
+                              AppRoutes.verificationStatus.name,
+                            ),
+                          ),
+                          _buildDivider(),
+                        ],
+                        _buildTile(
+                          context,
+                          title: Strings.rate_us.tr(),
+                          icon: Icons.star_outline,
+                          onTap: () {},
+                        ),
+                        _buildDivider(),
+                        _buildTile(
+                          context,
+                          title: Strings.privacy_policy.tr(),
+                          icon: Icons.shield_outlined,
+                          onTap: () =>
+                              context.pushNamed(AppRoutes.privacyPolicy.name),
+                        ),
+                        _buildDivider(),
+                        _buildTile(
+                          context,
+                          title: Strings.contact_us.tr(),
+                          icon: Icons.help_outline,
+                          onTap: () =>
+                              context.pushNamed(AppRoutes.supportReport.name),
+                        ),
+                        if (isAdmin) ...[
+                          _buildDivider(),
+                          _buildTile(
+                            context,
+                            title: Strings.admin_tasks.tr(),
+                            icon: Icons.admin_panel_settings_outlined,
+                            onTap: () =>
+                                context.pushNamed(AppRoutes.adminTasks.name),
+                          ),
+                        ],
+                        _buildDivider(),
+                        _buildTile(
+                          context,
+                          title: Strings.log_out.tr(),
+                          icon: Icons.logout,
+                          titleColor: context.colors.error,
+                          iconColor: context.colors.error,
+                          onTap: () => _handleLogout(context),
+                          showChevron: false,
+                        ),
+                      ],
+                    ),
+                  ),
+                  if (isSaving)
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: LinearProgressIndicator(
+                        minHeight: 2,
+                        color: context.colors.primary,
+                        backgroundColor: context.colors.primaryContainer,
+                      ),
+                    ),
+                  if (errorMessage != null) ...[
+                    UIConstants.smallHeight,
+                    Text(
+                      errorMessage,
+                      style: context.textTheme.labelSmall?.copyWith(
+                        color: context.colors.error,
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildHeader(
+    BuildContext context, {
+    required String name,
+    String? email,
+  }) {
+    return Column(
+      children: [
+        CircleAvatar(
+          radius: 44,
+          backgroundColor: context.colors.primaryContainer,
+          child: Icon(
+            Icons.person_outline,
+            color: context.colors.primary,
+            size: 36,
+          ),
+        ),
+        UIConstants.smallHeight,
+        Text(
+          name,
+          style: context.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        if (email != null && email.isNotEmpty) ...[
+          UIConstants.xsmallHeight,
+          Text(
+            email,
+            style: context.textTheme.bodySmall?.copyWith(
+              color: context.colors.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ],
+    );
+  }
+
+  Widget _buildTile(
+    BuildContext context, {
+    required String title,
+    required IconData icon,
+    VoidCallback? onTap,
+    Color? titleColor,
+    Color? iconColor,
+    bool showChevron = true,
+  }) {
+    return ListTile(
+      onTap: onTap,
+      dense: true,
+      contentPadding: EdgeInsets.zero,
+      leading: Container(
+        width: 36,
+        height: 36,
+        decoration: BoxDecoration(
+          color: context.colors.surfaceContainerHighest,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Icon(icon, color: iconColor ?? context.colors.onSurfaceVariant),
+      ),
+      title: Text(
+        title,
+        style: context.textTheme.bodyMedium?.copyWith(
+          color: titleColor ?? context.colors.onSurface,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      trailing: showChevron
+          ? Icon(
+              context.isRTL ? Icons.chevron_left : Icons.chevron_right,
+              color: context.colors.onSurfaceVariant,
+            )
+          : null,
+    );
+  }
+
+  Widget _buildToggleTile(
+    BuildContext context, {
+    required String title,
+    required IconData icon,
+    required bool value,
+    required ValueChanged<bool>? onChanged,
+  }) {
+    return ListTile(
+      dense: true,
+      contentPadding: EdgeInsets.zero,
+      leading: Container(
+        width: 36,
+        height: 36,
+        decoration: BoxDecoration(
+          color: context.colors.surfaceContainerHighest,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Icon(icon, color: context.colors.onSurfaceVariant),
+      ),
+      title: Text(
+        title,
+        style: context.textTheme.bodyMedium?.copyWith(
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      trailing: Switch.adaptive(value: value, onChanged: onChanged),
+    );
+  }
+
+  Widget _buildDivider() {
+    return const Divider(height: 1);
+  }
+
+  Future<void> _handleLogout(BuildContext context) async {
+    final result = await locator<AuthRepo>().signOut();
+    result.fold(
+      (failure) => Toasts.error(
+        context,
+        BlocUtils.mergeCodeWithMessage(
+          failure,
+          codeToMessageMap,
+          includeCodeLine: false,
+          fallbackMessage: Strings.unexpected_error,
+        ),
+      ),
+      (_) {
+        context.read<AppStateBloc>().add(
+          UpdateSession(
+            isLoggedIn: false,
+            userAuthStatus: UserAuthStatus.loggedOutReturningUser,
+          ),
+        );
+        context.goNamed(AppRoutes.login.name);
+      },
     );
   }
 }

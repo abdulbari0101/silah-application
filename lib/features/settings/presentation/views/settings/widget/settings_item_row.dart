@@ -8,12 +8,19 @@ class SettingsItemRow extends StatelessWidget {
   final String? value;
   final VoidCallback? onTap;
 
-  const SettingsItemRow({super.key, required this.label, this.value, this.onTap});
+  const SettingsItemRow({
+    super.key,
+    required this.label,
+    this.value,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: EdgeInsets.symmetric(horizontal: UIConstants.mediumPadding),
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: UIConstants.mediumPadding,
+      ),
       title: Text(label, style: context.textTheme.labelLarge),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,

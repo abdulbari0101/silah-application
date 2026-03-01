@@ -82,16 +82,59 @@ def find_verified_lawyers(
         availability=availability,
     )
     if specialization and specialization != "unknown":
-        for query in queries:
-            try:
-                docs = query.where("legalFieldIds", "array_contains", specialization).stream()
-                for doc in docs:
-                    lawyer_ids.add(doc.id)
-            except Exception as exc:
-                log_firestore_error("lawyers.query.legalFieldIds", exc)
+        specialization = specialization.strip()
+        if specialization:
+            for query in queries:
+                _query_lawyers_by_specialization(query, specialization, lawyer_ids)
+
+            if not lawyer_ids:
+                for name in _resolve_specialization_names(specialization, db):
+                    for query in queries:
+                        _query_lawyers_by_specialization(
+                            query,
+                            name,
+                            lawyer_ids,
+                            fields=("legalFields",),
+                        )
 
     log_firestore_response("lawyers.query", count=len(lawyer_ids))
     return sorted(lawyer_ids)
+
+
+def _query_lawyers_by_specialization(
+    query: firestore.Query,
+    specialization: str,
+    lawyer_ids: set[str],
+    fields: tuple[str, ...] = ("legalFieldIds", "legalFields"),
+) -> None:
+    for field in fields:
+        try:
+            docs = query.where(field, "array_contains", specialization).stream()
+            for doc in docs:
+                lawyer_ids.add(doc.id)
+        except Exception as exc:
+            log_firestore_error(f"lawyers.query.{field}", exc)
+
+
+def _resolve_specialization_names(
+    specialization_id: str,
+    db: firestore.Client,
+) -> list[str]:
+    try:
+        doc = db.collection("specializations").document(specialization_id).get()
+        if not doc.exists:
+            return []
+        data = doc.to_dict() or {}
+        names = []
+        name_en = str(data.get("nameEn") or "").strip()
+        name_ar = str(data.get("nameAr") or "").strip()
+        if name_en:
+            names.append(name_en)
+        if name_ar and name_ar not in names:
+            names.append(name_ar)
+        return names
+    except Exception:
+        return []
 
 
 def set_user_verified(uid: str, verified: bool) -> None:
@@ -135,9 +178,8 @@ def create_notification(
         notification=notification,
     )
     try:
-        ref, _ = (
-            db.collection("notifications").document(user_uid).collection("items").add(notification)
-        )
+        ref = db.collection("notifications").document(user_uid).collection("items").document()
+        ref.set(notification)
         log_firestore_response("notifications.create", doc_id=ref.id)
     except Exception as exc:
         log_firestore_error("notifications.create", exc, user_uid=user_uid)

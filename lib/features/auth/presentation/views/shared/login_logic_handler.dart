@@ -15,7 +15,12 @@ class LoginLogicHandler extends StatelessWidget {
   final Function(LoginOperationType)? onSuccess;
   final Function(LoginOperationType, String)? onError;
 
-  const LoginLogicHandler({super.key, required this.child, this.onSuccess, this.onError});
+  const LoginLogicHandler({
+    super.key,
+    required this.child,
+    this.onSuccess,
+    this.onError,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +28,6 @@ class LoginLogicHandler extends StatelessWidget {
       listener: (context, state) {
         if (state is AppStateLoaded) {
           switch (state.data.userAuthStatus) {
-          
             case UserAuthStatus.loggedInUnverifiedAccount:
             case UserAuthStatus.loggedInFullyVerified:
               context.goNamed(AppRoutes.home.name);

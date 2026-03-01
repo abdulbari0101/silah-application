@@ -15,7 +15,10 @@ class SupportScreen extends StatelessWidget {
     return BlocProvider(
       create: (_) => SupportBloc(repository: locator()),
 
-      child: PlatformScreenWrapper(title: Strings.support.tr(), body: const SupportBody()),
+      child: PlatformScreenWrapper(
+        title: Strings.support.tr(),
+        body: const SupportBody(),
+      ),
     );
   }
 }

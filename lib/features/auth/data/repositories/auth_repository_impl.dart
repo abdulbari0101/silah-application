@@ -45,7 +45,9 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  Future<Either<Failure, AuthUserEntity>> register(RegistrationPayload payload) async {
+  Future<Either<Failure, AuthUserEntity>> register(
+    RegistrationPayload payload,
+  ) async {
     return executor.runOnline(() async {
       final name = payload.fullName.isEmpty
           ? '${payload.firstName} ${payload.lastName}'.trim()
@@ -59,10 +61,7 @@ class AuthRepoImpl implements AuthRepo {
           email: payload.email,
           phone: payload.phone,
           password: payload.password,
-          profile: {
-            'avatarUrl': payload.avatarUrl,
-            'isTrainee': false,
-          },
+          profile: {'avatarUrl': payload.avatarUrl, 'isTrainee': false},
         );
         authUser = await remoteDS.registerUser(user: model);
       } else {
@@ -95,11 +94,15 @@ class AuthRepoImpl implements AuthRepo {
             nationalId == null ||
             ((gender?.isEmpty ?? true) && (genderId?.isEmpty ?? true)) ||
             ((city?.isEmpty ?? true) && (cityId?.isEmpty ?? true)) ||
-            ((workplace?.isEmpty ?? true) && (workDestinationId?.isEmpty ?? true)) ||
+            ((workplace?.isEmpty ?? true) &&
+                (workDestinationId?.isEmpty ?? true)) ||
             officeName.isEmpty ||
             licenseNumber.isEmpty ||
             nationalId.isEmpty) {
-          throw AuthException(Strings.error_fill_form.tr(), ErrorCodes.badRequest400);
+          throw AuthException(
+            Strings.error_fill_form.tr(),
+            ErrorCodes.badRequest400,
+          );
         }
 
         final model = AuthUserModel(
@@ -133,11 +136,27 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> sendPasswordReset({required String email}) async {
+  Future<Either<Failure, bool>> sendPasswordReset({
+    required String email,
+  }) async {
     return executor.runOnline(() async {
       await remoteDS.sendPasswordReset(email: email);
       return true;
     }, from: 'AuthRepoImpl.sendPasswordReset');
+  }
+
+  @override
+  Future<Either<Failure, bool>> updatePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    return executor.runOnline(() async {
+      await remoteDS.updatePassword(
+        currentPassword: currentPassword,
+        newPassword: newPassword,
+      );
+      return true;
+    }, from: 'AuthRepoImpl.updatePassword');
   }
 
   @override
@@ -150,10 +169,16 @@ class AuthRepoImpl implements AuthRepo {
     }, from: 'AuthRepoImpl.signOut');
   }
 
-  Future<AuthUserEntity> _persistAndBuildAuthData(AuthUserModel authUser) async {
+  Future<AuthUserEntity> _persistAndBuildAuthData(
+    AuthUserModel authUser,
+  ) async {
     final customer = authUser.toEntity();
     final userId = await authIdentityRepo.generateAndSaveUserId(customer);
-    await _cacheSession(customer: authUser, userId: userId, idToken: authUser.idToken);
+    await _cacheSession(
+      customer: authUser,
+      userId: userId,
+      idToken: authUser.idToken,
+    );
     await _syncDeviceToken();
     return customer;
   }
@@ -162,7 +187,9 @@ class AuthRepoImpl implements AuthRepo {
     try {
       final token = await settingReader.fcmToken();
       if (token == null || token.trim().isEmpty) return;
-      final result = await deviceTokenRepository.registerDeviceToken(deviceToken: token.trim());
+      final result = await deviceTokenRepository.registerDeviceToken(
+        deviceToken: token.trim(),
+      );
       result.fold((_) => null, (_) => null);
     } catch (_) {
       // ignore push token sync failures
@@ -178,7 +205,12 @@ class AuthRepoImpl implements AuthRepo {
 
     if (idToken != null && idToken.isNotEmpty) {
       await cacheDS.cacheLoginToken(
-        TokenModel(accessToken: idToken, tokenType: 'Bearer', expiresIn: 3600, scope: 'firebase'),
+        TokenModel(
+          accessToken: idToken,
+          tokenType: 'Bearer',
+          expiresIn: 3600,
+          scope: 'firebase',
+        ),
       );
     }
   }

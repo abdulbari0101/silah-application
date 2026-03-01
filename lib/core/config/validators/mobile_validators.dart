@@ -3,9 +3,8 @@ import 'package:form_validation/form_validation.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
 import 'package:silah_app/core/foundation/formatting/phone_utils.dart';
 
-/// Checks the number starts with a valid local-network prefix.
-///   • Turkey (+90) → starts with 5  ( 5XXXXXXXXX or 05XXXXXXXXX )
-///   • Yemen  (+967) → starts with 77, 78, 71, 73, 70 (±0 prefix)
+/// Checks the number starts with a valid KSA mobile prefix.
+///   • Saudi Arabia (+966) → starts with 5 ( 5XXXXXXXX (9 digits) or 05XXXXXXXX (10 digits) )
 class NetworkPrefixMobileValidator extends ValueValidator {
   @override
   String get type => 'network_prefix_mobile';
@@ -58,10 +57,7 @@ class _LengthWithZeroPrefixMobileValidator extends ValueValidator {
   String? validate({required String label, required String? value}) {
     if (value == null || value.isEmpty) return null;
 
-    bool hasZeroPrefix = value.startsWith('0');
-    final valueLength = !hasZeroPrefix ? value.length : value.length + 1;
-
-    if (valueLength != 10) {
+    if (!PhoneUtils.hasValidLength(value.trim())) {
       return Strings.error_invalid_mobile_length.tr();
     }
     return null;
@@ -79,7 +75,7 @@ class _LengthMobileValidator extends ValueValidator {
   String? validate({required String label, required String? value}) {
     if (value == null || value.isEmpty) return null;
 
-    if (value.length != 10) {
+    if (!PhoneUtils.hasValidLength(value.trim())) {
       return Strings.error_invalid_mobile_length.tr();
     }
     return null;
@@ -88,4 +84,3 @@ class _LengthMobileValidator extends ValueValidator {
   @override
   Map<String, dynamic> toJson() => {'type': type};
 }
-

@@ -30,11 +30,15 @@ Future<void> initSupport() async {
   );
 
   locator.registerLazySingleton<SupportRemoteDataSource>(
-    () => SupportRemoteDataSourceImpl(supportService: locator(), logger: locator()),
+    () => SupportRemoteDataSourceImpl(
+      supportService: locator(),
+      logger: locator(),
+    ),
   );
 
   // Support services
   locator.registerLazySingleton(
-    () => SupportService(locator<DioClient>().dio, baseUrl: ApiConstants.baseUrl),
+    () =>
+        SupportService(locator<DioClient>().dio, baseUrl: ApiConstants.baseUrl),
   );
 }

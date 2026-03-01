@@ -544,8 +544,11 @@ class Strings {
   static const String platform_overview = "platform_overview";
   static const String please_describe_the_issue = "please_describe_the_issue";
   static const String privacy_policy = "privacy_policy";
+  static const String privacy_policy_body = "privacy_policy_body";
   static const String rate_silah = "rate_silah";
+  static const String reference_number = "reference_number";
   static const String register_new_user = "register_new_user";
+  static const String request_verification = "request_verification";
   static const String request_ai_legal_consultation =
       "request_ai_legal_consultation";
   static const String request_consultation = "request_consultation";
@@ -566,6 +569,7 @@ class Strings {
   static const String choose_specialization = "choose_specialization";
   static const String start_consultation_now = "start_consultation_now";
   static const String start_now = "start_now";
+  static const String admin_tasks = "admin_tasks";
   static const String provide_legal_services_and_training =
       "provide_legal_services_and_training";
   static const String trainees = "trainees";
@@ -575,6 +579,13 @@ class Strings {
   static const String trainee_prompt_title = "trainee_prompt_title";
   static const String trainee_prompt_description = "trainee_prompt_description";
   static const String trainee_prompt_action = "trainee_prompt_action";
+  static const String trainees_applicants = "trainees_applicants";
+  static const String trainees_accepted = "trainees_accepted";
+  static const String requests_new = "requests_new";
+  static const String requests_in_progress = "requests_in_progress";
+  static const String requests_completed = "requests_completed";
+  static const String training_opportunities = "training_opportunities";
+  static const String training_opportunity = "training_opportunity";
 
   static const String status_pending = "status_pending";
   static const String status_accepted = "status_accepted";
@@ -582,6 +593,11 @@ class Strings {
   static const String status_active = "status_active";
   static const String status_closed = "status_closed";
   static const String status_cancelled = "status_cancelled";
+  static const String status_open = "status_open";
+  static const String status_in_progress = "status_in_progress";
+  static const String status_resolved = "status_resolved";
+  static const String status_in_review = "status_in_review";
+  static const String status_approved = "status_approved";
 
   static const String action_accept = "action_accept";
   static const String action_reject = "action_reject";
@@ -596,8 +612,24 @@ class Strings {
   static const String confirm_accept_application = "confirm_accept_application";
   static const String confirm_reject_application = "confirm_reject_application";
 
+  static const String created_at = "created_at";
+  static const String updated_at = "updated_at";
+
   static const String user_role_info = "user_role_info";
   static const String valid_license = "valid_license";
+  static const String verification_status = "verification_status";
+  static const String verification_unverified = "verification_unverified";
+  static const String verification_unverified_desc =
+      "verification_unverified_desc";
+  static const String verification_pending = "verification_pending";
+  static const String verification_pending_desc = "verification_pending_desc";
+  static const String verification_verified = "verification_verified";
+  static const String verification_verified_desc = "verification_verified_desc";
+  static const String verification_rejected = "verification_rejected";
+  static const String verification_rejected_desc = "verification_rejected_desc";
+  static const String verification_needs_review = "verification_needs_review";
+  static const String verification_needs_review_desc =
+      "verification_needs_review_desc";
   static const String view_profile = "view_profile";
   static const String welcome_to_silah_trusted_platform =
       "welcome_to_silah_trusted_platform";
@@ -607,4 +639,15 @@ class Strings {
   static const String years_of_experience = "years_of_experience";
   static const String years_of_experience_10 = "years_of_experience_10";
   static const String years_of_experience_9 = "years_of_experience_9";
+
+  static const String label_area = "label_area";
+  static const String label_faculty = "label_faculty";
+  static const String label_cv_url = "label_cv_url";
+  static const String training_request_sent_title =
+      "training_request_sent_title";
+  static const String training_request_sent_subtitle =
+      "training_request_sent_subtitle";
+
+  static const String national_id = "national_id";
+  static const String msg_enter_email_for_reset = "msg_enter_email_for_reset";
 }

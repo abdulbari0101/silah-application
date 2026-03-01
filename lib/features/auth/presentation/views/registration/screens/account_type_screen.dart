@@ -26,7 +26,12 @@ class AccountTypeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Center(child: Assets.images.silahLogo1.image(width: 140, fit: BoxFit.contain)),
+              Center(
+                child: Assets.images.silahLogo1.image(
+                  width: 140,
+                  fit: BoxFit.contain,
+                ),
+              ),
               UIConstants.bigHeight,
               Text(
                 Strings.choose_account_type.tr(),
@@ -42,7 +47,9 @@ class AccountTypeScreen extends StatelessWidget {
               UIConstants.xbigHeight,
               AccountTypeCard(
                 title: Strings.individuals_law_graduates.tr(),
-                subtitle: Strings.request_consultations_contact_lawyers_apply_training.tr(),
+                subtitle: Strings
+                    .request_consultations_contact_lawyers_apply_training
+                    .tr(),
                 icon: Icons.person_outline,
                 onTap: () => context.pushNamed(AppRoutes.userSignUp.name),
               ),

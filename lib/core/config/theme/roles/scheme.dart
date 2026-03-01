@@ -100,6 +100,9 @@ const ColorScheme _darkScheme = ColorScheme(
   surfaceContainerHighest: Color(0xff36343b),
 );
 
-ColorScheme buildScheme( Brightness b) {
+ColorScheme buildScheme(Brightness b, {Color? seed}) {
+  if (seed != null) {
+    return ColorScheme.fromSeed(seedColor: seed, brightness: b);
+  }
   return b == Brightness.light ? _lightScheme : _darkScheme;
 }

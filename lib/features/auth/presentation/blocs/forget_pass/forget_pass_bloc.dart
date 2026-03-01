@@ -20,7 +20,10 @@ class ForgetPassBloc extends Bloc<ForgetPassEvent, ForgetPassState> {
     );
   }
 
-  Future<void> _onForgetPass(ForgetPassRequest event, Emitter<ForgetPassState> emit) async {
+  Future<void> _onForgetPass(
+    ForgetPassRequest event,
+    Emitter<ForgetPassState> emit,
+  ) async {
     emit(ForgetPassLoading());
 
     final result = await repository.sendPasswordReset(email: event.email);

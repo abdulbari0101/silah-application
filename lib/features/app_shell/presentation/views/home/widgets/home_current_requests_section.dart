@@ -5,12 +5,13 @@ import 'package:go_router/go_router.dart';
 import 'package:silah_app/core/config/constants/ui_constants.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
 import 'package:silah_app/core/config/router/app_routes.dart';
+import 'package:silah_app/core/presentation/state_magment/blocs/app_setting/extensions/app_setting_context_extension.dart';
 import 'package:silah_app/core/presentation/ui/widget/buttons/primary_button_with_progress.dart';
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/empty_widget.dart';
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/error_widget.dart';
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/progress_state_widget.dart';
 import 'package:silah_app/features/consultations/presentation/cubits/requests/consultation_requests_cubit.dart';
-import 'package:silah_app/features/consultations/presentation/views/requests/widgets/request_card.dart';
+import 'package:silah_app/features/consultations/domain/entities/consultation_request_entity.dart';
 
 class HomeCurrentRequestsSection extends StatelessWidget {
   const HomeCurrentRequestsSection({super.key});
@@ -25,7 +26,10 @@ class HomeCurrentRequestsSection extends StatelessWidget {
             Expanded(
               child: Text(
                 Strings.current_requests.tr(),
-                style: Theme.of(context).textTheme.titleMedium,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
             TextButton(
@@ -56,18 +60,122 @@ class HomeCurrentRequestsSection extends StatelessWidget {
                   return EmptyWidget(
                     retryWidget: PrimaryButtonWithProgress(
                       text: Strings.try_again.tr(),
-                      onTap: () => context.read<ConsultationRequestsCubit>().load(),
+                      onTap: () =>
+                          context.read<ConsultationRequestsCubit>().load(),
                       isLoading: false,
                     ),
                   );
                 }
                 final preview = requests.first;
-                return RequestCard(request: preview, isUpdating: false);
+                return _RequestPreviewCard(request: preview);
               },
             );
           },
         ),
       ],
+    );
+  }
+}
+
+class _RequestPreviewCard extends StatelessWidget {
+  const _RequestPreviewCard({required this.request});
+
+  final ConsultationRequestEntity request;
+
+  @override
+  Widget build(BuildContext context) {
+    final title = request.specializationId ?? Strings.request_consultation.tr();
+    final description = request.description?.trim();
+    final arrowIcon = context.isRTL ? Icons.arrow_back : Icons.arrow_forward;
+
+    return Container(
+      padding: const EdgeInsets.all(UIConstants.mediumPadding),
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainerLow,
+        borderRadius: BorderRadius.circular(18),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+            decoration: BoxDecoration(
+              color: Theme.of(context).colorScheme.primary,
+              borderRadius: BorderRadius.circular(999),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  arrowIcon,
+                  color: Theme.of(context).colorScheme.onPrimary,
+                  size: 16,
+                ),
+                UIConstants.xsmallWidth,
+                Text(
+                  title,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (description != null && description.isNotEmpty) ...[
+            UIConstants.smallHeight,
+            Text(
+              description,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+          UIConstants.mediumHeight,
+          Row(
+            children: [
+              Container(
+                width: 28,
+                height: 28,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.chat_bubble_outline,
+                  color: Theme.of(context).colorScheme.primary,
+                  size: 16,
+                ),
+              ),
+              UIConstants.smallWidth,
+              Expanded(
+                child: Text(
+                  Strings.view_details.tr(),
+                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              Container(
+                width: 28,
+                height: 28,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.surface,
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.person_outline,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  size: 16,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }

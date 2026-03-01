@@ -41,10 +41,18 @@ class ThemeMenu extends StatelessWidget {
               Icon(
                 Icons.wb_sunny_outlined,
                 size: iconSize,
-                color: context.themeValue(light: context.colors.primary, dark: Colors.white),
+                color: context.themeValue(
+                  light: context.colors.primary,
+                  dark: Colors.white,
+                ),
               ),
               const SizedBox(width: 20),
-              Expanded(child: Text(Strings.dark_mode.tr(), style: context.textTheme.labelLarge)),
+              Expanded(
+                child: Text(
+                  Strings.dark_mode.tr(),
+                  style: context.textTheme.labelLarge,
+                ),
+              ),
               ArrowNextIcon(size: SizeIcon.SIZE_18),
             ],
           ),

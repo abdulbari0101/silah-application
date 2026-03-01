@@ -54,7 +54,10 @@ class RegistrationPayload with RegistrationPayloadMappable {
   });
 
   String get fullName {
-    final parts = [firstName, lastName].where((value) => value.trim().isNotEmpty).toList();
+    final parts = [
+      firstName,
+      lastName,
+    ].where((value) => value.trim().isNotEmpty).toList();
     return parts.isEmpty ? '' : parts.join(' ');
   }
 }

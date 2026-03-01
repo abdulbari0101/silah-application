@@ -18,18 +18,30 @@ class HomeSearchBar extends StatelessWidget {
           readOnly: true,
           decoration: InputDecoration(
             hintText: Strings.search_for_lawyer_or_specialization.tr(),
-            hintStyle:
-                context.textTheme.bodySmall?.copyWith(color: context.colors.onSurfaceVariant),
-            prefixIcon: Icon(Icons.search, color: context.colors.onSurfaceVariant),
+            hintStyle: context.textTheme.bodySmall?.copyWith(
+              color: context.colors.onSurfaceVariant,
+            ),
+            prefixIcon: Icon(
+              Icons.search,
+              color: context.colors.onSurfaceVariant,
+            ),
             filled: true,
-            fillColor: context.colors.surfaceContainerHighest.withAlphaOpacity(0.4),
+            fillColor: context.colors.surface,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: UIConstants.mediumPadding,
               vertical: UIConstants.smallPadding,
             ),
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(14),
-              borderSide: BorderSide.none,
+              borderRadius: BorderRadius.circular(18),
+              borderSide: BorderSide(color: context.colors.outlineVariant),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(18),
+              borderSide: BorderSide(color: context.colors.outlineVariant),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(18),
+              borderSide: BorderSide(color: context.colors.primary),
             ),
           ),
         ),

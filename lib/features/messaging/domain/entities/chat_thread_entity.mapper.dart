@@ -23,8 +23,8 @@ class ChatThreadEntityMapper extends ClassMapperBase<ChatThreadEntity> {
   @override
   final String id = 'ChatThreadEntity';
 
-  static int? _$id(ChatThreadEntity v) => v.id;
-  static const Field<ChatThreadEntity, int> _f$id = Field(
+  static String? _$id(ChatThreadEntity v) => v.id;
+  static const Field<ChatThreadEntity, String> _f$id = Field(
     'id',
     _$id,
     opt: true,
@@ -54,6 +54,12 @@ class ChatThreadEntityMapper extends ClassMapperBase<ChatThreadEntity> {
     _$updatedAt,
     opt: true,
   );
+  static String? _$consultationId(ChatThreadEntity v) => v.consultationId;
+  static const Field<ChatThreadEntity, String> _f$consultationId = Field(
+    'consultationId',
+    _$consultationId,
+    opt: true,
+  );
 
   @override
   final MappableFields<ChatThreadEntity> fields = const {
@@ -62,6 +68,7 @@ class ChatThreadEntityMapper extends ClassMapperBase<ChatThreadEntity> {
     #lastMessage: _f$lastMessage,
     #unreadCount: _f$unreadCount,
     #updatedAt: _f$updatedAt,
+    #consultationId: _f$consultationId,
   };
   @override
   final bool ignoreNull = true;
@@ -73,6 +80,7 @@ class ChatThreadEntityMapper extends ClassMapperBase<ChatThreadEntity> {
       lastMessage: data.dec(_f$lastMessage),
       unreadCount: data.dec(_f$unreadCount),
       updatedAt: data.dec(_f$updatedAt),
+      consultationId: data.dec(_f$consultationId),
     );
   }
 
@@ -142,11 +150,12 @@ abstract class ChatThreadEntityCopyWith<$R, $In extends ChatThreadEntity, $Out>
   get participantIds;
   MessageEntityCopyWith<$R, MessageEntity, MessageEntity>? get lastMessage;
   $R call({
-    int? id,
+    String? id,
     List<String>? participantIds,
     MessageEntity? lastMessage,
     int? unreadCount,
     String? updatedAt,
+    String? consultationId,
   });
   ChatThreadEntityCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
     Then<$Out2, $R2> t,
@@ -180,6 +189,7 @@ class _ChatThreadEntityCopyWithImpl<$R, $Out>
     Object? lastMessage = $none,
     int? unreadCount,
     Object? updatedAt = $none,
+    Object? consultationId = $none,
   }) => $apply(
     FieldCopyWithData({
       if (id != $none) #id: id,
@@ -187,6 +197,7 @@ class _ChatThreadEntityCopyWithImpl<$R, $Out>
       if (lastMessage != $none) #lastMessage: lastMessage,
       if (unreadCount != null) #unreadCount: unreadCount,
       if (updatedAt != $none) #updatedAt: updatedAt,
+      if (consultationId != $none) #consultationId: consultationId,
     }),
   );
   @override
@@ -196,6 +207,7 @@ class _ChatThreadEntityCopyWithImpl<$R, $Out>
     lastMessage: data.get(#lastMessage, or: $value.lastMessage),
     unreadCount: data.get(#unreadCount, or: $value.unreadCount),
     updatedAt: data.get(#updatedAt, or: $value.updatedAt),
+    consultationId: data.get(#consultationId, or: $value.consultationId),
   );
 
   @override

@@ -28,11 +28,11 @@ class AuthUserModel with AuthUserModelMappable {
   });
 
   AuthUserEntity toEntity() => AuthUserEntity(
-        uid: uid,
-        accountType: accountType,
-        fullName: fullName,
-        email: email,
-        phone: phone,
-        profile: profile,
-      );
+    uid: uid,
+    accountType: accountType,
+    fullName: fullName,
+    email: email,
+    phone: phone,
+    profile: profile,
+  );
 }

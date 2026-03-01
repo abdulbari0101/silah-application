@@ -7,7 +7,12 @@ import 'package:silah_app/features/support/domain/entities/support_ticket_entity
 import 'package:silah_app/gen/assets.gen.dart';
 
 class SupportItem extends StatelessWidget {
-  const SupportItem({super.key, required this.item, this.onTap, this.enabled = true});
+  const SupportItem({
+    super.key,
+    required this.item,
+    this.onTap,
+    this.enabled = true,
+  });
 
   final SupportTicketEntity item;
   final VoidCallback? onTap;

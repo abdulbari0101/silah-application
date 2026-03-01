@@ -28,7 +28,8 @@ ThemeData buildTheme(
   bool harmonizeBrandWithScheme = true, // <- NEW
 }) {
   // 1) Resolve ColorScheme: dynamic (Android) or brand fallback.
-  final baseScheme = schemeOverride ?? buildScheme(brightness);
+  final baseScheme = schemeOverride ?? buildScheme(brightness, seed: t.seed);
+  final scheme = _applyBrandTokens(baseScheme, t, brightness);
 
   // 2) Build a brand palette and (optionally) harmonize its extra colors
   //    with the resolved scheme’s primary (Material 3 guidance).
@@ -36,48 +37,52 @@ ThemeData buildTheme(
 
   var baseShape = ShapeScale(); // use default shape (radius)
   if (harmonizeBrandWithScheme) {
-    brand = brand.copyWith(primaryDark: brand.primaryDark.harmonizeWith(baseScheme.primary));
+    brand = brand.copyWith(primaryDark: brand.primaryDark.harmonizeWith(scheme.primary));
   }
 
   // 3) Typography from M3 ramp using the resolved scheme & brand accents.
-  final baseTextTheme = buildTextTheme(baseScheme, language, brand: brand);
+  final baseTextTheme = buildTextTheme(scheme, language, brand: brand);
   final baseThemeData = ThemeData(
     useMaterial3: true,
-    colorScheme: baseScheme,
-    scaffoldBackgroundColor: baseScheme.surface,
-    iconTheme: buildIconTheme(baseScheme),
+    colorScheme: scheme,
+    scaffoldBackgroundColor: scheme.surface,
+    iconTheme: buildIconTheme(scheme),
 
     textTheme: baseTextTheme,
-    appBarTheme: buildAppBarTheme(baseScheme, baseTextTheme, brand),
-    cardTheme: buildCardTheme(baseScheme, baseShape),
-    dialogTheme: buildDialogTheme(baseScheme, baseShape),
-    bottomSheetTheme: buildBottomSheetTheme(baseScheme, baseShape),
+    appBarTheme: buildAppBarTheme(scheme, baseTextTheme),
+    cardTheme: buildCardTheme(scheme, baseShape),
+    dialogTheme: buildDialogTheme(scheme, baseShape),
+    bottomSheetTheme: buildBottomSheetTheme(scheme, baseShape),
 
-    filledButtonTheme: buildFilledButtonTheme(baseScheme, baseTextTheme),
-    elevatedButtonTheme: buildElevatedButtonTheme(baseScheme, baseTextTheme),
-    outlinedButtonTheme: buildOutlinedButtonTheme(baseScheme, baseTextTheme),
-    textButtonTheme: buildTextButtonTheme(baseScheme, baseTextTheme),
+    filledButtonTheme: buildFilledButtonTheme(scheme, baseTextTheme),
+    elevatedButtonTheme: buildElevatedButtonTheme(scheme, baseTextTheme),
+    outlinedButtonTheme: buildOutlinedButtonTheme(scheme, baseTextTheme),
+    textButtonTheme: buildTextButtonTheme(scheme, baseTextTheme),
 
-    inputDecorationTheme: buildInputTheme(baseScheme, baseTextTheme, baseShape),
-    navigationBarTheme: buildNavBarTheme(baseScheme, baseTextTheme),
-    bottomNavigationBarTheme: buildbottomNavTheme(baseScheme, baseTextTheme),
-    segmentedButtonTheme: buildSegmentedTheme(baseScheme, baseTextTheme),
-    tabBarTheme: buildTabBarTheme(baseScheme, baseTextTheme),
-    chipTheme: buildChipTheme(baseScheme, baseTextTheme),
-    listTileTheme: buildListTileTheme(baseScheme, baseTextTheme),
-    snackBarTheme: buildSnackBarTheme(baseScheme, baseTextTheme, baseShape),
-    tooltipTheme: buildTooltipTheme(baseScheme, baseTextTheme, baseShape),
-    badgeTheme: buildBadgeTheme(baseScheme, baseTextTheme),
+    inputDecorationTheme: buildInputTheme(scheme, baseTextTheme, baseShape),
+    navigationBarTheme: buildNavBarTheme(scheme, baseTextTheme),
+    bottomNavigationBarTheme: buildbottomNavTheme(scheme, baseTextTheme),
+    segmentedButtonTheme: buildSegmentedTheme(scheme, baseTextTheme),
+    tabBarTheme: buildTabBarTheme(scheme, baseTextTheme),
+    chipTheme: buildChipTheme(scheme, baseTextTheme),
+    listTileTheme: buildListTileTheme(scheme, baseTextTheme),
+    snackBarTheme: buildSnackBarTheme(scheme, baseTextTheme, baseShape),
+    tooltipTheme: buildTooltipTheme(scheme, baseTextTheme, baseShape),
+    badgeTheme: buildBadgeTheme(scheme, baseTextTheme),
 
-    dividerTheme: DividerThemeData(thickness: 1, color: baseScheme.outline),
+    dividerTheme: DividerThemeData(thickness: 1, color: scheme.outline),
 
     extensions: <ThemeExtension<dynamic>>[
       buildTiny(baseTextTheme),
       brand,
       baseShape,
       FInputFillColors(
-        empty: baseScheme.surfaceContainerLowest, // match XD: clean white fields
-        filled: baseScheme.surfaceContainerLowest, // keep consistent after input
+        empty: brightness == Brightness.light
+            ? t.fieldFill
+            : scheme.surfaceContainerLowest,
+        filled: brightness == Brightness.light
+            ? t.fieldFill
+            : scheme.surfaceContainerLowest,
       ),
       SemanticColors(
         success: const Color(0xFF54B203),
@@ -89,4 +94,24 @@ ThemeData buildTheme(
   );
 
   return baseThemeData;
+}
+
+ColorScheme _applyBrandTokens(
+  ColorScheme scheme,
+  BrandTokens t,
+  Brightness brightness,
+) {
+  if (brightness != Brightness.light) return scheme;
+
+  return scheme.copyWith(
+    surface: t.pageBg,
+    surfaceContainerLowest: t.fieldFill,
+    surfaceContainerLow: t.card,
+    surfaceContainer: t.pageBg,
+    surfaceContainerHigh: t.card,
+    surfaceContainerHighest: t.bottomNavBg,
+    outline: t.outline,
+    onSurface: t.onSurface,
+    onSurfaceVariant: t.onSurfaceVariant,
+  );
 }

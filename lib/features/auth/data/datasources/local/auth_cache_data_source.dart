@@ -10,11 +10,14 @@ import '../../../../../core/infrastructure/errors/exceptions.dart';
 
 abstract class AuthCacheDataSource implements SessionReader, IdentityReader {
   // shared
-  Future<void> saveCustomer({required AuthUserModel customer, required String userId});
+  Future<void> saveCustomer({
+    required AuthUserModel customer,
+    required String userId,
+  });
 
   //Session
   Future<void> cacheLoginToken(TokenModel token);
- 
+
   Future<void> clearToken();
 
   //Identity
@@ -75,12 +78,11 @@ class AuthCacheDataSourceImpl implements AuthCacheDataSource {
     );
   }
 
-
-
-
-
   @override
-  Future<void> saveCustomer({required AuthUserModel customer, required String userId}) async {
+  Future<void> saveCustomer({
+    required AuthUserModel customer,
+    required String userId,
+  }) async {
     await appCache.secure.writeObject<AuthUserModel>(
       key: SecureKey.csr,
       object: customer,

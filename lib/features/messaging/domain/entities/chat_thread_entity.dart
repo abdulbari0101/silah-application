@@ -6,11 +6,12 @@ part 'chat_thread_entity.mapper.dart';
 
 @MappableClass()
 class ChatThreadEntity with ChatThreadEntityMappable {
-  final int? id;
+  final String? id;
   final List<String>? participantIds;
   final MessageEntity? lastMessage;
   final int unreadCount;
   final String? updatedAt;
+  final String? consultationId;
 
   const ChatThreadEntity({
     this.id,
@@ -18,5 +19,6 @@ class ChatThreadEntity with ChatThreadEntityMappable {
     this.lastMessage,
     this.unreadCount = 0,
     this.updatedAt,
+    this.consultationId,
   });
 }

@@ -15,7 +15,7 @@ class TraineesScreen extends StatelessWidget {
     return BlocProvider(
       create: (_) => TraineesCubit(repository: locator())..load(),
       child: PlatformScreenWrapper(
-        title: Strings.training_requests.tr(),
+        title: Strings.trainees.tr(),
         body: const TraineesBody(),
       ),
     );

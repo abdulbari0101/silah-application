@@ -11,6 +11,8 @@ import 'chats_service.dart';
 
 abstract class ChatsRemoteDataSource {
   Future<List<ChatThreadEntity>> fetchThreads();
+  Future<List<MessageEntity>> fetchMessages(String threadId);
+  Future<MessageEntity> sendMessage(String threadId, MessageEntity message);
 }
 
 class ChatsRemoteDataSourceImpl implements ChatsRemoteDataSource {
@@ -52,14 +54,89 @@ class ChatsRemoteDataSourceImpl implements ChatsRemoteDataSource {
               lastMessage ?? await _fetchLastMessage(doc.reference);
           threads.add(
             ChatThreadEntity(
+              id: doc.id,
               participantIds: (data['participants'] as List?)?.whereType<String>().toList(),
               lastMessage: resolvedMessage,
               unreadCount: (data['unreadCount'] as int?) ?? 0,
               updatedAt: parseFirestoreTimestamp(data['updatedAt']),
+              consultationId: data['consultationId'] as String?,
             ),
           );
         }
         return threads;
+      },
+    );
+  }
+
+  @override
+  Future<List<MessageEntity>> fetchMessages(String threadId) {
+    return firebaseCall<List<MessageEntity>>(
+      method: 'ChatsRemoteDataSource.fetchMessages',
+      logger: logger,
+      payload: {'threadId': threadId},
+      call: () async {
+        final snapshot = await firestore
+            .collection('chats')
+            .doc(threadId)
+            .collection('messages')
+            .orderBy('sentAt', descending: false)
+            .get();
+        return snapshot.docs.map((doc) {
+          final data = doc.data();
+          return MessageEntity(
+            id: doc.id,
+            threadId: threadId,
+            senderId: data['senderId'] as String?,
+            body: data['body'] as String?,
+            type: _parseType(data['type'] as String?),
+            sentAt: parseFirestoreTimestamp(data['sentAt']),
+            isRead: data['isRead'] as bool? ?? false,
+            attachmentUrls: (data['attachmentUrls'] as List?)?.whereType<String>().toList(),
+          );
+        }).toList();
+      },
+    );
+  }
+
+  @override
+  Future<MessageEntity> sendMessage(String threadId, MessageEntity message) {
+    return firebaseCall<MessageEntity>(
+      method: 'ChatsRemoteDataSource.sendMessage',
+      logger: logger,
+      payload: {'threadId': threadId},
+      call: () async {
+        final chatRef = firestore.collection('chats').doc(threadId);
+        final messageRef = chatRef.collection('messages').doc();
+        final data = <String, dynamic>{
+          'senderId': message.senderId,
+          'body': message.body,
+          'type': message.type.name,
+          'sentAt': FieldValue.serverTimestamp(),
+          'isRead': false,
+          'attachmentUrls': message.attachmentUrls ?? <String>[],
+        };
+        await messageRef.set(data);
+        await chatRef.set(
+          {
+            'lastMessage': {
+              'senderId': message.senderId,
+              'body': message.body,
+              'type': message.type.name,
+              'sentAt': FieldValue.serverTimestamp(),
+              'isRead': false,
+              'attachmentUrls': message.attachmentUrls ?? <String>[],
+            },
+            'updatedAt': FieldValue.serverTimestamp(),
+          },
+          SetOptions(merge: true),
+        );
+        return MessageEntity(
+          id: messageRef.id,
+          threadId: threadId,
+          senderId: message.senderId,
+          body: message.body,
+          type: message.type,
+        );
       },
     );
   }

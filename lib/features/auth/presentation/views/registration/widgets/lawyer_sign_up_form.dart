@@ -6,16 +6,22 @@ import 'package:silah_app/core/config/localization/localizations_string_keys.dar
 import 'package:silah_app/core/config/validators/form_validators.dart';
 import 'package:silah_app/core/presentation/state_magment/cubits/form_cubit.dart';
 import 'package:silah_app/core/presentation/ui/widget/buttons/primary_button_with_form_cubit.dart';
-import 'package:silah_app/core/presentation/ui/widget/text_fields/f_drop_down_field.dart';
+import 'package:silah_app/core/presentation/ui/widget/drop_down/f_drop_down.dart';
 import 'package:silah_app/core/presentation/ui/widget/text_fields/f_email_field.dart';
 import 'package:silah_app/core/presentation/ui/widget/text_fields/f_password_field.dart';
 import 'package:silah_app/core/presentation/ui/widget/text_fields/f_text2_feild.dart';
 import 'package:silah_app/features/auth/presentation/views/registration/models/lawyer_registration_data.dart';
+import 'package:silah_app/features/lookups/domain/entities/lookup_item_entity.dart';
 
 class LawyerSignUpForm extends StatefulWidget {
   final void Function(LawyerPersonalInfo info) onNext;
+  final List<LookupItemEntity> genders;
 
-  const LawyerSignUpForm({super.key, required this.onNext});
+  const LawyerSignUpForm({
+    super.key,
+    required this.onNext,
+    required this.genders,
+  });
 
   @override
   State<LawyerSignUpForm> createState() => _LawyerSignUpFormState();
@@ -28,7 +34,7 @@ class _LawyerSignUpFormState extends State<LawyerSignUpForm> {
   final _phoneCtrl = TextEditingController();
   final _passCtrl = TextEditingController();
   final _confirmCtrl = TextEditingController();
-  String? _gender;
+  LookupItemEntity? _selectedGender;
 
   @override
   void dispose() {
@@ -46,7 +52,7 @@ class _LawyerSignUpFormState extends State<LawyerSignUpForm> {
         _phoneCtrl.text.trim().isNotEmpty &&
         _passCtrl.text.isNotEmpty &&
         _confirmCtrl.text.isNotEmpty &&
-        _gender != null &&
+        _selectedGender != null &&
         _confirmCtrl.text == _passCtrl.text;
   }
 
@@ -58,7 +64,8 @@ class _LawyerSignUpFormState extends State<LawyerSignUpForm> {
         fullName: _nameCtrl.text.trim(),
         email: _emailCtrl.text.trim(),
         phone: _phoneCtrl.text.trim(),
-        gender: _gender ?? '',
+        gender: _displayGender(_selectedGender),
+        genderId: _selectedGender?.id,
         password: _passCtrl.text,
       ),
     );
@@ -66,11 +73,10 @@ class _LawyerSignUpFormState extends State<LawyerSignUpForm> {
 
   @override
   Widget build(BuildContext context) {
-    final genderOptions = [Strings.rbtn_male.tr(), Strings.rbtn_fmale.tr()];
-
     return Form(
       key: _formKey,
-      onChanged: () => context.read<FormCubit>().updateValidity(_isFormComplete()),
+      onChanged: () =>
+          context.read<FormCubit>().updateValidity(_isFormComplete()),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -98,12 +104,18 @@ class _LawyerSignUpFormState extends State<LawyerSignUpForm> {
             validator: validateMobileDefault,
           ),
           UIConstants.mediumHeight,
-          FDropdownField(
+          FDropDown<LookupItemEntity>(
+            items: widget.genders,
+            initialValue: _selectedGender,
+            labelBuilder: _displayGender,
             label: Strings.tv_gender.tr(),
-            options: genderOptions,
-            selectedValue: _gender,
-            onChanged: (value) => setState(() => _gender = value),
-            validator: validateJustRequired,
+            hintText: Strings.tv_gender.tr(),
+            validator: (value) =>
+                value == null ? Strings.error_fill_form.tr() : null,
+            onChanged: (value) {
+              setState(() => _selectedGender = value);
+              context.read<FormCubit>().updateValidity(_isFormComplete());
+            },
           ),
           UIConstants.mediumHeight,
           FPasswordField(
@@ -111,7 +123,10 @@ class _LawyerSignUpFormState extends State<LawyerSignUpForm> {
             label: Strings.password.tr(),
             hintText: Strings.password.tr(),
             textInputAction: TextInputAction.next,
-            validator: (value) => validateNewPassword(newValue: value, label: Strings.password.tr()),
+            validator: (value) => validateNewPassword(
+              newValue: value,
+              label: Strings.password.tr(),
+            ),
           ),
           UIConstants.mediumHeight,
           FPasswordField(
@@ -135,5 +150,14 @@ class _LawyerSignUpFormState extends State<LawyerSignUpForm> {
         ],
       ),
     );
+  }
+
+  String _displayGender(LookupItemEntity? gender) {
+    if (gender == null) return Strings.not_available.tr();
+    final locale = context.locale.languageCode;
+    final name = locale == 'ar' ? gender.nameAr : gender.nameEn;
+    return name?.trim().isNotEmpty == true
+        ? name!.trim()
+        : (gender.id ?? Strings.not_available.tr());
   }
 }

@@ -15,6 +15,15 @@ class AiLoadingView extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const AiBadgeIcon(size: 96),
+          UIConstants.mediumHeight,
+          SizedBox(
+            width: 42,
+            height: 42,
+            child: CircularProgressIndicator(
+              strokeWidth: 3,
+              color: context.colors.primary,
+            ),
+          ),
           UIConstants.bigHeight,
           Text(
             Strings.silah_helps_you_find_the_right_lawyer.tr(),

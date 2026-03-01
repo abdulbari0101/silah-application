@@ -13,5 +13,10 @@ abstract class AuthRepo {
 
   Future<Either<Failure, bool>> sendPasswordReset({required String email});
 
+  Future<Either<Failure, bool>> updatePassword({
+    required String currentPassword,
+    required String newPassword,
+  });
+
   Future<Either<Failure, bool>> signOut();
 }

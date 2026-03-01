@@ -24,7 +24,10 @@ class SupportBloc extends Bloc<SupportEvent, SupportState> {
     );
   }
 
-  Future<void> _onSupportsEvent(LoadSupports event, Emitter<SupportState> emit) async {
+  Future<void> _onSupportsEvent(
+    LoadSupports event,
+    Emitter<SupportState> emit,
+  ) async {
     emit(DataPaymentLoading());
 
     final result = await repository.submitTicket(SupportTicketEntity());

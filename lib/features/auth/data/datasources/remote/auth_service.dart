@@ -22,7 +22,10 @@ class AuthService {
 
   Stream<User?> get authStateChanges => _auth.authStateChanges();
 
-  Future<AuthUserModel> signIn({required String email, required String password}) async {
+  Future<AuthUserModel> signIn({
+    required String email,
+    required String password,
+  }) async {
     final credential = await _auth.signInWithEmailAndPassword(
       email: email.trim(),
       password: password,
@@ -38,18 +41,20 @@ class AuthService {
   }
 
   Future<AuthUserModel> registerUser({required AuthUserModel request}) async {
-    final email = _requireValue(request.email, Strings.error_self_reg.tr()).trim();
-    final password = _requireValue(request.password, Strings.error_self_reg.tr());
+    final email = _requireValue(
+      request.email,
+      Strings.error_self_reg.tr(),
+    ).trim();
+    final password = _requireValue(
+      request.password,
+      Strings.error_self_reg.tr(),
+    );
     final name = request.fullName?.trim() ?? '';
     final phone = request.phone?.trim() ?? '';
     final profile = _buildProfile(
       user: request,
       accountType: AuthAccountType.user,
-      extra: {
-        'name': name,
-        'email': email,
-        'phone': phone,
-      },
+      extra: {'name': name, 'email': email, 'phone': phone},
     );
 
     final credential = await _auth.createUserWithEmailAndPassword(
@@ -57,7 +62,10 @@ class AuthService {
       password: password,
     );
 
-    final firebaseUser = _requireUser(credential.user, Strings.error_self_reg.tr());
+    final firebaseUser = _requireUser(
+      credential.user,
+      Strings.error_self_reg.tr(),
+    );
     await firebaseUser.updateDisplayName(name);
 
     await _firestore.collection('users').doc(firebaseUser.uid).set(profile);
@@ -71,19 +79,20 @@ class AuthService {
   }
 
   Future<AuthUserModel> registerLawyer({required AuthUserModel request}) async {
-    final email = _requireValue(request.email, Strings.error_self_reg.tr()).trim();
-    final password = _requireValue(request.password, Strings.error_self_reg.tr());
+    final email = _requireValue(
+      request.email,
+      Strings.error_self_reg.tr(),
+    ).trim();
+    final password = _requireValue(
+      request.password,
+      Strings.error_self_reg.tr(),
+    );
     final name = request.fullName?.trim() ?? '';
     final phone = request.phone?.trim() ?? '';
     final profile = _buildProfile(
       user: request,
       accountType: AuthAccountType.lawyer,
-      extra: {
-        'name': name,
-        'email': email,
-        'phone': phone,
-        'verified': false,
-      },
+      extra: {'name': name, 'email': email, 'phone': phone, 'verified': false},
     );
 
     final resolvedLegalFieldIds = await _resolveLegalFieldIds(profile);
@@ -100,7 +109,10 @@ class AuthService {
       password: password,
     );
 
-    final firebaseUser = _requireUser(credential.user, Strings.error_self_reg.tr());
+    final firebaseUser = _requireUser(
+      credential.user,
+      Strings.error_self_reg.tr(),
+    );
     await firebaseUser.updateDisplayName(name);
 
     await _firestore.collection('lawyers').doc(firebaseUser.uid).set(profile);
@@ -115,6 +127,23 @@ class AuthService {
 
   Future<void> sendPasswordResetEmail({required String email}) async {
     await _auth.sendPasswordResetEmail(email: email.trim());
+  }
+
+  Future<void> updatePassword({
+    required String currentPassword,
+    required String newPassword,
+  }) async {
+    final user = _requireUser(_auth.currentUser, Strings.err_reset_pass.tr());
+    final email = _requireValue(user.email, Strings.err_reset_pass.tr());
+    final current = _requireValue(currentPassword, Strings.err_reset_pass.tr());
+    final next = _requireValue(newPassword, Strings.err_reset_pass.tr());
+
+    final credential = EmailAuthProvider.credential(
+      email: email,
+      password: current,
+    );
+    await user.reauthenticateWithCredential(credential);
+    await user.updatePassword(next);
   }
 
   Future<void> signOut() async {
@@ -176,7 +205,9 @@ class AuthService {
     return profile;
   }
 
-  Future<List<String>> _resolveLegalFieldIds(Map<String, dynamic> profile) async {
+  Future<List<String>> _resolveLegalFieldIds(
+    Map<String, dynamic> profile,
+  ) async {
     final ids = _parseStringList(profile['legalFieldIds']);
     if (ids.isNotEmpty) return ids;
 
@@ -211,7 +242,10 @@ class AuthService {
   List<String> _parseStringList(dynamic value) {
     final list = parseFirestoreStringList(value) ?? const <String>[];
     if (list.isNotEmpty) {
-      return list.map((item) => item.trim()).where((item) => item.isNotEmpty).toList();
+      return list
+          .map((item) => item.trim())
+          .where((item) => item.isNotEmpty)
+          .toList();
     }
     if (value is String) {
       final trimmed = value.trim();

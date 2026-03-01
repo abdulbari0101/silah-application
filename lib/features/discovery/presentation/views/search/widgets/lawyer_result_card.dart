@@ -12,10 +12,14 @@ class LawyerResultCard extends StatelessWidget {
     super.key,
     required this.lawyer,
     required this.specializationLabel,
+    this.specializationId,
+    this.onRequestConsultation,
   });
 
   final LawyerProfileEntity lawyer;
   final String? specializationLabel;
+  final String? specializationId;
+  final VoidCallback? onRequestConsultation;
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +38,7 @@ class LawyerResultCard extends StatelessWidget {
           text: Strings.request_consultation.tr(),
           icon: Icons.chat_bubble_outline,
           expand: true,
-          onTap: null,
+          onTap: onRequestConsultation,
         ),
         ActionPillButton(
           text: Strings.view_profile.tr(),
@@ -46,6 +50,7 @@ class LawyerResultCard extends StatelessWidget {
               extra: {
                 'lawyer': lawyer,
                 'specialization': specializationLabel,
+                'specializationId': specializationId,
               },
             );
           },

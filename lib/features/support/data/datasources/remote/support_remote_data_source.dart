@@ -2,11 +2,7 @@ import 'package:silah_app/core/infrastructure/analytics/logger/app_logger.dart';
 
 import 'support_service.dart';
 
-abstract class SupportRemoteDataSource {
-  
-
-
-}
+abstract class SupportRemoteDataSource {}
 
 class SupportRemoteDataSourceImpl implements SupportRemoteDataSource {
   final SupportService supportService;
@@ -16,8 +12,4 @@ class SupportRemoteDataSourceImpl implements SupportRemoteDataSource {
     required this.supportService,
     required this.logger,
   });
-
-
- 
-
 }

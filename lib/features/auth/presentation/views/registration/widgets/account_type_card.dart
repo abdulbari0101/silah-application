@@ -45,7 +45,10 @@ class AccountTypeCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: context.textTheme.titleMedium?.primary(context)),
+                Text(
+                  title,
+                  style: context.textTheme.titleMedium?.primary(context),
+                ),
                 UIConstants.smallHeight,
                 Text(
                   subtitle,

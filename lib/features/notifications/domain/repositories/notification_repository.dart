@@ -20,7 +20,9 @@ abstract class NotifyRepo {
   /// Marks all notifications as seen when user closes or exits the notifications screen.
   Future<Either<Failure, void>> markAllNotificationsAsSeen();
 
-  Future<Either<Failure, void>> tempSaveSeenNotifications(List<NotificationEntity> notifications);
+  Future<Either<Failure, void>> tempSaveSeenNotifications(
+    List<NotificationEntity> notifications,
+  );
 
   /// Deletes all notifications from local database.
   Future<Either<Failure, void>> clearAllNotifications();
