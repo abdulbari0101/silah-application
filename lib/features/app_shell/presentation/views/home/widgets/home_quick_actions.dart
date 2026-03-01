@@ -17,7 +17,9 @@ class HomeQuickActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final user = context.select<AppStateBloc, AuthUserEntity?>((bloc) => bloc.state.data.customer);
+    final user = context.select<AppStateBloc, AuthUserEntity?>(
+      (bloc) => bloc.state.data.customer,
+    );
     final role = resolveAppUserRole(user);
 
     final actions = _buildActions(role);
@@ -109,7 +111,7 @@ class _HomeAction {
   final String title;
   final IconData icon;
   final RouteInfo route;
-  final String? count;
+  String? count;
 
   _HomeAction({required this.title, required this.icon, required this.route});
 }
@@ -135,7 +137,10 @@ class _HomeActionCard extends StatelessWidget {
             Container(
               width: 28,
               height: 28,
-              decoration: BoxDecoration(color: context.colors.primary, shape: BoxShape.circle),
+              decoration: BoxDecoration(
+                color: context.colors.primary,
+                shape: BoxShape.circle,
+              ),
               child: Icon(
                 context.isRTL ? Icons.arrow_back : Icons.arrow_forward,
                 color: context.colors.onPrimary,
@@ -146,7 +151,9 @@ class _HomeActionCard extends StatelessWidget {
             Expanded(
               child: Text(
                 action.title,
-                style: context.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w600),
+                style: context.textTheme.titleSmall?.copyWith(
+                  fontWeight: FontWeight.w600,
+                ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
