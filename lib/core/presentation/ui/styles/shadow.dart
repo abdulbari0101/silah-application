@@ -16,7 +16,7 @@ class AppShadows extends ThemeExtension<AppShadows> {
   @override
   AppShadows lerp(ThemeExtension<AppShadows>? other, double t) {
     if (other is! AppShadows) return this;
-    List<BoxShadow> _lerpList(List<BoxShadow> a, List<BoxShadow> b) {
+    List<BoxShadow> lerpList(List<BoxShadow> a, List<BoxShadow> b) {
       final len = (a.length > b.length) ? a.length : b.length;
       return List.generate(len, (i) {
         final ai = i < a.length ? a[i] : const BoxShadow();
@@ -26,9 +26,9 @@ class AppShadows extends ThemeExtension<AppShadows> {
     }
 
     return AppShadows(
-      soft: _lerpList(soft, other.soft),
-      medium: _lerpList(medium, other.medium),
-      hard: _lerpList(hard, other.hard),
+      soft: lerpList(soft, other.soft),
+      medium: lerpList(medium, other.medium),
+      hard: lerpList(hard, other.hard),
     );
   }
 

@@ -17,6 +17,7 @@ class PersonalInfoScreen extends StatelessWidget {
       create: (_) => ProfileCubit(
         repository: locator(),
         appStateBloc: context.read<AppStateBloc>(),
+        imagePickerService: locator(),
       )..load(),
       child: PlatformScreenWrapper(
         title: Strings.personal_information.tr(),

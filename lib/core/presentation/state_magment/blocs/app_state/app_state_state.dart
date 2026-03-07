@@ -13,5 +13,5 @@ class AppStateInitial extends AppStateState with AppStateInitialMappable {
 
 @MappableClass(discriminatorValue: 'loaded')
 class AppStateLoaded extends AppStateState with AppStateLoadedMappable {
-  const AppStateLoaded(AppStateData data) : super(data);
+  const AppStateLoaded(super.data);
 }

@@ -217,6 +217,8 @@ class DioErrorHandler {
     switch (status) {
       case 401:
         return Strings.err_unauthorized401.tr();
+      case 409:
+        return Strings.err_conflict.tr();
       case 408:
         return Strings.request_timeout.tr();
       case 429:

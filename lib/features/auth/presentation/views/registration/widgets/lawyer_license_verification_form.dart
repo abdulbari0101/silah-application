@@ -9,6 +9,7 @@ import 'package:silah_app/core/presentation/ui/widget/buttons/primary_button_wit
 import 'package:silah_app/core/presentation/ui/widget/text_fields/f_text2_feild.dart';
 import 'package:silah_app/features/auth/domain/entities/registration_payload.dart';
 import 'package:silah_app/features/auth/presentation/views/registration/models/lawyer_registration_data.dart';
+import 'package:silah_app/features/discovery/domain/entities/legal_specialization_entity.dart';
 
 class LawyerLicenseVerificationForm extends StatefulWidget {
   final LawyerProfessionalInfo professionalInfo;
@@ -57,6 +58,18 @@ class _LawyerLicenseVerificationFormState
     final firstName = parts.isNotEmpty ? parts.first : fullName;
     final lastName = parts.length > 1 ? parts.sublist(1).join(' ') : '';
 
+    final legalFields = widget.professionalInfo.legalFields
+        .map(_displaySpecialization)
+        .where((value) => value.trim().isNotEmpty)
+        .toSet()
+        .toList();
+    final legalFieldIds = widget.professionalInfo.legalFields
+        .map((item) => item.id?.trim())
+        .whereType<String>()
+        .where((value) => value.isNotEmpty)
+        .toSet()
+        .toList();
+
     final payload = RegistrationPayload(
       accountType: RegistrationAccountType.lawyer,
       firstName: firstName,
@@ -66,10 +79,8 @@ class _LawyerLicenseVerificationFormState
       password: personal.password,
       gender: personal.gender,
       genderId: personal.genderId,
-      legalFields: [widget.professionalInfo.legalField],
-      legalFieldIds: widget.professionalInfo.legalFieldId != null
-          ? [widget.professionalInfo.legalFieldId!]
-          : null,
+      legalFields: legalFields.isNotEmpty ? legalFields : null,
+      legalFieldIds: legalFieldIds.isNotEmpty ? legalFieldIds : null,
       city: widget.professionalInfo.city,
       cityId: widget.professionalInfo.cityId,
       areaId: widget.professionalInfo.areaId,
@@ -82,6 +93,14 @@ class _LawyerLicenseVerificationFormState
     );
 
     widget.onSubmit(payload);
+  }
+
+  String _displaySpecialization(LegalSpecializationEntity specialization) {
+    final name = specialization.name?.trim();
+    if (name != null && name.isNotEmpty) return name;
+    final code = specialization.code?.trim();
+    if (code != null && code.isNotEmpty) return code;
+    return Strings.not_available.tr();
   }
 
   @override

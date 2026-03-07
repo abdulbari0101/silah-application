@@ -51,7 +51,7 @@ class AdaptiveBottomSheet {
         routeSettings: routeSettings,
         filter: filter,
         anchorPoint: anchorPoint,
-        builder: cupertinoBuilder ?? builder,
+        builder: cupertinoBuilder,
         // builder: (ctx) {
         //   final content = (cupertinoBuilder)(ctx);
 
@@ -71,7 +71,7 @@ class AdaptiveBottomSheet {
       // backgroundColor: backgroundColor ?? Colors.transparent,
       isScrollControlled: isScrollControlled,
       scrollControlDisabledMaxHeightRatio: scrollControlDisabledMaxHeightRatio,
-      useRootNavigator: useRootNavigator ?? AppPlatform.isIOS ? false : true,
+      useRootNavigator: useRootNavigator ?? !AppPlatform.isIOS,
       enableDrag: enableDrag,
       isDismissible: isDismissible,
       showDragHandle: showDragHandle,
@@ -122,7 +122,10 @@ class _BlurredSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-      child: BackdropFilter(filter: ui.ImageFilter.blur(sigmaX: 20, sigmaY: 20), child: child),
+      child: BackdropFilter(
+        filter: ui.ImageFilter.blur(sigmaX: 20, sigmaY: 20),
+        child: child,
+      ),
     );
   }
 }

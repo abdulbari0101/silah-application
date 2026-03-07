@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:silah_app/core/config/constants/ui_constants.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
-import 'package:silah_app/core/config/theme/extentions/theme_context_extension.dart';
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/empty_widget.dart';
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/error_widget.dart';
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/progress_state_widget.dart';
-import 'package:silah_app/features/notifications/domain/entities/notification/notification_group.dart';
 import 'package:silah_app/features/notifications/domain/entities/notification/notification_result.dart';
 import 'package:silah_app/features/notifications/presentation/cubits/notifications/notifications_cubit.dart';
 import 'package:silah_app/features/notifications/presentation/views/notifications/widgets/notification_item_card.dart';
@@ -49,43 +47,17 @@ class NotificationsBody extends StatelessWidget {
   }
 
   Widget _buildList(BuildContext context, NotificationResult result) {
-    final groups = result.groups ?? const <NotificationGroup>[];
-    final children = <Widget>[];
-
-    for (final group in groups) {
-      children.add(_buildHeader(context, group.headerDate));
-      final items = group.notifications ?? const [];
-      for (final notification in items) {
-        children.add(NotificationItemCard(notification: notification));
-        children.add(UIConstants.smallHeight);
-      }
-      children.add(UIConstants.mediumHeight);
-    }
-
-    return ListView(
+    return ListView.separated(
       padding: const EdgeInsets.symmetric(
         horizontal: UIConstants.screenHorizantalPadding,
         vertical: UIConstants.bigPadding,
       ),
-      children: children,
+      itemBuilder: (context, index) {
+        final notification = result.notifications[index];
+        return NotificationItemCard(notification: notification);
+      },
+      separatorBuilder: (_, __) => UIConstants.smallHeight,
+      itemCount: result.notifications.length,
     );
-  }
-
-  Widget _buildHeader(BuildContext context, String rawDate) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
-      child: Text(
-        _formatDate(context, rawDate),
-        style: context.textTheme.labelLarge?.copyWith(
-          color: context.colors.onSurfaceVariant,
-        ),
-      ),
-    );
-  }
-
-  String _formatDate(BuildContext context, String rawDate) {
-    final parsed = DateTime.tryParse(rawDate);
-    if (parsed == null) return rawDate;
-    return MaterialLocalizations.of(context).formatFullDate(parsed);
   }
 }

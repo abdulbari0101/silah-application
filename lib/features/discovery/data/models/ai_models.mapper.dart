@@ -8,363 +8,6 @@
 
 part of 'ai_models.dart';
 
-class AiClassifyRequestModelMapper
-    extends ClassMapperBase<AiClassifyRequestModel> {
-  AiClassifyRequestModelMapper._();
-
-  static AiClassifyRequestModelMapper? _instance;
-  static AiClassifyRequestModelMapper ensureInitialized() {
-    if (_instance == null) {
-      MapperContainer.globals.use(_instance = AiClassifyRequestModelMapper._());
-    }
-    return _instance!;
-  }
-
-  @override
-  final String id = 'AiClassifyRequestModel';
-
-  static String _$caseText(AiClassifyRequestModel v) => v.caseText;
-  static const Field<AiClassifyRequestModel, String> _f$caseText = Field(
-    'caseText',
-    _$caseText,
-  );
-  static String? _$lang(AiClassifyRequestModel v) => v.lang;
-  static const Field<AiClassifyRequestModel, String> _f$lang = Field(
-    'lang',
-    _$lang,
-    opt: true,
-  );
-
-  @override
-  final MappableFields<AiClassifyRequestModel> fields = const {
-    #caseText: _f$caseText,
-    #lang: _f$lang,
-  };
-  @override
-  final bool ignoreNull = true;
-
-  static AiClassifyRequestModel _instantiate(DecodingData data) {
-    return AiClassifyRequestModel(
-      caseText: data.dec(_f$caseText),
-      lang: data.dec(_f$lang),
-    );
-  }
-
-  @override
-  final Function instantiate = _instantiate;
-
-  static AiClassifyRequestModel fromJson(Map<String, dynamic> map) {
-    return ensureInitialized().decodeMap<AiClassifyRequestModel>(map);
-  }
-
-  static AiClassifyRequestModel fromJsonString(String json) {
-    return ensureInitialized().decodeJson<AiClassifyRequestModel>(json);
-  }
-}
-
-mixin AiClassifyRequestModelMappable {
-  String toJsonString() {
-    return AiClassifyRequestModelMapper.ensureInitialized()
-        .encodeJson<AiClassifyRequestModel>(this as AiClassifyRequestModel);
-  }
-
-  Map<String, dynamic> toJson() {
-    return AiClassifyRequestModelMapper.ensureInitialized()
-        .encodeMap<AiClassifyRequestModel>(this as AiClassifyRequestModel);
-  }
-
-  AiClassifyRequestModelCopyWith<
-    AiClassifyRequestModel,
-    AiClassifyRequestModel,
-    AiClassifyRequestModel
-  >
-  get copyWith =>
-      _AiClassifyRequestModelCopyWithImpl<
-        AiClassifyRequestModel,
-        AiClassifyRequestModel
-      >(this as AiClassifyRequestModel, $identity, $identity);
-  @override
-  String toString() {
-    return AiClassifyRequestModelMapper.ensureInitialized().stringifyValue(
-      this as AiClassifyRequestModel,
-    );
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return AiClassifyRequestModelMapper.ensureInitialized().equalsValue(
-      this as AiClassifyRequestModel,
-      other,
-    );
-  }
-
-  @override
-  int get hashCode {
-    return AiClassifyRequestModelMapper.ensureInitialized().hashValue(
-      this as AiClassifyRequestModel,
-    );
-  }
-}
-
-extension AiClassifyRequestModelValueCopy<$R, $Out>
-    on ObjectCopyWith<$R, AiClassifyRequestModel, $Out> {
-  AiClassifyRequestModelCopyWith<$R, AiClassifyRequestModel, $Out>
-  get $asAiClassifyRequestModel => $base.as(
-    (v, t, t2) => _AiClassifyRequestModelCopyWithImpl<$R, $Out>(v, t, t2),
-  );
-}
-
-abstract class AiClassifyRequestModelCopyWith<
-  $R,
-  $In extends AiClassifyRequestModel,
-  $Out
->
-    implements ClassCopyWith<$R, $In, $Out> {
-  $R call({String? caseText, String? lang});
-  AiClassifyRequestModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
-    Then<$Out2, $R2> t,
-  );
-}
-
-class _AiClassifyRequestModelCopyWithImpl<$R, $Out>
-    extends ClassCopyWithBase<$R, AiClassifyRequestModel, $Out>
-    implements
-        AiClassifyRequestModelCopyWith<$R, AiClassifyRequestModel, $Out> {
-  _AiClassifyRequestModelCopyWithImpl(super.value, super.then, super.then2);
-
-  @override
-  late final ClassMapperBase<AiClassifyRequestModel> $mapper =
-      AiClassifyRequestModelMapper.ensureInitialized();
-  @override
-  $R call({String? caseText, Object? lang = $none}) => $apply(
-    FieldCopyWithData({
-      if (caseText != null) #caseText: caseText,
-      if (lang != $none) #lang: lang,
-    }),
-  );
-  @override
-  AiClassifyRequestModel $make(CopyWithData data) => AiClassifyRequestModel(
-    caseText: data.get(#caseText, or: $value.caseText),
-    lang: data.get(#lang, or: $value.lang),
-  );
-
-  @override
-  AiClassifyRequestModelCopyWith<$R2, AiClassifyRequestModel, $Out2>
-  $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
-      _AiClassifyRequestModelCopyWithImpl<$R2, $Out2>($value, $cast, t);
-}
-
-class AiClassifyResponseModelMapper
-    extends ClassMapperBase<AiClassifyResponseModel> {
-  AiClassifyResponseModelMapper._();
-
-  static AiClassifyResponseModelMapper? _instance;
-  static AiClassifyResponseModelMapper ensureInitialized() {
-    if (_instance == null) {
-      MapperContainer.globals.use(
-        _instance = AiClassifyResponseModelMapper._(),
-      );
-      BaseRespWrapperMapper.ensureInitialized();
-      ResultModelMapper.ensureInitialized();
-      LegalSpecializationModelMapper.ensureInitialized();
-    }
-    return _instance!;
-  }
-
-  @override
-  final String id = 'AiClassifyResponseModel';
-
-  static ResultModel? _$result(AiClassifyResponseModel v) => v.result;
-  static const Field<AiClassifyResponseModel, ResultModel> _f$result = Field(
-    'result',
-    _$result,
-    key: r'Result',
-  );
-  static LegalSpecializationModel? _$specialization(
-    AiClassifyResponseModel v,
-  ) => v.specialization;
-  static const Field<AiClassifyResponseModel, LegalSpecializationModel>
-  _f$specialization = Field('specialization', _$specialization, opt: true);
-  static String? _$specializationId(AiClassifyResponseModel v) =>
-      v.specializationId;
-  static const Field<AiClassifyResponseModel, String> _f$specializationId =
-      Field('specializationId', _$specializationId, opt: true);
-  static double? _$confidence(AiClassifyResponseModel v) => v.confidence;
-  static const Field<AiClassifyResponseModel, double> _f$confidence = Field(
-    'confidence',
-    _$confidence,
-    opt: true,
-  );
-  static String? _$reason(AiClassifyResponseModel v) => v.reason;
-  static const Field<AiClassifyResponseModel, String> _f$reason = Field(
-    'reason',
-    _$reason,
-    opt: true,
-  );
-
-  @override
-  final MappableFields<AiClassifyResponseModel> fields = const {
-    #result: _f$result,
-    #specialization: _f$specialization,
-    #specializationId: _f$specializationId,
-    #confidence: _f$confidence,
-    #reason: _f$reason,
-  };
-  @override
-  final bool ignoreNull = true;
-
-  static AiClassifyResponseModel _instantiate(DecodingData data) {
-    return AiClassifyResponseModel(
-      result: data.dec(_f$result),
-      specialization: data.dec(_f$specialization),
-      specializationId: data.dec(_f$specializationId),
-      confidence: data.dec(_f$confidence),
-      reason: data.dec(_f$reason),
-    );
-  }
-
-  @override
-  final Function instantiate = _instantiate;
-
-  static AiClassifyResponseModel fromJson(Map<String, dynamic> map) {
-    return ensureInitialized().decodeMap<AiClassifyResponseModel>(map);
-  }
-
-  static AiClassifyResponseModel fromJsonString(String json) {
-    return ensureInitialized().decodeJson<AiClassifyResponseModel>(json);
-  }
-}
-
-mixin AiClassifyResponseModelMappable {
-  String toJsonString() {
-    return AiClassifyResponseModelMapper.ensureInitialized()
-        .encodeJson<AiClassifyResponseModel>(this as AiClassifyResponseModel);
-  }
-
-  Map<String, dynamic> toJson() {
-    return AiClassifyResponseModelMapper.ensureInitialized()
-        .encodeMap<AiClassifyResponseModel>(this as AiClassifyResponseModel);
-  }
-
-  AiClassifyResponseModelCopyWith<
-    AiClassifyResponseModel,
-    AiClassifyResponseModel,
-    AiClassifyResponseModel
-  >
-  get copyWith =>
-      _AiClassifyResponseModelCopyWithImpl<
-        AiClassifyResponseModel,
-        AiClassifyResponseModel
-      >(this as AiClassifyResponseModel, $identity, $identity);
-  @override
-  String toString() {
-    return AiClassifyResponseModelMapper.ensureInitialized().stringifyValue(
-      this as AiClassifyResponseModel,
-    );
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return AiClassifyResponseModelMapper.ensureInitialized().equalsValue(
-      this as AiClassifyResponseModel,
-      other,
-    );
-  }
-
-  @override
-  int get hashCode {
-    return AiClassifyResponseModelMapper.ensureInitialized().hashValue(
-      this as AiClassifyResponseModel,
-    );
-  }
-}
-
-extension AiClassifyResponseModelValueCopy<$R, $Out>
-    on ObjectCopyWith<$R, AiClassifyResponseModel, $Out> {
-  AiClassifyResponseModelCopyWith<$R, AiClassifyResponseModel, $Out>
-  get $asAiClassifyResponseModel => $base.as(
-    (v, t, t2) => _AiClassifyResponseModelCopyWithImpl<$R, $Out>(v, t, t2),
-  );
-}
-
-abstract class AiClassifyResponseModelCopyWith<
-  $R,
-  $In extends AiClassifyResponseModel,
-  $Out
->
-    implements BaseRespWrapperCopyWith<$R, $In, $Out> {
-  @override
-  ResultModelCopyWith<$R, ResultModel, ResultModel>? get result;
-  LegalSpecializationModelCopyWith<
-    $R,
-    LegalSpecializationModel,
-    LegalSpecializationModel
-  >?
-  get specialization;
-  @override
-  $R call({
-    ResultModel? result,
-    LegalSpecializationModel? specialization,
-    String? specializationId,
-    double? confidence,
-    String? reason,
-  });
-  AiClassifyResponseModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
-    Then<$Out2, $R2> t,
-  );
-}
-
-class _AiClassifyResponseModelCopyWithImpl<$R, $Out>
-    extends ClassCopyWithBase<$R, AiClassifyResponseModel, $Out>
-    implements
-        AiClassifyResponseModelCopyWith<$R, AiClassifyResponseModel, $Out> {
-  _AiClassifyResponseModelCopyWithImpl(super.value, super.then, super.then2);
-
-  @override
-  late final ClassMapperBase<AiClassifyResponseModel> $mapper =
-      AiClassifyResponseModelMapper.ensureInitialized();
-  @override
-  ResultModelCopyWith<$R, ResultModel, ResultModel>? get result =>
-      $value.result?.copyWith.$chain((v) => call(result: v));
-  @override
-  LegalSpecializationModelCopyWith<
-    $R,
-    LegalSpecializationModel,
-    LegalSpecializationModel
-  >?
-  get specialization =>
-      $value.specialization?.copyWith.$chain((v) => call(specialization: v));
-  @override
-  $R call({
-    Object? result = $none,
-    Object? specialization = $none,
-    Object? specializationId = $none,
-    Object? confidence = $none,
-    Object? reason = $none,
-  }) => $apply(
-    FieldCopyWithData({
-      if (result != $none) #result: result,
-      if (specialization != $none) #specialization: specialization,
-      if (specializationId != $none) #specializationId: specializationId,
-      if (confidence != $none) #confidence: confidence,
-      if (reason != $none) #reason: reason,
-    }),
-  );
-  @override
-  AiClassifyResponseModel $make(CopyWithData data) => AiClassifyResponseModel(
-    result: data.get(#result, or: $value.result),
-    specialization: data.get(#specialization, or: $value.specialization),
-    specializationId: data.get(#specializationId, or: $value.specializationId),
-    confidence: data.get(#confidence, or: $value.confidence),
-    reason: data.get(#reason, or: $value.reason),
-  );
-
-  @override
-  AiClassifyResponseModelCopyWith<$R2, AiClassifyResponseModel, $Out2>
-  $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
-      _AiClassifyResponseModelCopyWithImpl<$R2, $Out2>($value, $cast, t);
-}
-
 class AiRecommendRequestModelMapper
     extends ClassMapperBase<AiRecommendRequestModel> {
   AiRecommendRequestModelMapper._();
@@ -687,6 +330,7 @@ class AiRecommendResponseModelMapper
       BaseRespWrapperMapper.ensureInitialized();
       ResultModelMapper.ensureInitialized();
       LegalSpecializationModelMapper.ensureInitialized();
+      LawyerProfileEntityMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -709,16 +353,17 @@ class AiRecommendResponseModelMapper
       v.specializationId;
   static const Field<AiRecommendResponseModel, String> _f$specializationId =
       Field('specializationId', _$specializationId, opt: true);
-  static List<String>? _$lawyerIds(AiRecommendResponseModel v) => v.lawyerIds;
-  static const Field<AiRecommendResponseModel, List<String>> _f$lawyerIds =
-      Field('lawyerIds', _$lawyerIds, opt: true);
+  static List<LawyerProfileEntity>? _$lawyers(AiRecommendResponseModel v) =>
+      v.lawyers;
+  static const Field<AiRecommendResponseModel, List<LawyerProfileEntity>>
+  _f$lawyers = Field('lawyers', _$lawyers, opt: true);
 
   @override
   final MappableFields<AiRecommendResponseModel> fields = const {
     #result: _f$result,
     #specialization: _f$specialization,
     #specializationId: _f$specializationId,
-    #lawyerIds: _f$lawyerIds,
+    #lawyers: _f$lawyers,
   };
   @override
   final bool ignoreNull = true;
@@ -728,7 +373,7 @@ class AiRecommendResponseModelMapper
       result: data.dec(_f$result),
       specialization: data.dec(_f$specialization),
       specializationId: data.dec(_f$specializationId),
-      lawyerIds: data.dec(_f$lawyerIds),
+      lawyers: data.dec(_f$lawyers),
     );
   }
 
@@ -810,13 +455,18 @@ abstract class AiRecommendResponseModelCopyWith<
     LegalSpecializationModel
   >?
   get specialization;
-  ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>? get lawyerIds;
+  ListCopyWith<
+    $R,
+    LawyerProfileEntity,
+    LawyerProfileEntityCopyWith<$R, LawyerProfileEntity, LawyerProfileEntity>
+  >?
+  get lawyers;
   @override
   $R call({
     ResultModel? result,
     LegalSpecializationModel? specialization,
     String? specializationId,
-    List<String>? lawyerIds,
+    List<LawyerProfileEntity>? lawyers,
   });
   AiRecommendResponseModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
     Then<$Out2, $R2> t,
@@ -844,12 +494,16 @@ class _AiRecommendResponseModelCopyWithImpl<$R, $Out>
   get specialization =>
       $value.specialization?.copyWith.$chain((v) => call(specialization: v));
   @override
-  ListCopyWith<$R, String, ObjectCopyWith<$R, String, String>>? get lawyerIds =>
-      $value.lawyerIds != null
+  ListCopyWith<
+    $R,
+    LawyerProfileEntity,
+    LawyerProfileEntityCopyWith<$R, LawyerProfileEntity, LawyerProfileEntity>
+  >?
+  get lawyers => $value.lawyers != null
       ? ListCopyWith(
-          $value.lawyerIds!,
-          (v, t) => ObjectCopyWith(v, $identity, t),
-          (v) => call(lawyerIds: v),
+          $value.lawyers!,
+          (v, t) => v.copyWith.$chain(t),
+          (v) => call(lawyers: v),
         )
       : null;
   @override
@@ -857,13 +511,13 @@ class _AiRecommendResponseModelCopyWithImpl<$R, $Out>
     Object? result = $none,
     Object? specialization = $none,
     Object? specializationId = $none,
-    Object? lawyerIds = $none,
+    Object? lawyers = $none,
   }) => $apply(
     FieldCopyWithData({
       if (result != $none) #result: result,
       if (specialization != $none) #specialization: specialization,
       if (specializationId != $none) #specializationId: specializationId,
-      if (lawyerIds != $none) #lawyerIds: lawyerIds,
+      if (lawyers != $none) #lawyers: lawyers,
     }),
   );
   @override
@@ -871,7 +525,7 @@ class _AiRecommendResponseModelCopyWithImpl<$R, $Out>
     result: data.get(#result, or: $value.result),
     specialization: data.get(#specialization, or: $value.specialization),
     specializationId: data.get(#specializationId, or: $value.specializationId),
-    lawyerIds: data.get(#lawyerIds, or: $value.lawyerIds),
+    lawyers: data.get(#lawyers, or: $value.lawyers),
   );
 
   @override

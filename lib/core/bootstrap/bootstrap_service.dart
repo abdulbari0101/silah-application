@@ -30,7 +30,7 @@ Future<BootData?> loadAndApplyInitialSettings() async {
     // Await results
     final settingResult = await settingFuture;
     final customerResult = await customerFuture;
-    final int? sesstionTime = 120;
+    final int sesstionTime = 300;
 
     if (customerResult == null) {
       logger.initInfo("Customer is null", tag: "loadAndApplyInitialCustomer");

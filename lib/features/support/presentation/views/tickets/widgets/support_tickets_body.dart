@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:silah_app/core/config/constants/ui_constants.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
 import 'package:silah_app/core/config/router/app_routes.dart';
+import 'package:silah_app/core/presentation/state_magment/blocs/app_state/app_state_bloc.dart';
+import 'package:silah_app/core/presentation/ui/overlays/toasts.dart';
 import 'package:silah_app/core/presentation/ui/widget/buttons/primary_button.dart';
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/empty_widget.dart';
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/error_widget.dart';
@@ -19,29 +21,42 @@ class SupportTicketsBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isAdmin = context.select<AppStateBloc, bool>((bloc) {
+      final accountType = bloc.state.data.customer?.profile?['accountType']
+          ?.toString()
+          .toLowerCase();
+      return accountType == 'admin';
+    });
+
     return SafeArea(
       child: BlocBuilder<SupportTicketsCubit, SupportTicketsState>(
         builder: (context, state) {
           return state.when(
             loading: () => const Center(child: ProgressStateWidget()),
-            empty: () => _buildEmptyState(context),
+            empty: () => _buildEmptyState(context, isAdmin: isAdmin),
             failure: (message) => _buildErrorState(context, message),
-            ready: (tickets) => _buildTicketsList(context, tickets),
+            ready: (tickets) =>
+                _buildTicketsList(context, tickets, isAdmin: isAdmin),
           );
         },
       ),
     );
   }
 
-  Widget _buildEmptyState(BuildContext context) {
+  Widget _buildEmptyState(BuildContext context, {required bool isAdmin}) {
     return _buildContainer(
       context,
       child: EmptyWidget(
         title: Strings.no_data_to_display.tr(),
-        retryWidget: PrimaryButton(
-          text: Strings.send_report.tr(),
-          onTap: () => _openReportScreen(context),
-        ),
+        retryWidget: isAdmin
+            ? PrimaryButton(
+                text: Strings.try_again.tr(),
+                onTap: () => context.read<SupportTicketsCubit>().load(),
+              )
+            : PrimaryButton(
+                text: Strings.send_report.tr(),
+                onTap: () => _openReportScreen(context),
+              ),
       ),
     );
   }
@@ -58,18 +73,21 @@ class SupportTicketsBody extends StatelessWidget {
 
   Widget _buildTicketsList(
     BuildContext context,
-    List<SupportTicketEntity> tickets,
-  ) {
+    List<SupportTicketEntity> tickets, {
+    required bool isAdmin,
+  }) {
     return _buildContainer(
       context,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          PrimaryButton(
-            text: Strings.send_report.tr(),
-            onTap: () => _openReportScreen(context),
-          ),
-          UIConstants.mediumHeight,
+          if (!isAdmin) ...[
+            PrimaryButton(
+              text: Strings.send_report.tr(),
+              onTap: () => _openReportScreen(context),
+            ),
+            UIConstants.mediumHeight,
+          ],
           Expanded(
             child: ListView.separated(
               itemCount: tickets.length,
@@ -98,10 +116,17 @@ class SupportTicketsBody extends StatelessWidget {
     );
   }
 
-  void _openReportScreen(BuildContext context) {
-    context.pushNamed(AppRoutes.supportReport.name).then((_) {
-      context.read<SupportTicketsCubit>().load();
-    });
+  Future<void> _openReportScreen(BuildContext context) async {
+    final didSubmitReport =
+        await context.pushNamed<bool>(AppRoutes.supportReport.name) ?? false;
+
+    if (!context.mounted) return;
+
+    if (didSubmitReport) {
+      Toasts.success(context, Strings.sent_successfully.tr());
+    }
+
+    context.read<SupportTicketsCubit>().load();
   }
 
   void _openDetails(BuildContext context, SupportTicketEntity ticket) {

@@ -21,8 +21,6 @@ class DioClient {
     required this.appInfoService,
   }) {
     _configureHttpClient();
-
-
     _initializeInterceptors();
   }
 
@@ -39,9 +37,10 @@ class DioClient {
   void _configureHttpClient() {
     final adapter = IOHttpClientAdapter();
     mainContext = SecurityContext(withTrustedRoots: true);
-    adapter.onHttpClientCreate = (HttpClient client) {
+    adapter.createHttpClient = () {
       return HttpClient(context: mainContext)
-        ..badCertificateCallback = (X509Certificate cert, String host, int port) => true;
+        ..badCertificateCallback =
+            (X509Certificate cert, String host, int port) => true;
     };
     dio.httpClientAdapter = adapter;
   }

@@ -13,12 +13,14 @@ import 'package:silah_app/core/presentation/ui/widget/buttons/primary_button.dar
 import 'package:silah_app/core/presentation/ui/widget/buttons/secondary_button.dart';
 import 'package:silah_app/core/presentation/ui/widget/cards/custom_card.dart';
 import 'package:silah_app/core/presentation/ui/widget/chips/status_chip.dart';
+import 'package:silah_app/core/presentation/ui/widget/resolvers/resolved_display_widgets.dart';
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/error_widget.dart';
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/progress_state_widget.dart';
 import 'package:silah_app/features/auth/domain/entities/auth_user_entity.dart';
 import 'package:silah_app/features/consultations/domain/entities/consultation_request_entity.dart';
 import 'package:silah_app/features/consultations/domain/entities/consultation_status.dart';
 import 'package:silah_app/features/consultations/presentation/cubits/details/consultation_request_details_cubit.dart';
+import 'package:silah_app/features/consultations/presentation/support/consultation_status_presenter.dart';
 import 'package:silah_app/features/messaging/domain/repositories/messaging_repository.dart';
 import 'package:silah_app/core/config/router/app_routes.dart';
 import 'package:go_router/go_router.dart';
@@ -88,8 +90,14 @@ class ConsultationRequestDetailsBody extends StatelessWidget {
         accountType == 'lawyer' ||
         authUser?.accountType == AuthAccountType.lawyer;
 
-    final statusLabel = _statusLabel(request.status, context);
-    final statusColor = _statusColor(request.status, context);
+    final statusLabel = ConsultationStatusPresenter.label(
+      context,
+      request.status,
+    );
+    final statusColor = ConsultationStatusPresenter.color(
+      context,
+      request.status,
+    );
 
     final actions = <Widget>[];
     if (request.status == ConsultationStatus.pending && isLawyer) {
@@ -143,9 +151,7 @@ class ConsultationRequestDetailsBody extends StatelessWidget {
       );
     }
 
-    final chatEnabled =
-        request.status == ConsultationStatus.accepted ||
-        request.status == ConsultationStatus.active;
+    final chatEnabled = request.status.allowsMessaging;
 
     return SafeArea(
       child: SingleChildScrollView(
@@ -163,10 +169,11 @@ class ConsultationRequestDetailsBody extends StatelessWidget {
                   Row(
                     children: [
                       Expanded(
-                        child: Text(
-                          request.specializationId ??
-                              Strings.specializations.tr(),
-                          style: context.textTheme.titleSmall,
+                        child: ResolvedSpecializationName(
+                          specializationId: request.specializationId,
+                          fallback: Strings.specializations.tr(),
+                          builder: (title) =>
+                              Text(title, style: context.textTheme.titleSmall),
                         ),
                       ),
                       StatusChip(label: statusLabel, color: statusColor),
@@ -269,39 +276,6 @@ class ConsultationRequestDetailsBody extends StatelessWidget {
 
     if (confirmed == true) {
       onConfirm();
-    }
-  }
-
-  String _statusLabel(ConsultationStatus status, BuildContext context) {
-    switch (status) {
-      case ConsultationStatus.pending:
-        return Strings.status_pending.tr();
-      case ConsultationStatus.accepted:
-        return Strings.status_accepted.tr();
-      case ConsultationStatus.rejected:
-        return Strings.status_rejected.tr();
-      case ConsultationStatus.active:
-        return Strings.status_active.tr();
-      case ConsultationStatus.closed:
-        return Strings.status_closed.tr();
-      case ConsultationStatus.cancelled:
-        return Strings.status_cancelled.tr();
-    }
-  }
-
-  Color _statusColor(ConsultationStatus status, BuildContext context) {
-    switch (status) {
-      case ConsultationStatus.pending:
-        return context.semantic.warning;
-      case ConsultationStatus.accepted:
-        return context.semantic.success;
-      case ConsultationStatus.rejected:
-        return context.colors.error;
-      case ConsultationStatus.active:
-        return context.semantic.info;
-      case ConsultationStatus.closed:
-      case ConsultationStatus.cancelled:
-        return context.colors.outlineVariant;
     }
   }
 }

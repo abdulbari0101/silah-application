@@ -80,7 +80,7 @@ class _ChatConversationBodyState extends State<ChatConversationBody> {
   Widget _buildMessagesList(List<MessageEntity> messages) {
     final uid = FirebaseAuth.instance.currentUser?.uid;
     return ListView.separated(
-      padding: const EdgeInsets.all(UIConstants.mediumPadding),
+      padding: const EdgeInsets.fromLTRB(16, 20, 16, 12),
       itemCount: messages.length,
       separatorBuilder: (_, __) => UIConstants.smallHeight,
       itemBuilder: (context, index) {
@@ -106,7 +106,12 @@ class _ChatConversationBodyState extends State<ChatConversationBody> {
         constraints: const BoxConstraints(maxWidth: 280),
         decoration: BoxDecoration(
           color: background,
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadiusDirectional.only(
+            topStart: const Radius.circular(18),
+            topEnd: const Radius.circular(18),
+            bottomStart: Radius.circular(isMe ? 18 : 6),
+            bottomEnd: Radius.circular(isMe ? 6 : 18),
+          ),
         ),
         child: Text(
           message.body ?? Strings.not_available.tr(),
@@ -121,43 +126,51 @@ class _ChatConversationBodyState extends State<ChatConversationBody> {
       top: false,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-        child: Row(
-          children: [
-            Expanded(
-              child: TextField(
-                controller: _controller,
-                minLines: 1,
-                maxLines: 3,
-                textInputAction: TextInputAction.newline,
-                decoration: InputDecoration(
-                  hintText: Strings.messages.tr(),
-                  filled: true,
-                  fillColor: context.colors.surfaceContainerHighest
-                      .withAlphaOpacity(0.35),
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+          decoration: BoxDecoration(
+            color: context.colors.surface,
+            borderRadius: BorderRadius.circular(28),
+            boxShadow: context.shadowSoft,
+          ),
+          child: Row(
+            children: [
+              Expanded(
+                child: TextField(
+                  controller: _controller,
+                  minLines: 1,
+                  maxLines: 3,
+                  textInputAction: TextInputAction.newline,
+                  decoration: InputDecoration(
+                    hintText: Strings.messages.tr(),
+                    border: InputBorder.none,
+                    isDense: true,
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                  ),
                 ),
               ),
-            ),
-            UIConstants.smallWidth,
-            InkWell(
-              onTap: isSending ? null : () => _send(context),
-              borderRadius: BorderRadius.circular(24),
-              child: Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: isSending
-                      ? context.colors.primary.withAlphaOpacity(0.4)
-                      : context.colors.primary,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.send_rounded,
-                  color: context.colors.onPrimary,
-                  size: 20,
+              UIConstants.smallWidth,
+              InkWell(
+                onTap: isSending ? null : () => _send(context),
+                borderRadius: BorderRadius.circular(24),
+                child: Container(
+                  width: 42,
+                  height: 42,
+                  decoration: BoxDecoration(
+                    color: isSending
+                        ? context.colors.primary.withAlphaOpacity(0.4)
+                        : context.colors.primary,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.send_rounded,
+                    color: context.colors.onPrimary,
+                    size: 20,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

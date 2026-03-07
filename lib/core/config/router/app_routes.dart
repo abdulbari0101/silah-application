@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:silah_app/core/presentation/ui/screen/success/screens/success_screen.dart';
 import 'package:silah_app/features/app_shell/presentation/views/home/screens/home_screen.dart';
 import 'package:silah_app/features/app_shell/presentation/views/splash/screens/splash_screen.dart';
@@ -422,28 +421,4 @@ class AppRoutes {
     lawyerProfessionalInfo,
     lawyerLicenseVerification,
   ];
-
-  static RouteInfo _placeholderRoute(String name, String path) {
-    return RouteInfo(
-      name: name,
-      path: path,
-      builder: () => _PlaceholderScreen(title: name),
-      transitionType: RouteTransitionType.none,
-    );
-  }
-}
-
-class _PlaceholderScreen extends StatelessWidget {
-  const _PlaceholderScreen({required this.title});
-  final String title;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text(title)),
-      body: Center(
-        child: Text('$title is not available in the simplified Silah app'),
-      ),
-    );
-  }
 }

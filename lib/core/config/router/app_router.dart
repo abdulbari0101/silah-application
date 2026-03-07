@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:silah_app/core/infrastructure/analytics/logger/app_logger.dart';
 import 'package:silah_app/core/injection/injection_container.dart';
 import 'package:silah_app/core/presentation/state_magment/blocs/app_state/app_state_bloc.dart';
 
@@ -8,12 +9,20 @@ import 'global_navigator.dart';
 import 'platform_routes.dart';
 import 'route_info.dart';
 
+final logger = AppLogger();
+
 final GoRouter appRouter = GoRouter(
   navigatorKey: rootNavigatorKey,
   initialLocation: AppRoutes.splash.path,
   debugLogDiagnostics: true,
   redirect: (context, state) {
+
+    logger.appDebug( "routerState=${state.fullPath}" ,tag:  "redirect");
+  
     final blocState = locator.get<AppStateBloc>().state;
+
+        logger.appDebug( "blocState=$blocState" ,tag:  "redirect");
+
     if (blocState is! AppStateLoaded) return null;
 
     final isLoggedIn = blocState.data.isLoggedIn;

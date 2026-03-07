@@ -12,6 +12,7 @@ import 'chats_service.dart';
 abstract class ChatsRemoteDataSource {
   Future<List<ChatThreadEntity>> fetchThreads();
   Future<List<MessageEntity>> fetchMessages(String threadId);
+  Stream<List<MessageEntity>> watchMessages(String threadId);
   Future<MessageEntity> sendMessage(String threadId, MessageEntity message);
 }
 
@@ -26,8 +27,8 @@ class ChatsRemoteDataSourceImpl implements ChatsRemoteDataSource {
     required this.logger,
     FirebaseFirestore? firestore,
     FirebaseAuth? auth,
-  })  : firestore = firestore ?? FirebaseFirestore.instance,
-        auth = auth ?? FirebaseAuth.instance;
+  }) : firestore = firestore ?? FirebaseFirestore.instance,
+       auth = auth ?? FirebaseAuth.instance;
 
   @override
   Future<List<ChatThreadEntity>> fetchThreads() {
@@ -55,7 +56,9 @@ class ChatsRemoteDataSourceImpl implements ChatsRemoteDataSource {
           threads.add(
             ChatThreadEntity(
               id: doc.id,
-              participantIds: (data['participants'] as List?)?.whereType<String>().toList(),
+              participantIds: (data['participants'] as List?)
+                  ?.whereType<String>()
+                  .toList(),
               lastMessage: resolvedMessage,
               unreadCount: (data['unreadCount'] as int?) ?? 0,
               updatedAt: parseFirestoreTimestamp(data['updatedAt']),
@@ -81,21 +84,26 @@ class ChatsRemoteDataSourceImpl implements ChatsRemoteDataSource {
             .collection('messages')
             .orderBy('sentAt', descending: false)
             .get();
-        return snapshot.docs.map((doc) {
-          final data = doc.data();
-          return MessageEntity(
-            id: doc.id,
-            threadId: threadId,
-            senderId: data['senderId'] as String?,
-            body: data['body'] as String?,
-            type: _parseType(data['type'] as String?),
-            sentAt: parseFirestoreTimestamp(data['sentAt']),
-            isRead: data['isRead'] as bool? ?? false,
-            attachmentUrls: (data['attachmentUrls'] as List?)?.whereType<String>().toList(),
-          );
-        }).toList();
+        return snapshot.docs
+            .map((doc) => _mapMessageDoc(doc, threadId))
+            .toList();
       },
     );
+  }
+
+  @override
+  Stream<List<MessageEntity>> watchMessages(String threadId) {
+    return firestore
+        .collection('chats')
+        .doc(threadId)
+        .collection('messages')
+        .orderBy('sentAt', descending: false)
+        .snapshots()
+        .map((snapshot) {
+          return snapshot.docs
+              .map((doc) => _mapMessageDoc(doc, threadId))
+              .toList();
+        });
   }
 
   @override
@@ -116,20 +124,17 @@ class ChatsRemoteDataSourceImpl implements ChatsRemoteDataSource {
           'attachmentUrls': message.attachmentUrls ?? <String>[],
         };
         await messageRef.set(data);
-        await chatRef.set(
-          {
-            'lastMessage': {
-              'senderId': message.senderId,
-              'body': message.body,
-              'type': message.type.name,
-              'sentAt': FieldValue.serverTimestamp(),
-              'isRead': false,
-              'attachmentUrls': message.attachmentUrls ?? <String>[],
-            },
-            'updatedAt': FieldValue.serverTimestamp(),
+        await chatRef.set({
+          'lastMessage': {
+            'senderId': message.senderId,
+            'body': message.body,
+            'type': message.type.name,
+            'sentAt': FieldValue.serverTimestamp(),
+            'isRead': false,
+            'attachmentUrls': message.attachmentUrls ?? <String>[],
           },
-          SetOptions(merge: true),
-        );
+          'updatedAt': FieldValue.serverTimestamp(),
+        }, SetOptions(merge: true));
         return MessageEntity(
           id: messageRef.id,
           threadId: threadId,
@@ -149,11 +154,34 @@ class ChatsRemoteDataSourceImpl implements ChatsRemoteDataSource {
       type: _parseType(value['type'] as String?),
       sentAt: parseFirestoreTimestamp(value['sentAt']),
       isRead: value['isRead'] as bool? ?? false,
-      attachmentUrls: (value['attachmentUrls'] as List?)?.whereType<String>().toList(),
+      attachmentUrls: (value['attachmentUrls'] as List?)
+          ?.whereType<String>()
+          .toList(),
     );
   }
 
-  Future<MessageEntity?> _fetchLastMessage(DocumentReference<Map<String, dynamic>> chatRef) async {
+  MessageEntity _mapMessageDoc(
+    QueryDocumentSnapshot<Map<String, dynamic>> doc,
+    String threadId,
+  ) {
+    final data = doc.data();
+    return MessageEntity(
+      id: doc.id,
+      threadId: threadId,
+      senderId: data['senderId'] as String?,
+      body: data['body'] as String?,
+      type: _parseType(data['type'] as String?),
+      sentAt: parseFirestoreTimestamp(data['sentAt']),
+      isRead: data['isRead'] as bool? ?? false,
+      attachmentUrls: (data['attachmentUrls'] as List?)
+          ?.whereType<String>()
+          .toList(),
+    );
+  }
+
+  Future<MessageEntity?> _fetchLastMessage(
+    DocumentReference<Map<String, dynamic>> chatRef,
+  ) async {
     final snapshot = await chatRef
         .collection('messages')
         .orderBy('sentAt', descending: true)
@@ -169,7 +197,9 @@ class ChatsRemoteDataSourceImpl implements ChatsRemoteDataSource {
       type: _parseType(data['type'] as String?),
       sentAt: parseFirestoreTimestamp(data['sentAt']),
       isRead: data['isRead'] as bool? ?? false,
-      attachmentUrls: (data['attachmentUrls'] as List?)?.whereType<String>().toList(),
+      attachmentUrls: (data['attachmentUrls'] as List?)
+          ?.whereType<String>()
+          .toList(),
     );
   }
 

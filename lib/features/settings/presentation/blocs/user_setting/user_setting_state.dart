@@ -9,16 +9,16 @@ abstract class UserSettingState extends Equatable {
 }
 
 class UserSettingInitial extends UserSettingState {
-  UserSettingInitial() : super(const UserSettingEntity());
+  const UserSettingInitial() : super(const UserSettingEntity());
 }
 
 class UserSettingLoading extends UserSettingState {
-  UserSettingLoading(UserSettingEntity previous) : super(previous);
+  const UserSettingLoading(super.previous);
 }
 
 class UserSettingError extends UserSettingState {
   final String message;
-  UserSettingError({required this.message, required UserSettingEntity previous}) : super(previous);
+  const UserSettingError({required this.message, required UserSettingEntity previous}) : super(previous);
 
   @override
   List<Object?> get props => [message, data];

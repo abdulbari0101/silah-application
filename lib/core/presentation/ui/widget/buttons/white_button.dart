@@ -35,8 +35,6 @@ class WhiteButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
-
     final labelStyle = context.textTheme.labelLarge!.copyWith(
       // your OutlinedButtonTheme already sets Label-2 (15/18) + w600;
       // only let callers shrink/enlarge if they passed fontSize.

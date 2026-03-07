@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
-import 'package:silah_app/core/config/constants/api_constants.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
 import 'package:silah_app/core/infrastructure/analytics/logger/app_log_group.dart';
 import 'package:silah_app/core/infrastructure/analytics/logger/app_logger.dart';
@@ -30,7 +29,7 @@ class Executor {
     Failure Function(BaseAppException e, StackTrace stack)? onError,
     required String from,
   }) async {
-    if (!ApiConstants.isDemoMode && !await networkInfo.isConnected) {
+    if (!await networkInfo.isConnected) {
       logger.networkError(tag: from, Strings.err_no_internet_connection.tr());
       return Left(ConnectionFailure(Strings.err_no_internet_connection.tr()));
     }

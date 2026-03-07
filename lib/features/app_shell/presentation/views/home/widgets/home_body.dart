@@ -14,13 +14,12 @@ import 'package:silah_app/features/app_shell/presentation/blocs/home_bloc/home_b
 import 'package:silah_app/features/app_shell/presentation/views/main/widget/navigation/nav_items_builder.dart';
 import 'package:silah_app/features/consultations/presentation/cubits/requests/consultation_requests_cubit.dart';
 
+import 'home_admin_dashboard.dart';
 import 'home_ai_prompt_card.dart';
 import 'home_carousel_dots.dart';
 import 'home_current_requests_section.dart';
-import 'home_logout_section.dart';
-import 'home_quick_actions.dart';
 import 'home_search_bar.dart';
-import 'home_status_card.dart';
+import 'home_lawyer_dashboard.dart';
 import 'home_trainee_prompt_card.dart';
 import 'home_user_header.dart';
 
@@ -66,14 +65,6 @@ class _HomeContentState extends State<_HomeContent> {
     );
     final showTraineePrompt = role == AppUserRole.user && !isTrainee;
 
-    final content = role == AppUserRole.user
-        ? BlocProvider(
-            create: (_) =>
-                ConsultationRequestsCubit(repository: locator())..load(),
-            child: _UserHomeContent(showTraineePrompt: showTraineePrompt),
-          )
-        : _DefaultHomeContent(showTraineePrompt: showTraineePrompt);
-
     return MultiBlocListener(
       listeners: [
         // Control pull-to-refresh based on HomeBloc state
@@ -88,24 +79,37 @@ class _HomeContentState extends State<_HomeContent> {
           },
         ),
       ],
-      child: SmartRefresher(
-        controller: _refreshController,
-        enablePullDown: true,
-        header: const PullToRefershHeader(),
-        onRefresh: _onRefresh,
-        child: SingleChildScrollView(
-          physics: const BouncingScrollPhysics(),
-          child: ScreenPaddingWrapper(fullWidth: true, child: content),
-        ),
+      child: BlocBuilder<HomeBloc, HomeState>(
+        builder: (context, homeState) {
+          final content = switch (role) {
+            AppUserRole.user => BlocProvider(
+              key: ObjectKey(homeState),
+              create: (_) =>
+                  ConsultationRequestsCubit(repository: locator())..load(),
+              child: _UserHomeContent(showTraineePrompt: showTraineePrompt),
+            ),
+            AppUserRole.lawyer => _LawyerHomeContent(key: ObjectKey(homeState)),
+            AppUserRole.admin => _AdminHomeContent(key: ObjectKey(homeState)),
+          };
+
+          return SmartRefresher(
+            controller: _refreshController,
+            enablePullDown: true,
+            header: const PullToRefershHeader(),
+            onRefresh: _onRefresh,
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: ScreenPaddingWrapper(fullWidth: true, child: content),
+            ),
+          );
+        },
       ),
     );
   }
 }
 
-class _DefaultHomeContent extends StatelessWidget {
-  const _DefaultHomeContent({required this.showTraineePrompt});
-
-  final bool showTraineePrompt;
+class _LawyerHomeContent extends StatelessWidget {
+  const _LawyerHomeContent({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -130,18 +134,41 @@ class _DefaultHomeContent extends StatelessWidget {
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const HomeQuickActions(),
-              if (showTraineePrompt) ...[
-                UIConstants.bigHeight,
-                const HomeTraineePromptCard(),
-              ],
-              UIConstants.bigHeight,
-              const HomeStatusCard(),
-              UIConstants.xbigHeight,
-              const HomeLogoutSection(),
-              UIConstants.bigHeight,
-            ],
+            children: [const HomeLawyerDashboard(), UIConstants.xbigHeight],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _AdminHomeContent extends StatelessWidget {
+  const _AdminHomeContent({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        CurvedHeaderContainer(
+          padding: const EdgeInsetsDirectional.fromSTEB(
+            UIConstants.screenHorizantalPadding,
+            UIConstants.mediumPadding,
+            UIConstants.screenHorizantalPadding,
+            UIConstants.bigPadding,
+          ),
+          child: const HomeUserHeader(),
+        ),
+        Padding(
+          padding: const EdgeInsetsDirectional.fromSTEB(
+            UIConstants.screenHorizantalPadding,
+            UIConstants.bigPadding,
+            UIConstants.screenHorizantalPadding,
+            0,
+          ),
+          child: const Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [HomeAdminDashboard(), UIConstants.xbigHeight],
           ),
         ),
       ],
@@ -194,8 +221,6 @@ class _UserHomeContent extends StatelessWidget {
               UIConstants.bigHeight,
               const HomeCurrentRequestsSection(),
               UIConstants.xbigHeight,
-              const HomeLogoutSection(),
-              UIConstants.bigHeight,
             ],
           ),
         ),

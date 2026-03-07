@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
@@ -7,6 +5,7 @@ import 'package:silah_app/core/infrastructure/errors/error_utils.dart';
 import 'package:silah_app/core/infrastructure/errors/failures.dart';
 import 'package:silah_app/core/presentation/state_magment/bloc_utils/bloc_utils.dart';
 import 'package:silah_app/features/notifications/domain/entities/notification/notification_result.dart';
+import 'package:silah_app/features/notifications/domain/entities/notification/notification_result_extensions.dart';
 import 'package:silah_app/features/notifications/domain/repositories/notification_repository.dart';
 
 part 'notifications_cubit.freezed.dart';
@@ -22,42 +21,42 @@ class NotificationsState with _$NotificationsState {
 }
 
 class NotificationsCubit extends Cubit<NotificationsState> {
-  final NotifyRepo repository;
-  StreamSubscription<NotificationResult>? _subscription;
+  final NotificationsRepository repository;
 
   NotificationsCubit({required this.repository})
     : super(const NotificationsState.loading());
 
   Future<void> load() async {
     emit(const NotificationsState.loading());
-    await _subscription?.cancel();
-    _subscription = repository.observeAllNotifications().listen(
-      (result) {
-        final groups = result.groups ?? const [];
-        if (groups.isEmpty) {
+    final result = await repository.fetchNotifications();
+    result.fold(
+      (failure) =>
+          emit(NotificationsState.failure(message: _mapFailure(failure))),
+      (data) {
+        if (data.isEmpty) {
           emit(const NotificationsState.empty());
-        } else {
-          emit(NotificationsState.ready(result: result));
+          return;
         }
-      },
-      onError: (Object error) {
-        emit(
-          NotificationsState.failure(
-            message: _mapFailure(UnexpectedFailure(error.toString())),
-          ),
-        );
+        emit(NotificationsState.ready(result: data));
       },
     );
   }
 
   Future<void> markAllSeen() async {
-    await repository.markAllNotificationsAsSeen();
-  }
+    final currentResult = state.maybeWhen(
+      ready: (result) => result,
+      orElse: () => null,
+    );
+    if (currentResult == null || currentResult.unSeenCount == 0) {
+      return;
+    }
 
-  @override
-  Future<void> close() async {
-    await _subscription?.cancel();
-    return super.close();
+    final result = await repository.markAllNotificationsAsSeen();
+    result.fold((_) => null, (_) {
+      emit(
+        NotificationsState.ready(result: currentResult.markAllSeenLocally()),
+      );
+    });
   }
 
   String _mapFailure(Failure failure) {

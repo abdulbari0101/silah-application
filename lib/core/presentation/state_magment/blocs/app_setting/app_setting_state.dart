@@ -16,7 +16,7 @@ class AppSettingInitial extends AppSettingState with AppSettingInitialMappable{
 
 @MappableClass(discriminatorValue: 'loading')
 class AppSettingLoading extends AppSettingState with AppSettingLoadingMappable {
-  const AppSettingLoading(AppSettingEntity previous) : super(previous);
+  const AppSettingLoading(super.previous);
 }
 
 @MappableClass(discriminatorValue: 'error')
@@ -28,5 +28,5 @@ class AppSettingError extends AppSettingState with AppSettingErrorMappable{
 
 @MappableClass(discriminatorValue: 'loaded')
 class AppSettingLoaded extends AppSettingState with AppSettingLoadedMappable{
-  const AppSettingLoaded(AppSettingEntity setting) : super(setting);
+  const AppSettingLoaded(super.setting);
 }

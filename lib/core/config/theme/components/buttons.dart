@@ -24,8 +24,9 @@ ButtonStyle _baseFilled(ColorScheme cs, TextTheme text) {
       if (states.contains(WidgetState.disabled)) {
         return cs.primary.withAlphaOpacity(0.50); // your old 0.5 disabled look
       }
-      if (states.contains(WidgetState.pressed))
+      if (states.contains(WidgetState.pressed)) {
         return cs.primary.darker(5); // darker brand on press
+      }
       return cs.primary;
     }),
     overlayColor: WidgetStateProperty.resolveWith((states) {

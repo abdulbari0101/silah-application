@@ -7,7 +7,8 @@ import 'package:silah_app/features/consultations/domain/entities/consultation_st
 part 'consultation_models.mapper.dart';
 
 @MappableClass(ignoreNull: true)
-class ConsultationCreateRequestModel with ConsultationCreateRequestModelMappable {
+class ConsultationCreateRequestModel
+    with ConsultationCreateRequestModelMappable {
   final String clientUid;
   final String lawyerUid;
   final String caseText;
@@ -22,7 +23,9 @@ class ConsultationCreateRequestModel with ConsultationCreateRequestModelMappable
     this.specialization,
   });
 
-  factory ConsultationCreateRequestModel.fromEntity(ConsultationRequestEntity entity) {
+  factory ConsultationCreateRequestModel.fromEntity(
+    ConsultationRequestEntity entity,
+  ) {
     return ConsultationCreateRequestModel(
       clientUid: entity.clientId ?? '',
       lawyerUid: entity.lawyerId ?? '',
@@ -38,17 +41,23 @@ class ConsultationCreateResponseModel extends BaseRespWrapper
     with ConsultationCreateResponseModelMappable {
   final String? consultationId;
 
-  const ConsultationCreateResponseModel({required super.result, this.consultationId});
+  const ConsultationCreateResponseModel({
+    required super.result,
+    this.consultationId,
+  });
 }
 
 @MappableClass(ignoreNull: true)
-class ConsultationStatusUpdateRequestModel with ConsultationStatusUpdateRequestModelMappable {
+class ConsultationStatusUpdateRequestModel
+    with ConsultationStatusUpdateRequestModelMappable {
   final String status;
 
   const ConsultationStatusUpdateRequestModel({required this.status});
 
-  factory ConsultationStatusUpdateRequestModel.fromStatus(ConsultationStatus status) {
-    return ConsultationStatusUpdateRequestModel(status: status.name);
+  factory ConsultationStatusUpdateRequestModel.fromStatus(
+    ConsultationStatus status,
+  ) {
+    return ConsultationStatusUpdateRequestModel(status: status.apiValue);
   }
 }
 
@@ -57,5 +66,8 @@ class ConsultationStatusUpdateResponseModel extends BaseRespWrapper
     with ConsultationStatusUpdateResponseModelMappable {
   final String? status;
 
-  const ConsultationStatusUpdateResponseModel({required super.result, this.status});
+  const ConsultationStatusUpdateResponseModel({
+    required super.result,
+    this.status,
+  });
 }

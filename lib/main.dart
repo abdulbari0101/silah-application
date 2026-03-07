@@ -23,20 +23,21 @@ import 'package:silah_app/core/presentation/state_magment/blocs/sesstion_bloc/se
 import 'package:silah_app/core/presentation/state_magment/wrapper/sesstion_listener.dart';
 import 'package:silah_app/core/presentation/ui/app/android_app.dart';
 import 'package:silah_app/core/presentation/ui/app/ios_app.dart';
+import 'package:silah_app/features/settings/data/datasources/local/settings_cache_data_source.dart';
+import 'package:silah_app/integrations/notifications/fcm_token_listener.dart';
 import 'package:silah_app/integrations/notifications/local_notification_service.dart';
 import 'package:silah_app/mappers.init.dart';
+
 import 'core/bootstrap/app_rebuilder.dart';
-import 'core/config/localization/app_language.dart';
 import 'core/bootstrap/bootstrap_service.dart';
+import 'core/config/localization/app_language.dart';
 import 'core/config/simple_bloc_observer.dart';
 import 'core/config/theme/theme_controller.dart';
 import 'core/injection/injection_container.dart' as di;
 import 'core/presentation/state_magment/blocs/app_setting/app_setting_bloc.dart';
 import 'core/presentation/state_magment/cubits/iItem_loading_cubit.dart';
 import 'core/presentation/ui/startup/boot_error_screen.dart';
-
 import 'features/auth/presentation/blocs/login/login_bloc.dart';
-
 import 'integrations/notifications/noification_config.dart';
 
 bool _bootstrapped = false;
@@ -49,12 +50,7 @@ void _handleTopLevelError({
   if (_bootstrapped) {
     // App already running → show non-fatal overlay via UiErrorHost
     UiErrorBus.i.emit(
-      UiError(
-        title: "Unexpected error",
-        message: message,
-        error: error,
-        stack: stack,
-      ),
+      UiError(title: "Unexpected error", message: message, error: error, stack: stack),
     );
     return;
   }
@@ -145,14 +141,8 @@ Future<void> retryStartupFromFatal() async {
 }
 
 Future<void> _initLocalServices() async {
-  await _initStep(
-    'LocalNotificationService.init',
-    () => LocalNotificationService().init(),
-  );
-  await _initStep(
-    'dotenv.load',
-    () => dotenv.load(fileName: ApiConstants.getEnvFileName),
-  );
+  await _initStep('LocalNotificationService.init', () => LocalNotificationService().init());
+  await _initStep('dotenv.load', () => dotenv.load(fileName: ApiConstants.getEnvFileName));
 }
 
 Future<void> _lockOrientation() async {
@@ -222,12 +212,7 @@ void _wireCrashlyticsHandlers() {
       AppLogger().uiError(error, tag: 'platform', stack: stack);
     }
     UiErrorBus.i.emit(
-      UiError(
-        title: "Unexpected error",
-        message: error.toString(),
-        error: error,
-        stack: stack,
-      ),
+      UiError(title: "Unexpected error", message: error.toString(), error: error, stack: stack),
     );
     return true; // don’t hard-crash; show overlay instead
   };
@@ -256,9 +241,7 @@ Future<void> _setupNotifications() async {
   await _initStep('notifications.setup', () async {
     final plugin = FlutterLocalNotificationsPlugin();
     await plugin
-        .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin
-        >()
+        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
         ?.requestNotificationsPermission();
     if (!kIsWeb) await setupFlutterNotifications();
   });
@@ -279,10 +262,7 @@ Future<void> _validatePlatform() async {
 }
 
 Future<void> _initLocalizationAndMappers() async {
-  await _initStep(
-    'EasyLocalization.ensureInitialized',
-    EasyLocalization.ensureInitialized,
-  );
+  await _initStep('EasyLocalization.ensureInitialized', EasyLocalization.ensureInitialized);
   await _initStep('initializeMappers', () async => initializeMappers());
 }
 
@@ -311,12 +291,8 @@ Future<void> _fatalStep(
     await step().timeout(timeout);
   } catch (e, st) {
     _recordFatal(name, e, st);
-    _handleTopLevelError(
-      message: 'Startup step failed: $name',
-      error: e,
-      stack: st,
-    );
-    throw e;
+    _handleTopLevelError(message: 'Startup step failed: $name', error: e, stack: st);
+    rethrow;
   }
 }
 
@@ -329,18 +305,9 @@ void _recordFatal(String name, Object error, StackTrace stack) {
 }
 
 // fatal UI -------------------------------------------------------------------
-void _mountFatalUI({
-  required String message,
-  required Object error,
-  required StackTrace stack,
-}) {
+void _mountFatalUI({required String message, required Object error, required StackTrace stack}) {
   AppLogger().appError(error, tag: 'fatal_ui', stack: stack);
-  runApp(
-    MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: BootErrorScreen(message: message),
-    ),
-  );
+  runApp(MaterialApp(debugShowCheckedModeBanner: false, home: BootErrorScreen(message: message)));
 }
 
 // app widgets ----------------------------------------------------------------
@@ -355,24 +322,32 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   late final ThemeController _themeController;
 
+  // used to save the fcm token
+  final fcmListener = FcmTokenListener(
+    messaging: FirebaseMessaging.instance,
+    local: di.locator<SettingsCacheDataSource>(),
+    logger: di.locator<AppLogger>(),
+  );
+
   @override
   void initState() {
     super.initState();
-    _themeController = ThemeController(
-      settingBloc: di.locator<AppSettingBloc>(),
-    );
-    WidgetsBinding.instance.addPostFrameCallback(
-      (_) => _themeController.init(),
-    );
+    fcmListener.init();
+    _themeController = ThemeController(settingBloc: di.locator<AppSettingBloc>());
+    WidgetsBinding.instance.addPostFrameCallback((_) => _themeController.init());
+  }
+
+  @override
+  void dispose() {
+    fcmListener.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider.value(
-          value: di.locator<AppSettingBloc>()..add(GetAppSettingEvent()),
-        ),
+        BlocProvider.value(value: di.locator<AppSettingBloc>()..add(GetAppSettingEvent())),
         BlocProvider.value(value: di.locator<AppStateBloc>()),
         BlocProvider.value(value: di.locator<SessionBloc>()),
         BlocProvider(create: (_) => di.locator<LoginBloc>()),

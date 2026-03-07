@@ -5,7 +5,7 @@ import 'package:silah_app/features/notifications/data/datasources/remote/device_
 import 'package:silah_app/features/notifications/data/models/device_token_models.dart';
 
 abstract class DeviceTokenRemoteDataSource {
-  Future<BaseApiResponse<DeviceTokenResponseModel>> registerDeviceToken(
+  Future<BaseApiResponse<DeviceTokenResponseModel>> registerDeviceFcmToken(
     DeviceTokenRequestModel request,
   );
 }
@@ -14,17 +14,14 @@ class DeviceTokenRemoteDataSourceImpl implements DeviceTokenRemoteDataSource {
   final DeviceTokenService service;
   final AppLogger logger;
 
-  DeviceTokenRemoteDataSourceImpl({
-    required this.service,
-    required this.logger,
-  });
+  DeviceTokenRemoteDataSourceImpl({required this.service, required this.logger});
 
   @override
-  Future<BaseApiResponse<DeviceTokenResponseModel>> registerDeviceToken(
+  Future<BaseApiResponse<DeviceTokenResponseModel>> registerDeviceFcmToken(
     DeviceTokenRequestModel request,
   ) => handleBaseApiResponse<DeviceTokenResponseModel>(
-    method: 'DeviceTokenRemoteDataSource.registerDeviceToken',
+    method: 'DeviceTokenRemoteDataSource.registerDeviceFcmToken',
     logger: logger,
-    call: () => service.registerDeviceToken(request),
+    call: () => service.registerDeviceFcmToken(request),
   );
 }

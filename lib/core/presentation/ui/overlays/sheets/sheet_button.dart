@@ -11,7 +11,8 @@ class SheetButton<T> extends StatefulWidget {
   final String label;
   final T? selectedValue;
   final List<T> options;
-  final String Function(T?, bool) labelResolver; // Updated to access selection state
+  final String Function(T?, bool)
+  labelResolver; // Updated to access selection state
   final String Function(T, bool)? sheetLabelResolver;
   final Widget? icon;
   final ValueChanged<T> onSelected;
@@ -46,7 +47,8 @@ class SheetButton<T> extends StatefulWidget {
     this.enabled = true,
     this.showLabel = true,
   }) : assert(
-         itemBuilder == null || (subtitleResolver == null && trailingBuilder == null),
+         itemBuilder == null ||
+             (subtitleResolver == null && trailingBuilder == null),
          'If itemBuilder is provided, subtitleResolver and trailingBuilder will be ignored.',
        );
 
@@ -103,7 +105,9 @@ class _SheetButtonState<T> extends State<SheetButton<T>> {
     final cs = Theme.of(context).colorScheme;
     final text = Theme.of(context).textTheme;
 
-    final labelStyle = text.labelMedium!.copyWith(color: cs.onSurfaceVariant); // Label-3
+    final labelStyle = text.labelMedium!.copyWith(
+      color: cs.onSurfaceVariant,
+    ); // Label-3
     final valueStyle = text.labelMedium!.copyWith(
       fontWeight: FontWeight.w500,
       color: cs.onSurfaceVariant,
@@ -148,7 +152,8 @@ class _SheetButtonState<T> extends State<SheetButton<T>> {
                         ],
                       ),
               ),
-              widget.icon ?? const Icon(Icons.keyboard_arrow_down_rounded, size: 20),
+              widget.icon ??
+                  const Icon(Icons.keyboard_arrow_down_rounded, size: 20),
             ],
           ),
         ),
@@ -179,11 +184,7 @@ class _SheetContent<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cs = context.colors;
-    final text = Theme.of(context).textTheme;
-
     final titleStyle = Theme.of(context).appBarTheme.titleTextStyle; // H5
-    final rowTitleBase = text.labelLarge!; // Label-2
-    final rowSubtitle = text.labelMedium!.copyWith(color: cs.onSurfaceVariant); // Label-3
 
     Widget buildFilterList() {
       return Card(
@@ -204,7 +205,8 @@ class _SheetContent<T> extends StatelessWidget {
               }
 
               final trailing =
-                  trailingBuilder?.call(e, isSelected) ?? (isSelected ? Icon(Icons.check) : null);
+                  trailingBuilder?.call(e, isSelected) ??
+                  (isSelected ? Icon(Icons.check) : null);
               final subtitle = subtitleResolver?.call(e, isSelected);
 
               return ListTile(

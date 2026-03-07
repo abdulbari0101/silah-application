@@ -22,6 +22,24 @@ from ..utils.time import utc_now_iso
 router = APIRouter(prefix="/training", tags=["training"])
 
 
+def _to_bool(value: object) -> bool:
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, (int, float)):
+        return value != 0
+    if isinstance(value, str):
+        normalized = value.strip().lower()
+        if normalized in {"true", "1", "yes"}:
+            return True
+        if normalized in {"false", "0", "no"}:
+            return False
+    return False
+
+
+def _build_training_application_id(*, lawyer_uid: str, trainee_uid: str) -> str:
+    return f"{lawyer_uid.strip()}_{trainee_uid.strip()}"
+
+
 @router.post("/applications")
 def create_training_application(
     payload: TrainingApplicationCreateRequest,
@@ -31,25 +49,110 @@ def create_training_application(
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden")
 
     db = firestore_client()
-    log_firestore_request("training_opportunities.get", opportunity_id=payload.opportunityId)
+    target_id = payload.opportunityId.strip()
+    log_firestore_request("training_target.resolve", target_id=target_id)
     try:
-        opp_doc = db.collection("training_opportunities").document(payload.opportunityId).get()
+        opp_doc = db.collection("training_opportunities").document(target_id).get()
         log_firestore_response(
-            "training_opportunities.get",
-            opportunity_id=payload.opportunityId,
+            "training_target.resolve",
+            target_id=target_id,
             exists=opp_doc.exists,
         )
     except Exception as exc:
-        log_firestore_error("training_opportunities.get", exc, opportunity_id=payload.opportunityId)
+        log_firestore_error("training_target.resolve", exc, target_id=target_id)
         raise
-    if not opp_doc.exists:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Opportunity not found")
 
+    has_opportunity = opp_doc.exists
     opp_data = opp_doc.to_dict() or {}
-    lawyer_uid = opp_data.get("lawyerUid")
+    lawyer_uid = str(opp_data.get("lawyerUid") or "").strip() if has_opportunity else target_id
+    if not lawyer_uid:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Missing lawyer uid")
+
+    log_firestore_request("lawyers.get", lawyer_uid=lawyer_uid)
+    try:
+        lawyer_doc = db.collection("lawyers").document(lawyer_uid).get()
+        log_firestore_response("lawyers.get", lawyer_uid=lawyer_uid, exists=lawyer_doc.exists)
+    except Exception as exc:
+        log_firestore_error("lawyers.get", exc, lawyer_uid=lawyer_uid)
+        raise
+
+    if not lawyer_doc.exists:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Lawyer not found")
+
+    lawyer_data = lawyer_doc.to_dict() or {}
+    is_verified = _to_bool(lawyer_data.get("verified"))
+    accepts_trainees = _to_bool(lawyer_data.get("acceptsTrainees"))
+    if not is_verified:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Lawyer is not verified for training",
+        )
+    if not accepts_trainees:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Lawyer is not accepting trainees",
+        )
+
+    application_id = _build_training_application_id(
+        lawyer_uid=lawyer_uid,
+        trainee_uid=payload.traineeUid,
+    )
+    existing_ref = db.collection("training_applications").document(application_id)
+    log_firestore_request(
+        "training_applications.duplicate_check",
+        application_id=application_id,
+        lawyer_uid=lawyer_uid,
+        trainee_uid=payload.traineeUid,
+    )
+    try:
+        existing_doc = existing_ref.get()
+        if existing_doc.exists:
+            log_firestore_response(
+                "training_applications.duplicate_check",
+                application_id=application_id,
+                exists=True,
+            )
+            raise HTTPException(
+                status_code=status.HTTP_409_CONFLICT,
+                detail="Training application already exists for this lawyer",
+            )
+
+        legacy_docs = (
+            db.collection("training_applications")
+            .where("lawyerUid", "==", lawyer_uid)
+            .stream()
+        )
+        for legacy_doc in legacy_docs:
+            legacy_data = legacy_doc.to_dict() or {}
+            if str(legacy_data.get("traineeUid") or "").strip() == payload.traineeUid.strip():
+                log_firestore_response(
+                    "training_applications.duplicate_check",
+                    application_id=application_id,
+                    exists=True,
+                    legacy_application_id=legacy_doc.id,
+                )
+                raise HTTPException(
+                    status_code=status.HTTP_409_CONFLICT,
+                    detail="Training application already exists for this lawyer",
+                )
+
+        log_firestore_response(
+            "training_applications.duplicate_check",
+            application_id=application_id,
+            exists=False,
+        )
+    except HTTPException:
+        raise
+    except Exception as exc:
+        log_firestore_error(
+            "training_applications.duplicate_check",
+            exc,
+            application_id=application_id,
+        )
+        raise
 
     record = {
-        "opportunityId": payload.opportunityId,
+        "opportunityId": payload.opportunityId if has_opportunity else None,
         "traineeUid": payload.traineeUid,
         "lawyerUid": lawyer_uid,
         "fullName": payload.fullName,
@@ -63,10 +166,11 @@ def create_training_application(
         "cvUrl": payload.cvUrl,
         "status": "pending",
         "submittedAt": utc_now_iso(),
+        "dedupeKey": application_id,
     }
     log_firestore_request("training_applications.create", data=record)
     try:
-        ref = db.collection("training_applications").document()
+        ref = existing_ref
         ref.set(record)
         log_firestore_response("training_applications.create", application_id=ref.id)
     except Exception as exc:
@@ -77,7 +181,7 @@ def create_training_application(
         create_notification(
             lawyer_uid,
             title="New training application",
-            message="A trainee applied for your training opportunity.",
+            message="A trainee submitted a training application.",
             data={"type": "training", "applicationId": ref.id},
         )
     try:

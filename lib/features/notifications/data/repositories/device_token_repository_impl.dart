@@ -9,21 +9,15 @@ class DeviceTokenRepositoryImpl implements DeviceTokenRepository {
   final DeviceTokenRemoteDataSource remoteDataSource;
   final Executor executor;
 
-  DeviceTokenRepositoryImpl({
-    required this.remoteDataSource,
-    required this.executor,
-  });
+  DeviceTokenRepositoryImpl({required this.remoteDataSource, required this.executor});
 
   @override
-  Future<Either<Failure, bool>> registerDeviceToken({
-    required String deviceToken,
-    String? platform,
-  }) {
+  Future<Either<Failure, bool>> registerDeviceFcmToken({required String deviceFcmToken, String? platform}) {
     return executor.runOnline(() async {
-      await remoteDataSource.registerDeviceToken(
-        DeviceTokenRequestModel(deviceToken: deviceToken, platform: platform),
+      await remoteDataSource.registerDeviceFcmToken(
+        DeviceTokenRequestModel(deviceFcmToken: deviceFcmToken, platform: platform),
       );
       return true;
-    }, from: 'DeviceTokenRepository.registerDeviceToken');
+    }, from: 'DeviceTokenRepository.registerDeviceFcmToken');
   }
 }

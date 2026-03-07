@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:silah_app/core/config/constants/ui_constants.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
 import 'package:silah_app/core/config/router/app_routes.dart';
+import 'package:silah_app/core/foundation/localization/localized_value_resolver.dart';
 import 'package:silah_app/core/presentation/ui/widget/buttons/primary_button_with_progress.dart';
 import 'package:silah_app/core/presentation/ui/widget/drop_down/f_drop_down.dart';
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/error_widget.dart';
@@ -23,10 +24,12 @@ class TrainingApplicationFormBody extends StatefulWidget {
   final TrainingOpportunityEntity opportunity;
 
   @override
-  State<TrainingApplicationFormBody> createState() => _TrainingApplicationFormBodyState();
+  State<TrainingApplicationFormBody> createState() =>
+      _TrainingApplicationFormBodyState();
 }
 
-class _TrainingApplicationFormBodyState extends State<TrainingApplicationFormBody> {
+class _TrainingApplicationFormBodyState
+    extends State<TrainingApplicationFormBody> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
   final _universityController = TextEditingController();
@@ -45,14 +48,16 @@ class _TrainingApplicationFormBodyState extends State<TrainingApplicationFormBod
   }
 
   void _continue(BuildContext context, TrainingLookupsState lookupsState) {
-    if (widget.opportunity.id == null || widget.opportunity.id!.trim().isEmpty) {
+    if (widget.opportunity.id == null ||
+        widget.opportunity.id!.trim().isEmpty) {
       Toasts.error(context, Strings.unexpected_error.tr());
       return;
     }
     if (!(_formKey.currentState?.validate() ?? false)) return;
 
     final ready = lookupsState.maybeWhen(
-      ready: (areas, cities, selectedArea, selectedCity) => (selectedArea, selectedCity),
+      ready: (areas, cities, selectedArea, selectedCity) =>
+          (selectedArea, selectedCity),
       orElse: () => null,
     );
     if (ready == null) return;
@@ -132,8 +137,11 @@ class _TrainingApplicationFormBodyState extends State<TrainingApplicationFormBod
                       initialValue: selectedArea,
                       labelBuilder: _displayName,
                       label: Strings.label_area.tr(),
-                      onChanged: (value) => context.read<TrainingLookupsCubit>().selectArea(value),
-                      validator: (value) => value == null ? Strings.error_fill_form.tr() : null,
+                      onChanged: (value) => context
+                          .read<TrainingLookupsCubit>()
+                          .selectArea(value),
+                      validator: (value) =>
+                          value == null ? Strings.error_fill_form.tr() : null,
                     ),
                     UIConstants.mediumHeight,
                     FDropDown<LookupItemEntity>(
@@ -141,8 +149,11 @@ class _TrainingApplicationFormBodyState extends State<TrainingApplicationFormBod
                       initialValue: selectedCity,
                       labelBuilder: _displayName,
                       label: Strings.label_city.tr(),
-                      onChanged: (value) => context.read<TrainingLookupsCubit>().selectCity(value),
-                      validator: (value) => value == null ? Strings.error_fill_form.tr() : null,
+                      onChanged: (value) => context
+                          .read<TrainingLookupsCubit>()
+                          .selectCity(value),
+                      validator: (value) =>
+                          value == null ? Strings.error_fill_form.tr() : null,
                     ),
                     UIConstants.mediumHeight,
                     FTextField(
@@ -182,8 +193,11 @@ class _TrainingApplicationFormBodyState extends State<TrainingApplicationFormBod
 
   String _displayName(LookupItemEntity? item) {
     if (item == null) return Strings.not_available.tr();
-    final locale = context.locale.languageCode;
-    final name = locale == 'ar' ? item.nameAr : item.nameEn;
-    return name?.trim().isNotEmpty == true ? name!.trim() : (item.id ?? Strings.not_available.tr());
+    final name = LocalizedValueResolver.resolve(
+      localeCode: context.locale.languageCode,
+      arabic: item.nameAr,
+      english: item.nameEn,
+    );
+    return name != null && name.isNotEmpty ? name : Strings.not_available.tr();
   }
 }

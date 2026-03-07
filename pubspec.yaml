@@ -73,6 +73,7 @@ dependencies:
   firebase_auth:
   cloud_firestore:
   firebase_core:
+  firebase_storage:
   # awesome_notifications:
   # awesome_notifications_fcm:
 
@@ -134,6 +135,7 @@ dev_dependencies:
   freezed: ^3.1.0
   flutter_test:
     sdk: flutter
+  flutter_lints: ^5.0.0
 
   # icon stuff
   #to call this library use flutter pub run flutter_launcher_icons
@@ -234,7 +236,7 @@ flutter_native_splash:
   # of your splash screen to a solid color.  Use background_image to set the background of your
   # splash screen to a png image.  This is useful for gradients. The image will be stretch to the
   # size of the app. Only one parameter can be used, color and background_image cannot both be set.
-  color: "#1C75B9"
+  color: "#3C6F2F"
   #background_image: "assets/background.png"
 
   # Optional parameters are listed below.  To enable a parameter, uncomment the line by removing
@@ -277,10 +279,10 @@ flutter_native_splash:
     image: "assets/icons/logo/logo.png"
 
     # Splash screen background color.
-    color: "#1C75B9"
+    color: "#3C6F2F"
 
     # App icon background color.
-    icon_background_color: "#1C75B9"
+    icon_background_color: "#3C6F2F"
 
     # App icon background color.
     #icon_background_color: "#111111"

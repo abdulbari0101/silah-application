@@ -35,6 +35,11 @@ class MessagingRepositoryoImpl implements MessagingRepository {
   }
 
   @override
+  Stream<List<MessageEntity>> watchMessages(String threadId) {
+    return remoteDS.watchMessages(threadId);
+  }
+
+  @override
   Future<Either<Failure, List<ChatThreadEntity>>> fetchThreads() {
     return executor.runOnline(() async {
       return remoteDS.fetchThreads();
@@ -51,6 +56,4 @@ class MessagingRepositoryoImpl implements MessagingRepository {
       return remoteDS.sendMessage(threadId, message);
     }, from: 'MessagingRepository.sendMessage');
   }
-
-
 }

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Optional
 
-from pydantic import BaseModel, Field
+from pydantic import AliasChoices, BaseModel, ConfigDict, Field
 
 
 class AIClassifyRequest(BaseModel):
@@ -16,6 +16,23 @@ class LegalSpecializationPayload(BaseModel):
     nameEn: Optional[str] = None
     iconUrl: Optional[str] = None
     active: Optional[bool] = None
+
+
+class LawyerProfilePayload(BaseModel):
+    id: Optional[str] = None
+    fullName: Optional[str] = None
+    licenseNumber: Optional[str] = None
+    legalFields: list[str] = Field(default_factory=list)
+    legalFieldIds: list[str] = Field(default_factory=list)
+    city: Optional[str] = None
+    cityId: Optional[str] = None
+    areaId: Optional[str] = None
+    workplace: Optional[str] = None
+    workDestinationId: Optional[str] = None
+    yearsOfExperience: Optional[int] = None
+    avatarUrl: Optional[str] = None
+    acceptsTrainees: bool = False
+    availability: str = "available"
 
 
 class AIClassifyResult(BaseModel):
@@ -37,7 +54,7 @@ class AIRecommendRequest(BaseModel):
 class AIRecommendResponse(BaseModel):
     specialization: Optional[LegalSpecializationPayload] = None
     specializationId: Optional[str] = None
-    lawyerIds: list[str]
+    lawyers: list[LawyerProfilePayload] = Field(default_factory=list)
 
 
 class AIClassifyResponse(BaseModel):
@@ -109,8 +126,28 @@ class TrainingApplicationStatusUpdateResponse(BaseModel):
     status: str
 
 
+class NotificationItemResponse(BaseModel):
+    notificationId: str
+    type: Optional[str] = None
+    title: Optional[str] = None
+    message: Optional[str] = None
+    data: dict[str, Any] = Field(default_factory=dict)
+    isSeen: bool = False
+    timestamp: Optional[str] = None
+
+
+class NotificationsListResponse(BaseModel):
+    notifications: list[NotificationItemResponse]
+    unSeenCount: int
+
+
+class NotificationsSeenResponse(BaseModel):
+    updatedCount: int
+
+
 class SupportReportCreateRequest(BaseModel):
     reporterUid: str = Field(..., min_length=1)
+    subject: Optional[str] = None
     details: str = Field(..., min_length=1)
 
 
@@ -118,13 +155,42 @@ class SupportReportCreateResponse(BaseModel):
     reportId: str
 
 
+class SupportReportItemResponse(BaseModel):
+    reportId: str
+    reporterUid: str
+    role: str
+    subject: Optional[str] = None
+    details: str
+    status: str
+    adminNotes: Optional[str] = None
+    createdAt: Optional[str] = None
+    updatedAt: Optional[str] = None
+
+
+class SupportReportsListResponse(BaseModel):
+    reports: list[SupportReportItemResponse]
+
+
 class DeviceTokenRequest(BaseModel):
-    deviceToken: str = Field(..., min_length=1)
+    deviceFcmToken: str = Field(
+        ...,
+        min_length=1,
+        validation_alias=AliasChoices(
+            "deviceFcmToken",
+            "device_fcm_token",
+            "fcmToken",
+            "fcm_token",
+        ),
+    )
     platform: Optional[str] = None
 
 
 class DeviceTokenResponse(BaseModel):
     status: str
+
+
+class RoleSyncResponse(BaseModel):
+    role: str
 
 
 class WrappedResponse(BaseModel):
@@ -133,6 +199,4 @@ class WrappedResponse(BaseModel):
 
 class WrappedDataResponse(WrappedResponse):
     data: dict[str, Any]
-
-    class Config:
-        extra = "allow"
+    model_config = ConfigDict(extra="allow")

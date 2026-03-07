@@ -134,8 +134,9 @@ class AppSettingBloc extends Bloc<AppSettingEvent, AppSettingState> {
 
       // Only update if the theme mode is not already system or brightness changed
       if (current.appAppThemeMode != AppThemeMode.system || (current.isDarkTheme != isDark)) {
-        if ((state is AppSettingLoaded))
+        if ((state is AppSettingLoaded)) {
           add(ChangeThemeEvent(appAppThemeMode: appAppThemeMode, fromWhere: 'systemThemeChanged'));
+        }
       }
     };
   }

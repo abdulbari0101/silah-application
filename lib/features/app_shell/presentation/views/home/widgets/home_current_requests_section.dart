@@ -7,6 +7,7 @@ import 'package:silah_app/core/config/localization/localizations_string_keys.dar
 import 'package:silah_app/core/config/router/app_routes.dart';
 import 'package:silah_app/core/presentation/state_magment/blocs/app_setting/extensions/app_setting_context_extension.dart';
 import 'package:silah_app/core/presentation/ui/widget/buttons/primary_button_with_progress.dart';
+import 'package:silah_app/core/presentation/ui/widget/resolvers/resolved_display_widgets.dart';
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/empty_widget.dart';
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/error_widget.dart';
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/progress_state_widget.dart';
@@ -84,7 +85,6 @@ class _RequestPreviewCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = request.specializationId ?? Strings.request_consultation.tr();
     final description = request.description?.trim();
     final arrowIcon = context.isRTL ? Icons.arrow_back : Icons.arrow_forward;
 
@@ -112,11 +112,15 @@ class _RequestPreviewCard extends StatelessWidget {
                   size: 16,
                 ),
                 UIConstants.xsmallWidth,
-                Text(
-                  title,
-                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    fontWeight: FontWeight.w600,
+                ResolvedSpecializationName(
+                  specializationId: request.specializationId,
+                  fallback: Strings.request_consultation.tr(),
+                  builder: (title) => Text(
+                    title,
+                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ],

@@ -1,7 +1,6 @@
 import 'package:silah_app/core/config/constants/api_constants.dart';
 import 'package:silah_app/core/infrastructure/network/dio_client.dart';
 import 'package:silah_app/core/injection/injection_container.dart';
-import 'package:silah_app/features/support/data/datasources/local/support_local_data_source.dart';
 import 'package:silah_app/features/support/data/datasources/remote/support_remote_data_source.dart';
 import 'package:silah_app/features/support/data/datasources/remote/support_service.dart';
 import 'package:silah_app/features/support/data/repositories/support_repository_impl.dart';
@@ -16,19 +15,11 @@ Future<void> initSupport() async {
 
   // Repo
   locator.registerLazySingleton<SupportTicketsRepository>(
-    () => SupportTicketsRepositoryoImpl(
-      remoteDS: locator(),
-      executor: locator(),
-      localDS: locator(),
-      deviceInfoHelper: locator(),
-    ),
+    () =>
+        SupportTicketsRepositoryoImpl(remoteDS: locator(), executor: locator()),
   );
 
   // Data sources
-  locator.registerLazySingleton<SupportLocalDataSource>(
-    () => SupportLocalDataSourceImpl(logger: locator(), appCache: locator()),
-  );
-
   locator.registerLazySingleton<SupportRemoteDataSource>(
     () => SupportRemoteDataSourceImpl(
       supportService: locator(),

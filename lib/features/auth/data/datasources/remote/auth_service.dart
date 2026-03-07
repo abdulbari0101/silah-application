@@ -6,6 +6,7 @@ import 'package:silah_app/core/infrastructure/analytics/logger/app_logger.dart';
 import 'package:silah_app/core/infrastructure/errors/error_codes.dart';
 import 'package:silah_app/core/infrastructure/errors/exceptions.dart';
 import 'package:silah_app/core/infrastructure/network/firestore_helpers.dart';
+import 'package:silah_app/features/auth/data/datasources/remote/auth_role_service.dart';
 import 'package:silah_app/features/auth/data/models/auth_user_model.dart';
 import 'package:silah_app/features/auth/domain/entities/auth_user_entity.dart';
 
@@ -13,10 +14,15 @@ import 'package:silah_app/features/auth/domain/entities/auth_user_entity.dart';
 class AuthService {
   final FirebaseAuth _auth;
   final FirebaseFirestore _firestore;
+  final AuthRoleService? _roleService;
 
-  AuthService({FirebaseAuth? auth, FirebaseFirestore? firestore})
-    : _auth = auth ?? FirebaseAuth.instance,
-      _firestore = firestore ?? FirebaseFirestore.instance;
+  AuthService({
+    FirebaseAuth? auth,
+    FirebaseFirestore? firestore,
+    AuthRoleService? roleService,
+  })  : _auth = auth ?? FirebaseAuth.instance,
+        _firestore = firestore ?? FirebaseFirestore.instance,
+        _roleService = roleService;
 
   User? get currentUser => _auth.currentUser;
 
@@ -70,7 +76,11 @@ class AuthService {
 
     await _firestore.collection('users').doc(firebaseUser.uid).set(profile);
 
-    final idToken = await _safeIdToken(firebaseUser);
+    final didSyncRole = await _syncRoleClaim(firebaseUser);
+    final idToken = await _safeIdToken(
+      firebaseUser,
+      forceRefresh: didSyncRole,
+    );
     return _buildUserModel(
       user: firebaseUser,
       profile: _ProfileData(AuthAccountType.user, profile),
@@ -117,7 +127,11 @@ class AuthService {
 
     await _firestore.collection('lawyers').doc(firebaseUser.uid).set(profile);
 
-    final idToken = await _safeIdToken(firebaseUser);
+    final didSyncRole = await _syncRoleClaim(firebaseUser);
+    final idToken = await _safeIdToken(
+      firebaseUser,
+      forceRefresh: didSyncRole,
+    );
     return _buildUserModel(
       user: firebaseUser,
       profile: _ProfileData(AuthAccountType.lawyer, profile),
@@ -269,9 +283,27 @@ class AuthService {
     return user;
   }
 
-  Future<String?> _safeIdToken(User user) async {
+  Future<bool> _syncRoleClaim(User user) async {
+    if (_roleService == null) return false;
+    final idToken = await _safeIdToken(user);
+    if (idToken == null || idToken.trim().isEmpty) {
+      return false;
+    }
     try {
-      return await user.getIdToken();
+      await _roleService.syncRole('Bearer $idToken');
+      return true;
+    } catch (error, stack) {
+      AppLogger().networkError(tag: 'AuthService.syncRoleClaim', error, stack: stack);
+      return false;
+    }
+  }
+
+  Future<String?> _safeIdToken(
+    User user, {
+    bool forceRefresh = false,
+  }) async {
+    try {
+      return await user.getIdToken(forceRefresh);
     } catch (_) {
       return null;
     }

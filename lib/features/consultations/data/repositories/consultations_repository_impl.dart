@@ -22,33 +22,41 @@ class ConsultationsRepositoryImpl implements ConsultationsRepository {
     ConsultationRequestEntity request,
   ) {
     return executor.runOnline(() async {
-      if (request.clientId == null || request.clientId!.isEmpty) {
+      final clientId = request.clientId?.trim();
+      final lawyerId = request.lawyerId?.trim();
+      final description = request.description?.trim();
+      final specializationId = request.specializationId?.trim();
+
+      if (clientId == null || clientId.isEmpty) {
         throw const MissingDataException('Missing clientId');
       }
-      if (request.lawyerId == null || request.lawyerId!.isEmpty) {
+      if (lawyerId == null || lawyerId.isEmpty) {
         throw const MissingDataException('Missing lawyerId');
       }
-      if (request.description == null || request.description!.isEmpty) {
+      if (description == null || description.isEmpty) {
         throw const MissingDataException('Missing case description');
       }
 
+      final preparedRequest = request.copyWith(
+        clientId: clientId,
+        lawyerId: lawyerId,
+        description: description,
+        specializationId: specializationId?.isNotEmpty == true
+            ? specializationId
+            : null,
+        status: ConsultationStatus.pending,
+      );
       final response = await remoteDataSource.createConsultation(
-        ConsultationCreateRequestModel(
-          clientUid: request.clientId!,
-          lawyerUid: request.lawyerId!,
-          caseText: request.description!,
-          specializationId: request.specializationId,
-        ),
+        ConsultationCreateRequestModel.fromEntity(preparedRequest),
       );
 
       final consultationId = response.consultationId;
       if (consultationId == null || consultationId.isEmpty) {
-        return request;
+        return preparedRequest;
       }
 
       final fetched = await _fetchByIdInternal(consultationId);
-      return fetched ??
-          request.copyWith(id: consultationId, status: ConsultationStatus.pending);
+      return fetched ?? preparedRequest.copyWith(id: consultationId);
     }, from: 'ConsultationsRepository.createRequest');
   }
 
@@ -70,53 +78,47 @@ class ConsultationsRepositoryImpl implements ConsultationsRepository {
     ConsultationStatus status,
   ) {
     return executor.runOnline(() async {
+      final resolvedRequestId = requestId.trim();
+      if (resolvedRequestId.isEmpty) {
+        throw const MissingDataException('Missing request id');
+      }
       final response = await remoteDataSource.updateStatus(
-        requestId,
+        resolvedRequestId,
         ConsultationStatusUpdateRequestModel.fromStatus(status),
       );
-      final resolved = _parseStatus(response.status) ?? status;
+      final resolved = ConsultationStatusX.tryParse(response.status) ?? status;
 
-      final fetched = await _fetchByIdInternal(requestId);
-      return fetched ?? ConsultationRequestEntity(id: requestId, status: resolved);
+      final fetched = await _fetchByIdInternal(resolvedRequestId);
+      return fetched ??
+          ConsultationRequestEntity(id: resolvedRequestId, status: resolved);
     }, from: 'ConsultationsRepository.updateRequestStatus');
   }
 
   @override
-  Future<Either<Failure, ConsultationRequestEntity>> fetchRequestById(String requestId) {
+  Future<Either<Failure, ConsultationRequestEntity>> fetchRequestById(
+    String requestId,
+  ) {
     return executor.runOnline(() async {
-      final result = await remoteDataSource.fetchRequestById(requestId);
+      final resolvedRequestId = requestId.trim();
+      if (resolvedRequestId.isEmpty) {
+        throw const MissingDataException('Missing request id');
+      }
+      final result = await remoteDataSource.fetchRequestById(resolvedRequestId);
       return result ??
           ConsultationRequestEntity(
-            id: requestId,
+            id: resolvedRequestId,
             status: ConsultationStatus.pending,
           );
     }, from: 'ConsultationsRepository.fetchRequestById');
   }
 
-  Future<ConsultationRequestEntity?> _fetchByIdInternal(String requestId) async {
+  Future<ConsultationRequestEntity?> _fetchByIdInternal(
+    String requestId,
+  ) async {
     try {
       return await remoteDataSource.fetchRequestById(requestId);
     } catch (_) {
       return null;
-    }
-  }
-
-  ConsultationStatus? _parseStatus(String? value) {
-    switch (value?.toLowerCase()) {
-      case 'accepted':
-        return ConsultationStatus.accepted;
-      case 'rejected':
-        return ConsultationStatus.rejected;
-      case 'active':
-        return ConsultationStatus.active;
-      case 'closed':
-        return ConsultationStatus.closed;
-      case 'cancelled':
-        return ConsultationStatus.cancelled;
-      case 'pending':
-        return ConsultationStatus.pending;
-      default:
-        return null;
     }
   }
 }

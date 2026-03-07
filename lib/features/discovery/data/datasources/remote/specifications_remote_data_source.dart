@@ -1,11 +1,14 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:silah_app/core/data/model/api/base/base_api_response.dart';
+import 'package:silah_app/core/foundation/parsing/profile_field_reader.dart';
 import 'package:silah_app/core/infrastructure/analytics/logger/app_logger.dart';
 import 'package:silah_app/core/infrastructure/network/decoders/api_json_decoder.dart';
 import 'package:silah_app/core/infrastructure/network/firebase_call.dart';
 import 'package:silah_app/core/infrastructure/network/firestore_helpers.dart';
 import 'package:silah_app/features/discovery/data/models/ai_models.dart';
-import 'package:silah_app/features/discovery/data/models/legal_specialization_model.dart';
 import 'package:silah_app/features/discovery/domain/entities/discovery_request_entity.dart';
 import 'package:silah_app/features/discovery/domain/entities/legal_specialization_entity.dart';
 import 'package:silah_app/features/profiles/domain/entities/availability_status.dart';
@@ -14,13 +17,23 @@ import 'package:silah_app/features/profiles/domain/entities/lawyer_profile_entit
 import 'specifications_service.dart';
 
 abstract class SpecificationsRemoteDataSource {
-  Future<BaseApiResponse<AiClassifyResponseModel>> classify(
-    AiClassifyRequestModel request,
-  );
   Future<BaseApiResponse<AiRecommendResponseModel>> recommend(
     AiRecommendRequestModel request,
   );
   Future<List<LegalSpecializationEntity>> fetchSpecializations();
+  String generateSpecializationId();
+  Future<String> uploadSpecializationIcon({
+    required String specializationId,
+    required File imageFile,
+  });
+  Future<void> upsertSpecialization({
+    required String specializationId,
+    required String nameAr,
+    required String nameEn,
+    required int order,
+    String? iconUrl,
+    bool active = true,
+  });
   Future<List<LawyerProfileEntity>> fetchLawyersBySpecialization(
     DiscoveryRequestEntity request,
   );
@@ -31,21 +44,15 @@ class SpecificationsRemoteDataSourceImpl
   final SpecificationsService specificationsService;
   final AppLogger logger;
   final FirebaseFirestore firestore;
+  final FirebaseStorage storage;
 
   SpecificationsRemoteDataSourceImpl({
     required this.specificationsService,
     required this.logger,
     FirebaseFirestore? firestore,
-  }) : firestore = firestore ?? FirebaseFirestore.instance;
-
-  @override
-  Future<BaseApiResponse<AiClassifyResponseModel>> classify(
-    AiClassifyRequestModel request,
-  ) => handleBaseApiResponse<AiClassifyResponseModel>(
-    method: 'SpecificationsRemoteDataSource.classify',
-    logger: logger,
-    call: () => specificationsService.classify(request),
-  );
+    FirebaseStorage? storage,
+  }) : firestore = firestore ?? FirebaseFirestore.instance,
+       storage = storage ?? FirebaseStorage.instance;
 
   @override
   Future<BaseApiResponse<AiRecommendResponseModel>> recommend(
@@ -66,17 +73,100 @@ class SpecificationsRemoteDataSourceImpl
             .collection('specializations')
             .where('active', isEqualTo: true)
             .get();
-        return snapshot.docs
-            .map(
-              (doc) => LegalSpecializationModel(
-                id: doc.id,
-                nameAr: doc.data()['nameAr'] as String?,
-                nameEn: doc.data()['nameEn'] as String?,
-                iconUrl: doc.data()['iconUrl'] as String?,
-                active: doc.data()['active'] as bool?,
-              ).toEntity(),
-            )
-            .toList();
+        final items = snapshot.docs.map((doc) {
+          final data = doc.data();
+          final nameAr = (data['nameAr'] as String?)?.trim();
+          final nameEn = (data['nameEn'] as String?)?.trim();
+          final order = parseFirestoreInt(data['order']);
+          return LegalSpecializationEntity(
+            id: doc.id,
+            code: nameEn,
+            name: (nameAr?.isNotEmpty == true) ? nameAr : nameEn,
+            description: order?.toString(),
+            iconUrl: (data['iconUrl'] as String?)?.trim(),
+            keywords: null,
+          );
+        }).toList();
+        items.sort((a, b) {
+          final orderA = int.tryParse(a.description ?? '') ?? 1 << 30;
+          final orderB = int.tryParse(b.description ?? '') ?? 1 << 30;
+          if (orderA != orderB) return orderA.compareTo(orderB);
+          final nameA = (a.name ?? a.code ?? '').toLowerCase();
+          final nameB = (b.name ?? b.code ?? '').toLowerCase();
+          return nameA.compareTo(nameB);
+        });
+        return items;
+      },
+    );
+  }
+
+  @override
+  String generateSpecializationId() {
+    return firestore.collection('specializations').doc().id;
+  }
+
+  @override
+  Future<String> uploadSpecializationIcon({
+    required String specializationId,
+    required File imageFile,
+  }) {
+    return firebaseCall<String>(
+      method: 'SpecificationsRemoteDataSource.uploadSpecializationIcon',
+      logger: logger,
+      payload: {'specializationId': specializationId},
+      call: () async {
+        final path =
+            'specializations/$specializationId/icon_${DateTime.now().millisecondsSinceEpoch}.jpg';
+        final ref = storage.ref().child(path);
+        await ref.putFile(
+          imageFile,
+          SettableMetadata(contentType: 'image/jpeg'),
+        );
+        return ref.getDownloadURL();
+      },
+    );
+  }
+
+  @override
+  Future<void> upsertSpecialization({
+    required String specializationId,
+    required String nameAr,
+    required String nameEn,
+    required int order,
+    String? iconUrl,
+    bool active = true,
+  }) {
+    return firebaseCall<void>(
+      method: 'SpecificationsRemoteDataSource.upsertSpecialization',
+      logger: logger,
+      payload: {
+        'specializationId': specializationId,
+        'nameAr': nameAr,
+        'nameEn': nameEn,
+        'order': order,
+        'active': active,
+      },
+      call: () async {
+        final ref = firestore
+            .collection('specializations')
+            .doc(specializationId);
+        final exists = (await ref.get()).exists;
+        final payload = <String, dynamic>{
+          'nameAr': nameAr.trim(),
+          'nameEn': nameEn.trim(),
+          'order': order,
+          'active': active,
+          'updatedAt': FieldValue.serverTimestamp(),
+        };
+        final icon = iconUrl?.trim();
+        if (icon != null && icon.isNotEmpty) {
+          payload['iconUrl'] = icon;
+        }
+        if (!exists) {
+          payload['createdAt'] = FieldValue.serverTimestamp();
+        }
+
+        await ref.set(payload, SetOptions(merge: true));
       },
     );
   }
@@ -239,7 +329,7 @@ class SpecificationsRemoteDataSourceImpl
       yearsOfExperience:
           parseFirestoreInt(data['experienceYears']) ??
           parseFirestoreInt(data['yearsOfExperience']),
-      avatarUrl: data['avatarUrl'] as String?,
+      avatarUrl: ProfileFieldReader.readAvatarUrl(data),
       acceptsTrainees: data['acceptsTrainees'] as bool? ?? false,
       availability: _parseAvailability(availabilityValue),
     );

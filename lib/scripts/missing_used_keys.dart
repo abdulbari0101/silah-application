@@ -81,7 +81,7 @@ Example: dart run lib/scripts/missing_used_keys.dart tr
 
   // --- 4. Write output ---------------------------------------------------
   await File(outPath)
-      .writeAsString(JsonEncoder.withIndent('  ').convert(missing) + '\n');
+      .writeAsString('${JsonEncoder.withIndent('  ').convert(missing)}\n');
 
   stdout.writeln(
       '✅ Found ${missing.length} missing key(s). Output written to $outPath');

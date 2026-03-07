@@ -1,58 +1,83 @@
 import 'package:dart_mappable/dart_mappable.dart';
+import 'package:silah_app/core/data/model/api/base/response_wrapper.dart';
+import 'package:silah_app/core/data/model/api/result_model.dart';
 import 'package:silah_app/features/notifications/domain/entities/notification/notification_entity.dart';
+import 'package:silah_app/features/notifications/domain/entities/notification/notification_result.dart';
 
 part 'notification_model.mapper.dart';
 
 @MappableClass(ignoreNull: true)
 class NotificationModel with NotificationModelMappable {
-  @MappableField(key: 'DATEIN')
+  @MappableField(key: 'notificationId')
+  final String? id;
+
+  final String? type;
+
   final String? timestamp;
 
-  @MappableField(key: 'SERVICENO')
-  final int? serviceNo;
+  final String? title;
 
-  @MappableField(key: 'LANGNO')
-  final int? languageCode;
-
-  @MappableField(key: 'MESSAGE')
   final String? message;
 
-  @MappableField(key: 'local_id')
-  final int? id; // for db primary key
-
-  @MappableField(key: 'local_user_id')
-  final String? userId; // hide it from entity , keep private handled in data layer exactly in db_source
+  final Map<String, dynamic>? data;
 
   @MappableField(key: 'isSeen')
   final bool isSeen;
 
   const NotificationModel({
-    this.timestamp,
-    this.serviceNo,
-    this.languageCode,
-    this.message,
     this.id,
-    this.userId,
+    this.type,
+    this.timestamp,
+    this.title,
+    this.message,
+    this.data,
     this.isSeen = false,
   });
 
   NotificationEntity toEntity() => NotificationEntity(
-    timestamp: timestamp,
     id: id,
-    languageCode: languageCode,
+    type: type,
+    timestamp: timestamp,
+    title: title,
     message: message,
-    serviceNo: serviceNo,
-
+    data: data,
     isSeen: isSeen,
   );
+}
 
-  factory NotificationModel.fromEntity(NotificationEntity entity) =>
-      NotificationModel(
-        id: entity.id,
-        timestamp: entity.timestamp,
-        languageCode: entity.languageCode,
-        message: entity.message,
-        serviceNo: entity.serviceNo,
-        isSeen: entity.isSeen,
-      );
+@MappableClass(ignoreNull: true)
+class NotificationsResponseModel extends BaseRespWrapper
+    with NotificationsResponseModelMappable {
+  final List<NotificationModel>? notifications;
+  final int? unSeenCount;
+
+  const NotificationsResponseModel({
+    required super.result,
+    this.notifications,
+    this.unSeenCount,
+  });
+
+  NotificationResult toEntity() {
+    final items =
+        notifications?.map((item) => item.toEntity()).toList(growable: false) ??
+        const <NotificationEntity>[];
+    final fallbackUnSeenCount = items
+        .where((notification) => notification.isSeen == false)
+        .length;
+    return NotificationResult(
+      unSeenCount: unSeenCount ?? fallbackUnSeenCount,
+      notifications: items,
+    );
+  }
+}
+
+@MappableClass(ignoreNull: true)
+class NotificationsSeenResponseModel extends BaseRespWrapper
+    with NotificationsSeenResponseModelMappable {
+  final int? updatedCount;
+
+  const NotificationsSeenResponseModel({
+    required super.result,
+    this.updatedCount,
+  });
 }

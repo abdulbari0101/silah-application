@@ -42,33 +42,50 @@ class _ContentState extends State<_Content> {
 
   @override
   Widget build(BuildContext context) {
-    final extra = GoRouterState.of(context).extra as Map<String, dynamic>? ?? {};
+    final extra =
+        GoRouterState.of(context).extra as Map<String, dynamic>? ?? {};
 
     final title =
-        extra.safe<String>(SuccessScreenKeys.title) ?? Strings.msg_reset_password_done.tr();
+        extra.safe<String>(SuccessScreenKeys.title) ??
+        Strings.msg_reset_password_done.tr();
     final subtitle =
-        extra.safe<String>(SuccessScreenKeys.subtitle) ?? Strings.msg_reset_success.tr();
+        extra.safe<String>(SuccessScreenKeys.subtitle) ??
+        Strings.msg_reset_success.tr();
     final primaryButtonLabel =
-        extra.safe<String>(SuccessScreenKeys.primaryButtonLabel) ?? Strings.btn_go_login.tr();
-    final showSecondButton = extra.safe<bool>(SuccessScreenKeys.secondButton) ?? false;
+        extra.safe<String>(SuccessScreenKeys.primaryButtonLabel) ??
+        Strings.btn_go_login.tr();
+    final showSecondButton =
+        extra.safe<bool>(SuccessScreenKeys.secondButton) ?? false;
     final secondButtonLabel =
-        extra.safe<String>(SuccessScreenKeys.secondButtonLabel) ?? Strings.btn_go_login.tr();
+        extra.safe<String>(SuccessScreenKeys.secondButtonLabel) ??
+        Strings.btn_go_login.tr();
 
     final onTapId = extra.safe<String>(SuccessScreenKeys.onTapId);
     final onPrimaryRoute = extra.safe<String>(SuccessScreenKeys.onPrimaryRoute);
 
     final onPrimaryTap = onTapId != null
         ? CallbackRegistry.retrieve(onTapId)
-        : () => context.goTo(AppRoutes.login);
+        : null;
 
     final onSecondTapId = extra.safe<String>(SuccessScreenKeys.onSecondTapId);
-    final onSecondaryTap = onSecondTapId != null ? CallbackRegistry.retrieve(onSecondTapId) : null;
-    final transactionNumber = extra.safe<String>(SuccessScreenKeys.transactionNumber);
-    final showShareButton = extra.safe<bool>(SuccessScreenKeys.shareButton) ?? false;
-    final shareButtonLabel = extra.safe<String>(SuccessScreenKeys.shareButtonLabel);
+    final onSecondaryTap = onSecondTapId != null
+        ? CallbackRegistry.retrieve(onSecondTapId)
+        : null;
+    final transactionNumber = extra.safe<String>(
+      SuccessScreenKeys.transactionNumber,
+    );
+    final showShareButton =
+        extra.safe<bool>(SuccessScreenKeys.shareButton) ?? false;
+    final shareButtonLabel = extra.safe<String>(
+      SuccessScreenKeys.shareButtonLabel,
+    );
     final shareTapId = extra.safe<String>(SuccessScreenKeys.onShareTapId);
-    final onShareTap = shareTapId != null ? CallbackRegistry.retrieve(shareTapId) : null;
-    final postFrameTapId = extra.safe<String>(SuccessScreenKeys.onPostFrameTapId);
+    final onShareTap = shareTapId != null
+        ? CallbackRegistry.retrieve(shareTapId)
+        : null;
+    final postFrameTapId = extra.safe<String>(
+      SuccessScreenKeys.onPostFrameTapId,
+    );
 
     if (!_postFrameHandled && postFrameTapId != null) {
       _postFrameHandled = true;
@@ -77,22 +94,30 @@ class _ContentState extends State<_Content> {
       });
     }
 
+    void handlePrimaryAction() {
+      if (onPrimaryRoute != null) {
+        context.goNamed(onPrimaryRoute);
+        return;
+      }
+      if (onPrimaryTap != null) {
+        onPrimaryTap();
+        return;
+      }
+      context.goTo(AppRoutes.login);
+    }
+
     final spacing = AppDimension(context).height * 0.03;
 
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
         if (!didPop) {
-          if (onPrimaryTap != null) {
-            onPrimaryTap();
-          } else if (onSecondaryTap != null) {
+          if (onSecondaryTap != null &&
+              onPrimaryRoute == null &&
+              onPrimaryTap == null) {
             onSecondaryTap();
           } else {
-            if (onPrimaryRoute != null) {
-              context.goTo(AppRoutes.home);
-            } else {
-              if (Navigator.canPop(context)) Navigator.pop(context);
-            }
+            handlePrimaryAction();
           }
         }
       },
@@ -111,7 +136,9 @@ class _ContentState extends State<_Content> {
               darkDynamicColor: false,
             ),
             SizedBox(height: spacing),
-            ScreenPaddingWrapper(child: SuccessSubtitleText(subtitle: subtitle)),
+            ScreenPaddingWrapper(
+              child: SuccessSubtitleText(subtitle: subtitle),
+            ),
             if (transactionNumber != null) ...[
               SizedBox(height: spacing * 0.6),
               _TransactionNumberCard(transactionNumber: transactionNumber),
@@ -122,17 +149,12 @@ class _ContentState extends State<_Content> {
             const Spacer(flex: 3),
             Column(
               children: [
-                if (showShareButton) ShareButton(onShareTap: onShareTap),
+                if (showShareButton)
+                  ShareButton(onShareTap: onShareTap, label: shareButtonLabel),
 
                 PrimaryButton(
                   text: primaryButtonLabel,
-                  onTap: () {
-                    if (onPrimaryRoute != null) {
-                      context.goNamed(AppRoutes.home.name);
-                    } else {
-                      onPrimaryTap?.call();
-                    }
-                  },
+                  onTap: handlePrimaryAction,
                 ),
                 SizedBox(height: spacing),
                 if (showSecondButton)
@@ -177,8 +199,10 @@ class _TransactionNumberCard extends StatelessWidget {
           : [colors.primary.withValues(alpha: 0.08), colors.surface],
     );
 
-    final borderColor = colors.outlineVariant.withAlphaOpacity(isDark ? 0.2 : 0.3);
-    final copyAction = () => CopyUtil.copyValue(transactionNumber, context);
+    final borderColor = colors.outlineVariant.withAlphaOpacity(
+      isDark ? 0.2 : 0.3,
+    );
+    void copyAction() => CopyUtil.copyValue(transactionNumber, context);
 
     return Semantics(
       button: true,
@@ -205,7 +229,9 @@ class _TransactionNumberCard extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: colors.primary.withValues(alpha: isDark ? 0.18 : 0.12),
+                    color: colors.primary.withValues(
+                      alpha: isDark ? 0.18 : 0.12,
+                    ),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: AppSvgIcon(
@@ -268,9 +294,13 @@ class _CopyButton extends StatelessWidget {
       child: TextButton.icon(
         style: TextButton.styleFrom(
           padding: const EdgeInsets.symmetric(horizontal: 12),
-          backgroundColor: colors.primary.withValues(alpha: isDark ? 0.16 : 0.12),
+          backgroundColor: colors.primary.withValues(
+            alpha: isDark ? 0.16 : 0.12,
+          ),
           foregroundColor: colors.onPrimary,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
           overlayColor: colors.primary.withValues(alpha: 0.12),
         ),
         onPressed: onCopy,

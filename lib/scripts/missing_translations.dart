@@ -31,7 +31,7 @@ Example: dart run lib/scripts/missing_translations.dart en tr
   if (!await defaultPatchDir.exists()) {
     await defaultPatchDir.create(recursive: true);
   }
-  final defaultPatchPath = '${defaultPatchDir.path}/$srcLang\_$tgtLang.json';
+  final defaultPatchPath = '${defaultPatchDir.path}/${srcLang}_$tgtLang.json';
   final outPath = args.length == 3 ? args[2] : defaultPatchPath;
 
   final srcPath = 'assets/translations/$srcLang.json';
@@ -59,7 +59,7 @@ Example: dart run lib/scripts/missing_translations.dart en tr
   });
 
   await File(outPath)
-      .writeAsString(JsonEncoder.withIndent('  ').convert(missing) + '\n');
+      .writeAsString('${JsonEncoder.withIndent('  ').convert(missing)}\n');
 
   stdout.writeln(
       '✅ Found ${missing.length} missing translation(s). Written to $outPath');

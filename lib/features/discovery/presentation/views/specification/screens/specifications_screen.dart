@@ -13,7 +13,8 @@ class SpecificationsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => SpecificationsBloc(repository: locator()),
+      create: (_) =>
+          SpecificationsBloc(repository: locator())..add(LoadSpecifications()),
 
       child: PlatformScreenWrapper(
         title: Strings.specializations.tr(),

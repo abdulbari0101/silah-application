@@ -10,8 +10,8 @@ part 'device_token_service.g.dart';
 abstract class DeviceTokenService {
   factory DeviceTokenService(Dio dio, {String? baseUrl}) = _DeviceTokenService;
 
-  @POST('/devices/token')
-  Future<BaseApiResponse<DeviceTokenResponseModel>> registerDeviceToken(
+  @POST('/devices/fcm_token')
+  Future<BaseApiResponse<DeviceTokenResponseModel>> registerDeviceFcmToken(
     @Body() DeviceTokenRequestModel request,
   );
 }

@@ -7,7 +7,8 @@ import 'package:silah_app/features/consultations/presentation/views/create_reque
 import 'package:silah_app/features/profiles/domain/entities/lawyer_profile_entity.dart';
 import 'package:silah_app/features/profiles/presentation/views/lawyer_profile/widgets/lawyer_profile_details_card.dart';
 import 'package:silah_app/features/profiles/presentation/views/lawyer_profile/widgets/lawyer_profile_summary_card.dart';
-import 'package:silah_app/features/training/presentation/views/opportunities/models/training_opportunities_args.dart';
+import 'package:silah_app/features/training/domain/entities/training_opportunity_entity.dart';
+import 'package:silah_app/features/training/presentation/views/application/models/training_application_args.dart';
 
 class LawyerProfileBody extends StatelessWidget {
   const LawyerProfileBody({
@@ -42,12 +43,13 @@ class LawyerProfileBody extends StatelessWidget {
             LawyerProfileDetailsCard(
               lawyer: lawyer,
               specialization: specialization,
-              onRequestConsultation: specializationId == null && specialization == null
+              onRequestConsultation:
+                  specializationId == null && specialization == null
                   ? null
                   : () => _requestConsultation(context),
-              onRequestTraining: lawyer.id == null
+              onRequestTraining: lawyer.id == null || !lawyer.acceptsTrainees
                   ? null
-                  : () => _openTrainingOpportunities(context, lawyer.id!),
+                  : () => _openTrainingApplication(context, lawyer.id!),
             ),
           ],
         ),
@@ -66,10 +68,18 @@ class LawyerProfileBody extends StatelessWidget {
     );
   }
 
-  void _openTrainingOpportunities(BuildContext context, String lawyerUid) {
+  void _openTrainingApplication(BuildContext context, String lawyerUid) {
     context.pushNamed(
-      AppRoutes.trainingOpportunities.name,
-      extra: TrainingOpportunitiesArgs(lawyerUid: lawyerUid),
+      AppRoutes.trainingApplication.name,
+      extra: TrainingApplicationArgs(
+        opportunity: TrainingOpportunityEntity(
+          // Backend accepts this field as either an opportunity ID
+          // or a direct lawyer UID target.
+          id: lawyerUid,
+          lawyerId: lawyerUid,
+          title: specialization,
+        ),
+      ),
     );
   }
 }

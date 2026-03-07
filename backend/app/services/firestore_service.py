@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import Iterable
+from typing import Any, Iterable
 
 from firebase_admin import auth, firestore, messaging
 
@@ -55,18 +55,18 @@ def get_specialization_names(db: firestore.Client | None = None) -> list[str]:
     return names or DEFAULT_SPECIALIZATIONS
 
 
-def find_verified_lawyers(
+def find_verified_lawyer_profiles(
     specialization: str,
     city: str | None = None,
     availability: str | None = None,
     db: firestore.Client | None = None,
-) -> list[str]:
+) -> list[dict[str, Any]]:
     db = db or firestore_client()
     base_query = db.collection("lawyers").where("verified", "==", True)
     if availability:
         base_query = base_query.where("availability", "==", availability)
 
-    lawyer_ids: set[str] = set()
+    lawyers: dict[str, dict[str, Any]] = {}
 
     queries = []
     if city:
@@ -85,35 +85,94 @@ def find_verified_lawyers(
         specialization = specialization.strip()
         if specialization:
             for query in queries:
-                _query_lawyers_by_specialization(query, specialization, lawyer_ids)
+                _query_lawyers_by_specialization(query, specialization, lawyers)
 
-            if not lawyer_ids:
+            if not lawyers:
                 for name in _resolve_specialization_names(specialization, db):
                     for query in queries:
                         _query_lawyers_by_specialization(
                             query,
                             name,
-                            lawyer_ids,
+                            lawyers,
                             fields=("legalFields",),
                         )
 
-    log_firestore_response("lawyers.query", count=len(lawyer_ids))
-    return sorted(lawyer_ids)
+    log_firestore_response("lawyers.query", count=len(lawyers))
+    return sorted(
+        lawyers.values(),
+        key=lambda item: (
+            str(item.get("fullName") or "").strip().lower(),
+            str(item.get("id") or "").strip().lower(),
+        ),
+    )
 
 
 def _query_lawyers_by_specialization(
     query: firestore.Query,
     specialization: str,
-    lawyer_ids: set[str],
+    lawyers: dict[str, dict[str, Any]],
     fields: tuple[str, ...] = ("legalFieldIds", "legalFields"),
 ) -> None:
     for field in fields:
         try:
             docs = query.where(field, "array_contains", specialization).stream()
             for doc in docs:
-                lawyer_ids.add(doc.id)
+                lawyers[doc.id] = _serialize_lawyer_profile(doc)
         except Exception as exc:
             log_firestore_error(f"lawyers.query.{field}", exc)
+
+
+def _serialize_lawyer_profile(
+    doc: firestore.DocumentSnapshot,
+) -> dict[str, Any]:
+    data = doc.to_dict() or {}
+    legal_field_ids = _parse_string_list(data.get("legalFieldIds"))
+    legal_fields = _parse_string_list(data.get("legalFields"))
+    city_id = str(data.get("cityId") or "").strip() or None
+    city_name = str(data.get("city") or "").strip() or None
+    work_destination_id = str(data.get("workDestinationId") or "").strip() or None
+    workplace_name = str(data.get("workplace") or "").strip() or None
+
+    return {
+        "id": doc.id,
+        "fullName": str(data.get("name") or data.get("fullName") or "").strip() or None,
+        "licenseNumber": str(data.get("licenseNumber") or "").strip() or None,
+        "legalFields": legal_fields,
+        "legalFieldIds": legal_field_ids,
+        "city": city_name or city_id,
+        "cityId": city_id,
+        "areaId": str(data.get("areaId") or "").strip() or None,
+        "workplace": workplace_name or work_destination_id,
+        "workDestinationId": work_destination_id,
+        "yearsOfExperience": _parse_int(
+            data.get("experienceYears"),
+        ) or _parse_int(data.get("yearsOfExperience")),
+        "avatarUrl": str(data.get("avatarUrl") or "").strip() or None,
+        "acceptsTrainees": bool(data.get("acceptsTrainees") or False),
+        "availability": str(data.get("availability") or "available").strip() or "available",
+    }
+
+
+def _parse_string_list(value: Any) -> list[str]:
+    if isinstance(value, list):
+        return [str(item).strip() for item in value if str(item).strip()]
+    if isinstance(value, str):
+        trimmed = value.strip()
+        return [trimmed] if trimmed else []
+    return []
+
+
+def _parse_int(value: Any) -> int | None:
+    if isinstance(value, int):
+        return value
+    if isinstance(value, float):
+        return int(value)
+    if isinstance(value, str):
+        try:
+            return int(value.strip())
+        except ValueError:
+            return None
+    return None
 
 
 def _resolve_specialization_names(
@@ -153,13 +212,27 @@ def set_user_role(uid: str, role: str) -> None:
     auth.set_custom_user_claims(uid, claims)
 
 
+def resolve_user_role(uid: str, db: firestore.Client | None = None) -> str:
+    db = db or firestore_client()
+    try:
+        lawyer_doc = db.collection("lawyers").document(uid).get()
+        if lawyer_doc.exists:
+            return "lawyer"
+        user_doc = db.collection("users").document(uid).get()
+        if user_doc.exists:
+            return "user"
+    except Exception:
+        return "user"
+    return "user"
+
+
 def create_notification(
     user_uid: str,
     title: str,
     message: str,
     data: dict | None = None,
     fcm_token: str | None = None,
-    fcm_tokens: Iterable[str] | None = None,
+    device_fcm_token: Iterable[str] | None = None,
     send_push: bool = True,
     db: firestore.Client | None = None,
 ) -> None:
@@ -190,7 +263,7 @@ def create_notification(
 
     tokens = _merge_tokens(
         fcm_token=fcm_token,
-        fcm_tokens=fcm_tokens,
+        device_fcm_token=device_fcm_token,
         user_uid=user_uid,
         db=db,
     )
@@ -207,15 +280,15 @@ def create_notification(
 def _merge_tokens(
     *,
     fcm_token: str | None,
-    fcm_tokens: Iterable[str] | None,
+    device_fcm_token: Iterable[str] | None,
     user_uid: str,
     db: firestore.Client,
 ) -> list[str]:
     tokens: list[str] = []
     if fcm_token:
         tokens.append(str(fcm_token))
-    if fcm_tokens:
-        tokens.extend([str(token) for token in fcm_tokens if token])
+    if device_fcm_token:
+        tokens.extend([str(token) for token in device_fcm_token if token])
 
     if tokens:
         return _dedupe_tokens(tokens)
@@ -230,15 +303,24 @@ def _merge_tokens(
 
     return _dedupe_tokens(tokens)
 
-
 def _extract_tokens(data: dict) -> list[str]:
     tokens: list[str] = []
-    token = data.get("fcmToken") or data.get("deviceToken")
-    if token:
-        tokens.append(str(token))
-    list_token = data.get("fcmTokens")
-    if isinstance(list_token, list):
-        tokens.extend([str(item) for item in list_token if item])
+    token_keys = (
+        "deviceFcmToken",
+        "device_fcm_token",
+        "fcmToken",
+        "fcm_token",
+    )
+    for key in token_keys:
+        token = data.get(key)
+        if token:
+            tokens.append(str(token))
+
+    list_token_keys = ("fcmTokens", "deviceFcmTokens", "device_fcm_tokens")
+    for key in list_token_keys:
+        list_token = data.get(key)
+        if isinstance(list_token, list):
+            tokens.extend([str(item) for item in list_token if item])
     return tokens
 
 
@@ -259,6 +341,10 @@ def _send_push(tokens: list[str], title: str, message: str, data: dict | None) -
     client = messaging_client()
 
     payload_data = {str(k): str(v) for k, v in (data or {}).items()}
+    if "title" not in payload_data:
+        payload_data["title"] = title
+    if "body" not in payload_data:
+        payload_data["body"] = message
     if len(tokens) == 1:
         msg = messaging.Message(
             token=tokens[0],
@@ -301,26 +387,24 @@ def create_admin_task(
     return ref.id
 
 
-def save_device_token(
+def save_device_fcm_token(
     user_uid: str,
-    device_token: str,
+    device_fcm_token: str,
     role: str | None = None,
     platform: str | None = None,
     db: firestore.Client | None = None,
 ) -> None:
     db = db or firestore_client()
     payload = {
-        "deviceToken": device_token,
-        "deviceTokens": firestore.ArrayUnion([device_token]),
-        "fcmToken": device_token,
-        "fcmTokens": firestore.ArrayUnion([device_token]),
-        "deviceTokenUpdatedAt": utc_now_iso(),
+        # Store one canonical token field only (no token arrays).
+        "deviceFcmToken": device_fcm_token,
+        "deviceFcmTokenUpdatedAt": utc_now_iso(),
     }
     if platform:
         payload["devicePlatform"] = platform
 
     log_firestore_request(
-        "device_tokens.save",
+        "device_fcm_token.save",
         user_uid=user_uid,
         role=role,
         platform=platform,
@@ -330,17 +414,17 @@ def save_device_token(
     if role == "lawyer":
         try:
             db.collection("lawyers").document(user_uid).set(payload, merge=True)
-            log_firestore_response("device_tokens.save", collection="lawyers", user_uid=user_uid)
+            log_firestore_response("device_fcm_token.save", collection="lawyers", user_uid=user_uid)
         except Exception as exc:
-            log_firestore_error("device_tokens.save", exc, collection="lawyers", user_uid=user_uid)
+            log_firestore_error("device_fcm_token.save", exc, collection="lawyers", user_uid=user_uid)
             raise
         return
     if role in {"user", "admin"}:
         try:
             db.collection("users").document(user_uid).set(payload, merge=True)
-            log_firestore_response("device_tokens.save", collection="users", user_uid=user_uid)
+            log_firestore_response("device_fcm_token.save", collection="users", user_uid=user_uid)
         except Exception as exc:
-            log_firestore_error("device_tokens.save", exc, collection="users", user_uid=user_uid)
+            log_firestore_error("device_fcm_token.save", exc, collection="users", user_uid=user_uid)
             raise
         return
 
@@ -348,9 +432,9 @@ def save_device_token(
     if user_doc.exists:
         try:
             db.collection("users").document(user_uid).set(payload, merge=True)
-            log_firestore_response("device_tokens.save", collection="users", user_uid=user_uid)
+            log_firestore_response("device_fcm_token.save", collection="users", user_uid=user_uid)
         except Exception as exc:
-            log_firestore_error("device_tokens.save", exc, collection="users", user_uid=user_uid)
+            log_firestore_error("device_fcm_token.save", exc, collection="users", user_uid=user_uid)
             raise
         return
 
@@ -358,15 +442,15 @@ def save_device_token(
     if lawyer_doc.exists:
         try:
             db.collection("lawyers").document(user_uid).set(payload, merge=True)
-            log_firestore_response("device_tokens.save", collection="lawyers", user_uid=user_uid)
+            log_firestore_response("device_fcm_token.save", collection="lawyers", user_uid=user_uid)
         except Exception as exc:
-            log_firestore_error("device_tokens.save", exc, collection="lawyers", user_uid=user_uid)
+            log_firestore_error("device_fcm_token.save", exc, collection="lawyers", user_uid=user_uid)
             raise
         return
 
     try:
         db.collection("users").document(user_uid).set(payload, merge=True)
-        log_firestore_response("device_tokens.save", collection="users", user_uid=user_uid)
+        log_firestore_response("device_fcm_token.save", collection="users", user_uid=user_uid)
     except Exception as exc:
-        log_firestore_error("device_tokens.save", exc, collection="users", user_uid=user_uid)
+        log_firestore_error("device_fcm_token.save", exc, collection="users", user_uid=user_uid)
         raise

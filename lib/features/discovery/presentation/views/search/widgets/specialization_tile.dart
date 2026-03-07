@@ -2,19 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:silah_app/core/config/constants/ui_constants.dart';
 import 'package:silah_app/core/config/theme/extentions/theme_context_extension.dart';
 import 'package:silah_app/core/presentation/ui/widget/buttons/card_button.dart';
+import 'package:silah_app/core/presentation/ui/widget/image/app_remote_icon.dart';
 import 'package:silah_app/features/discovery/domain/entities/legal_specialization_entity.dart';
 
 class SpecializationTile extends StatelessWidget {
   const SpecializationTile({
     super.key,
     required this.specialization,
-    required this.icon,
+    required this.fallbackIcon,
     this.onTap,
     this.selected = false,
   });
 
   final LegalSpecializationEntity specialization;
-  final IconData icon;
+  final IconData fallbackIcon;
   final VoidCallback? onTap;
   final bool selected;
 
@@ -24,7 +25,9 @@ class SpecializationTile extends StatelessWidget {
         ? context.colors.primaryContainer.withAlphaOpacity(0.4)
         : context.colors.surface;
     final border = context.colors.outlineVariant.withAlphaOpacity(0.3);
-    final iconColor = selected ? context.colors.primary : context.colors.primary.withAlphaOpacity(0.7);
+    final iconColor = selected
+        ? context.colors.primary
+        : context.colors.primary.withAlphaOpacity(0.7);
     final radius = BorderRadius.circular(16);
 
     return Container(
@@ -49,7 +52,16 @@ class SpecializationTile extends StatelessWidget {
                 shape: BoxShape.circle,
                 border: Border.all(color: border),
               ),
-              child: Icon(icon, color: iconColor, size: 22),
+              padding: const EdgeInsets.all(11),
+              child: AppRemoteIcon(
+                size: 22,
+                imageUrl: specialization.iconUrl,
+                fit: BoxFit.contain,
+                backgroundColor: Colors.transparent,
+                fallbackIcon: fallbackIcon,
+                iconColor: iconColor,
+                borderRadius: BorderRadius.circular(11),
+              ),
             ),
             UIConstants.mediumHeight,
             Text(
@@ -57,7 +69,9 @@ class SpecializationTile extends StatelessWidget {
               textAlign: TextAlign.center,
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
-              style: context.textTheme.labelMedium?.copyWith(fontWeight: FontWeight.w600),
+              style: context.textTheme.labelMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ],
         ),

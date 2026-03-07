@@ -42,7 +42,7 @@ class AppLogger {
       );
 
   String _wrap(AppLogGroup group, String? tag, dynamic message) =>
-      '[${group.name}] ' + (tag?.isNotEmpty == true ? '$tag → $message' : '$message');
+      '[${group.name}] ${tag?.isNotEmpty == true ? '$tag → $message' : '$message'}';
 
   /// Logs debug info (only in debug mode)
   void _debug(

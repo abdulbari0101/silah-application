@@ -71,7 +71,7 @@ Future<void> main(List<String> args) async {
   });
 
   await File(outPath)
-      .writeAsString(JsonEncoder.withIndent('  ').convert(unused) + '\n');
+      .writeAsString('${JsonEncoder.withIndent('  ').convert(unused)}\n');
 
   stdout.writeln(
       '✅ Detected ${unused.length} unused key(s). Output → $outPath');

@@ -4,9 +4,10 @@ import 'package:silah_app/core/config/constants/ui_constants.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
 import 'package:silah_app/core/config/theme/extentions/theme_context_extension.dart';
 import 'package:silah_app/features/consultations/domain/entities/consultation_request_entity.dart';
-import 'package:silah_app/features/consultations/domain/entities/consultation_status.dart';
 import 'package:silah_app/core/presentation/state_magment/blocs/app_setting/extensions/app_setting_context_extension.dart';
 import 'package:silah_app/core/foundation/formatting/relative_time.dart';
+import 'package:silah_app/core/presentation/ui/widget/resolvers/resolved_display_widgets.dart';
+import 'package:silah_app/features/consultations/presentation/support/consultation_status_presenter.dart';
 
 class RequestCard extends StatelessWidget {
   const RequestCard({super.key, required this.request, this.onTap});
@@ -16,19 +17,10 @@ class RequestCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = request.specializationId ?? Strings.request_consultation.tr();
     final description = request.description?.trim();
     final createdAt = formatRelativeTime(context, request.createdAt);
     final arrowIcon = context.isRTL ? Icons.arrow_back : Icons.arrow_forward;
-    final statusIcon = switch (request.status) {
-      ConsultationStatus.closed ||
-      ConsultationStatus.rejected ||
-      ConsultationStatus.cancelled =>
-        Icons.check_circle,
-      ConsultationStatus.accepted || ConsultationStatus.active =>
-        Icons.chat_bubble,
-      _ => Icons.chat_bubble_outline,
-    };
+    final statusIcon = ConsultationStatusPresenter.listIcon(request.status);
 
     final card = Container(
       padding: const EdgeInsets.all(UIConstants.mediumPadding),
@@ -65,10 +57,14 @@ class RequestCard extends StatelessWidget {
               ),
               UIConstants.smallWidth,
               Expanded(
-                child: Text(
-                  title,
-                  style: context.textTheme.titleSmall?.copyWith(
-                    fontWeight: FontWeight.w700,
+                child: ResolvedSpecializationName(
+                  specializationId: request.specializationId,
+                  fallback: Strings.request_consultation.tr(),
+                  builder: (title) => Text(
+                    title,
+                    style: context.textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ),

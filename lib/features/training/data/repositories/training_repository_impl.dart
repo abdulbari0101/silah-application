@@ -32,50 +32,60 @@ class TrainingRepositoryImpl implements TrainingRepository {
     TrainingApplicationEntity application,
   ) {
     return executor.runOnline(() async {
-      final uid = application.traineeId ?? remoteDataSource.currentUserId();
+      final resolvedTraineeId = application.traineeId?.trim();
+      final uid = resolvedTraineeId != null && resolvedTraineeId.isNotEmpty
+          ? resolvedTraineeId
+          : remoteDataSource.currentUserId();
+      final opportunityId = application.opportunityId?.trim();
+      final cvUrl = application.cvUrl?.trim();
       if (uid == null) {
         throw const MissingDataException('Missing trainee id');
       }
-      if (application.opportunityId == null || application.opportunityId!.isEmpty) {
+      if (opportunityId == null || opportunityId.isEmpty) {
         throw const MissingDataException('Missing opportunityId');
       }
-      if (application.cvUrl == null || application.cvUrl!.isEmpty) {
+      if (cvUrl == null || cvUrl.isEmpty) {
         throw const MissingDataException('Missing CV URL');
       }
 
-      final response = await remoteDataSource.createApplication(
-        TrainingApplicationCreateRequestModel(
-          opportunityId: application.opportunityId!,
-          traineeUid: uid,
-          cvUrl: application.cvUrl!,
-          fullName: application.fullName,
-          university: application.university,
-          faculty: application.faculty,
-          cityId: application.cityId ?? application.city,
-          areaId: application.areaId,
-          graduationYear: application.graduationYear,
-        ),
+      final preparedApplication = application.copyWith(
+        traineeId: uid,
+        opportunityId: opportunityId,
+        cvUrl: cvUrl,
+        cityId: application.cityId?.trim(),
+        city: application.city?.trim(),
+        areaId: application.areaId?.trim(),
+        fullName: application.fullName?.trim(),
+        university: application.university?.trim(),
+        faculty: application.faculty?.trim(),
       );
+      final request = TrainingApplicationCreateRequestModel.fromEntity(
+        preparedApplication,
+      );
+
+      final response = await remoteDataSource.createApplication(request);
 
       final applicationId = response.applicationId;
       return TrainingApplicationEntity(
         id: applicationId,
-        opportunityId: application.opportunityId,
+        opportunityId: request.opportunityId,
         traineeId: uid,
-        fullName: application.fullName,
-        university: application.university,
-        faculty: application.faculty,
-        cityId: application.cityId,
-        areaId: application.areaId,
-        graduationYear: application.graduationYear,
-        cvUrl: application.cvUrl,
+        fullName: preparedApplication.fullName,
+        university: preparedApplication.university,
+        faculty: preparedApplication.faculty,
+        cityId: preparedApplication.cityId,
+        city: preparedApplication.city,
+        areaId: preparedApplication.areaId,
+        graduationYear: preparedApplication.graduationYear,
+        cvUrl: request.cvUrl,
         status: TrainingApplicationStatus.pending,
       );
     }, from: 'TrainingRepository.submitApplication');
   }
 
   @override
-  Future<Either<Failure, List<TrainingApplicationEntity>>> fetchMyApplications() {
+  Future<Either<Failure, List<TrainingApplicationEntity>>>
+  fetchMyApplications() {
     return executor.runOnline(() async {
       final uid = remoteDataSource.currentUserId();
       if (uid == null) {
@@ -86,9 +96,8 @@ class TrainingRepositoryImpl implements TrainingRepository {
   }
 
   @override
-  Future<Either<Failure, List<TrainingApplicationEntity>>> fetchApplicationsForLawyer(
-    String lawyerUid,
-  ) {
+  Future<Either<Failure, List<TrainingApplicationEntity>>>
+  fetchApplicationsForLawyer(String lawyerUid) {
     return executor.runOnline(() async {
       if (lawyerUid.trim().isEmpty) {
         throw const MissingDataException('Missing lawyer id');
@@ -110,23 +119,9 @@ class TrainingRepositoryImpl implements TrainingRepository {
         applicationId,
         TrainingApplicationStatusUpdateRequestModel.fromStatus(status),
       );
-      final resolved = _parseStatus(response.status) ?? status;
+      final resolved =
+          TrainingApplicationStatusX.tryParse(response.status) ?? status;
       return TrainingApplicationEntity(id: applicationId, status: resolved);
     }, from: 'TrainingRepository.updateApplicationStatus');
-  }
-
-  TrainingApplicationStatus? _parseStatus(String? value) {
-    switch (value?.toLowerCase()) {
-      case 'accepted':
-        return TrainingApplicationStatus.accepted;
-      case 'rejected':
-        return TrainingApplicationStatus.rejected;
-      case 'cancelled':
-        return TrainingApplicationStatus.cancelled;
-      case 'pending':
-        return TrainingApplicationStatus.pending;
-      default:
-        return null;
-    }
   }
 }

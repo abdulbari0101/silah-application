@@ -5,6 +5,7 @@ import 'package:silah_app/core/config/localization/localizations_string_keys.dar
 import 'package:silah_app/core/config/theme/extentions/theme_context_extension.dart';
 import 'package:silah_app/core/presentation/ui/widget/cards/custom_card.dart';
 import 'package:silah_app/core/presentation/ui/widget/chips/status_chip.dart';
+import 'package:silah_app/core/presentation/ui/widget/text/labeled_value_row.dart';
 import 'package:silah_app/features/support/domain/entities/support_ticket_entity.dart';
 import 'package:silah_app/features/support/domain/entities/support_ticket_status.dart';
 
@@ -50,50 +51,36 @@ class SupportTicketDetailsBody extends StatelessWidget {
               ],
               if (ticket.createdAt != null) ...[
                 UIConstants.mediumHeight,
-                _infoRow(
-                  context,
+                LabeledValueRow(
                   label: Strings.created_at.tr(),
                   value: ticket.createdAt!,
+                  labelSuffix: ':',
+                  labelStyle: context.textTheme.labelSmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                  valueStyle: context.textTheme.labelSmall?.copyWith(
+                    color: context.colors.onSurfaceVariant,
+                  ),
                 ),
               ],
               if (ticket.updatedAt != null) ...[
                 UIConstants.smallHeight,
-                _infoRow(
-                  context,
+                LabeledValueRow(
                   label: Strings.updated_at.tr(),
                   value: ticket.updatedAt!,
+                  labelSuffix: ':',
+                  labelStyle: context.textTheme.labelSmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
+                  valueStyle: context.textTheme.labelSmall?.copyWith(
+                    color: context.colors.onSurfaceVariant,
+                  ),
                 ),
               ],
             ],
           ),
         ),
       ),
-    );
-  }
-
-  Widget _infoRow(
-    BuildContext context, {
-    required String label,
-    required String value,
-  }) {
-    return Row(
-      children: [
-        Text(
-          '$label:',
-          style: context.textTheme.labelSmall?.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        UIConstants.smallWidth,
-        Expanded(
-          child: Text(
-            value,
-            style: context.textTheme.labelSmall?.copyWith(
-              color: context.colors.onSurfaceVariant,
-            ),
-          ),
-        ),
-      ],
     );
   }
 

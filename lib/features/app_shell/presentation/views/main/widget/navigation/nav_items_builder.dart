@@ -72,7 +72,7 @@ class NavItemsBuilder {
     _tab(
       route: AppRoutes.trainees,
       labelKey: Strings.trainees,
-      icon: Assets.icons.bottomNavigation.requests,
+      icon: Assets.icons.bottomNavigation.traniees,
     ),
     _tab(
       route: AppRoutes.settings,
@@ -91,11 +91,6 @@ class NavItemsBuilder {
       route: AppRoutes.specifications,
       labelKey: Strings.specializations,
       icon: Assets.icons.bottomNavigation.requests,
-    ),
-    _tab(
-      route: AppRoutes.messages,
-      labelKey: Strings.messages,
-      icon: Assets.icons.bottomNavigation.chats,
     ),
     _tab(
       route: AppRoutes.settings,

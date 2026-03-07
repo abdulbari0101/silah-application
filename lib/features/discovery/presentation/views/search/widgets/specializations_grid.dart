@@ -31,7 +31,7 @@ class SpecializationsGrid extends StatelessWidget {
         return SpecializationTile(
           specialization: item,
           selected: selectedId == item.id,
-          icon: _icons[index % _icons.length],
+          fallbackIcon: _icons[index % _icons.length],
           onTap: () => onSelect(item),
         );
       },

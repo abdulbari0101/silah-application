@@ -20,15 +20,15 @@ Future<void> initNetwork() async {
 
   void registerClient() {
     // For slow / unstable networks (e.g. Yemen)
-    const _kConnectTimeout = Duration(seconds: 25);
-    const _kSendTimeoutRegular = Duration(seconds: 40); // Normal APIs
-    const _kReceiveTimeoutRegular = Duration(seconds: 50);
+    const kConnectTimeout = Duration(seconds: 25);
+    const kSendTimeoutRegular = Duration(seconds: 40); // Normal APIs
+    const kReceiveTimeoutRegular = Duration(seconds: 50);
 
     final dio = Dio(
       BaseOptions(
-        connectTimeout: _kConnectTimeout,
-        sendTimeout: _kSendTimeoutRegular,
-        receiveTimeout: _kReceiveTimeoutRegular,
+        connectTimeout: kConnectTimeout,
+        sendTimeout: kSendTimeoutRegular,
+        receiveTimeout: kReceiveTimeoutRegular,
         responseType: ResponseType.json,
         headers: const {'Accept': 'application/json', 'Content-Type': 'application/json'},
       ),

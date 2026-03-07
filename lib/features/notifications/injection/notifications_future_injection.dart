@@ -1,7 +1,6 @@
 import 'package:silah_app/core/config/constants/api_constants.dart';
 import 'package:silah_app/core/infrastructure/network/dio_client.dart';
 import 'package:silah_app/core/injection/injection_container.dart';
-import 'package:silah_app/features/notifications/data/datasources/local/notifications_cache_data_source.dart';
 import 'package:silah_app/features/notifications/data/datasources/remote/device_token_remote_data_source.dart';
 import 'package:silah_app/features/notifications/data/datasources/remote/device_token_service.dart';
 import 'package:silah_app/features/notifications/data/datasources/remote/notifications_remote_data_source.dart';
@@ -15,14 +14,6 @@ import 'package:silah_app/features/notifications/domain/repositories/notificatio
 
 Future<void> initNotifications() async {
   // Data sources
-  locator.registerLazySingleton<NotificationsCacheDataSource>(
-    () => NotificationsCacheDataSourceImpl(
-      logger: locator(),
-      appCache: locator(),
-      identityReader: locator(),
-    ),
-  );
-
   locator.registerLazySingleton<NotificationsRemoteDataSource>(
     () => NotificationsRemoteDataSourceImpl(
       notificationsService: locator(),
@@ -42,8 +33,11 @@ Future<void> initNotifications() async {
     ),
   );
 
-  locator.registerLazySingleton<NotifyRepo>(
-    () => NotificationsRepositoryImpl(),
+  locator.registerLazySingleton<NotificationsRepository>(
+    () => NotificationsRepositoryImpl(
+      remoteDataSource: locator(),
+      executor: locator(),
+    ),
   );
 
   // Services

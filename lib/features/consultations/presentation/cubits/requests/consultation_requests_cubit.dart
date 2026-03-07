@@ -97,23 +97,7 @@ class ConsultationRequestsCubit extends Cubit<ConsultationRequestsState> {
   }
 
   bool _matchesFilter(ConsultationRequestEntity request) {
-    switch (_filter) {
-      case ConsultationStatus.pending:
-        return request.status == ConsultationStatus.pending;
-      case ConsultationStatus.accepted:
-        return request.status == ConsultationStatus.accepted ||
-            request.status == ConsultationStatus.active;
-      case ConsultationStatus.closed:
-        return request.status == ConsultationStatus.closed ||
-            request.status == ConsultationStatus.rejected ||
-            request.status == ConsultationStatus.cancelled;
-      case ConsultationStatus.rejected:
-        return request.status == ConsultationStatus.rejected;
-      case ConsultationStatus.active:
-        return request.status == ConsultationStatus.active;
-      case ConsultationStatus.cancelled:
-        return request.status == ConsultationStatus.cancelled;
-    }
+    return request.status.matchesRequestsFilter(_filter);
   }
 
   void _emitFiltered() {

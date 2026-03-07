@@ -27,8 +27,8 @@ class SecureKeyMapper extends EnumMapper<SecureKey> {
   @override
   SecureKey decode(dynamic value) {
     switch (value) {
-      case r'device_token':
-        return SecureKey.deviceToken;
+      case r'device_fcm_token':
+        return SecureKey.deviceFcmToken;
       case r'auth_token_login':
         return SecureKey.authTokenLogin;
       case r'auth_token_reg':
@@ -77,8 +77,8 @@ class SecureKeyMapper extends EnumMapper<SecureKey> {
   @override
   dynamic encode(SecureKey self) {
     switch (self) {
-      case SecureKey.deviceToken:
-        return r'device_token';
+      case SecureKey.deviceFcmToken:
+        return r'device_fcm_token';
       case SecureKey.authTokenLogin:
         return r'auth_token_login';
       case SecureKey.authTokenReg:

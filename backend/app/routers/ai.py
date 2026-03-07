@@ -11,7 +11,7 @@ from ..schemas import (
     LegalSpecializationPayload,
 )
 from ..services.firestore_service import (
-    find_verified_lawyers,
+    find_verified_lawyer_profiles,
     get_active_specializations,
     get_specialization_names,
 )
@@ -53,9 +53,9 @@ def recommend_lawyers(
     specialization_id = resolved.id if resolved else None
 
     filters = payload.filters
-    lawyer_ids: list[str] = []
+    lawyers: list[dict] = []
     if specialization_id:
-        lawyer_ids = find_verified_lawyers(
+        lawyers = find_verified_lawyer_profiles(
             specialization_id,
             city=filters.city if filters else None,
             availability=filters.availability if filters else None,
@@ -64,7 +64,7 @@ def recommend_lawyers(
     response = AIRecommendResponse(
         specialization=resolved,
         specializationId=specialization_id,
-        lawyerIds=lawyer_ids,
+        lawyers=lawyers,
     )
     return success_response(response.model_dump(exclude_none=True))
 

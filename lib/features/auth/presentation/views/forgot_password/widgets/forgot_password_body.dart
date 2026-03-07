@@ -67,8 +67,9 @@ class _ForgotPasswordBodyState extends State<ForgotPasswordBody> {
                     onTap: isLoading
                         ? null
                         : () {
-                            if (!(_formKey.currentState?.validate() ?? false))
+                            if (!(_formKey.currentState?.validate() ?? false)) {
                               return;
+                            }
                             context.read<ForgotPasswordCubit>().submit(
                               _emailController.text,
                             );

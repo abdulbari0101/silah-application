@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:silah_app/core/config/constants/ui_constants.dart';
 import 'package:silah_app/core/config/theme/extentions/theme_context_extension.dart';
 import 'package:silah_app/core/presentation/ui/widget/buttons/card_button.dart';
+import 'package:silah_app/core/presentation/ui/widget/image/app_remote_avatar.dart';
 
 class LawyerSummaryCard extends StatelessWidget {
   const LawyerSummaryCard({
@@ -23,7 +24,6 @@ class LawyerSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final initials = name.isNotEmpty ? name.characters.first : '?';
     final radius = BorderRadius.circular(18);
 
     return Container(
@@ -47,9 +47,12 @@ class LawyerSummaryCard extends StatelessWidget {
                     children: [
                       Text(
                         name,
-                        style: context.textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.w700),
+                        style: context.textTheme.bodyLarge?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
-                      if (specialization != null && specialization!.trim().isNotEmpty) ...[
+                      if (specialization != null &&
+                          specialization!.trim().isNotEmpty) ...[
                         UIConstants.xsmallHeight,
                         Text(
                           specialization!,
@@ -58,7 +61,8 @@ class LawyerSummaryCard extends StatelessWidget {
                           ),
                         ),
                       ],
-                      if (experienceLabel != null && experienceLabel!.trim().isNotEmpty) ...[
+                      if (experienceLabel != null &&
+                          experienceLabel!.trim().isNotEmpty) ...[
                         UIConstants.xsmallHeight,
                         Text(
                           experienceLabel!,
@@ -70,19 +74,13 @@ class LawyerSummaryCard extends StatelessWidget {
                     ],
                   ),
                 ),
-                CircleAvatar(
+                AppRemoteAvatar(
                   radius: 20,
+                  imageUrl: avatarUrl,
+                  label: name,
+                  variant: AppAvatarVariant.lawyer,
                   backgroundColor: context.colors.surface,
-                  backgroundImage: (avatarUrl != null && avatarUrl!.isNotEmpty)
-                      ? NetworkImage(avatarUrl!)
-                      : null,
-                  child: (avatarUrl == null || avatarUrl!.isEmpty)
-                      ? Text(
-                          initials,
-                          style: context.textTheme.labelMedium
-                              ?.copyWith(color: context.colors.primary),
-                        )
-                      : null,
+                  foregroundColor: context.colors.primary,
                 ),
               ],
             ),

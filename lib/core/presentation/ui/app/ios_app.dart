@@ -26,7 +26,9 @@ class IOSApp extends StatelessWidget {
         //  return _IOSAppShell(home: _ErrorOverlay(message: "Mesage"));
         // return const _IOSAppShell(home: SplashScreen());
         return switch (state) {
-          AppSettingError(:final message) => _IOSAppShell(home: _ErrorOverlay(message: message)),
+          AppSettingError(:final message) => _IOSAppShell(
+            home: _ErrorOverlay(message: message),
+          ),
           AppSettingLoaded() => _IOSAppShell(routerConfig: appRouter),
 
           _ => const _IOSAppShell(home: SplashScreen()),
@@ -54,17 +56,8 @@ class _IOSAppShell extends StatelessWidget {
         final materialTheme = _buildMaterialTheme(context);
 
         // Cupertino theme that defers to the Material theme.
-        final cupertinoTheme = MaterialBasedCupertinoThemeData(materialTheme: materialTheme);
-
-        // Material theme for Material widgets embedded in Cupertino trees.
-        final materialForCupertino = CupertinoBasedMaterialThemeData(
-          themeData: cupertinoTheme,
-        ).materialTheme;
-
-        // Preserve ThemeExtensions dropped during Cupertino <-> Material conversion.
-        final mergedMaterial = _mergeMaterialExtensions(
-          target: materialForCupertino,
-          sourceExtensionsFrom: materialTheme,
+        final cupertinoTheme = MaterialBasedCupertinoThemeData(
+          materialTheme: materialTheme,
         );
 
         final loc = _CommonLocalization.from(context);
@@ -166,13 +159,6 @@ ThemeData _buildMaterialTheme(BuildContext context) {
     language: context.appLnaguage,
     // If you decide to use dynamic color, pass schemeOverride with lightDynamic/darkDynamic.
   );
-}
-
-ThemeData _mergeMaterialExtensions({
-  required ThemeData target,
-  required ThemeData sourceExtensionsFrom,
-}) {
-  return target.copyWith(extensions: sourceExtensionsFrom.extensions.values.toList());
 }
 
 /// Collects localization props so we don't repeat them.

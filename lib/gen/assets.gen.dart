@@ -370,8 +370,11 @@ class $AssetsIconsBottomNavigationGen {
   /// File path: assets/icons/bottom_navigation/requests.svg
   String get requests => 'assets/icons/bottom_navigation/requests.svg';
 
+  /// File path: assets/icons/bottom_navigation/traniees.svg
+  String get traniees => 'assets/icons/bottom_navigation/traniees.svg';
+
   /// List of all assets
-  List<String> get values => [account, chats, home, requests];
+  List<String> get values => [account, chats, home, requests, traniees];
 }
 
 class $AssetsIconsFlagsGen {

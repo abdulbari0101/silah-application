@@ -15,7 +15,7 @@ class NotificationResultMapper extends ClassMapperBase<NotificationResult> {
   static NotificationResultMapper ensureInitialized() {
     if (_instance == null) {
       MapperContainer.globals.use(_instance = NotificationResultMapper._());
-      NotificationGroupMapper.ensureInitialized();
+      NotificationEntityMapper.ensureInitialized();
     }
     return _instance!;
   }
@@ -28,14 +28,15 @@ class NotificationResultMapper extends ClassMapperBase<NotificationResult> {
     'unSeenCount',
     _$unSeenCount,
   );
-  static List<NotificationGroup>? _$groups(NotificationResult v) => v.groups;
-  static const Field<NotificationResult, List<NotificationGroup>> _f$groups =
-      Field('groups', _$groups, opt: true);
+  static List<NotificationEntity> _$notifications(NotificationResult v) =>
+      v.notifications;
+  static const Field<NotificationResult, List<NotificationEntity>>
+  _f$notifications = Field('notifications', _$notifications);
 
   @override
   final MappableFields<NotificationResult> fields = const {
     #unSeenCount: _f$unSeenCount,
-    #groups: _f$groups,
+    #notifications: _f$notifications,
   };
   @override
   final bool ignoreNull = true;
@@ -43,7 +44,7 @@ class NotificationResultMapper extends ClassMapperBase<NotificationResult> {
   static NotificationResult _instantiate(DecodingData data) {
     return NotificationResult(
       unSeenCount: data.dec(_f$unSeenCount),
-      groups: data.dec(_f$groups),
+      notifications: data.dec(_f$notifications),
     );
   }
 
@@ -120,11 +121,11 @@ abstract class NotificationResultCopyWith<
     implements ClassCopyWith<$R, $In, $Out> {
   ListCopyWith<
     $R,
-    NotificationGroup,
-    NotificationGroupCopyWith<$R, NotificationGroup, NotificationGroup>
-  >?
-  get groups;
-  $R call({int? unSeenCount, List<NotificationGroup>? groups});
+    NotificationEntity,
+    NotificationEntityCopyWith<$R, NotificationEntity, NotificationEntity>
+  >
+  get notifications;
+  $R call({int? unSeenCount, List<NotificationEntity>? notifications});
   NotificationResultCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
     Then<$Out2, $R2> t,
   );
@@ -141,27 +142,26 @@ class _NotificationResultCopyWithImpl<$R, $Out>
   @override
   ListCopyWith<
     $R,
-    NotificationGroup,
-    NotificationGroupCopyWith<$R, NotificationGroup, NotificationGroup>
-  >?
-  get groups => $value.groups != null
-      ? ListCopyWith(
-          $value.groups!,
-          (v, t) => v.copyWith.$chain(t),
-          (v) => call(groups: v),
-        )
-      : null;
-  @override
-  $R call({int? unSeenCount, Object? groups = $none}) => $apply(
-    FieldCopyWithData({
-      if (unSeenCount != null) #unSeenCount: unSeenCount,
-      if (groups != $none) #groups: groups,
-    }),
+    NotificationEntity,
+    NotificationEntityCopyWith<$R, NotificationEntity, NotificationEntity>
+  >
+  get notifications => ListCopyWith(
+    $value.notifications,
+    (v, t) => v.copyWith.$chain(t),
+    (v) => call(notifications: v),
   );
+  @override
+  $R call({int? unSeenCount, List<NotificationEntity>? notifications}) =>
+      $apply(
+        FieldCopyWithData({
+          if (unSeenCount != null) #unSeenCount: unSeenCount,
+          if (notifications != null) #notifications: notifications,
+        }),
+      );
   @override
   NotificationResult $make(CopyWithData data) => NotificationResult(
     unSeenCount: data.get(#unSeenCount, or: $value.unSeenCount),
-    groups: data.get(#groups, or: $value.groups),
+    notifications: data.get(#notifications, or: $value.notifications),
   );
 
   @override

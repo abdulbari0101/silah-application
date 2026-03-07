@@ -5,7 +5,7 @@ part 'secure_key.mapper.dart';
 
 @MappableEnum(caseStyle: CaseStyle.snakeCase)
 enum SecureKey {
-  deviceToken, // → 'device_token'
+  deviceFcmToken, // → 'device_fcm_token'
   authTokenLogin, // → 'auth_token_login'
   authTokenReg, // → 'auth_token_reg'
 

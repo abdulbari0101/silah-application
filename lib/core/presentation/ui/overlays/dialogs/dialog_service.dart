@@ -36,11 +36,11 @@ class DialogService {
     String? iconAsset,
   })
   {
-    Widget _buildBody() {
+    Widget buildBody() {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          message != null ? Text('$message', style: context.textTheme.bodySmall) : body ?? Text(''),
+          message != null ? Text(message, style: context.textTheme.bodySmall) : body ?? Text(''),
           if (message != null || body != null) UIConstants.xbigHeight,
         ],
       );
@@ -72,7 +72,7 @@ class DialogService {
                 style: Theme.of(context).dialogTheme.titleTextStyle,
               ),
               UIConstants.mediumHeight,
-              _buildBody(),
+              buildBody(),
               if (onConfirmsClick != null)
                 PrimaryButton(
                   // backgroundRadius: 25,

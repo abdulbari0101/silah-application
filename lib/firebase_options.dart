@@ -57,22 +57,21 @@ class DefaultFirebaseOptions {
     measurementId: 'G-970DHKL9G1',
   );
 
-  // Existing mobile configs (unchanged)
+  // Mobile FirebaseOptions (silah-app-9acb6)
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyC1eFcNEhxG4o7wh6LdqqkaR4qGq4l1bR4',
-    appId: '1:292889484226:android:c406ebc97fef080fb4145b',
-    messagingSenderId: '292889484226',
-    projectId: 'silah-158eb',
-    storageBucket: 'silah-158eb.firebasestorage.app',
-  
+    apiKey: 'AIzaSyDy6HZxbBWQXHQw2GGAYN0uUMTXY_3BEY8',
+    appId: '1:330197769102:android:ea9147f7cff63ead4de2df',
+    messagingSenderId: '330197769102',
+    projectId: 'silah-app-9acb6',
+    storageBucket: 'silah-app-9acb6.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDjRgAuTsdQJbX4Pn4xMPoWlI62atkdCrE',
-    appId: '1:292889484226:ios:97bb9fd3b1a04681b4145b',
-    messagingSenderId: '292889484226',
-    projectId: 'silah-158eb',
-    storageBucket: 'silah-158eb.firebasestorage.app',
-    iosBundleId: 'com.example.silah_app',
+    apiKey: 'AIzaSyAB827UqWeIlP2SkZFLsQwiWPglwXCkuqk',
+    appId: '1:330197769102:ios:31251950f8a783384de2df',
+    messagingSenderId: '330197769102',
+    projectId: 'silah-app-9acb6',
+    storageBucket: 'silah-app-9acb6.firebasestorage.app',
+    iosBundleId: 'com.example.silahApp',
   );
 }

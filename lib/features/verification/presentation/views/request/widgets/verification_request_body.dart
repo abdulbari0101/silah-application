@@ -66,8 +66,9 @@ class _VerificationRequestBodyState extends State<VerificationRequestBody> {
                     onTap: isLoading
                         ? null
                         : () {
-                            if (!(_formKey.currentState?.validate() ?? false))
+                            if (!(_formKey.currentState?.validate() ?? false)) {
                               return;
+                            }
                             context.read<VerificationRequestCubit>().submit(
                               licenseNumber: _licenseController.text,
                               nationalId: _nationalIdController.text,

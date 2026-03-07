@@ -14,7 +14,6 @@
 
 import 'dart:convert';
 import 'dart:io';
-import 'dart:collection';
 
 Future<void> main(List<String> args) async {
   if (args.isEmpty) {
@@ -68,7 +67,7 @@ Example: dart run lib/scripts/used_keys_with_values.dart en
       jsonDecode(await langFile.readAsString()) as Map<String, dynamic>;
 
   // ---------- 3. Build ordered map ---------------------------------------
-  final ordered = LinkedHashMap<String, dynamic>();
+  final ordered = <String, dynamic>{};
   final sortedKeys = usedKeys.toList()..sort();
   for (final k in sortedKeys) {
     ordered[k] = langMap.containsKey(k) && (langMap[k] as String).trim().isNotEmpty
@@ -79,7 +78,7 @@ Example: dart run lib/scripts/used_keys_with_values.dart en
   // ---------- 4. Write out -----------------------------------------------
   final outFile = File(outPath);
   await outFile.writeAsString(
-      JsonEncoder.withIndent('  ').convert(ordered) + '\n');
+      '${JsonEncoder.withIndent('  ').convert(ordered)}\n');
 
   stdout.writeln(
       '✅ Collected ${ordered.length} keys. Output written to $outPath');

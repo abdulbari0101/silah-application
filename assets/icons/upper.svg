@@ -6,7 +6,7 @@
 							`;a.documentElement.insertAdjacentHTML("afterbegin",p)}c.useXMLparser===!0?o[0]=[new XMLSerializer().serializeToString(a)]:o[0][0]=a.documentElement.outerHTML}}}return G(e,o)}let n=Object.getOwnPropertyNames(e);for(let o=0;o&lt;n.length;o++){let s=n[o];if(s in t)continue;let m=Object.getOwnPropertyDescriptor(e,s);Object.defineProperty(t,s,m)}return t.prototype=e.prototype,t}(Blob);function v(e){if(typeof e=="object"&amp;&amp;typeof e.coords=="object"){const t=O(),n=r,o=g;d=e.coords.lat,f=e.coords.lon,r=e.fakeIt,g=!0,b={lat:d,lon:f},o&amp;&amp;(t||n!==r)&amp;&amp;W()}}typeof chrome&lt;"u"?setInterval(()=&gt;{chrome.runtime.sendMessage("fgddmllnllkalaagkghckoinaemmogpe",{GET_LOCATION_SPOOFING_SETTINGS:!0},e=&gt;{v(e)})},500):typeof w&lt;"u"&amp;&amp;document.addEventListener(w,function(e){try{const t=JSON.parse(e.detail);v(t)}catch{}})})();</script>
   <defs>
     <linearGradient id="linear-gradient" x1="0.5" x2="0.5" y2="0.867" gradientUnits="objectBoundingBox">
-      <stop offset="0" stop-color="#1c75b9"/>
+      <stop offset="0" stop-color="#3C6F2F"/>
       <stop offset="1" stop-color="#fafafa"/>
     </linearGradient>
   </defs>

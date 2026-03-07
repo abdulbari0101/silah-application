@@ -10,11 +10,6 @@ part 'specifications_service.g.dart';
 abstract class SpecificationsService {
   factory SpecificationsService(Dio dio, {String? baseUrl}) = _SpecificationsService;
 
-  @POST('/ai/classify')
-  Future<BaseApiResponse<AiClassifyResponseModel>> classify(
-    @Body() AiClassifyRequestModel request,
-  );
-
   @POST('/ai/recommend')
   Future<BaseApiResponse<AiRecommendResponseModel>> recommend(
     @Body() AiRecommendRequestModel request,

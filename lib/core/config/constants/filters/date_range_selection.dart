@@ -8,7 +8,7 @@ class DateRangeSelection extends Equatable {
   final DateTime? from;
   final DateTime? to;
 
-  DateRangeSelection({required this.type, this.from, this.to});
+  const DateRangeSelection({required this.type, this.from, this.to});
 
   factory DateRangeSelection.idleState() {
     return DateRangeSelection(type: DateRangeType.all);

@@ -5,7 +5,11 @@ from fastapi import APIRouter, Depends
 from ..auth import ensure_same_user_or_admin, require_admin, verify_id_token
 from ..firebase import firestore_client
 from ..schemas import VerificationRequest, VerificationResponse, VerificationReviewRequest
-from ..services.firestore_service import create_admin_task, set_user_verified
+from ..services.firestore_service import (
+    create_admin_task,
+    create_notification,
+    set_user_verified,
+)
 from ..utils.firebase_logger import (
     log_firestore_error,
     log_firestore_request,
@@ -63,8 +67,38 @@ def request_verification(
             set_user_verified(payload.lawyerUid, True)
         except Exception:
             pass
+        create_notification(
+            payload.lawyerUid,
+            title="Verification successful",
+            message="Your lawyer account has been verified successfully.",
+            data={"type": "verification", "status": "verified"},
+        )
     elif status_value == "needsReview":
         create_admin_task("license_review", payload.lawyerUid, "Auto-verification needs review")
+        create_notification(
+            payload.lawyerUid,
+            title="Verification pending review",
+            message="Your license verification needs manual review by admin.",
+            data={"type": "verification", "status": "needsReview"},
+        )
+    else:
+        log_firestore_request("lawyers.update", lawyer_uid=payload.lawyerUid, verified=False)
+        try:
+            db.collection("lawyers").document(payload.lawyerUid).set({"verified": False}, merge=True)
+            log_firestore_response("lawyers.update", lawyer_uid=payload.lawyerUid)
+        except Exception as exc:
+            log_firestore_error("lawyers.update", exc, lawyer_uid=payload.lawyerUid)
+            raise
+        try:
+            set_user_verified(payload.lawyerUid, False)
+        except Exception:
+            pass
+        create_notification(
+            payload.lawyerUid,
+            title="Verification rejected",
+            message="Your license verification request was rejected.",
+            data={"type": "verification", "status": "rejected"},
+        )
 
     response = VerificationResponse(status=status_value)
     return success_response(response.model_dump())
@@ -110,6 +144,12 @@ def review_verification(
             set_user_verified(payload.lawyerUid, True)
         except Exception:
             pass
+        create_notification(
+            payload.lawyerUid,
+            title="Verification successful",
+            message="Your lawyer account has been activated by admin.",
+            data={"type": "verification", "status": "verified"},
+        )
     else:
         log_firestore_request("lawyers.update", lawyer_uid=payload.lawyerUid, verified=False)
         try:
@@ -122,6 +162,12 @@ def review_verification(
             set_user_verified(payload.lawyerUid, False)
         except Exception:
             pass
+        create_notification(
+            payload.lawyerUid,
+            title="Verification rejected",
+            message="Your lawyer verification was rejected by admin review.",
+            data={"type": "verification", "status": "rejected"},
+        )
 
     response = VerificationResponse(status=status_value)
     return success_response(response.model_dump())

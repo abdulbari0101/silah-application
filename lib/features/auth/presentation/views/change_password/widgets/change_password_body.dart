@@ -66,8 +66,9 @@ class _ChangePasswordBodyState extends State<ChangePasswordBody> {
                 hintText: Strings.confirm_password.tr(),
                 validator: (value) {
                   final confirm = value ?? '';
-                  if (confirm.trim().isEmpty)
+                  if (confirm.trim().isEmpty) {
                     return Strings.error_fill_form.tr();
+                  }
                   if (confirm.trim() != _newController.text.trim()) {
                     return Strings.error_enter_password_mismatch.tr();
                   }
@@ -87,8 +88,9 @@ class _ChangePasswordBodyState extends State<ChangePasswordBody> {
                     onTap: isLoading
                         ? null
                         : () {
-                            if (!(_formKey.currentState?.validate() ?? false))
+                            if (!(_formKey.currentState?.validate() ?? false)) {
                               return;
+                            }
                             context.read<ChangePasswordCubit>().submit(
                               currentPassword: _currentController.text,
                               newPassword: _newController.text,

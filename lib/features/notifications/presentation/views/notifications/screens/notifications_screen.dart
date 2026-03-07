@@ -16,10 +16,11 @@ class NotificationsScreen extends StatelessWidget {
       create: (_) => NotificationsCubit(repository: locator())..load(),
       child: Builder(
         builder: (context) {
-          return WillPopScope(
-            onWillPop: () async {
-              await context.read<NotificationsCubit>().markAllSeen();
-              return true;
+          return PopScope(
+            canPop: true,
+            onPopInvokedWithResult: (didPop, result) {
+              if (!didPop) return;
+              context.read<NotificationsCubit>().markAllSeen();
             },
             child: PlatformScreenWrapper(
               title: Strings.notification.tr(),

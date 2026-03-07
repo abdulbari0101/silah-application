@@ -1,8 +1,10 @@
 import 'package:dartz/dartz.dart';
 import 'package:easy_localization/easy_localization.dart';
+import 'package:silah_app/core/config/extentions/string_validation.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
 import 'package:silah_app/core/data/local/cache/readers/setting_reader.dart';
 import 'package:silah_app/core/data/model/api/auth/token_model.dart';
+import 'package:silah_app/core/infrastructure/analytics/logger/app_logger.dart';
 import 'package:silah_app/core/infrastructure/errors/error_codes.dart';
 import 'package:silah_app/core/infrastructure/errors/exceptions.dart';
 import 'package:silah_app/core/infrastructure/errors/failures.dart';
@@ -20,7 +22,7 @@ class AuthRepoImpl implements AuthRepo {
   final AuthRemoteDataSource remoteDS;
   final AuthCacheDataSource cacheDS;
   final AuthIdentityRepo authIdentityRepo;
-  final DeviceTokenRepository deviceTokenRepository;
+  final DeviceTokenRepository deviceFcmTokenRepository;
   final SettingReader settingReader;
   final Executor executor;
 
@@ -29,7 +31,7 @@ class AuthRepoImpl implements AuthRepo {
     required this.cacheDS,
     required this.executor,
     required this.authIdentityRepo,
-    required this.deviceTokenRepository,
+    required this.deviceFcmTokenRepository,
     required this.settingReader,
   });
 
@@ -45,9 +47,7 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  Future<Either<Failure, AuthUserEntity>> register(
-    RegistrationPayload payload,
-  ) async {
+  Future<Either<Failure, AuthUserEntity>> register(RegistrationPayload payload) async {
     return executor.runOnline(() async {
       final name = payload.fullName.isEmpty
           ? '${payload.firstName} ${payload.lastName}'.trim()
@@ -70,10 +70,12 @@ class AuthRepoImpl implements AuthRepo {
         final legalFields = payload.legalFields
             ?.map((value) => value.trim())
             .where((value) => value.isNotEmpty)
+            .toSet()
             .toList();
         final legalFieldIds = payload.legalFieldIds
             ?.map((value) => value.trim())
             .where((value) => value.isNotEmpty)
+            .toSet()
             .toList();
         final city = payload.city?.trim();
         final cityId = payload.cityId?.trim();
@@ -94,15 +96,11 @@ class AuthRepoImpl implements AuthRepo {
             nationalId == null ||
             ((gender?.isEmpty ?? true) && (genderId?.isEmpty ?? true)) ||
             ((city?.isEmpty ?? true) && (cityId?.isEmpty ?? true)) ||
-            ((workplace?.isEmpty ?? true) &&
-                (workDestinationId?.isEmpty ?? true)) ||
+            ((workplace?.isEmpty ?? true) && (workDestinationId?.isEmpty ?? true)) ||
             officeName.isEmpty ||
             licenseNumber.isEmpty ||
             nationalId.isEmpty) {
-          throw AuthException(
-            Strings.error_fill_form.tr(),
-            ErrorCodes.badRequest400,
-          );
+          throw AuthException(Strings.error_fill_form.tr(), ErrorCodes.badRequest400);
         }
 
         final model = AuthUserModel(
@@ -136,9 +134,7 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> sendPasswordReset({
-    required String email,
-  }) async {
+  Future<Either<Failure, bool>> sendPasswordReset({required String email}) async {
     return executor.runOnline(() async {
       await remoteDS.sendPasswordReset(email: email);
       return true;
@@ -151,10 +147,7 @@ class AuthRepoImpl implements AuthRepo {
     required String newPassword,
   }) async {
     return executor.runOnline(() async {
-      await remoteDS.updatePassword(
-        currentPassword: currentPassword,
-        newPassword: newPassword,
-      );
+      await remoteDS.updatePassword(currentPassword: currentPassword, newPassword: newPassword);
       return true;
     }, from: 'AuthRepoImpl.updatePassword');
   }
@@ -169,16 +162,10 @@ class AuthRepoImpl implements AuthRepo {
     }, from: 'AuthRepoImpl.signOut');
   }
 
-  Future<AuthUserEntity> _persistAndBuildAuthData(
-    AuthUserModel authUser,
-  ) async {
+  Future<AuthUserEntity> _persistAndBuildAuthData(AuthUserModel authUser) async {
     final customer = authUser.toEntity();
     final userId = await authIdentityRepo.generateAndSaveUserId(customer);
-    await _cacheSession(
-      customer: authUser,
-      userId: userId,
-      idToken: authUser.idToken,
-    );
+    await _cacheSession(customer: authUser, userId: userId, idToken: authUser.idToken);
     await _syncDeviceToken();
     return customer;
   }
@@ -186,12 +173,14 @@ class AuthRepoImpl implements AuthRepo {
   Future<void> _syncDeviceToken() async {
     try {
       final token = await settingReader.fcmToken();
-      if (token == null || token.trim().isEmpty) return;
-      final result = await deviceTokenRepository.registerDeviceToken(
-        deviceToken: token.trim(),
+      AppLogger().appInfo("fcmValue = $token", tag: "_syncDeviceToken");
+      if (token.isNullOrEmpty) return;
+      final result = await deviceFcmTokenRepository.registerDeviceFcmToken(
+        deviceFcmToken: token!.trim(),
       );
       result.fold((_) => null, (_) => null);
-    } catch (_) {
+    } catch (e) {
+      AppLogger().appError(e, tag: "_syncDeviceToken");
       // ignore push token sync failures
     }
   }
@@ -205,12 +194,7 @@ class AuthRepoImpl implements AuthRepo {
 
     if (idToken != null && idToken.isNotEmpty) {
       await cacheDS.cacheLoginToken(
-        TokenModel(
-          accessToken: idToken,
-          tokenType: 'Bearer',
-          expiresIn: 3600,
-          scope: 'firebase',
-        ),
+        TokenModel(accessToken: idToken, tokenType: 'Bearer', expiresIn: 3600, scope: 'firebase'),
       );
     }
   }

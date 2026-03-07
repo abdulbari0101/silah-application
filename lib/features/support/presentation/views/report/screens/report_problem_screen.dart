@@ -19,10 +19,7 @@ class ReportProblemScreen extends StatelessWidget {
       child: BlocListener<SupportReportCubit, SupportReportState>(
         listener: (context, state) {
           state.whenOrNull(
-            success: (_) {
-              Toasts.success(context, Strings.send_report.tr());
-              context.pop(true);
-            },
+            success: (_) => context.pop(true),
             failure: (message) => Toasts.error(context, message),
           );
         },

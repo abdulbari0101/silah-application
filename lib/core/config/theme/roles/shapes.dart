@@ -101,6 +101,7 @@ class ShapeScale extends ThemeExtension<ShapeScale> {
 
   static const StadiumBorder pill = StadiumBorder();
 
+  @override
   ShapeScale copyWith({
     double? radiusXs,
     double? radiusSm,

@@ -19,7 +19,9 @@ class _DeviceTokenService implements DeviceTokenService {
 
   final ParseErrorLogger? errorLogger;
 
-  Future<dynamic> _registerDeviceToken(DeviceTokenRequestModel request) async {
+  Future<dynamic> _registerDeviceFcmToken(
+    DeviceTokenRequestModel request,
+  ) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
@@ -28,7 +30,7 @@ class _DeviceTokenService implements DeviceTokenService {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/devices/token',
+            '/devices/fcm_token',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -40,11 +42,11 @@ class _DeviceTokenService implements DeviceTokenService {
   }
 
   @override
-  Future<DeviceTokenResponseModel> registerDeviceToken(
+  Future<DeviceTokenResponseModel> registerDeviceFcmToken(
     DeviceTokenRequestModel request,
   ) {
     return JsonBodyMappableAdapter<DeviceTokenResponseModel>().adapt(
-      () => _registerDeviceToken(request),
+      () => _registerDeviceFcmToken(request),
     );
   }
 

@@ -1,3 +1,5 @@
+import 'package:silah_app/features/discovery/domain/entities/legal_specialization_entity.dart';
+
 class LawyerPersonalInfo {
   final String fullName;
   final String email;
@@ -18,8 +20,7 @@ class LawyerPersonalInfo {
 
 class LawyerProfessionalInfo {
   final LawyerPersonalInfo personal;
-  final String legalField;
-  final String? legalFieldId;
+  final List<LegalSpecializationEntity> legalFields;
   final String city;
   final String? cityId;
   final String? areaId;
@@ -30,8 +31,7 @@ class LawyerProfessionalInfo {
 
   const LawyerProfessionalInfo({
     required this.personal,
-    required this.legalField,
-    this.legalFieldId,
+    required this.legalFields,
     required this.city,
     this.cityId,
     this.areaId,

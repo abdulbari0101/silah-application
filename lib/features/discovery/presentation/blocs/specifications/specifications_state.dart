@@ -12,7 +12,7 @@ class DataPaymentInitial extends SpecificationsState {}
 class DataPaymentLoading extends SpecificationsState {}
 
 class DataPaymentLoaded extends SpecificationsState {
-  final List<SpecificationItemEntity> data;
+  final List<LegalSpecializationEntity> data;
 
   const DataPaymentLoaded({required this.data});
 

@@ -45,29 +45,12 @@ class RequiredMobileValidator extends ValueValidator {
   Map<String, dynamic> toJson() => {'type': type};
 }
 
-get LengthMobileValidator => _LengthWithZeroPrefixMobileValidator();
+ValueValidator get LengthMobileValidator =>
+    _LengthWithZeroPrefixMobileValidator();
 
 /// AppConstants.mobileLength,
 /// allowing an optional leading 0.
 class _LengthWithZeroPrefixMobileValidator extends ValueValidator {
-  @override
-  String get type => 'length_mobile';
-
-  @override
-  String? validate({required String label, required String? value}) {
-    if (value == null || value.isEmpty) return null;
-
-    if (!PhoneUtils.hasValidLength(value.trim())) {
-      return Strings.error_invalid_mobile_length.tr();
-    }
-    return null;
-  }
-
-  @override
-  Map<String, dynamic> toJson() => {'type': type};
-}
-
-class _LengthMobileValidator extends ValueValidator {
   @override
   String get type => 'length_mobile';
 

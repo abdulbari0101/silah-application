@@ -128,12 +128,12 @@ return failure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  idle,TResult Function()?  loading,TResult Function( AiClassificationResultEntity classification,  AiRecommendationEntity recommendation)?  success,TResult Function( String message)?  failure,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  idle,TResult Function()?  loading,TResult Function( AiRecommendationEntity recommendation)?  success,TResult Function( String message)?  failure,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AiConsultationIdle() when idle != null:
 return idle();case _AiConsultationLoading() when loading != null:
 return loading();case _AiConsultationSuccess() when success != null:
-return success(_that.classification,_that.recommendation);case _AiConsultationFailure() when failure != null:
+return success(_that.recommendation);case _AiConsultationFailure() when failure != null:
 return failure(_that.message);case _:
   return orElse();
 
@@ -152,12 +152,12 @@ return failure(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  idle,required TResult Function()  loading,required TResult Function( AiClassificationResultEntity classification,  AiRecommendationEntity recommendation)  success,required TResult Function( String message)  failure,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  idle,required TResult Function()  loading,required TResult Function( AiRecommendationEntity recommendation)  success,required TResult Function( String message)  failure,}) {final _that = this;
 switch (_that) {
 case _AiConsultationIdle():
 return idle();case _AiConsultationLoading():
 return loading();case _AiConsultationSuccess():
-return success(_that.classification,_that.recommendation);case _AiConsultationFailure():
+return success(_that.recommendation);case _AiConsultationFailure():
 return failure(_that.message);case _:
   throw StateError('Unexpected subclass');
 
@@ -175,12 +175,12 @@ return failure(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  idle,TResult? Function()?  loading,TResult? Function( AiClassificationResultEntity classification,  AiRecommendationEntity recommendation)?  success,TResult? Function( String message)?  failure,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  idle,TResult? Function()?  loading,TResult? Function( AiRecommendationEntity recommendation)?  success,TResult? Function( String message)?  failure,}) {final _that = this;
 switch (_that) {
 case _AiConsultationIdle() when idle != null:
 return idle();case _AiConsultationLoading() when loading != null:
 return loading();case _AiConsultationSuccess() when success != null:
-return success(_that.classification,_that.recommendation);case _AiConsultationFailure() when failure != null:
+return success(_that.recommendation);case _AiConsultationFailure() when failure != null:
 return failure(_that.message);case _:
   return null;
 
@@ -257,10 +257,9 @@ String toString() {
 
 
 class _AiConsultationSuccess implements AiConsultationState {
-  const _AiConsultationSuccess({required this.classification, required this.recommendation});
+  const _AiConsultationSuccess({required this.recommendation});
   
 
- final  AiClassificationResultEntity classification;
  final  AiRecommendationEntity recommendation;
 
 /// Create a copy of AiConsultationState
@@ -273,16 +272,16 @@ _$AiConsultationSuccessCopyWith<_AiConsultationSuccess> get copyWith => __$AiCon
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AiConsultationSuccess&&(identical(other.classification, classification) || other.classification == classification)&&(identical(other.recommendation, recommendation) || other.recommendation == recommendation));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AiConsultationSuccess&&(identical(other.recommendation, recommendation) || other.recommendation == recommendation));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,classification,recommendation);
+int get hashCode => Object.hash(runtimeType,recommendation);
 
 @override
 String toString() {
-  return 'AiConsultationState.success(classification: $classification, recommendation: $recommendation)';
+  return 'AiConsultationState.success(recommendation: $recommendation)';
 }
 
 
@@ -293,7 +292,7 @@ abstract mixin class _$AiConsultationSuccessCopyWith<$Res> implements $AiConsult
   factory _$AiConsultationSuccessCopyWith(_AiConsultationSuccess value, $Res Function(_AiConsultationSuccess) _then) = __$AiConsultationSuccessCopyWithImpl;
 @useResult
 $Res call({
- AiClassificationResultEntity classification, AiRecommendationEntity recommendation
+ AiRecommendationEntity recommendation
 });
 
 
@@ -310,10 +309,9 @@ class __$AiConsultationSuccessCopyWithImpl<$Res>
 
 /// Create a copy of AiConsultationState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? classification = null,Object? recommendation = null,}) {
+@pragma('vm:prefer-inline') $Res call({Object? recommendation = null,}) {
   return _then(_AiConsultationSuccess(
-classification: null == classification ? _self.classification : classification // ignore: cast_nullable_to_non_nullable
-as AiClassificationResultEntity,recommendation: null == recommendation ? _self.recommendation : recommendation // ignore: cast_nullable_to_non_nullable
+recommendation: null == recommendation ? _self.recommendation : recommendation // ignore: cast_nullable_to_non_nullable
 as AiRecommendationEntity,
   ));
 }

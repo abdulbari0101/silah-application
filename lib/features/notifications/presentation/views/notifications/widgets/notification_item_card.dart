@@ -5,6 +5,7 @@ import 'package:silah_app/core/config/localization/localizations_string_keys.dar
 import 'package:silah_app/core/config/theme/extentions/theme_context_extension.dart';
 import 'package:silah_app/core/presentation/ui/widget/cards/custom_card.dart';
 import 'package:silah_app/features/notifications/domain/entities/notification/notification_entity.dart';
+import 'package:silah_app/features/notifications/presentation/support/notification_timestamp_presenter.dart';
 
 class NotificationItemCard extends StatelessWidget {
   const NotificationItemCard({super.key, required this.notification});
@@ -13,8 +14,12 @@ class NotificationItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = notification.operationName?.trim();
+    final title = notification.title?.trim();
     final message = notification.message?.trim();
+    final timestamp = NotificationTimestampPresenter.format(
+      context,
+      notification,
+    );
 
     return CustomCard(
       innerWidget: Row(
@@ -50,6 +55,15 @@ class NotificationItemCard extends StatelessWidget {
                     message,
                     style: context.textTheme.bodySmall?.copyWith(
                       color: context.colors.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+                if (timestamp != null) ...[
+                  UIConstants.xsmallHeight,
+                  Text(
+                    timestamp,
+                    style: context.textTheme.labelSmall?.copyWith(
+                      color: context.colors.outline,
                     ),
                   ),
                 ],

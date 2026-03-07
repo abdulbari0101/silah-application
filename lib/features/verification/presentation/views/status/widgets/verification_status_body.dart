@@ -6,9 +6,11 @@ import 'package:silah_app/core/config/constants/ui_constants.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
 import 'package:silah_app/core/config/router/app_routes.dart';
 import 'package:silah_app/core/config/theme/extentions/theme_context_extension.dart';
+import 'package:silah_app/core/presentation/ui/overlays/toasts.dart';
 import 'package:silah_app/core/presentation/ui/widget/buttons/primary_button.dart';
 import 'package:silah_app/core/presentation/ui/widget/cards/custom_card.dart';
 import 'package:silah_app/core/presentation/ui/widget/chips/status_chip.dart';
+import 'package:silah_app/core/presentation/ui/widget/text/labeled_value_row.dart';
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/error_widget.dart';
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/progress_state_widget.dart';
 import 'package:silah_app/features/verification/domain/entities/license_verification_entity.dart';
@@ -106,18 +108,30 @@ class VerificationStatusBody extends StatelessWidget {
                   ),
                   if ((verification.licenseNumber ?? '').isNotEmpty) ...[
                     UIConstants.mediumHeight,
-                    _infoRow(
-                      context,
+                    LabeledValueRow(
                       label: Strings.license_number.tr(),
                       value: verification.licenseNumber!,
+                      labelSuffix: ':',
+                      labelStyle: context.textTheme.labelSmall?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                      valueStyle: context.textTheme.labelSmall?.copyWith(
+                        color: context.colors.onSurfaceVariant,
+                      ),
                     ),
                   ],
                   if ((verification.nationalId ?? '').isNotEmpty) ...[
                     UIConstants.smallHeight,
-                    _infoRow(
-                      context,
+                    LabeledValueRow(
                       label: Strings.national_id.tr(),
                       value: verification.nationalId!,
+                      labelSuffix: ':',
+                      labelStyle: context.textTheme.labelSmall?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                      valueStyle: context.textTheme.labelSmall?.copyWith(
+                        color: context.colors.onSurfaceVariant,
+                      ),
                     ),
                   ],
                   if ((verification.reviewNotes ?? '').isNotEmpty) ...[
@@ -152,35 +166,11 @@ class VerificationStatusBody extends StatelessWidget {
     );
   }
 
-  Widget _infoRow(
-    BuildContext context, {
-    required String label,
-    required String value,
-  }) {
-    return Row(
-      children: [
-        Text(
-          '$label:',
-          style: context.textTheme.labelSmall?.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        UIConstants.smallWidth,
-        Expanded(
-          child: Text(
-            value,
-            style: context.textTheme.labelSmall?.copyWith(
-              color: context.colors.onSurfaceVariant,
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
   void _openRequest(BuildContext context) {
     context.pushNamed(AppRoutes.verificationRequest.name).then((value) {
+      if (!context.mounted) return;
       if (value == true) {
+        Toasts.success(context, Strings.send_verification.tr());
         context.read<VerificationStatusCubit>().load();
       }
     });

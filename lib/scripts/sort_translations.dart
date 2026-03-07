@@ -14,7 +14,6 @@
 
 import 'dart:convert';
 import 'dart:io';
-import 'dart:collection';
 
 Future<void> main(List<String> args) async {
   if (args.length < 2 || args.length > 3) {
@@ -49,7 +48,7 @@ Example: dart run lib/scripts/sort_translations.dart en tr
   final tgtMap = await readJson(tgtPath);
 
   // Use LinkedHashMap to preserve insertion order
-  final ordered = LinkedHashMap<String, dynamic>();
+  final ordered = <String, dynamic>{};
 
   // 1️⃣ Keys that appear in reference — in the same order
   for (final key in refMap.keys) {
@@ -68,7 +67,7 @@ Example: dart run lib/scripts/sort_translations.dart en tr
   }
 
   await File(outPath)
-      .writeAsString(JsonEncoder.withIndent('  ').convert(ordered) + '\n');
+      .writeAsString('${JsonEncoder.withIndent('  ').convert(ordered)}\n');
 
   stdout.writeln(
       '✅ Sorted ${ordered.length} entries. Output written to $outPath');

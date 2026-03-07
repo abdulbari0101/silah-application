@@ -2,8 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:silah_app/core/config/router/app_routes.dart';
-import 'package:silah_app/core/config/router/route_extensions.dart';
 import 'package:silah_app/core/injection/injection_container.dart';
 import 'package:silah_app/core/presentation/state_magment/blocs/app_state/app_state_bloc.dart';
 import 'package:silah_app/core/presentation/state_magment/blocs/app_state/state_data/app_auth_status.dart';
@@ -32,10 +30,9 @@ class AndroidNavWrapper extends StatelessWidget {
           UpdateSession(isLoggedIn: false, userAuthStatus: UserAuthStatus.loggedOutReturningUser),
         );
 
-        context.goTo(AppRoutes.login);
       },
 
-      child: _ScaffoldBody(child: child, items: items, navigationShell: navigationShell),
+      child: _ScaffoldBody(items: items, navigationShell: navigationShell, child: child),
     );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:silah_app/core/config/theme/extentions/theme_context_extension.dart';
-import 'package:silah_app/features/discovery/domain/entities/specification_item_entity.dart';
+import 'package:silah_app/features/discovery/domain/entities/legal_specialization_entity.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 import 'specification_item.dart';
@@ -20,7 +20,10 @@ class SpecificationItemShimmer extends StatelessWidget {
         highlightColor: colors.shimmerHighlight,
         duration: const Duration(milliseconds: 1200),
       ),
-      child: SpecificationItem(item: SpecificationItemEntity(name: 'name'), enabled: false),
+      child: SpecificationItem(
+        item: const LegalSpecializationEntity(name: 'name'),
+        enabled: false,
+      ),
     );
   }
 }

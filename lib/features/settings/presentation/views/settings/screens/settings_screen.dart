@@ -18,6 +18,7 @@ class SettingsScreen extends StatelessWidget {
           create: (_) => ProfileCubit(
             repository: locator(),
             appStateBloc: context.read<AppStateBloc>(),
+            imagePickerService: locator(),
           )..load(),
           child: const PlatformScreenWrapper(body: Body()),
         );

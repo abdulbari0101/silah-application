@@ -1,6 +1,9 @@
+import 'package:silah_app/core/config/constants/api_constants.dart';
 import 'package:silah_app/core/domain/repositories/identity_repo.dart';
+import 'package:silah_app/core/infrastructure/network/dio_client.dart';
 import 'package:silah_app/core/injection/injection_container.dart';
 import 'package:silah_app/features/auth/data/datasources/remote/auth_remote_data_source.dart';
+import 'package:silah_app/features/auth/data/datasources/remote/auth_role_service.dart';
 import 'package:silah_app/features/auth/data/datasources/remote/auth_service.dart';
 import 'package:silah_app/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:silah_app/features/auth/data/repositories/identity_repo_impl.dart';
@@ -20,7 +23,10 @@ Future<void> initAuth() async {
   locator.registerFactory(() => RegistrationBloc(repository: locator(), appStateBloc: locator()));
 
   // Auth services (Firebase)
-  locator.registerLazySingleton(() => AuthService());
+  locator.registerLazySingleton(
+    () => AuthRoleService(locator<DioClient>().dio, baseUrl: ApiConstants.baseUrl),
+  );
+  locator.registerLazySingleton(() => AuthService(roleService: locator()));
 
   locator.registerLazySingleton<AuthRemoteDataSource>(
     () => AuthRemoteDataSourceImpl(authService: locator(), logger: locator()),
@@ -33,7 +39,7 @@ Future<void> initAuth() async {
       cacheDS: locator(),
       executor: locator(),
       authIdentityRepo: locator(),
-      deviceTokenRepository: locator<DeviceTokenRepository>(),
+      deviceFcmTokenRepository: locator<DeviceTokenRepository>(),
       settingReader: locator(),
     ),
   );

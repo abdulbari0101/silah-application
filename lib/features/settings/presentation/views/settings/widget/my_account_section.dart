@@ -2,9 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:silah_app/core/config/constants/ui_constants.dart';
+import 'package:silah_app/core/config/localization/account_type_localizer.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
 import 'package:silah_app/core/config/theme/extentions/theme_context_extension.dart';
 import 'package:silah_app/core/presentation/ui/widget/cards/custom_card.dart';
+import 'package:silah_app/core/presentation/ui/widget/image/app_remote_avatar.dart';
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/error_widget.dart';
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/progress_state_widget.dart';
 import 'package:silah_app/features/profiles/domain/entities/profile_entity.dart';
@@ -52,7 +54,10 @@ class MyAccountSection extends StatelessWidget {
         : Strings.user.tr();
     final email = profile.email?.trim();
     final phone = profile.phone?.trim();
-    final accountTypeLabel = _accountTypeLabel(context, profile.accountType);
+    final accountTypeLabel = AccountTypeLocalizer.label(
+      context,
+      profile.accountType,
+    );
 
     return CustomCard(
       innerWidget: Column(
@@ -60,14 +65,12 @@ class MyAccountSection extends StatelessWidget {
         children: [
           Row(
             children: [
-              CircleAvatar(
+              AppRemoteAvatar(
                 radius: 22,
+                imageUrl: profile.avatarUrl,
+                label: name,
                 backgroundColor: context.colors.primaryContainer,
-                child: Icon(
-                  Icons.person_outline,
-                  color: context.colors.primary,
-                  size: 22,
-                ),
+                foregroundColor: context.colors.primary,
               ),
               UIConstants.mediumWidth,
               Expanded(
@@ -135,18 +138,5 @@ class MyAccountSection extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  String? _accountTypeLabel(BuildContext context, String? accountType) {
-    switch (accountType?.toLowerCase()) {
-      case 'admin':
-        return Strings.account_type_admin.tr();
-      case 'lawyer':
-        return Strings.account_type_lawyer.tr();
-      case 'user':
-        return Strings.account_type_user.tr();
-      default:
-        return null;
-    }
   }
 }

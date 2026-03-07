@@ -8,6 +8,7 @@ import 'package:silah_app/core/presentation/ui/widget/buttons/primary_button.dar
 import 'package:silah_app/core/presentation/ui/widget/buttons/secondary_button.dart';
 import 'package:silah_app/core/presentation/ui/widget/cards/custom_card.dart';
 import 'package:silah_app/core/presentation/ui/widget/chips/status_chip.dart';
+import 'package:silah_app/core/presentation/ui/widget/text/labeled_value_row.dart';
 import 'package:silah_app/features/admin/domain/entities/admin_task_entity.dart';
 import 'package:silah_app/features/admin/domain/entities/admin_task_status.dart';
 import 'package:silah_app/features/admin/presentation/cubits/details/admin_task_details_cubit.dart';
@@ -108,10 +109,16 @@ class AdminTaskDetailsBody extends StatelessWidget {
                   ),
                   if ((task.targetId ?? '').isNotEmpty) ...[
                     UIConstants.smallHeight,
-                    _infoRow(
-                      context,
+                    LabeledValueRow(
                       label: Strings.reference_number.tr(),
                       value: task.targetId!,
+                      labelSuffix: ':',
+                      labelStyle: context.textTheme.labelSmall?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                      valueStyle: context.textTheme.labelSmall?.copyWith(
+                        color: context.colors.onSurfaceVariant,
+                      ),
                     ),
                   ],
                   if ((task.notes ?? '').isNotEmpty) ...[
@@ -120,10 +127,16 @@ class AdminTaskDetailsBody extends StatelessWidget {
                   ],
                   if ((task.createdAt ?? '').isNotEmpty) ...[
                     UIConstants.mediumHeight,
-                    _infoRow(
-                      context,
+                    LabeledValueRow(
                       label: Strings.created_at.tr(),
                       value: task.createdAt!,
+                      labelSuffix: ':',
+                      labelStyle: context.textTheme.labelSmall?.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
+                      valueStyle: context.textTheme.labelSmall?.copyWith(
+                        color: context.colors.onSurfaceVariant,
+                      ),
                     ),
                   ],
                 ],
@@ -156,32 +169,6 @@ class AdminTaskDetailsBody extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _infoRow(
-    BuildContext context, {
-    required String label,
-    required String value,
-  }) {
-    return Row(
-      children: [
-        Text(
-          '$label:',
-          style: context.textTheme.labelSmall?.copyWith(
-            fontWeight: FontWeight.w600,
-          ),
-        ),
-        UIConstants.smallWidth,
-        Expanded(
-          child: Text(
-            value,
-            style: context.textTheme.labelSmall?.copyWith(
-              color: context.colors.onSurfaceVariant,
-            ),
-          ),
-        ),
-      ],
     );
   }
 

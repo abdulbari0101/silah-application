@@ -12,22 +12,31 @@ import 'package:silah_app/features/training/domain/entities/training_application
 import 'package:silah_app/features/training/domain/entities/training_opportunity_entity.dart';
 
 abstract class TrainingRemoteDataSource {
-  Future<BaseApiResponse<TrainingApplicationCreateResponseModel>> createApplication(
-    TrainingApplicationCreateRequestModel request,
-  );
+  Future<BaseApiResponse<TrainingApplicationCreateResponseModel>>
+  createApplication(TrainingApplicationCreateRequestModel request);
 
-  Future<BaseApiResponse<TrainingApplicationStatusUpdateResponseModel>> updateStatus(
+  Future<BaseApiResponse<TrainingApplicationStatusUpdateResponseModel>>
+  updateStatus(
     String applicationId,
     TrainingApplicationStatusUpdateRequestModel request,
   );
 
-  Future<List<TrainingOpportunityEntity>> fetchOpportunities({String? lawyerUid});
-  Future<List<TrainingApplicationEntity>> fetchMyApplications(String traineeUid);
-  Future<List<TrainingApplicationEntity>> fetchApplicationsForLawyer(String lawyerUid);
+  Future<List<TrainingOpportunityEntity>> fetchOpportunities({
+    String? lawyerUid,
+  });
+  Future<List<TrainingApplicationEntity>> fetchMyApplications(
+    String traineeUid,
+  );
+  Future<List<TrainingApplicationEntity>> fetchApplicationsForLawyer(
+    String lawyerUid,
+  );
   String? currentUserId();
 }
 
 class TrainingRemoteDataSourceImpl implements TrainingRemoteDataSource {
+  static const String _opportunitiesCollection = 'training_opportunities';
+  static const String _applicationsCollection = 'training_applications';
+
   final TrainingService service;
   final AppLogger logger;
   final FirebaseFirestore firestore;
@@ -38,13 +47,12 @@ class TrainingRemoteDataSourceImpl implements TrainingRemoteDataSource {
     required this.logger,
     FirebaseFirestore? firestore,
     FirebaseAuth? auth,
-  })  : firestore = firestore ?? FirebaseFirestore.instance,
-        auth = auth ?? FirebaseAuth.instance;
+  }) : firestore = firestore ?? FirebaseFirestore.instance,
+       auth = auth ?? FirebaseAuth.instance;
 
   @override
-  Future<BaseApiResponse<TrainingApplicationCreateResponseModel>> createApplication(
-    TrainingApplicationCreateRequestModel request,
-  ) =>
+  Future<BaseApiResponse<TrainingApplicationCreateResponseModel>>
+  createApplication(TrainingApplicationCreateRequestModel request) =>
       handleBaseApiResponse<TrainingApplicationCreateResponseModel>(
         method: 'TrainingRemoteDataSource.createApplication',
         logger: logger,
@@ -52,24 +60,26 @@ class TrainingRemoteDataSourceImpl implements TrainingRemoteDataSource {
       );
 
   @override
-  Future<BaseApiResponse<TrainingApplicationStatusUpdateResponseModel>> updateStatus(
+  Future<BaseApiResponse<TrainingApplicationStatusUpdateResponseModel>>
+  updateStatus(
     String applicationId,
     TrainingApplicationStatusUpdateRequestModel request,
-  ) =>
-      handleBaseApiResponse<TrainingApplicationStatusUpdateResponseModel>(
-        method: 'TrainingRemoteDataSource.updateStatus',
-        logger: logger,
-        call: () => service.updateStatus(applicationId, request),
-      );
+  ) => handleBaseApiResponse<TrainingApplicationStatusUpdateResponseModel>(
+    method: 'TrainingRemoteDataSource.updateStatus',
+    logger: logger,
+    call: () => service.updateStatus(applicationId, request),
+  );
 
   @override
-  Future<List<TrainingOpportunityEntity>> fetchOpportunities({String? lawyerUid}) {
+  Future<List<TrainingOpportunityEntity>> fetchOpportunities({
+    String? lawyerUid,
+  }) {
     return firebaseCall<List<TrainingOpportunityEntity>>(
       method: 'TrainingRemoteDataSource.fetchOpportunities',
       logger: logger,
       call: () async {
         Query<Map<String, dynamic>> query = firestore
-            .collection('training_opportunities')
+            .collection(_opportunitiesCollection)
             .where('isOpen', isEqualTo: true);
         final resolvedLawyerUid = lawyerUid?.trim();
         if (resolvedLawyerUid != null && resolvedLawyerUid.isNotEmpty) {
@@ -82,30 +92,38 @@ class TrainingRemoteDataSourceImpl implements TrainingRemoteDataSource {
   }
 
   @override
-  Future<List<TrainingApplicationEntity>> fetchMyApplications(String traineeUid) {
+  Future<List<TrainingApplicationEntity>> fetchMyApplications(
+    String traineeUid,
+  ) {
+    final resolvedTraineeUid = traineeUid.trim();
     return firebaseCall<List<TrainingApplicationEntity>>(
       method: 'TrainingRemoteDataSource.fetchMyApplications',
       logger: logger,
-      payload: {'uid': traineeUid},
+      payload: {'uid': resolvedTraineeUid},
       call: () async {
-        final snapshot =
-            await firestore.collection('training_applications').where('traineeUid', isEqualTo: traineeUid).get();
+        final snapshot = await _fetchApplicationsByField(
+          'traineeUid',
+          resolvedTraineeUid,
+        );
         return snapshot.docs.map(_mapApplicationDoc).toList();
       },
     );
   }
 
   @override
-  Future<List<TrainingApplicationEntity>> fetchApplicationsForLawyer(String lawyerUid) {
+  Future<List<TrainingApplicationEntity>> fetchApplicationsForLawyer(
+    String lawyerUid,
+  ) {
+    final resolvedLawyerUid = lawyerUid.trim();
     return firebaseCall<List<TrainingApplicationEntity>>(
       method: 'TrainingRemoteDataSource.fetchApplicationsForLawyer',
       logger: logger,
-      payload: {'lawyerUid': lawyerUid},
+      payload: {'lawyerUid': resolvedLawyerUid},
       call: () async {
-        final snapshot = await firestore
-            .collection('training_applications')
-            .where('lawyerUid', isEqualTo: lawyerUid)
-            .get();
+        final snapshot = await _fetchApplicationsByField(
+          'lawyerUid',
+          resolvedLawyerUid,
+        );
         return snapshot.docs.map(_mapApplicationDoc).toList();
       },
     );
@@ -114,7 +132,9 @@ class TrainingRemoteDataSourceImpl implements TrainingRemoteDataSource {
   @override
   String? currentUserId() => auth.currentUser?.uid;
 
-  TrainingOpportunityEntity _mapOpportunityDoc(QueryDocumentSnapshot<Map<String, dynamic>> doc) {
+  TrainingOpportunityEntity _mapOpportunityDoc(
+    QueryDocumentSnapshot<Map<String, dynamic>> doc,
+  ) {
     final data = doc.data();
     return TrainingOpportunityEntity(
       id: doc.id,
@@ -127,7 +147,9 @@ class TrainingRemoteDataSourceImpl implements TrainingRemoteDataSource {
     );
   }
 
-  TrainingApplicationEntity _mapApplicationDoc(QueryDocumentSnapshot<Map<String, dynamic>> doc) {
+  TrainingApplicationEntity _mapApplicationDoc(
+    QueryDocumentSnapshot<Map<String, dynamic>> doc,
+  ) {
     final data = doc.data();
     return TrainingApplicationEntity(
       id: doc.id,
@@ -141,23 +163,20 @@ class TrainingRemoteDataSourceImpl implements TrainingRemoteDataSource {
       areaId: data['areaId'] as String?,
       graduationYear: parseFirestoreInt(data['graduationYear']),
       cvUrl: data['cvUrl'] as String?,
-      status: _parseStatus(data['status'] as String?) ?? TrainingApplicationStatus.pending,
+      status:
+          TrainingApplicationStatusX.tryParse(data['status'] as String?) ??
+          TrainingApplicationStatus.pending,
       submittedAt: parseFirestoreTimestamp(data['submittedAt']),
     );
   }
 
-  TrainingApplicationStatus? _parseStatus(String? value) {
-    switch (value?.toLowerCase()) {
-      case 'accepted':
-        return TrainingApplicationStatus.accepted;
-      case 'rejected':
-        return TrainingApplicationStatus.rejected;
-      case 'cancelled':
-        return TrainingApplicationStatus.cancelled;
-      case 'pending':
-        return TrainingApplicationStatus.pending;
-      default:
-        return null;
-    }
+  Future<QuerySnapshot<Map<String, dynamic>>> _fetchApplicationsByField(
+    String field,
+    String value,
+  ) {
+    return firestore
+        .collection(_applicationsCollection)
+        .where(field, isEqualTo: value)
+        .get();
   }
 }

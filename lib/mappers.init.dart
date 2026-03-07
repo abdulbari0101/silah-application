@@ -35,44 +35,43 @@ import 'features/admin/domain/entities/admin_task_status.dart' as p23;
 import 'features/app_shell/data/models/intro_model.dart' as p24;
 import 'features/app_shell/data/models/intro_response_wrapper.dart' as p25;
 import 'features/app_shell/domain/entities/intro_entity.dart' as p26;
-import 'features/auth/data/models/auth_user_model.dart' as p27;
-import 'features/auth/domain/entities/auth_user_entity.dart' as p28;
-import 'features/auth/domain/entities/registration_payload.dart' as p29;
-import 'features/consultations/data/models/consultation_models.dart' as p30;
+import 'features/auth/data/models/auth_role_models.dart' as p27;
+import 'features/auth/data/models/auth_user_model.dart' as p28;
+import 'features/auth/domain/entities/auth_user_entity.dart' as p29;
+import 'features/auth/domain/entities/registration_payload.dart' as p30;
+import 'features/consultations/data/models/consultation_models.dart' as p31;
 import 'features/consultations/domain/entities/case_attachment_entity.dart'
-    as p31;
-import 'features/consultations/domain/entities/consultation_close_reason.dart'
     as p32;
-import 'features/consultations/domain/entities/consultation_request_entity.dart'
+import 'features/consultations/domain/entities/consultation_close_reason.dart'
     as p33;
-import 'features/consultations/domain/entities/consultation_status.dart' as p34;
-import 'features/discovery/data/models/ai_models.dart' as p35;
-import 'features/discovery/data/models/legal_specialization_model.dart' as p36;
+import 'features/consultations/domain/entities/consultation_request_entity.dart'
+    as p34;
+import 'features/consultations/domain/entities/consultation_status.dart' as p35;
+import 'features/discovery/data/models/ai_models.dart' as p36;
+import 'features/discovery/data/models/legal_specialization_model.dart' as p37;
 import 'features/discovery/domain/entities/ai_classification_request_entity.dart'
-    as p37;
-import 'features/discovery/domain/entities/ai_classification_result_entity.dart'
     as p38;
-import 'features/discovery/domain/entities/ai_recommendation_entity.dart'
+import 'features/discovery/domain/entities/ai_classification_result_entity.dart'
     as p39;
-import 'features/discovery/domain/entities/discovery_request_entity.dart'
+import 'features/discovery/domain/entities/ai_recommendation_entity.dart'
     as p40;
-import 'features/discovery/domain/entities/legal_specialization_entity.dart'
+import 'features/discovery/domain/entities/discovery_request_entity.dart'
     as p41;
-import 'features/discovery/domain/entities/specification_item_entity.dart'
+import 'features/discovery/domain/entities/legal_specialization_entity.dart'
     as p42;
-import 'features/lookups/data/models/lookup_item_model.dart' as p43;
-import 'features/lookups/domain/entities/lookup_item_entity.dart' as p44;
-import 'features/messaging/data/models/chat_item_model.dart' as p45;
-import 'features/messaging/domain/entities/chat_item_entity.dart' as p46;
-import 'features/messaging/domain/entities/chat_thread_entity.dart' as p47;
-import 'features/messaging/domain/entities/message_entity.dart' as p48;
-import 'features/messaging/domain/entities/message_type.dart' as p49;
-import 'features/notifications/data/models/device_token_models.dart' as p50;
+import 'features/discovery/domain/entities/specification_item_entity.dart'
+    as p43;
+import 'features/lookups/data/models/lookup_item_model.dart' as p44;
+import 'features/lookups/domain/entities/lookup_item_entity.dart' as p45;
+import 'features/messaging/data/models/chat_item_model.dart' as p46;
+import 'features/messaging/domain/entities/chat_item_entity.dart' as p47;
+import 'features/messaging/domain/entities/chat_thread_entity.dart' as p48;
+import 'features/messaging/domain/entities/message_entity.dart' as p49;
+import 'features/messaging/domain/entities/message_type.dart' as p50;
+import 'features/notifications/data/models/device_token_models.dart' as p51;
 import 'features/notifications/data/models/notification/notification_model.dart'
-    as p51;
-import 'features/notifications/domain/entities/notification/notification_entity.dart'
     as p52;
-import 'features/notifications/domain/entities/notification/notification_group.dart'
+import 'features/notifications/domain/entities/notification/notification_entity.dart'
     as p53;
 import 'features/notifications/domain/entities/notification/notification_result.dart'
     as p54;
@@ -143,43 +142,43 @@ void initializeMappers() {
   p24.IntroModelMapper.ensureInitialized();
   p25.IntroRespWrapperMapper.ensureInitialized();
   p26.IntroEntityMapper.ensureInitialized();
-  p27.AuthUserModelMapper.ensureInitialized();
-  p28.AuthUserEntityMapper.ensureInitialized();
-  p28.AuthAccountTypeMapper.ensureInitialized();
-  p29.RegistrationPayloadMapper.ensureInitialized();
-  p29.RegistrationAccountTypeMapper.ensureInitialized();
-  p30.ConsultationCreateRequestModelMapper.ensureInitialized();
-  p30.ConsultationCreateResponseModelMapper.ensureInitialized();
-  p30.ConsultationStatusUpdateRequestModelMapper.ensureInitialized();
-  p30.ConsultationStatusUpdateResponseModelMapper.ensureInitialized();
-  p31.CaseAttachmentEntityMapper.ensureInitialized();
-  p32.ConsultationCloseReasonMapper.ensureInitialized();
-  p33.ConsultationRequestEntityMapper.ensureInitialized();
-  p34.ConsultationStatusMapper.ensureInitialized();
-  p35.AiClassifyRequestModelMapper.ensureInitialized();
-  p35.AiClassifyResponseModelMapper.ensureInitialized();
-  p35.AiRecommendRequestModelMapper.ensureInitialized();
-  p35.AiRecommendFiltersModelMapper.ensureInitialized();
-  p35.AiRecommendResponseModelMapper.ensureInitialized();
-  p36.LegalSpecializationModelMapper.ensureInitialized();
-  p37.AiClassificationRequestEntityMapper.ensureInitialized();
-  p38.AiClassificationResultEntityMapper.ensureInitialized();
-  p39.AiRecommendationEntityMapper.ensureInitialized();
-  p40.DiscoveryRequestEntityMapper.ensureInitialized();
-  p41.LegalSpecializationEntityMapper.ensureInitialized();
-  p42.SpecificationItemEntityMapper.ensureInitialized();
-  p43.LookupItemModelMapper.ensureInitialized();
-  p44.LookupItemEntityMapper.ensureInitialized();
-  p45.ChatItemModelMapper.ensureInitialized();
-  p46.ChatItemEntityMapper.ensureInitialized();
-  p47.ChatThreadEntityMapper.ensureInitialized();
-  p48.MessageEntityMapper.ensureInitialized();
-  p49.MessageTypeMapper.ensureInitialized();
-  p50.DeviceTokenRequestModelMapper.ensureInitialized();
-  p50.DeviceTokenResponseModelMapper.ensureInitialized();
-  p51.NotificationModelMapper.ensureInitialized();
-  p52.NotificationEntityMapper.ensureInitialized();
-  p53.NotificationGroupMapper.ensureInitialized();
+  p27.RoleSyncResponseModelMapper.ensureInitialized();
+  p28.AuthUserModelMapper.ensureInitialized();
+  p29.AuthUserEntityMapper.ensureInitialized();
+  p29.AuthAccountTypeMapper.ensureInitialized();
+  p30.RegistrationPayloadMapper.ensureInitialized();
+  p30.RegistrationAccountTypeMapper.ensureInitialized();
+  p31.ConsultationCreateRequestModelMapper.ensureInitialized();
+  p31.ConsultationCreateResponseModelMapper.ensureInitialized();
+  p31.ConsultationStatusUpdateRequestModelMapper.ensureInitialized();
+  p31.ConsultationStatusUpdateResponseModelMapper.ensureInitialized();
+  p32.CaseAttachmentEntityMapper.ensureInitialized();
+  p33.ConsultationCloseReasonMapper.ensureInitialized();
+  p34.ConsultationRequestEntityMapper.ensureInitialized();
+  p35.ConsultationStatusMapper.ensureInitialized();
+  p36.AiRecommendRequestModelMapper.ensureInitialized();
+  p36.AiRecommendFiltersModelMapper.ensureInitialized();
+  p36.AiRecommendResponseModelMapper.ensureInitialized();
+  p37.LegalSpecializationModelMapper.ensureInitialized();
+  p38.AiClassificationRequestEntityMapper.ensureInitialized();
+  p39.AiClassificationResultEntityMapper.ensureInitialized();
+  p40.AiRecommendationEntityMapper.ensureInitialized();
+  p41.DiscoveryRequestEntityMapper.ensureInitialized();
+  p42.LegalSpecializationEntityMapper.ensureInitialized();
+  p43.SpecificationItemEntityMapper.ensureInitialized();
+  p44.LookupItemModelMapper.ensureInitialized();
+  p45.LookupItemEntityMapper.ensureInitialized();
+  p46.ChatItemModelMapper.ensureInitialized();
+  p47.ChatItemEntityMapper.ensureInitialized();
+  p48.ChatThreadEntityMapper.ensureInitialized();
+  p49.MessageEntityMapper.ensureInitialized();
+  p50.MessageTypeMapper.ensureInitialized();
+  p51.DeviceTokenRequestModelMapper.ensureInitialized();
+  p51.DeviceTokenResponseModelMapper.ensureInitialized();
+  p52.NotificationModelMapper.ensureInitialized();
+  p52.NotificationsResponseModelMapper.ensureInitialized();
+  p52.NotificationsSeenResponseModelMapper.ensureInitialized();
+  p53.NotificationEntityMapper.ensureInitialized();
   p54.NotificationResultMapper.ensureInitialized();
   p55.AvailabilityStatusMapper.ensureInitialized();
   p56.LawyerProfileEntityMapper.ensureInitialized();
@@ -190,6 +189,8 @@ void initializeMappers() {
   p61.SettingSectionEntityMapper.ensureInitialized();
   p62.SupportReportRequestModelMapper.ensureInitialized();
   p62.SupportReportResponseModelMapper.ensureInitialized();
+  p62.SupportTicketItemModelMapper.ensureInitialized();
+  p62.SupportTicketsResponseModelMapper.ensureInitialized();
   p63.SupportTicketEntityMapper.ensureInitialized();
   p64.SupportTicketStatusMapper.ensureInitialized();
   p65.TrainingApplicationCreateRequestModelMapper.ensureInitialized();

@@ -1,19 +1,22 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
 import 'package:silah_app/core/domain/entities/api/request/post_request_entity.dart';
 import 'package:silah_app/core/infrastructure/errors/error_utils.dart';
 import 'package:silah_app/core/infrastructure/errors/failures.dart';
 import 'package:silah_app/core/presentation/state_magment/bloc_utils/bloc_utils.dart';
-import 'package:silah_app/features/discovery/domain/entities/specification_item_entity.dart';
+import 'package:silah_app/features/discovery/domain/entities/legal_specialization_entity.dart';
 import 'package:silah_app/features/discovery/domain/repositories/discovery_repository.dart';
 
 part 'specifications_event.dart';
 part 'specifications_state.dart';
 
-class SpecificationsBloc extends Bloc<SpecificationsEvent, SpecificationsState> {
+class SpecificationsBloc
+    extends Bloc<SpecificationsEvent, SpecificationsState> {
   final DiscoveryRepository repository;
   PostRequestEntity postRequest = PostRequestEntity();
 
@@ -32,16 +35,44 @@ class SpecificationsBloc extends Bloc<SpecificationsEvent, SpecificationsState> 
 
     final result = await repository.fetchSpecializations();
 
-    result.fold((failure) => _emitFailure(failure, emit), (data) {
-      final items = data
-          .map(
-            (spec) => SpecificationItemEntity(
-              name: spec.name ?? spec.code ?? spec.id,
-            ),
-          )
-          .toList();
-      emit(DataPaymentLoaded(data: items));
-    });
+    result.fold(
+      (failure) => _emitFailure(failure, emit),
+      (data) => emit(DataPaymentLoaded(data: data)),
+    );
+  }
+
+  Future<String?> upsertSpecialization({
+    String? specializationId,
+    required String nameAr,
+    required String nameEn,
+    required int order,
+    String? iconUrl,
+    File? iconFile,
+  }) async {
+    final result = await repository.upsertSpecialization(
+      specializationId: specializationId,
+      nameAr: nameAr,
+      nameEn: nameEn,
+      order: order,
+      iconUrl: iconUrl,
+      iconFile: iconFile,
+      active: true,
+    );
+
+    return result.fold(
+      (failure) {
+        return BlocUtils.mergeCodeWithMessage(
+          failure,
+          codeToMessageMap,
+          includeCodeLine: false,
+          fallbackMessage: Strings.unexpected_error,
+        );
+      },
+      (_) {
+        add(LoadSpecifications());
+        return null;
+      },
+    );
   }
 
   void _emitFailure(Failure failure, Emitter<SpecificationsState> emit) {

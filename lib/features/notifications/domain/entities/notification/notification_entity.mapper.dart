@@ -22,28 +22,28 @@ class NotificationEntityMapper extends ClassMapperBase<NotificationEntity> {
   @override
   final String id = 'NotificationEntity';
 
+  static String? _$id(NotificationEntity v) => v.id;
+  static const Field<NotificationEntity, String> _f$id = Field(
+    'id',
+    _$id,
+    opt: true,
+  );
+  static String? _$type(NotificationEntity v) => v.type;
+  static const Field<NotificationEntity, String> _f$type = Field(
+    'type',
+    _$type,
+    opt: true,
+  );
   static String? _$timestamp(NotificationEntity v) => v.timestamp;
   static const Field<NotificationEntity, String> _f$timestamp = Field(
     'timestamp',
     _$timestamp,
     opt: true,
   );
-  static int? _$serviceNo(NotificationEntity v) => v.serviceNo;
-  static const Field<NotificationEntity, int> _f$serviceNo = Field(
-    'serviceNo',
-    _$serviceNo,
-    opt: true,
-  );
-  static String? _$operationName(NotificationEntity v) => v.operationName;
-  static const Field<NotificationEntity, String> _f$operationName = Field(
-    'operationName',
-    _$operationName,
-    opt: true,
-  );
-  static int? _$languageCode(NotificationEntity v) => v.languageCode;
-  static const Field<NotificationEntity, int> _f$languageCode = Field(
-    'languageCode',
-    _$languageCode,
+  static String? _$title(NotificationEntity v) => v.title;
+  static const Field<NotificationEntity, String> _f$title = Field(
+    'title',
+    _$title,
     opt: true,
   );
   static String? _$message(NotificationEntity v) => v.message;
@@ -52,10 +52,10 @@ class NotificationEntityMapper extends ClassMapperBase<NotificationEntity> {
     _$message,
     opt: true,
   );
-  static int? _$id(NotificationEntity v) => v.id;
-  static const Field<NotificationEntity, int> _f$id = Field(
-    'id',
-    _$id,
+  static Map<String, dynamic>? _$data(NotificationEntity v) => v.data;
+  static const Field<NotificationEntity, Map<String, dynamic>> _f$data = Field(
+    'data',
+    _$data,
     opt: true,
   );
   static bool _$isSeen(NotificationEntity v) => v.isSeen;
@@ -68,12 +68,12 @@ class NotificationEntityMapper extends ClassMapperBase<NotificationEntity> {
 
   @override
   final MappableFields<NotificationEntity> fields = const {
-    #timestamp: _f$timestamp,
-    #serviceNo: _f$serviceNo,
-    #operationName: _f$operationName,
-    #languageCode: _f$languageCode,
-    #message: _f$message,
     #id: _f$id,
+    #type: _f$type,
+    #timestamp: _f$timestamp,
+    #title: _f$title,
+    #message: _f$message,
+    #data: _f$data,
     #isSeen: _f$isSeen,
   };
   @override
@@ -81,12 +81,12 @@ class NotificationEntityMapper extends ClassMapperBase<NotificationEntity> {
 
   static NotificationEntity _instantiate(DecodingData data) {
     return NotificationEntity(
-      timestamp: data.dec(_f$timestamp),
-      serviceNo: data.dec(_f$serviceNo),
-      operationName: data.dec(_f$operationName),
-      languageCode: data.dec(_f$languageCode),
-      message: data.dec(_f$message),
       id: data.dec(_f$id),
+      type: data.dec(_f$type),
+      timestamp: data.dec(_f$timestamp),
+      title: data.dec(_f$title),
+      message: data.dec(_f$message),
+      data: data.dec(_f$data),
       isSeen: data.dec(_f$isSeen),
     );
   }
@@ -162,13 +162,15 @@ abstract class NotificationEntityCopyWith<
   $Out
 >
     implements ClassCopyWith<$R, $In, $Out> {
+  MapCopyWith<$R, String, dynamic, ObjectCopyWith<$R, dynamic, dynamic>>?
+  get data;
   $R call({
+    String? id,
+    String? type,
     String? timestamp,
-    int? serviceNo,
-    String? operationName,
-    int? languageCode,
+    String? title,
     String? message,
-    int? id,
+    Map<String, dynamic>? data,
     bool? isSeen,
   });
   NotificationEntityCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
@@ -185,33 +187,42 @@ class _NotificationEntityCopyWithImpl<$R, $Out>
   late final ClassMapperBase<NotificationEntity> $mapper =
       NotificationEntityMapper.ensureInitialized();
   @override
+  MapCopyWith<$R, String, dynamic, ObjectCopyWith<$R, dynamic, dynamic>>?
+  get data => $value.data != null
+      ? MapCopyWith(
+          $value.data!,
+          (v, t) => ObjectCopyWith(v, $identity, t),
+          (v) => call(data: v),
+        )
+      : null;
+  @override
   $R call({
-    Object? timestamp = $none,
-    Object? serviceNo = $none,
-    Object? operationName = $none,
-    Object? languageCode = $none,
-    Object? message = $none,
     Object? id = $none,
+    Object? type = $none,
+    Object? timestamp = $none,
+    Object? title = $none,
+    Object? message = $none,
+    Object? data = $none,
     bool? isSeen,
   }) => $apply(
     FieldCopyWithData({
-      if (timestamp != $none) #timestamp: timestamp,
-      if (serviceNo != $none) #serviceNo: serviceNo,
-      if (operationName != $none) #operationName: operationName,
-      if (languageCode != $none) #languageCode: languageCode,
-      if (message != $none) #message: message,
       if (id != $none) #id: id,
+      if (type != $none) #type: type,
+      if (timestamp != $none) #timestamp: timestamp,
+      if (title != $none) #title: title,
+      if (message != $none) #message: message,
+      if (data != $none) #data: data,
       if (isSeen != null) #isSeen: isSeen,
     }),
   );
   @override
   NotificationEntity $make(CopyWithData data) => NotificationEntity(
-    timestamp: data.get(#timestamp, or: $value.timestamp),
-    serviceNo: data.get(#serviceNo, or: $value.serviceNo),
-    operationName: data.get(#operationName, or: $value.operationName),
-    languageCode: data.get(#languageCode, or: $value.languageCode),
-    message: data.get(#message, or: $value.message),
     id: data.get(#id, or: $value.id),
+    type: data.get(#type, or: $value.type),
+    timestamp: data.get(#timestamp, or: $value.timestamp),
+    title: data.get(#title, or: $value.title),
+    message: data.get(#message, or: $value.message),
+    data: data.get(#data, or: $value.data),
     isSeen: data.get(#isSeen, or: $value.isSeen),
   );
 

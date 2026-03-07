@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:silah_app/core/config/constants/ui_constants.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
 import 'package:silah_app/core/config/validators/form_validators.dart';
+import 'package:silah_app/core/foundation/localization/localized_value_resolver.dart';
 import 'package:silah_app/core/presentation/state_magment/cubits/form_cubit.dart';
 import 'package:silah_app/core/presentation/ui/widget/buttons/primary_button_with_form_cubit.dart';
 import 'package:silah_app/core/presentation/ui/widget/drop_down/f_drop_down.dart';
@@ -154,10 +155,11 @@ class _LawyerSignUpFormState extends State<LawyerSignUpForm> {
 
   String _displayGender(LookupItemEntity? gender) {
     if (gender == null) return Strings.not_available.tr();
-    final locale = context.locale.languageCode;
-    final name = locale == 'ar' ? gender.nameAr : gender.nameEn;
-    return name?.trim().isNotEmpty == true
-        ? name!.trim()
-        : (gender.id ?? Strings.not_available.tr());
+    final name = LocalizedValueResolver.resolve(
+      localeCode: context.locale.languageCode,
+      arabic: gender.nameAr,
+      english: gender.nameEn,
+    );
+    return name != null && name.isNotEmpty ? name : Strings.not_available.tr();
   }
 }

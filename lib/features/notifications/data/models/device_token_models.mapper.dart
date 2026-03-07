@@ -25,10 +25,10 @@ class DeviceTokenRequestModelMapper
   @override
   final String id = 'DeviceTokenRequestModel';
 
-  static String _$deviceToken(DeviceTokenRequestModel v) => v.deviceToken;
-  static const Field<DeviceTokenRequestModel, String> _f$deviceToken = Field(
-    'deviceToken',
-    _$deviceToken,
+  static String _$deviceFcmToken(DeviceTokenRequestModel v) => v.deviceFcmToken;
+  static const Field<DeviceTokenRequestModel, String> _f$deviceFcmToken = Field(
+    'deviceFcmToken',
+    _$deviceFcmToken,
   );
   static String? _$platform(DeviceTokenRequestModel v) => v.platform;
   static const Field<DeviceTokenRequestModel, String> _f$platform = Field(
@@ -39,7 +39,7 @@ class DeviceTokenRequestModelMapper
 
   @override
   final MappableFields<DeviceTokenRequestModel> fields = const {
-    #deviceToken: _f$deviceToken,
+    #deviceFcmToken: _f$deviceFcmToken,
     #platform: _f$platform,
   };
   @override
@@ -47,7 +47,7 @@ class DeviceTokenRequestModelMapper
 
   static DeviceTokenRequestModel _instantiate(DecodingData data) {
     return DeviceTokenRequestModel(
-      deviceToken: data.dec(_f$deviceToken),
+      deviceFcmToken: data.dec(_f$deviceFcmToken),
       platform: data.dec(_f$platform),
     );
   }
@@ -122,7 +122,7 @@ abstract class DeviceTokenRequestModelCopyWith<
   $Out
 >
     implements ClassCopyWith<$R, $In, $Out> {
-  $R call({String? deviceToken, String? platform});
+  $R call({String? deviceFcmToken, String? platform});
   DeviceTokenRequestModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
     Then<$Out2, $R2> t,
   );
@@ -138,15 +138,15 @@ class _DeviceTokenRequestModelCopyWithImpl<$R, $Out>
   late final ClassMapperBase<DeviceTokenRequestModel> $mapper =
       DeviceTokenRequestModelMapper.ensureInitialized();
   @override
-  $R call({String? deviceToken, Object? platform = $none}) => $apply(
+  $R call({String? deviceFcmToken, Object? platform = $none}) => $apply(
     FieldCopyWithData({
-      if (deviceToken != null) #deviceToken: deviceToken,
+      if (deviceFcmToken != null) #deviceFcmToken: deviceFcmToken,
       if (platform != $none) #platform: platform,
     }),
   );
   @override
   DeviceTokenRequestModel $make(CopyWithData data) => DeviceTokenRequestModel(
-    deviceToken: data.get(#deviceToken, or: $value.deviceToken),
+    deviceFcmToken: data.get(#deviceFcmToken, or: $value.deviceFcmToken),
     platform: data.get(#platform, or: $value.platform),
   );
 

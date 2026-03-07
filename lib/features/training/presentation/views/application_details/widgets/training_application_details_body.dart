@@ -9,6 +9,7 @@ import 'package:silah_app/core/presentation/ui/widget/buttons/primary_button.dar
 import 'package:silah_app/core/presentation/ui/widget/buttons/secondary_button.dart';
 import 'package:silah_app/core/presentation/ui/widget/cards/custom_card.dart';
 import 'package:silah_app/core/presentation/ui/widget/chips/status_chip.dart';
+import 'package:silah_app/core/presentation/ui/widget/text/labeled_value_row.dart';
 import 'package:silah_app/core/presentation/ui/widget/webview/agreement_webview.dart';
 import 'package:silah_app/core/presentation/ui/widget/wrappers/platform_screen_wrapper.dart';
 import 'package:silah_app/features/training/domain/entities/training_application_entity.dart';
@@ -112,22 +113,25 @@ class TrainingApplicationDetailsBody extends StatelessWidget {
                     ],
                   ),
                   UIConstants.smallHeight,
-                  _infoRow(
-                    context,
+                  LabeledValueRow(
                     label: Strings.label_university.tr(),
                     value: application.university ?? Strings.not_available.tr(),
+                    padding: const EdgeInsets.only(bottom: 6),
+                    labelWidth: 120,
                   ),
-                  _infoRow(
-                    context,
+                  LabeledValueRow(
                     label: Strings.label_city.tr(),
                     value: application.city ?? Strings.not_available.tr(),
+                    padding: const EdgeInsets.only(bottom: 6),
+                    labelWidth: 120,
                   ),
-                  _infoRow(
-                    context,
+                  LabeledValueRow(
                     label: Strings.label_graduation_year.tr(),
                     value:
                         application.graduationYear?.toString() ??
                         Strings.not_available.tr(),
+                    padding: const EdgeInsets.only(bottom: 6),
+                    labelWidth: 120,
                   ),
                   if (application.cvUrl != null &&
                       application.cvUrl!.isNotEmpty) ...[
@@ -237,36 +241,5 @@ class TrainingApplicationDetailsBody extends StatelessWidget {
       case TrainingApplicationStatus.cancelled:
         return context.colors.outlineVariant;
     }
-  }
-
-  Widget _infoRow(
-    BuildContext context, {
-    required String label,
-    required String value,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 6),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 120,
-            child: Text(
-              label,
-              style: context.textTheme.bodySmall?.copyWith(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-          Expanded(
-            child: Text(
-              value,
-              style: context.textTheme.bodySmall?.copyWith(
-                color: context.colors.onSurfaceVariant,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }

@@ -25,7 +25,10 @@ abstract class ConsultationsRemoteDataSource {
   String? currentUserId();
 }
 
-class ConsultationsRemoteDataSourceImpl implements ConsultationsRemoteDataSource {
+class ConsultationsRemoteDataSourceImpl
+    implements ConsultationsRemoteDataSource {
+  static const String _consultationsCollection = 'consultations';
+
   final ConsultationsService service;
   final AppLogger logger;
   final FirebaseFirestore firestore;
@@ -36,59 +39,53 @@ class ConsultationsRemoteDataSourceImpl implements ConsultationsRemoteDataSource
     required this.logger,
     FirebaseFirestore? firestore,
     FirebaseAuth? auth,
-  })  : firestore = firestore ?? FirebaseFirestore.instance,
-        auth = auth ?? FirebaseAuth.instance;
+  }) : firestore = firestore ?? FirebaseFirestore.instance,
+       auth = auth ?? FirebaseAuth.instance;
 
   @override
   Future<BaseApiResponse<ConsultationCreateResponseModel>> createConsultation(
     ConsultationCreateRequestModel request,
-  ) =>
-      handleBaseApiResponse<ConsultationCreateResponseModel>(
-        method: 'ConsultationsRemoteDataSource.createConsultation',
-        logger: logger,
-        call: () => service.createConsultation(request),
-      );
+  ) => handleBaseApiResponse<ConsultationCreateResponseModel>(
+    method: 'ConsultationsRemoteDataSource.createConsultation',
+    logger: logger,
+    call: () => service.createConsultation(request),
+  );
 
   @override
   Future<BaseApiResponse<ConsultationStatusUpdateResponseModel>> updateStatus(
     String consultationId,
     ConsultationStatusUpdateRequestModel request,
-  ) =>
-      handleBaseApiResponse<ConsultationStatusUpdateResponseModel>(
-        method: 'ConsultationsRemoteDataSource.updateStatus',
-        logger: logger,
-        call: () => service.updateStatus(consultationId, request),
-      );
+  ) => handleBaseApiResponse<ConsultationStatusUpdateResponseModel>(
+    method: 'ConsultationsRemoteDataSource.updateStatus',
+    logger: logger,
+    call: () => service.updateStatus(consultationId, request),
+  );
 
   @override
   Future<List<ConsultationRequestEntity>> fetchRequestsByUser(String userId) {
+    final resolvedUserId = userId.trim();
     return firebaseCall<List<ConsultationRequestEntity>>(
       method: 'ConsultationsRemoteDataSource.fetchRequestsByUser',
       logger: logger,
-      payload: {'uid': userId},
+      payload: {'uid': resolvedUserId},
       call: () async {
         try {
           final results = <String, ConsultationRequestEntity>{};
-          final clientSnap = await firestore
-              .collection('consultations')
-              .where('clientUid', isEqualTo: userId)
-              .get();
-          for (final doc in clientSnap.docs) {
-            results[doc.id] = _mapDoc(doc);
-          }
-
-          final lawyerSnap = await firestore
-              .collection('consultations')
-              .where('lawyerUid', isEqualTo: userId)
-              .get();
-          for (final doc in lawyerSnap.docs) {
-            results[doc.id] = _mapDoc(doc);
+          final snapshots = await Future.wait([
+            _fetchRequestsByField('clientUid', resolvedUserId),
+            _fetchRequestsByField('lawyerUid', resolvedUserId),
+          ]);
+          for (final snapshot in snapshots) {
+            for (final doc in snapshot.docs) {
+              results[doc.id] = _mapDoc(doc);
+            }
           }
           return results.values.toList();
         } on FirebaseException catch (error) {
           if (error.code == 'permission-denied') {
             logger.networkError(
-             tag:  'ConsultationsRemoteDataSource.fetchRequestsByUser permission denied',
+              tag:
+                  'ConsultationsRemoteDataSource.fetchRequestsByUser permission denied',
               error,
             );
             return <ConsultationRequestEntity>[];
@@ -101,12 +98,16 @@ class ConsultationsRemoteDataSourceImpl implements ConsultationsRemoteDataSource
 
   @override
   Future<ConsultationRequestEntity?> fetchRequestById(String requestId) {
+    final resolvedRequestId = requestId.trim();
     return firebaseCall<ConsultationRequestEntity?>(
       method: 'ConsultationsRemoteDataSource.fetchRequestById',
       logger: logger,
-      payload: {'requestId': requestId},
+      payload: {'requestId': resolvedRequestId},
       call: () async {
-        final doc = await firestore.collection('consultations').doc(requestId).get();
+        final doc = await firestore
+            .collection(_consultationsCollection)
+            .doc(resolvedRequestId)
+            .get();
         if (!doc.exists) return null;
         return _mapDoc(doc);
       },
@@ -116,38 +117,34 @@ class ConsultationsRemoteDataSourceImpl implements ConsultationsRemoteDataSource
   @override
   String? currentUserId() => auth.currentUser?.uid;
 
-  ConsultationRequestEntity _mapDoc(DocumentSnapshot<Map<String, dynamic>> doc) {
+  ConsultationRequestEntity _mapDoc(
+    DocumentSnapshot<Map<String, dynamic>> doc,
+  ) {
     final data = doc.data() ?? const <String, dynamic>{};
     return ConsultationRequestEntity(
       id: doc.id,
       clientId: data['clientUid'] as String?,
       lawyerId: data['lawyerUid'] as String?,
       specializationId:
-          (data['specializationId'] as String?) ?? (data['specialization'] as String?),
+          (data['specializationId'] as String?) ??
+          (data['specialization'] as String?),
       description: data['caseText'] as String?,
-      status: _parseStatus(data['status'] as String?) ?? ConsultationStatus.pending,
+      status:
+          ConsultationStatusX.tryParse(data['status'] as String?) ??
+          ConsultationStatus.pending,
       createdAt: parseFirestoreTimestamp(data['createdAt']),
       updatedAt: parseFirestoreTimestamp(data['updatedAt']),
       closedAt: parseFirestoreTimestamp(data['closedAt']),
     );
   }
 
-  ConsultationStatus? _parseStatus(String? value) {
-    switch (value?.toLowerCase()) {
-      case 'accepted':
-        return ConsultationStatus.accepted;
-      case 'rejected':
-        return ConsultationStatus.rejected;
-      case 'active':
-        return ConsultationStatus.active;
-      case 'closed':
-        return ConsultationStatus.closed;
-      case 'cancelled':
-        return ConsultationStatus.cancelled;
-      case 'pending':
-        return ConsultationStatus.pending;
-      default:
-        return null;
-    }
+  Future<QuerySnapshot<Map<String, dynamic>>> _fetchRequestsByField(
+    String field,
+    String value,
+  ) {
+    return firestore
+        .collection(_consultationsCollection)
+        .where(field, isEqualTo: value)
+        .get();
   }
 }

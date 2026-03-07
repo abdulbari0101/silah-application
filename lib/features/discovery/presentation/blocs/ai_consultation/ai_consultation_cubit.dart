@@ -6,7 +6,6 @@ import 'package:silah_app/core/infrastructure/errors/error_utils.dart';
 import 'package:silah_app/core/infrastructure/errors/failures.dart';
 import 'package:silah_app/core/presentation/state_magment/bloc_utils/bloc_utils.dart';
 import 'package:silah_app/features/discovery/domain/entities/ai_classification_request_entity.dart';
-import 'package:silah_app/features/discovery/domain/entities/ai_classification_result_entity.dart';
 import 'package:silah_app/features/discovery/domain/entities/ai_recommendation_entity.dart';
 import 'package:silah_app/features/discovery/domain/repositories/discovery_repository.dart';
 
@@ -17,7 +16,6 @@ class AiConsultationState with _$AiConsultationState {
   const factory AiConsultationState.idle() = _AiConsultationIdle;
   const factory AiConsultationState.loading() = _AiConsultationLoading;
   const factory AiConsultationState.success({
-    required AiClassificationResultEntity classification,
     required AiRecommendationEntity recommendation,
   }) = _AiConsultationSuccess;
   const factory AiConsultationState.failure({required String message}) = _AiConsultationFailure;
@@ -37,27 +35,15 @@ class AiConsultationCubit extends Cubit<AiConsultationState> {
 
     emit(const AiConsultationState.loading());
 
-    final classifyResult = await repository.classifyIssue(
+    final recommendResult = await repository.recommendLawyers(
       AiClassificationRequestEntity(prompt: trimmed),
     );
 
-    await classifyResult.fold(
-      (failure) async => emit(AiConsultationState.failure(message: _mapFailure(failure))),
-      (classification) async {
-        final recommendResult = await repository.recommendLawyers(
-          AiClassificationRequestEntity(prompt: trimmed),
-        );
-
-        recommendResult.fold(
-          (failure) => emit(AiConsultationState.failure(message: _mapFailure(failure))),
-          (recommendation) => emit(
-            AiConsultationState.success(
-              classification: classification,
-              recommendation: recommendation,
-            ),
-          ),
-        );
-      },
+    recommendResult.fold(
+      (failure) => emit(AiConsultationState.failure(message: _mapFailure(failure))),
+      (recommendation) => emit(
+        AiConsultationState.success(recommendation: recommendation),
+      ),
     );
   }
 

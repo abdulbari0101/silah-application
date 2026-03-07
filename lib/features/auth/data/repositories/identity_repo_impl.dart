@@ -66,6 +66,6 @@ class IdentityRepoImpl implements AuthIdentityRepo {
   Future<String> generateIMI() async {
     final serial = await getOrCreateDeviceId();
 
-    return "$serial";
+    return serial;
   }
 }

@@ -7,9 +7,10 @@ import 'package:silah_app/core/presentation/ui/widget/icons/app_svg_icon.dart';
 import 'package:silah_app/gen/assets.gen.dart';
 
 class ShareButton extends StatelessWidget {
-  const ShareButton({super.key, required this.onShareTap});
+  const ShareButton({super.key, required this.onShareTap, this.label});
 
   final Function()? onShareTap;
+  final String? label;
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +19,14 @@ class ShareButton extends StatelessWidget {
     return Column(
       children: [
         SecondaryButton(
-          text: Strings.share_receipt.tr(),
+          text: label?.trim().isNotEmpty == true
+              ? label!.trim()
+              : Strings.share_receipt.tr(),
           onTap: onShareTap,
-          prefixWidget: AppSvgIcon(assetName: Assets.icons.share, lightDynamicColor: true),
+          prefixWidget: AppSvgIcon(
+            assetName: Assets.icons.share,
+            lightDynamicColor: true,
+          ),
         ),
         SizedBox(height: spacing),
       ],

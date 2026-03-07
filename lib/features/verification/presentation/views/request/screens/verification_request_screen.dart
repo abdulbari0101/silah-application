@@ -19,10 +19,7 @@ class VerificationRequestScreen extends StatelessWidget {
       child: BlocListener<VerificationRequestCubit, VerificationRequestState>(
         listener: (context, state) {
           state.whenOrNull(
-            success: (_) {
-              Toasts.success(context, Strings.send_verification.tr());
-              context.pop(true);
-            },
+            success: (_) => context.pop(true),
             failure: (message) => Toasts.error(context, message),
           );
         },

@@ -12,9 +12,11 @@ import 'package:silah_app/core/presentation/state_magment/bloc_utils/bloc_utils.
 import 'package:silah_app/core/presentation/state_magment/blocs/app_setting/extensions/app_setting_context_extension.dart';
 import 'package:silah_app/core/presentation/state_magment/blocs/app_state/app_state_bloc.dart';
 import 'package:silah_app/core/presentation/state_magment/blocs/app_state/state_data/app_auth_status.dart';
+import 'package:silah_app/core/presentation/ui/overlays/sheets/image_picker_sheet.dart';
 import 'package:silah_app/core/presentation/ui/overlays/toasts.dart';
 import 'package:silah_app/core/presentation/ui/widget/cards/custom_card.dart';
 import 'package:silah_app/core/presentation/ui/widget/headers/curved_header_container.dart';
+import 'package:silah_app/core/presentation/ui/widget/image/app_remote_avatar.dart';
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/error_widget.dart';
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/progress_state_widget.dart';
 import 'package:silah_app/features/auth/domain/repositories/auth_repository.dart';
@@ -38,12 +40,7 @@ class Body extends StatelessWidget {
                 onRetry: () => context.read<ProfileCubit>().load(),
               );
             }
-            return _buildContent(
-              context,
-              profile,
-              isSaving: false,
-              errorMessage: message,
-            );
+            return _buildContent(context, profile, isSaving: false, errorMessage: message);
           },
           loaded: (profile, isSaving) =>
               _buildContent(context, profile, isSaving: isSaving ?? false),
@@ -58,13 +55,14 @@ class Body extends StatelessWidget {
     required bool isSaving,
     String? errorMessage,
   }) {
-    final name = profile.name?.trim().isNotEmpty == true
-        ? profile.name!.trim()
-        : Strings.user.tr();
+    final name = profile.name?.trim().isNotEmpty == true ? profile.name!.trim() : Strings.user.tr();
     final email = profile.email?.trim();
     final accountType = profile.accountType?.toLowerCase();
     final isAdmin = accountType == 'admin';
     final isLawyer = accountType == 'lawyer';
+    final traineeToggleTitle = isLawyer
+        ? Strings.training_opportunities.tr()
+        : Strings.legal_trainee_profile.tr();
 
     return SafeArea(
       child: SingleChildScrollView(
@@ -78,7 +76,13 @@ class Body extends StatelessWidget {
                 UIConstants.screenHorizantalPadding,
                 UIConstants.bigPadding,
               ),
-              child: _buildHeader(context, name: name, email: email),
+              child: _buildHeader(
+                context,
+                name: name,
+                email: email,
+                avatarUrl: profile.avatarUrl,
+                onAvatarTap: isSaving ? null : () => _showAvatarPicker(context),
+              ),
             ),
             Padding(
               padding: const EdgeInsets.symmetric(
@@ -94,54 +98,53 @@ class Body extends StatelessWidget {
                           context,
                           title: Strings.personal_information.tr(),
                           icon: Icons.person_outline,
-                          onTap: () =>
-                              context.pushNamed(AppRoutes.personalInfo.name),
+                          onTap: () => context.pushNamed(AppRoutes.personalInfo.name),
                         ),
-                        _buildDivider(),
-                        _buildToggleTile(
-                          context,
-                          title: Strings.legal_trainee_profile.tr(),
-                          icon: Icons.school_outlined,
-                          value: profile.isTrainee,
-                          onChanged: isSaving
-                              ? null
-                              : (value) => context
-                                    .read<ProfileCubit>()
-                                    .updateIsTrainee(value),
-                        ),
+                        if (!isAdmin) ...[
+                          _buildDivider(),
+                          _buildToggleTile(
+                            context,
+                            title: traineeToggleTitle,
+                            icon: Icons.school_outlined,
+                            value: profile.isTrainee,
+                            onChanged: isSaving
+                                ? null
+                                : (value) => context.read<ProfileCubit>().updateIsTrainee(value),
+                          ),
+                        ],
                         _buildDivider(),
                         if (isLawyer) ...[
                           _buildTile(
                             context,
                             title: Strings.verification_status.tr(),
                             icon: Icons.verified_user_outlined,
-                            onTap: () => context.pushNamed(
-                              AppRoutes.verificationStatus.name,
-                            ),
+                            onTap: () => context.pushNamed(AppRoutes.verificationStatus.name),
+                          ),
+                          _buildDivider(),
+                        ],
+                        if (!isAdmin) ...[
+                          _buildTile(
+                            context,
+                            title: Strings.rate_us.tr(),
+                            icon: Icons.star_outline,
+                            onTap: () {},
                           ),
                           _buildDivider(),
                         ],
                         _buildTile(
                           context,
-                          title: Strings.rate_us.tr(),
-                          icon: Icons.star_outline,
-                          onTap: () {},
-                        ),
-                        _buildDivider(),
-                        _buildTile(
-                          context,
                           title: Strings.privacy_policy.tr(),
                           icon: Icons.shield_outlined,
-                          onTap: () =>
-                              context.pushNamed(AppRoutes.privacyPolicy.name),
+                          onTap: () => context.pushNamed(AppRoutes.privacyPolicy.name),
                         ),
                         _buildDivider(),
                         _buildTile(
                           context,
                           title: Strings.contact_us.tr(),
                           icon: Icons.help_outline,
-                          onTap: () =>
-                              context.pushNamed(AppRoutes.supportReport.name),
+                          onTap: () => isAdmin
+                              ? context.pushNamed(AppRoutes.supportTickets.name)
+                              : _openReportScreen(context),
                         ),
                         if (isAdmin) ...[
                           _buildDivider(),
@@ -149,8 +152,7 @@ class Body extends StatelessWidget {
                             context,
                             title: Strings.admin_tasks.tr(),
                             icon: Icons.admin_panel_settings_outlined,
-                            onTap: () =>
-                                context.pushNamed(AppRoutes.adminTasks.name),
+                            onTap: () => context.pushNamed(AppRoutes.adminTasks.name),
                           ),
                         ],
                         _buildDivider(),
@@ -179,9 +181,7 @@ class Body extends StatelessWidget {
                     UIConstants.smallHeight,
                     Text(
                       errorMessage,
-                      style: context.textTheme.labelSmall?.copyWith(
-                        color: context.colors.error,
-                      ),
+                      style: context.textTheme.labelSmall?.copyWith(color: context.colors.error),
                     ),
                   ],
                 ],
@@ -197,35 +197,65 @@ class Body extends StatelessWidget {
     BuildContext context, {
     required String name,
     String? email,
+    String? avatarUrl,
+    VoidCallback? onAvatarTap,
   }) {
     return Column(
       children: [
-        CircleAvatar(
-          radius: 44,
-          backgroundColor: context.colors.primaryContainer,
-          child: Icon(
-            Icons.person_outline,
-            color: context.colors.primary,
-            size: 36,
+        GestureDetector(
+          onTap: onAvatarTap,
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              AppRemoteAvatar(
+                radius: 44,
+                imageUrl: avatarUrl,
+                label: name,
+                backgroundColor: context.colors.primaryContainer,
+                foregroundColor: context.colors.primary,
+              ),
+              PositionedDirectional(
+                end: -2,
+                bottom: -2,
+                child: Container(
+                  width: 28,
+                  height: 28,
+                  decoration: BoxDecoration(
+                    color: context.colors.surface,
+                    shape: BoxShape.circle,
+                    border: Border.all(color: context.colors.primaryContainer, width: 1.5),
+                  ),
+                  child: Icon(Icons.edit_outlined, size: 16, color: context.colors.primary),
+                ),
+              ),
+            ],
           ),
         ),
         UIConstants.smallHeight,
-        Text(
-          name,
-          style: context.textTheme.titleMedium?.copyWith(
-            fontWeight: FontWeight.w700,
-          ),
-        ),
+        Text(name, style: context.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
         if (email != null && email.isNotEmpty) ...[
           UIConstants.xsmallHeight,
           Text(
             email,
-            style: context.textTheme.bodySmall?.copyWith(
-              color: context.colors.onSurfaceVariant,
-            ),
+            style: context.textTheme.bodySmall?.copyWith(color: context.colors.onSurfaceVariant),
           ),
         ],
       ],
+    );
+  }
+
+  Future<void> _showAvatarPicker(BuildContext context) async {
+    await showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheetContext) {
+        return ImagePickerBottomSheet(
+          onSelect: (source) {
+            Navigator.of(sheetContext).pop();
+            context.read<ProfileCubit>().pickAndUploadAvatar(source);
+          },
+        );
+      },
     );
   }
 
@@ -288,9 +318,7 @@ class Body extends StatelessWidget {
       ),
       title: Text(
         title,
-        style: context.textTheme.bodyMedium?.copyWith(
-          fontWeight: FontWeight.w600,
-        ),
+        style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
       ),
       trailing: Switch.adaptive(value: value, onChanged: onChanged),
     );
@@ -314,13 +342,18 @@ class Body extends StatelessWidget {
       ),
       (_) {
         context.read<AppStateBloc>().add(
-          UpdateSession(
-            isLoggedIn: false,
-            userAuthStatus: UserAuthStatus.loggedOutReturningUser,
-          ),
+          UpdateSession(isLoggedIn: false, userAuthStatus: UserAuthStatus.loggedOutReturningUser),
         );
         context.goNamed(AppRoutes.login.name);
       },
     );
+  }
+
+  Future<void> _openReportScreen(BuildContext context) async {
+    final didSubmitReport = await context.pushNamed<bool>(AppRoutes.supportReport.name) ?? false;
+
+    if (!context.mounted || !didSubmitReport) return;
+
+    Toasts.success(context, Strings.sent_successfully.tr());
   }
 }

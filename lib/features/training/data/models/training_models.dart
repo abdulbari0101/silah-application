@@ -7,7 +7,8 @@ import 'package:silah_app/features/training/domain/entities/training_application
 part 'training_models.mapper.dart';
 
 @MappableClass(ignoreNull: true)
-class TrainingApplicationCreateRequestModel with TrainingApplicationCreateRequestModelMappable {
+class TrainingApplicationCreateRequestModel
+    with TrainingApplicationCreateRequestModelMappable {
   final String opportunityId;
   final String traineeUid;
   final String cvUrl;
@@ -30,7 +31,9 @@ class TrainingApplicationCreateRequestModel with TrainingApplicationCreateReques
     this.graduationYear,
   });
 
-  factory TrainingApplicationCreateRequestModel.fromEntity(TrainingApplicationEntity entity) {
+  factory TrainingApplicationCreateRequestModel.fromEntity(
+    TrainingApplicationEntity entity,
+  ) {
     return TrainingApplicationCreateRequestModel(
       opportunityId: entity.opportunityId ?? '',
       traineeUid: entity.traineeId ?? '',
@@ -43,7 +46,6 @@ class TrainingApplicationCreateRequestModel with TrainingApplicationCreateReques
       graduationYear: entity.graduationYear,
     );
   }
-
 }
 
 @MappableClass(ignoreNull: true)
@@ -66,9 +68,7 @@ class TrainingApplicationStatusUpdateRequestModel
 
   factory TrainingApplicationStatusUpdateRequestModel.fromStatus(
     TrainingApplicationStatus status,
-  ) =>
-      TrainingApplicationStatusUpdateRequestModel(status: status.name);
-
+  ) => TrainingApplicationStatusUpdateRequestModel(status: status.apiValue);
 }
 
 @MappableClass(ignoreNull: true)

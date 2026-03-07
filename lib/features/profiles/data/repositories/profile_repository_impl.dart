@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:silah_app/core/infrastructure/errors/exceptions.dart';
 import 'package:silah_app/core/infrastructure/errors/failures.dart';
@@ -40,7 +42,30 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
-  Future<Either<Failure, LawyerProfileEntity>> fetchLawyerProfile(String lawyerId) {
+  Future<Either<Failure, ProfileEntity>> updateAvatar({
+    required ProfileEntity profile,
+    required File imageFile,
+  }) {
+    return executor.runOnline(() async {
+      final avatarUrl = await remoteDataSource.uploadAvatar(
+        imageFile: imageFile,
+        accountType: profile.accountType,
+      );
+      if (avatarUrl.trim().isEmpty) {
+        return profile;
+      }
+      final updated = await remoteDataSource.updateProfile(
+        profile.copyWith(avatarUrl: avatarUrl),
+      );
+      await _syncCachedProfile(updated);
+      return updated;
+    }, from: 'ProfileRepository.updateAvatar');
+  }
+
+  @override
+  Future<Either<Failure, LawyerProfileEntity>> fetchLawyerProfile(
+    String lawyerId,
+  ) {
     throw const MissingDataException('Not implemented');
   }
 
@@ -55,7 +80,8 @@ class ProfileRepositoryImpl implements ProfileRepository {
     final cached = await cacheDataSource.customer();
     if (cached == null) return;
 
-    final userId = await cacheDataSource.userId() ??
+    final userId =
+        await cacheDataSource.userId() ??
         await identityRepo.generateAndSaveUserId(cached.toEntity());
 
     final nextProfile = <String, dynamic>{

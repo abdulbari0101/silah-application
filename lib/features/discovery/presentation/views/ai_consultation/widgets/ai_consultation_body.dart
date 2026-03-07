@@ -9,9 +9,7 @@ import 'package:silah_app/core/config/theme/extentions/theme_context_extension.d
 import 'package:silah_app/core/presentation/ui/widget/buttons/back_button.dart';
 import 'package:silah_app/core/presentation/ui/widget/text_fields/f_text2_feild.dart';
 import 'package:silah_app/features/consultations/presentation/views/create_request/models/consultation_request_args.dart';
-import 'package:silah_app/features/discovery/domain/entities/ai_classification_result_entity.dart';
 import 'package:silah_app/features/discovery/domain/entities/ai_recommendation_entity.dart';
-import 'package:silah_app/features/discovery/domain/entities/legal_specialization_entity.dart';
 import 'package:silah_app/features/discovery/presentation/blocs/ai_consultation/ai_consultation_cubit.dart';
 import 'package:silah_app/features/discovery/presentation/views/ai_consultation/widgets/ai_badge_icon.dart';
 import 'package:silah_app/features/discovery/presentation/views/ai_consultation/widgets/ai_loading_view.dart';
@@ -91,10 +89,7 @@ class _AiConsultationBodyState extends State<AiConsultationBody> {
       orElse: () => null,
     );
     final successData = state.maybeWhen(
-      success: (classification, recommendation) => _AiResultData(
-        classification: classification,
-        recommendation: recommendation,
-      ),
+      success: (recommendation) => recommendation,
       orElse: () => null,
     );
 
@@ -258,17 +253,11 @@ class _AiConsultationBodyState extends State<AiConsultationBody> {
     );
   }
 
-  Widget _buildRecommendationSection(_AiResultData data) {
-    final specialization = _resolveSpecialization(
-      data.classification,
-      data.recommendation,
-    );
-    final lawyers =
-        data.recommendation.lawyers ?? const <LawyerProfileEntity>[];
-    final specializationId =
-        specialization?.id ?? data.classification.specializationName;
-    final specializationLabel =
-        specialization?.name ?? data.classification.specializationName;
+  Widget _buildRecommendationSection(AiRecommendationEntity recommendation) {
+    final specialization = recommendation.specialization;
+    final lawyers = recommendation.lawyers ?? const <LawyerProfileEntity>[];
+    final specializationId = specialization?.id;
+    final specializationLabel = specialization?.name;
     final displayLabel = specializationLabel ?? Strings.not_available.tr();
     final canRequest =
         specializationId != null && specializationId.trim().isNotEmpty;
@@ -347,13 +336,6 @@ class _AiConsultationBodyState extends State<AiConsultationBody> {
     );
   }
 
-  LegalSpecializationEntity? _resolveSpecialization(
-    AiClassificationResultEntity classification,
-    AiRecommendationEntity recommendation,
-  ) {
-    return classification.specialization ?? recommendation.specialization;
-  }
-
   void _openRequest(
     BuildContext context,
     LawyerProfileEntity lawyer,
@@ -372,13 +354,3 @@ class _AiConsultationBodyState extends State<AiConsultationBody> {
 }
 
 enum _AiPromptStage { input, review }
-
-class _AiResultData {
-  final AiClassificationResultEntity classification;
-  final AiRecommendationEntity recommendation;
-
-  const _AiResultData({
-    required this.classification,
-    required this.recommendation,
-  });
-}

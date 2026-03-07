@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 
 class PrtImiHelper {
-  static String generateIMI(String deviceSer, String deviceToken, String opTimestamp) {
-    String msg = deviceSer + deviceToken + opTimestamp;
+  static String generateIMI(String deviceSer, String deviceFcmToken, String opTimestamp) {
+    String msg = deviceSer + deviceFcmToken + opTimestamp;
     msg = _sha256(msg);
     msg = "$msg\$$opTimestamp";
     msg = msg.replaceAll("&", "\$");

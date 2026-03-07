@@ -78,10 +78,11 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
   void _logout() {
     bool isUserCurrentlyLoggedIn = _appState.state.data.isLoggedIn;
 
-    if (isUserCurrentlyLoggedIn)
+    if (isUserCurrentlyLoggedIn) {
       _appState.add(
         UpdateSession(isLoggedIn: false, userAuthStatus: UserAuthStatus.loggedOutReturningUser),
       );
+    }
   }
 
   void expireSesstion({required SessionFailure failure}) =>
