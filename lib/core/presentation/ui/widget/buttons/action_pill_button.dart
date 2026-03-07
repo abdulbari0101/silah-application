@@ -23,11 +23,13 @@ class ActionPillButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final enabled = onTap != null;
-    final background = backgroundColor ??
+    final background =
+        backgroundColor ??
         (enabled
             ? context.colors.primary
             : context.colors.primary.withAlphaOpacity(0.2));
-    final foreground = foregroundColor ??
+    final foreground =
+        foregroundColor ??
         (enabled
             ? context.colors.onPrimary
             : context.colors.onSurfaceVariant.withAlphaOpacity(0.6));
@@ -47,13 +49,21 @@ class ActionPillButton extends StatelessWidget {
           ),
           child: Row(
             mainAxisSize: expand ? MainAxisSize.max : MainAxisSize.min,
-            mainAxisAlignment: expand ? MainAxisAlignment.center : MainAxisAlignment.start,
+            mainAxisAlignment: expand
+                ? MainAxisAlignment.center
+                : MainAxisAlignment.start,
             children: [
               Icon(icon, size: 16, color: foreground),
               UIConstants.xsmallWidth,
-              Text(
-                text,
-                style: context.textTheme.labelMedium?.copyWith(color: foreground),
+              Flexible(
+                child: Text(
+                  text,
+                  style: context.textTheme.labelMedium?.copyWith(
+                    color: foreground,
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                  maxLines: 1,
+                ),
               ),
             ],
           ),

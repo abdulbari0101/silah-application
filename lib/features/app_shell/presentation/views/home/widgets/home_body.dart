@@ -212,8 +212,8 @@ class _UserHomeContent extends StatelessWidget {
               ),
               UIConstants.bigHeight,
               const HomeAiPromptCard(),
-              UIConstants.smallHeight,
-              const HomeCarouselDots(),
+              // UIConstants.smallHeight,
+              // const HomeCarouselDots(),
               if (showTraineePrompt) ...[
                 UIConstants.bigHeight,
                 const HomeTraineePromptCard(),
