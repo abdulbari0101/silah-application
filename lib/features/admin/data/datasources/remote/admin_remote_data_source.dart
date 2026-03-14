@@ -11,11 +11,14 @@ import 'package:silah_app/features/admin/domain/entities/admin_task_status.dart'
 import 'package:silah_app/features/admin/domain/entities/admin_task_subject_details_entity.dart';
 import 'package:silah_app/features/support/data/datasources/remote/support_service.dart';
 import 'package:silah_app/features/support/data/models/support_report_models.dart';
+import 'package:silah_app/features/verification/data/datasources/remote/verification_service.dart';
+import 'package:silah_app/features/verification/data/models/verification_models.dart';
 import 'package:silah_app/features/verification/domain/entities/license_verification_entity.dart';
 import 'package:silah_app/features/verification/domain/entities/verification_status.dart';
 
 abstract class AdminRemoteDataSource {
   Future<List<AdminTaskEntity>> fetchTasks();
+  Stream<List<AdminTaskEntity>> watchTasks();
   Future<AdminTaskEntity> updateTask(AdminTaskEntity task);
   Future<AdminTaskSubjectDetailsEntity?> fetchTaskSubject(AdminTaskEntity task);
   String? currentUserId();
@@ -26,10 +29,12 @@ class AdminRemoteDataSourceImpl implements AdminRemoteDataSource {
   final FirebaseAuth auth;
   final AppLogger logger;
   final SupportService supportService;
+  final VerificationService verificationService;
 
   AdminRemoteDataSourceImpl({
     required this.logger,
     required this.supportService,
+    required this.verificationService,
     FirebaseFirestore? firestore,
     FirebaseAuth? auth,
   }) : firestore = firestore ?? FirebaseFirestore.instance,
@@ -54,6 +59,19 @@ class AdminRemoteDataSourceImpl implements AdminRemoteDataSource {
             .toList(growable: false);
       },
     );
+  }
+
+  @override
+  Stream<List<AdminTaskEntity>> watchTasks() {
+    return firestore
+        .collection('admin_tasks')
+        .orderBy('createdAt', descending: true)
+        .snapshots()
+        .map(
+          (snapshot) => snapshot.docs
+              .map((doc) => _mapTaskDocument(doc))
+              .toList(growable: false),
+        );
   }
 
   @override
@@ -88,6 +106,29 @@ class AdminRemoteDataSourceImpl implements AdminRemoteDataSource {
               reportId,
               SupportReportReviewRequestModel(status: reportStatus),
             ),
+          );
+        } else if (_taskTypeKey(task.type) == _AdminTaskType.licenseReview) {
+          final lawyerUid = task.targetId?.trim();
+          if (lawyerUid == null || lawyerUid.isEmpty) {
+            throw const MissingDataException(
+              'Missing lawyer id for license review task',
+            );
+          }
+          final verificationStatus = _verificationReviewStatusForTaskStatus(
+            task.status,
+          );
+          if (verificationStatus == null) {
+            throw const MissingDataException(
+              'Unsupported admin action for license review task',
+            );
+          }
+          await handleBaseApiResponse<VerificationResponseModel>(
+            method: 'AdminRemoteDataSource.reviewLicenseVerification',
+            logger: logger,
+            call: () => verificationService.reviewVerification({
+              'lawyerUid': lawyerUid,
+              'status': verificationStatus,
+            }),
           );
         } else {
           await firestore.collection('admin_tasks').doc(taskId).set({
@@ -347,6 +388,18 @@ class AdminRemoteDataSourceImpl implements AdminRemoteDataSource {
         return 'resolved';
       case AdminTaskStatus.rejected:
         return 'closed';
+      case AdminTaskStatus.pending:
+      case AdminTaskStatus.inReview:
+        return null;
+    }
+  }
+
+  String? _verificationReviewStatusForTaskStatus(AdminTaskStatus status) {
+    switch (status) {
+      case AdminTaskStatus.approved:
+        return 'verified';
+      case AdminTaskStatus.rejected:
+        return 'rejected';
       case AdminTaskStatus.pending:
       case AdminTaskStatus.inReview:
         return null;

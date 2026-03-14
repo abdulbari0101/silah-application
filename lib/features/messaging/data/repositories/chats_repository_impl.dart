@@ -35,6 +35,23 @@ class MessagingRepositoryoImpl implements MessagingRepository {
   }
 
   @override
+  Stream<List<ChatThreadEntity>> watchThreads() {
+    return remoteDS.watchThreads();
+  }
+
+  @override
+  Stream<ChatThreadEntity?> watchThread(String threadId) {
+    final resolvedThreadId = threadId.trim();
+    if (resolvedThreadId.isEmpty) {
+      return Stream<ChatThreadEntity?>.error(
+        const MissingDataException('Missing thread id'),
+      );
+    }
+
+    return remoteDS.watchThread(resolvedThreadId);
+  }
+
+  @override
   Stream<List<MessageEntity>> watchMessages(String threadId) {
     return remoteDS.watchMessages(threadId);
   }

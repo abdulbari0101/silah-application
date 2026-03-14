@@ -5,6 +5,7 @@ import 'package:silah_app/features/admin/domain/entities/admin_task_subject_deta
 
 abstract class AdminRepository {
   Future<Either<Failure, List<AdminTaskEntity>>> fetchPendingTasks();
+  Stream<List<AdminTaskEntity>> watchTasks();
 
   Future<Either<Failure, AdminTaskEntity>> updateTask(AdminTaskEntity task);
 

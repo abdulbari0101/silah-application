@@ -10,8 +10,10 @@ import 'package:silah_app/core/presentation/state_magment/blocs/app_state/app_st
 import 'package:silah_app/core/presentation/ui/overlays/toasts.dart';
 import 'package:silah_app/core/presentation/ui/widget/wrappers/platform_screen_wrapper.dart';
 import 'package:silah_app/features/auth/domain/entities/auth_user_entity.dart';
+import 'package:silah_app/features/consultations/domain/entities/consultation_request_entity.dart';
 import 'package:silah_app/features/consultations/domain/entities/consultation_status.dart';
 import 'package:silah_app/features/consultations/domain/repositories/consultations_repository.dart';
+import 'package:silah_app/features/consultations/presentation/support/consultation_close_reason_localizer.dart';
 import 'package:silah_app/features/messaging/presentation/cubits/conversation/chat_conversation_cubit.dart';
 import 'package:silah_app/features/messaging/presentation/views/conversation/models/chat_conversation_args.dart';
 import 'package:silah_app/features/messaging/presentation/views/conversation/widgets/chat_conversation_body.dart';
@@ -28,12 +30,19 @@ class ChatConversationScreen extends StatefulWidget {
 
 class _ChatConversationScreenState extends State<ChatConversationScreen> {
   late final Future<String?> _titleFuture;
+  late final ConsultationsRepository _consultationsRepository;
+  late final Stream<ConsultationRequestEntity?>? _consultationStream;
   bool _isClosing = false;
 
   @override
   void initState() {
     super.initState();
+    _consultationsRepository = locator<ConsultationsRepository>();
     _titleFuture = _resolveTitle();
+    final consultationId = widget.args.thread.consultationId?.trim();
+    _consultationStream = consultationId == null || consultationId.isEmpty
+        ? null
+        : _consultationsRepository.watchRequestById(consultationId);
   }
 
   Future<String?> _resolveTitle() async {
@@ -63,7 +72,7 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
       _isClosing = true;
     });
 
-    final result = await locator<ConsultationsRepository>().updateRequestStatus(
+    final result = await _consultationsRepository.updateRequestStatus(
       consultationId,
       ConsultationStatus.closed,
       closeReason: closeReason,
@@ -108,40 +117,100 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
       future: _titleFuture,
       builder: (context, snapshot) {
         final title = snapshot.data?.trim();
-        final actions = canEndChat
-            ? <Widget>[
-                PopupMenuButton<String>(
-                  enabled: !_isClosing,
-                  onSelected: (_) => _closeChat(),
-                  itemBuilder: (context) => [
-                    PopupMenuItem<String>(
-                      value: 'end-chat',
-                      child: Text(Strings.end_chat.tr()),
-                    ),
-                  ],
-                  icon: const Icon(Icons.more_horiz_rounded),
-                ),
-              ]
-            : null;
 
         return BlocProvider(
           create: (_) =>
               ChatConversationCubit(repository: locator(), threadId: threadId)
                 ..load(),
-          child: PlatformScreenWrapper(
-            title: title?.isNotEmpty == true ? title! : Strings.messages.tr(),
-            androidActions: actions,
-            iosTrailing: actions?.first,
-            androidBackgroundColor: Theme.of(
-              context,
-            ).colorScheme.surfaceContainerLow,
-            iosBackgroundColor: Theme.of(
-              context,
-            ).colorScheme.surfaceContainerLow,
-            body: ChatConversationBody(threadId: threadId),
+          child: StreamBuilder<ConsultationRequestEntity?>(
+            stream: _consultationStream,
+            builder: (context, consultationSnapshot) {
+              final isMessagingEnabled = _isMessagingEnabled(
+                consultationSnapshot,
+              );
+              final messagingDisabledNotice = _resolveMessagingDisabledNotice(
+                consultationSnapshot,
+              );
+              final actions = canEndChat && isMessagingEnabled
+                  ? <Widget>[
+                      PopupMenuButton<String>(
+                        enabled: !_isClosing,
+                        onSelected: (_) => _closeChat(),
+                        itemBuilder: (context) => [
+                          PopupMenuItem<String>(
+                            value: 'end-chat',
+                            child: Text(Strings.end_chat.tr()),
+                          ),
+                        ],
+                        icon: const Icon(Icons.more_horiz_rounded),
+                      ),
+                    ]
+                  : null;
+
+              return PlatformScreenWrapper(
+                title: title?.isNotEmpty == true
+                    ? title!
+                    : Strings.messages.tr(),
+                androidActions: actions,
+                iosTrailing: actions?.first,
+                androidBackgroundColor: Theme.of(
+                  context,
+                ).colorScheme.surfaceContainerLow,
+                iosBackgroundColor: Theme.of(
+                  context,
+                ).colorScheme.surfaceContainerLow,
+                body: ChatConversationBody(
+                  threadId: threadId,
+                  isMessagingEnabled: isMessagingEnabled,
+                  messagingDisabledNotice: messagingDisabledNotice,
+                ),
+              );
+            },
           ),
         );
       },
     );
+  }
+
+  bool _isMessagingEnabled(
+    AsyncSnapshot<ConsultationRequestEntity?> consultationSnapshot,
+  ) {
+    final consultationId = widget.args.thread.consultationId?.trim();
+    if (consultationId == null || consultationId.isEmpty) {
+      return true;
+    }
+    if (!consultationSnapshot.hasData &&
+        (consultationSnapshot.connectionState == ConnectionState.waiting ||
+            consultationSnapshot.connectionState == ConnectionState.none)) {
+      return false;
+    }
+
+    return consultationSnapshot.data?.status.allowsMessaging ?? false;
+  }
+
+  String? _resolveMessagingDisabledNotice(
+    AsyncSnapshot<ConsultationRequestEntity?> consultationSnapshot,
+  ) {
+    final consultationId = widget.args.thread.consultationId?.trim();
+    if (consultationId == null || consultationId.isEmpty) {
+      return null;
+    }
+    if (!consultationSnapshot.hasData &&
+        (consultationSnapshot.connectionState == ConnectionState.waiting ||
+            consultationSnapshot.connectionState == ConnectionState.none)) {
+      return null;
+    }
+
+    final consultation = consultationSnapshot.data;
+    if (consultation?.status.allowsMessaging == true) {
+      return null;
+    }
+
+    final reason = consultation?.closeReason;
+    if (consultation?.status == ConsultationStatus.closed && reason != null) {
+      return '${Strings.consultation_messaging_unavailable_message.tr()}\n${ConsultationCloseReasonLocalizer.label(reason)}';
+    }
+
+    return Strings.consultation_messaging_unavailable_message.tr();
   }
 }

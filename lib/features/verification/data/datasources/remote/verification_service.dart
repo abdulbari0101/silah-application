@@ -15,4 +15,9 @@ abstract class VerificationService {
   Future<BaseApiResponse<VerificationResponseModel>> requestVerification(
     @Body() VerificationRequestModel request,
   );
+
+  @POST('/verification/review')
+  Future<BaseApiResponse<VerificationResponseModel>> reviewVerification(
+    @Body() Map<String, dynamic> request,
+  );
 }

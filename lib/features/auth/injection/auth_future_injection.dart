@@ -11,6 +11,7 @@ import 'package:silah_app/features/auth/domain/repositories/identity_base_repo.d
 import 'package:silah_app/features/auth/presentation/blocs/login/login_bloc.dart';
 import 'package:silah_app/features/auth/presentation/blocs/registration/registration_bloc.dart';
 import 'package:silah_app/features/notifications/domain/repositories/device_token_repository.dart';
+import 'package:silah_app/features/verification/domain/repositories/verification_repository.dart';
 
 import '../domain/repositories/auth_repository.dart';
 
@@ -45,6 +46,7 @@ Future<void> initAuth() async {
       authIdentityRepo: locator(),
       deviceFcmTokenRepository: locator<DeviceTokenRepository>(),
       settingReader: locator(),
+      verificationRepository: locator<VerificationRepository>(),
     ),
   );
 

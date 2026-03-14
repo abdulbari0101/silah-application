@@ -28,7 +28,9 @@ class ProfileRepositoryImpl implements ProfileRepository {
   @override
   Future<Either<Failure, ProfileEntity>> fetchProfile() {
     return executor.runOnline(() async {
-      return remoteDataSource.fetchProfile();
+      final profile = await remoteDataSource.fetchProfile();
+      await _syncCachedProfile(profile);
+      return profile;
     }, from: 'ProfileRepository.fetchProfile');
   }
 
@@ -93,14 +95,17 @@ class ProfileRepositoryImpl implements ProfileRepository {
       if (profile.avatarUrl != null) 'avatarUrl': profile.avatarUrl,
       if (profile.accountType != null) 'accountType': profile.accountType,
       'isTrainee': profile.isTrainee,
+      if (profile.verified != null) 'verified': profile.verified,
+      if (profile.verificationStatus != null)
+        'verificationStatus': profile.verificationStatus,
     };
 
     final updated = AuthUserModel(
       uid: cached.uid,
       accountType: cached.accountType,
-      fullName: cached.fullName,
-      email: cached.email,
-      phone: cached.phone,
+      fullName: profile.name ?? cached.fullName,
+      email: profile.email ?? cached.email,
+      phone: profile.phone ?? cached.phone,
       password: cached.password,
       idToken: cached.idToken,
       profile: nextProfile,

@@ -35,7 +35,8 @@ class AdminTasksBody extends StatelessWidget {
               ),
               child: CustomeErrorWidget(
                 message: message,
-                onRetry: () => context.read<AdminTasksCubit>().load(),
+                onRetry: () =>
+                    context.read<AdminTasksCubit>().watch(forceRestart: true),
               ),
             ),
             ready: (tasks) => _buildList(context, tasks),
@@ -64,12 +65,9 @@ class AdminTasksBody extends StatelessWidget {
   }
 
   void _openDetails(BuildContext context, AdminTaskEntity task) {
-    final cubit = context.read<AdminTasksCubit>();
-    context
-        .pushNamed(
-          AppRoutes.adminTaskDetails.name,
-          extra: AdminTaskDetailsArgs(task: task).toJson(),
-        )
-        .then((_) => cubit.load());
+    context.pushNamed(
+      AppRoutes.adminTaskDetails.name,
+      extra: AdminTaskDetailsArgs(task: task).toJson(),
+    );
   }
 }

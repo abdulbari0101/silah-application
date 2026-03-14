@@ -546,6 +546,7 @@
   "confirm_reject_request": "هل تريد رفض الطلب؟",
   "confirm_close_request": "هل تريد إغلاق الطلب؟",
   "confirm_end_chat": "هل تريد إنهاء الشات وإغلاق الاستشارة؟",
+  "consultation_messaging_unavailable_message": "المراسلة غير متاحة لأن هذه الاستشارة لم تعد مفتوحة.",
   "confirm_accept_application": "هل تريد قبول الطلب؟",
   "confirm_reject_application": "هل تريد رفض الطلب؟",
   "training_opportunities": "فرص التدريب",

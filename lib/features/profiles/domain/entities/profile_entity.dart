@@ -12,6 +12,8 @@ class ProfileEntity with ProfileEntityMappable {
   final String? avatarUrl;
   final String? accountType;
   final bool isTrainee;
+  final bool? verified;
+  final String? verificationStatus;
 
   const ProfileEntity({
     this.id,
@@ -22,5 +24,7 @@ class ProfileEntity with ProfileEntityMappable {
     this.avatarUrl,
     this.accountType,
     this.isTrainee = false,
+    this.verified,
+    this.verificationStatus,
   });
 }

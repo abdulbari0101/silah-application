@@ -17,6 +17,8 @@ import 'package:silah_app/features/auth/domain/entities/registration_payload.dar
 import 'package:silah_app/features/auth/domain/repositories/auth_repository.dart';
 import 'package:silah_app/features/auth/domain/repositories/identity_base_repo.dart';
 import 'package:silah_app/features/notifications/domain/repositories/device_token_repository.dart';
+import 'package:silah_app/features/verification/domain/entities/verification_status.dart';
+import 'package:silah_app/features/verification/domain/repositories/verification_repository.dart';
 
 class AuthRepoImpl implements AuthRepo {
   final AuthRemoteDataSource remoteDS;
@@ -24,6 +26,7 @@ class AuthRepoImpl implements AuthRepo {
   final AuthIdentityRepo authIdentityRepo;
   final DeviceTokenRepository deviceFcmTokenRepository;
   final SettingReader settingReader;
+  final VerificationRepository verificationRepository;
   final Executor executor;
 
   AuthRepoImpl({
@@ -33,6 +36,7 @@ class AuthRepoImpl implements AuthRepo {
     required this.authIdentityRepo,
     required this.deviceFcmTokenRepository,
     required this.settingReader,
+    required this.verificationRepository,
   });
 
   @override
@@ -47,7 +51,9 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  Future<Either<Failure, AuthUserEntity>> register(RegistrationPayload payload) async {
+  Future<Either<Failure, AuthUserEntity>> register(
+    RegistrationPayload payload,
+  ) async {
     return executor.runOnline(() async {
       final name = payload.fullName.isEmpty
           ? '${payload.firstName} ${payload.lastName}'.trim()
@@ -96,11 +102,15 @@ class AuthRepoImpl implements AuthRepo {
             nationalId == null ||
             ((gender?.isEmpty ?? true) && (genderId?.isEmpty ?? true)) ||
             ((city?.isEmpty ?? true) && (cityId?.isEmpty ?? true)) ||
-            ((workplace?.isEmpty ?? true) && (workDestinationId?.isEmpty ?? true)) ||
+            ((workplace?.isEmpty ?? true) &&
+                (workDestinationId?.isEmpty ?? true)) ||
             officeName.isEmpty ||
             licenseNumber.isEmpty ||
             nationalId.isEmpty) {
-          throw AuthException(Strings.error_fill_form.tr(), ErrorCodes.badRequest400);
+          throw AuthException(
+            Strings.error_fill_form.tr(),
+            ErrorCodes.badRequest400,
+          );
         }
 
         final model = AuthUserModel(
@@ -127,6 +137,12 @@ class AuthRepoImpl implements AuthRepo {
           },
         );
         authUser = await remoteDS.registerLawyer(user: model);
+        await _cacheIdTokenIfNeeded(authUser.idToken);
+        authUser = await _syncLawyerVerification(
+          authUser: authUser,
+          licenseNumber: licenseNumber,
+          nationalId: nationalId,
+        );
       }
 
       return _persistAndBuildAuthData(authUser);
@@ -134,7 +150,9 @@ class AuthRepoImpl implements AuthRepo {
   }
 
   @override
-  Future<Either<Failure, bool>> sendPasswordReset({required String email}) async {
+  Future<Either<Failure, bool>> sendPasswordReset({
+    required String email,
+  }) async {
     return executor.runOnline(() async {
       await remoteDS.sendPasswordReset(email: email);
       return true;
@@ -147,7 +165,10 @@ class AuthRepoImpl implements AuthRepo {
     required String newPassword,
   }) async {
     return executor.runOnline(() async {
-      await remoteDS.updatePassword(currentPassword: currentPassword, newPassword: newPassword);
+      await remoteDS.updatePassword(
+        currentPassword: currentPassword,
+        newPassword: newPassword,
+      );
       return true;
     }, from: 'AuthRepoImpl.updatePassword');
   }
@@ -162,10 +183,16 @@ class AuthRepoImpl implements AuthRepo {
     }, from: 'AuthRepoImpl.signOut');
   }
 
-  Future<AuthUserEntity> _persistAndBuildAuthData(AuthUserModel authUser) async {
+  Future<AuthUserEntity> _persistAndBuildAuthData(
+    AuthUserModel authUser,
+  ) async {
     final customer = authUser.toEntity();
     final userId = await authIdentityRepo.generateAndSaveUserId(customer);
-    await _cacheSession(customer: authUser, userId: userId, idToken: authUser.idToken);
+    await _cacheSession(
+      customer: authUser,
+      userId: userId,
+      idToken: authUser.idToken,
+    );
     await _syncDeviceToken();
     return customer;
   }
@@ -185,6 +212,28 @@ class AuthRepoImpl implements AuthRepo {
     }
   }
 
+  Future<AuthUserModel> _syncLawyerVerification({
+    required AuthUserModel authUser,
+    required String licenseNumber,
+    required String nationalId,
+  }) async {
+    final result = await verificationRepository.verifyLicense(
+      licenseNumber: licenseNumber,
+      nationalId: nationalId,
+    );
+
+    return result.fold(
+      (failure) {
+        AppLogger().networkError(
+          failure,
+          tag: 'AuthRepoImpl._syncLawyerVerification',
+        );
+        return _recoverVerificationState(authUser);
+      },
+      (verification) => _applyVerificationState(authUser, verification.status),
+    );
+  }
+
   Future<void> _cacheSession({
     required AuthUserModel customer,
     required String userId,
@@ -192,10 +241,46 @@ class AuthRepoImpl implements AuthRepo {
   }) async {
     await cacheDS.saveCustomer(customer: customer, userId: userId);
 
-    if (idToken != null && idToken.isNotEmpty) {
-      await cacheDS.cacheLoginToken(
-        TokenModel(accessToken: idToken, tokenType: 'Bearer', expiresIn: 3600, scope: 'firebase'),
-      );
+    await _cacheIdTokenIfNeeded(idToken);
+  }
+
+  Future<AuthUserModel> _recoverVerificationState(
+    AuthUserModel authUser,
+  ) async {
+    final fallback = await verificationRepository.fetchVerificationStatus();
+    return fallback.fold((_) => authUser, (verification) {
+      final hasVerificationRecord =
+          (verification.licenseNumber ?? '').isNotEmpty ||
+          (verification.nationalId ?? '').isNotEmpty ||
+          verification.status != VerificationStatus.pending;
+      if (!hasVerificationRecord) {
+        return authUser;
+      }
+      return _applyVerificationState(authUser, verification.status);
+    });
+  }
+
+  AuthUserModel _applyVerificationState(
+    AuthUserModel authUser,
+    VerificationStatus status,
+  ) {
+    final updatedProfile = Map<String, dynamic>.from(authUser.profile ?? {});
+    updatedProfile['verified'] = status == VerificationStatus.verified;
+    updatedProfile['verificationStatus'] = status.name;
+    return authUser.copyWith(profile: updatedProfile);
+  }
+
+  Future<void> _cacheIdTokenIfNeeded(String? idToken) async {
+    if (idToken == null || idToken.isEmpty) {
+      return;
     }
+    await cacheDS.cacheLoginToken(
+      TokenModel(
+        accessToken: idToken,
+        tokenType: 'Bearer',
+        expiresIn: 3600,
+        scope: 'firebase',
+      ),
+    );
   }
 }

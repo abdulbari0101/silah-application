@@ -12,9 +12,16 @@ import 'package:silah_app/features/messaging/domain/entities/message_entity.dart
 import 'package:silah_app/features/messaging/presentation/cubits/conversation/chat_conversation_cubit.dart';
 
 class ChatConversationBody extends StatefulWidget {
-  const ChatConversationBody({super.key, required this.threadId});
+  const ChatConversationBody({
+    super.key,
+    required this.threadId,
+    this.isMessagingEnabled = true,
+    this.messagingDisabledNotice,
+  });
 
   final String threadId;
+  final bool isMessagingEnabled;
+  final String? messagingDisabledNotice;
 
   @override
   State<ChatConversationBody> createState() => _ChatConversationBodyState();
@@ -32,7 +39,24 @@ class _ChatConversationBodyState extends State<ChatConversationBody> {
     super.dispose();
   }
 
+  @override
+  void didUpdateWidget(covariant ChatConversationBody oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.isMessagingEnabled && !widget.isMessagingEnabled) {
+      _controller.clear();
+      FocusScope.of(context).unfocus();
+    }
+  }
+
   void _send(BuildContext context) {
+    if (!widget.isMessagingEnabled) {
+      Toasts.error(
+        context,
+        widget.messagingDisabledNotice ??
+            Strings.consultation_messaging_unavailable_message.tr(),
+      );
+      return;
+    }
     final uid = FirebaseAuth.instance.currentUser?.uid;
     if (uid == null) {
       Toasts.error(context, Strings.unexpected_error.tr());
@@ -157,66 +181,88 @@ class _ChatConversationBodyState extends State<ChatConversationBody> {
   }
 
   Widget _buildComposer({required bool isSending}) {
+    final isComposerEnabled = widget.isMessagingEnabled && !isSending;
     return SafeArea(
       top: false,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-          decoration: BoxDecoration(
-            color: context.colors.surface,
-            borderRadius: BorderRadius.circular(28),
-            boxShadow: context.shadowSoft,
-          ),
-          child: Row(
-            children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
-                  child: TextField(
-                    controller: _controller,
-                    minLines: 1,
-                    maxLines: 3,
-                    textInputAction: TextInputAction.newline,
-                    decoration: InputDecoration(
-                      isCollapsed: true,
-                      hintText: Strings.messages.tr(),
-                      hintStyle: context.textTheme.bodyMedium?.copyWith(
-                        color: context.colors.onSurfaceVariant,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (widget.messagingDisabledNotice?.trim().isNotEmpty == true)
+              Padding(
+                padding: const EdgeInsetsDirectional.only(
+                  start: 8,
+                  end: 8,
+                  bottom: 8,
+                ),
+                child: Text(
+                  widget.messagingDisabledNotice!,
+                  textAlign: TextAlign.center,
+                  style: context.textTheme.bodySmall?.copyWith(
+                    color: context.colors.onSurfaceVariant,
+                  ),
+                ),
+              ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+              decoration: BoxDecoration(
+                color: context.colors.surface,
+                borderRadius: BorderRadius.circular(28),
+                boxShadow: context.shadowSoft,
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: TextField(
+                        controller: _controller,
+                        enabled: isComposerEnabled,
+                        minLines: 1,
+                        maxLines: 3,
+                        textInputAction: TextInputAction.newline,
+                        decoration: InputDecoration(
+                          isCollapsed: true,
+                          hintText: Strings.messages.tr(),
+                          hintStyle: context.textTheme.bodyMedium?.copyWith(
+                            color: context.colors.onSurfaceVariant,
+                          ),
+                          filled: false,
+                          border: InputBorder.none,
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          disabledBorder: InputBorder.none,
+                          errorBorder: InputBorder.none,
+                          focusedErrorBorder: InputBorder.none,
+                        ),
                       ),
-                      filled: false,
-                      border: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      disabledBorder: InputBorder.none,
-                      errorBorder: InputBorder.none,
-                      focusedErrorBorder: InputBorder.none,
                     ),
                   ),
-                ),
-              ),
-              UIConstants.smallWidth,
-              InkWell(
-                onTap: isSending ? null : () => _send(context),
-                borderRadius: BorderRadius.circular(24),
-                child: Container(
-                  width: 42,
-                  height: 42,
-                  decoration: BoxDecoration(
-                    color: isSending
-                        ? context.colors.primary.withAlphaOpacity(0.4)
-                        : context.colors.primary,
-                    shape: BoxShape.circle,
+                  UIConstants.smallWidth,
+                  InkWell(
+                    onTap: isComposerEnabled ? () => _send(context) : null,
+                    borderRadius: BorderRadius.circular(24),
+                    child: Container(
+                      width: 42,
+                      height: 42,
+                      decoration: BoxDecoration(
+                        color: isComposerEnabled
+                            ? context.colors.primary
+                            : context.colors.disabled,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.send_rounded,
+                        color: context.colors.onPrimary,
+                        size: 20,
+                      ),
+                    ),
                   ),
-                  child: Icon(
-                    Icons.send_rounded,
-                    color: context.colors.onPrimary,
-                    size: 20,
-                  ),
-                ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

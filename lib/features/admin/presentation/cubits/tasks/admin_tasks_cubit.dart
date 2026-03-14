@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
@@ -21,23 +24,51 @@ class AdminTasksState with _$AdminTasksState {
 
 class AdminTasksCubit extends Cubit<AdminTasksState> {
   final AdminRepository repository;
+  StreamSubscription<List<AdminTaskEntity>>? _tasksSubscription;
 
   AdminTasksCubit({required this.repository})
     : super(const AdminTasksState.loading());
+
+  Future<void> watch({bool forceRestart = false}) async {
+    if (_tasksSubscription != null && !forceRestart) {
+      return;
+    }
+
+    await _tasksSubscription?.cancel();
+    emit(const AdminTasksState.loading());
+    _tasksSubscription = repository.watchTasks().listen(
+      _emitTasks,
+      onError: (error, stackTrace) {
+        emit(
+          AdminTasksState.failure(
+            message: error?.toString() ?? Strings.unexpected_error.tr(),
+          ),
+        );
+      },
+    );
+  }
 
   Future<void> load() async {
     emit(const AdminTasksState.loading());
     final result = await repository.fetchPendingTasks();
     result.fold(
       (failure) => emit(AdminTasksState.failure(message: _mapFailure(failure))),
-      (tasks) {
-        if (tasks.isEmpty) {
-          emit(const AdminTasksState.empty());
-        } else {
-          emit(AdminTasksState.ready(tasks: tasks));
-        }
-      },
+      _emitTasks,
     );
+  }
+
+  @override
+  Future<void> close() async {
+    await _tasksSubscription?.cancel();
+    return super.close();
+  }
+
+  void _emitTasks(List<AdminTaskEntity> tasks) {
+    if (tasks.isEmpty) {
+      emit(const AdminTasksState.empty());
+      return;
+    }
+    emit(AdminTasksState.ready(tasks: tasks));
   }
 
   String _mapFailure(Failure failure) {

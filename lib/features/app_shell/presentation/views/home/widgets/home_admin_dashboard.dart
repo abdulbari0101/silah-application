@@ -27,42 +27,26 @@ class HomeAdminDashboard extends StatefulWidget {
 }
 
 class _HomeAdminDashboardState extends State<HomeAdminDashboard> {
-  Future<_AdminHomeSnapshot>? _future;
+  late Stream<List<AdminTaskEntity>> _tasksStream;
+  Future<int>? _supportCountFuture;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    _future ??= _loadSnapshot();
+  void initState() {
+    super.initState();
+    _tasksStream = locator<AdminRepository>().watchTasks();
+    _supportCountFuture = _loadSupportCount();
   }
 
-  Future<_AdminHomeSnapshot> _loadSnapshot() async {
-    final adminRepository = locator<AdminRepository>();
+  Future<int> _loadSupportCount() async {
     final supportRepository = locator<SupportTicketsRepository>();
-
-    final tasks = _unwrap(await adminRepository.fetchPendingTasks());
     final tickets = _unwrap(await supportRepository.fetchTickets());
-
-    final actionableTasks = tasks
-        .where(
-          (item) =>
-              item.status == AdminTaskStatus.pending ||
-              item.status == AdminTaskStatus.inReview,
-        )
-        .toList();
-
-    final openReports = tickets
+    return tickets
         .where(
           (item) =>
               item.status == SupportTicketStatus.open ||
               item.status == SupportTicketStatus.inProgress,
         )
         .length;
-
-    return _AdminHomeSnapshot(
-      actionableTaskCount: actionableTasks.length,
-      openSupportCount: openReports,
-      tasks: tasks.take(2).toList(),
-    );
   }
 
   T _unwrap<T>(Either<Failure, T> result) {
@@ -74,108 +58,121 @@ class _HomeAdminDashboardState extends State<HomeAdminDashboard> {
 
   void _retry() {
     setState(() {
-      _future = _loadSnapshot();
+      _tasksStream = locator<AdminRepository>().watchTasks();
+      _supportCountFuture = _loadSupportCount();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<_AdminHomeSnapshot>(
-      future: _future,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState != ConnectionState.done) {
+    return FutureBuilder<int>(
+      future: _supportCountFuture,
+      builder: (context, supportSnapshot) {
+        if (supportSnapshot.connectionState != ConnectionState.done) {
           return const Center(child: ProgressStateWidget());
         }
-        if (snapshot.hasError || !snapshot.hasData) {
+        if (supportSnapshot.hasError || !supportSnapshot.hasData) {
           return CustomeErrorWidget(
             message:
-                snapshot.error?.toString() ?? Strings.unexpected_error.tr(),
+                supportSnapshot.error?.toString() ??
+                Strings.unexpected_error.tr(),
             onRetry: _retry,
           );
         }
 
-        final data = snapshot.data!;
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text(
-              Strings.today_summary.tr(),
-              style: context.textTheme.titleMedium?.copyWith(
-                color: context.colors.primary,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            UIConstants.smallHeight,
-            Row(
+        return StreamBuilder<List<AdminTaskEntity>>(
+          stream: _tasksStream,
+          builder: (context, tasksSnapshot) {
+            if (tasksSnapshot.connectionState == ConnectionState.waiting &&
+                !tasksSnapshot.hasData) {
+              return const Center(child: ProgressStateWidget());
+            }
+            if (tasksSnapshot.hasError) {
+              return CustomeErrorWidget(
+                message:
+                    tasksSnapshot.error?.toString() ??
+                    Strings.unexpected_error.tr(),
+                onRetry: _retry,
+              );
+            }
+
+            final tasks = tasksSnapshot.data ?? const <AdminTaskEntity>[];
+            final actionableTaskCount = tasks
+                .where(
+                  (item) =>
+                      item.status == AdminTaskStatus.pending ||
+                      item.status == AdminTaskStatus.inReview,
+                )
+                .length;
+            final previewTasks = tasks.take(2).toList(growable: false);
+
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                Expanded(
-                  child: _AdminMetricCard(
-                    title: Strings.admin_tasks.tr(),
-                    count: data.actionableTaskCount,
+                Text(
+                  Strings.today_summary.tr(),
+                  style: context.textTheme.titleMedium?.copyWith(
+                    color: context.colors.primary,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                UIConstants.smallHeight,
+                Row(
+                  children: [
+                    Expanded(
+                      child: _AdminMetricCard(
+                        title: Strings.admin_tasks.tr(),
+                        count: actionableTaskCount,
+                        onTap: () => context.openRoute(AppRoutes.adminTasks),
+                      ),
+                    ),
+                    UIConstants.mediumWidth,
+                    Expanded(
+                      child: _AdminMetricCard(
+                        title: Strings.support.tr(),
+                        count: supportSnapshot.data!,
+                        onTap: () =>
+                            context.openRoute(AppRoutes.supportTickets),
+                      ),
+                    ),
+                  ],
+                ),
+                UIConstants.mediumHeight,
+              
+                Text(
+                  Strings.admin_tasks.tr(),
+                  style: context.textTheme.titleMedium?.copyWith(
+                    color: context.colors.primary,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                UIConstants.smallHeight,
+                if (previewTasks.isEmpty)
+                  _AdminEmptyCard(
                     onTap: () => context.openRoute(AppRoutes.adminTasks),
-                  ),
-                ),
-                UIConstants.mediumWidth,
-                Expanded(
-                  child: _AdminMetricCard(
-                    title: Strings.support.tr(),
-                    count: data.openSupportCount,
-                    onTap: () => context.openRoute(AppRoutes.supportTickets),
-                  ),
-                ),
-              ],
-            ),
-            UIConstants.mediumHeight,
-            _AdminLinkCard(
-              title: Strings.specializations.tr(),
-              subtitle: Strings.manage_consultations_clients_and_training.tr(),
-              onTap: () => context.openRoute(AppRoutes.specifications),
-            ),
-            UIConstants.xbigHeight,
-            Text(
-              Strings.admin_tasks.tr(),
-              style: context.textTheme.titleMedium?.copyWith(
-                color: context.colors.primary,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            UIConstants.smallHeight,
-            if (data.tasks.isEmpty)
-              _AdminEmptyCard(
-                onTap: () => context.openRoute(AppRoutes.adminTasks),
-              )
-            else
-              ...data.tasks.map(
-                (task) => Padding(
-                  padding: const EdgeInsets.only(
-                    bottom: UIConstants.smallPadding,
-                  ),
-                  child: AdminTaskCard(
-                    task: task,
-                    onTap: () => context.pushNamed(
-                      AppRoutes.adminTaskDetails.name,
-                      extra: AdminTaskDetailsArgs(task: task).toJson(),
+                  )
+                else
+                  ...previewTasks.map(
+                    (task) => Padding(
+                      padding: const EdgeInsets.only(
+                        bottom: UIConstants.smallPadding,
+                      ),
+                      child: AdminTaskCard(
+                        task: task,
+                        onTap: () => context.pushNamed(
+                          AppRoutes.adminTaskDetails.name,
+                          extra: AdminTaskDetailsArgs(task: task).toJson(),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-          ],
+              ],
+            );
+          },
         );
       },
     );
   }
-}
-
-class _AdminHomeSnapshot {
-  const _AdminHomeSnapshot({
-    required this.actionableTaskCount,
-    required this.openSupportCount,
-    required this.tasks,
-  });
-
-  final int actionableTaskCount;
-  final int openSupportCount;
-  final List<AdminTaskEntity> tasks;
 }
 
 class _AdminMetricCard extends StatelessWidget {

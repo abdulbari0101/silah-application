@@ -71,6 +71,18 @@ class ProfileEntityMapper extends ClassMapperBase<ProfileEntity> {
     opt: true,
     def: false,
   );
+  static bool? _$verified(ProfileEntity v) => v.verified;
+  static const Field<ProfileEntity, bool> _f$verified = Field(
+    'verified',
+    _$verified,
+    opt: true,
+  );
+  static String? _$verificationStatus(ProfileEntity v) => v.verificationStatus;
+  static const Field<ProfileEntity, String> _f$verificationStatus = Field(
+    'verificationStatus',
+    _$verificationStatus,
+    opt: true,
+  );
 
   @override
   final MappableFields<ProfileEntity> fields = const {
@@ -82,6 +94,8 @@ class ProfileEntityMapper extends ClassMapperBase<ProfileEntity> {
     #avatarUrl: _f$avatarUrl,
     #accountType: _f$accountType,
     #isTrainee: _f$isTrainee,
+    #verified: _f$verified,
+    #verificationStatus: _f$verificationStatus,
   };
   @override
   final bool ignoreNull = true;
@@ -96,6 +110,8 @@ class ProfileEntityMapper extends ClassMapperBase<ProfileEntity> {
       avatarUrl: data.dec(_f$avatarUrl),
       accountType: data.dec(_f$accountType),
       isTrainee: data.dec(_f$isTrainee),
+      verified: data.dec(_f$verified),
+      verificationStatus: data.dec(_f$verificationStatus),
     );
   }
 
@@ -170,6 +186,8 @@ abstract class ProfileEntityCopyWith<$R, $In extends ProfileEntity, $Out>
     String? avatarUrl,
     String? accountType,
     bool? isTrainee,
+    bool? verified,
+    String? verificationStatus,
   });
   ProfileEntityCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
@@ -192,6 +210,8 @@ class _ProfileEntityCopyWithImpl<$R, $Out>
     Object? avatarUrl = $none,
     Object? accountType = $none,
     bool? isTrainee,
+    Object? verified = $none,
+    Object? verificationStatus = $none,
   }) => $apply(
     FieldCopyWithData({
       if (id != $none) #id: id,
@@ -202,6 +222,9 @@ class _ProfileEntityCopyWithImpl<$R, $Out>
       if (avatarUrl != $none) #avatarUrl: avatarUrl,
       if (accountType != $none) #accountType: accountType,
       if (isTrainee != null) #isTrainee: isTrainee,
+      if (verified != $none) #verified: verified,
+      if (verificationStatus != $none)
+        #verificationStatus: verificationStatus,
     }),
   );
   @override
@@ -214,6 +237,9 @@ class _ProfileEntityCopyWithImpl<$R, $Out>
     avatarUrl: data.get(#avatarUrl, or: $value.avatarUrl),
     accountType: data.get(#accountType, or: $value.accountType),
     isTrainee: data.get(#isTrainee, or: $value.isTrainee),
+    verified: data.get(#verified, or: $value.verified),
+    verificationStatus:
+        data.get(#verificationStatus, or: $value.verificationStatus),
   );
 
   @override
@@ -221,4 +247,3 @@ class _ProfileEntityCopyWithImpl<$R, $Out>
     Then<$Out2, $R2> t,
   ) => _ProfileEntityCopyWithImpl<$R2, $Out2>($value, $cast, t);
 }
-

@@ -634,6 +634,8 @@ class Strings {
   static const String confirm_reject_request = "confirm_reject_request";
   static const String confirm_close_request = "confirm_close_request";
   static const String confirm_end_chat = "confirm_end_chat";
+  static const String consultation_messaging_unavailable_message =
+      "consultation_messaging_unavailable_message";
   static const String confirm_accept_application = "confirm_accept_application";
   static const String confirm_reject_application = "confirm_reject_application";
 

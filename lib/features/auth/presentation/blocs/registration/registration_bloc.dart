@@ -1,14 +1,12 @@
-import 'dart:async';
-
-import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:silah_app/core/infrastructure/errors/error_utils.dart';
 import 'package:silah_app/core/infrastructure/errors/failures.dart';
 import 'package:silah_app/core/presentation/state_magment/bloc_utils/bloc_utils.dart';
 import 'package:silah_app/core/presentation/state_magment/blocs/app_state/app_state_bloc.dart';
-import 'package:silah_app/core/presentation/state_magment/blocs/app_state/state_data/app_auth_status.dart';
 import 'package:silah_app/features/auth/domain/entities/registration_payload.dart';
 import 'package:silah_app/features/auth/domain/repositories/auth_repository.dart';
+import 'package:silah_app/features/auth/presentation/support/auth_user_auth_status_resolver.dart';
 
 import 'registration_operation_type.dart';
 
@@ -51,7 +49,7 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         appStateBloc.add(
           UserLoggedIn(
             authData: authData,
-            userAuthStatus: UserAuthStatus.loggedInUnverifiedAccount,
+            userAuthStatus: resolveUserAuthStatus(authData),
           ),
         );
       },

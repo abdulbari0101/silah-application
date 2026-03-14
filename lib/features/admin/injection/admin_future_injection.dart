@@ -3,6 +3,7 @@ import 'package:silah_app/features/admin/data/datasources/remote/admin_remote_da
 import 'package:silah_app/features/admin/data/repositories/admin_repository_impl.dart';
 import 'package:silah_app/features/admin/domain/repositories/admin_repository.dart';
 import 'package:silah_app/features/support/data/datasources/remote/support_service.dart';
+import 'package:silah_app/features/verification/data/datasources/remote/verification_service.dart';
 
 // ! Features - Admin
 
@@ -11,6 +12,7 @@ Future<void> initAdmin() async {
     () => AdminRemoteDataSourceImpl(
       logger: locator(),
       supportService: locator<SupportService>(),
+      verificationService: locator<VerificationService>(),
     ),
   );
   locator.registerLazySingleton<AdminRepository>(

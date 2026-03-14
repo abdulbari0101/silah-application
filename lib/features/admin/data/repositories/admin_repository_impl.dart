@@ -21,6 +21,11 @@ class AdminRepositoryImpl implements AdminRepository {
   }
 
   @override
+  Stream<List<AdminTaskEntity>> watchTasks() {
+    return remoteDataSource.watchTasks();
+  }
+
+  @override
   Future<Either<Failure, AdminTaskEntity>> updateTask(AdminTaskEntity task) {
     return executor.runOnline(
       () async => remoteDataSource.updateTask(task),

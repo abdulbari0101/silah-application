@@ -30,13 +30,23 @@ def request_verification(
     ensure_same_user_or_admin(payload.lawyerUid, decoded)
 
     db = firestore_client()
-    status_value = mock_najiz_check(payload.licenseNumber, payload.nationalId)
+    review_notes = None
+    try:
+        status_value = mock_najiz_check(payload.licenseNumber, payload.nationalId)
+    except Exception as exc:
+        status_value = "needsReview"
+        review_notes = "Automated verification failed; manual review required."
+        log_firestore_error(
+            "license_verifications.mock_najiz_check",
+            exc,
+            lawyer_uid=payload.lawyerUid,
+        )
 
     verification_doc = {
         "licenseNumber": payload.licenseNumber,
         "nationalId": payload.nationalId,
         "status": status_value,
-        "reviewNotes": None,
+        "reviewNotes": review_notes,
         "requestedAt": utc_now_iso(),
         "verifiedAt": utc_now_iso() if status_value == "verified" else None,
     }
@@ -111,11 +121,12 @@ def review_verification(
 ) -> dict:
     db = firestore_client()
     status_value = payload.status
+    updated_at = utc_now_iso()
 
     update_data = {
         "status": status_value,
         "reviewNotes": payload.reviewNotes,
-        "verifiedAt": utc_now_iso(),
+        "verifiedAt": updated_at,
     }
     log_firestore_request(
         "license_verifications.review",
@@ -146,8 +157,8 @@ def review_verification(
             pass
         create_notification(
             payload.lawyerUid,
-            title="Verification successful",
-            message="Your lawyer account has been activated by admin.",
+            title="License approved",
+            message="Your lawyer license has been approved by admin.",
             data={"type": "verification", "status": "verified"},
         )
     else:
@@ -168,6 +179,38 @@ def review_verification(
             message="Your lawyer verification was rejected by admin review.",
             data={"type": "verification", "status": "rejected"},
         )
+
+    task_status = "approved" if status_value == "verified" else "rejected"
+    try:
+        task_docs = (
+            db.collection("admin_tasks")
+            .where("targetId", "==", payload.lawyerUid)
+            .stream()
+        )
+        for task_doc in task_docs:
+            if not task_doc.exists:
+                continue
+            task_data = task_doc.to_dict() or {}
+            task_type = str(task_data.get("type") or "").strip().lower().replace(
+                "-",
+                "_",
+            )
+            if task_type != "license_review":
+                continue
+            task_doc.reference.set(
+                {
+                    "status": task_status,
+                    "updatedAt": updated_at,
+                },
+                merge=True,
+            )
+    except Exception as exc:
+        log_firestore_error(
+            "admin_tasks.sync_license_review",
+            exc,
+            lawyer_uid=payload.lawyerUid,
+        )
+        raise
 
     response = VerificationResponse(status=status_value)
     return success_response(response.model_dump())

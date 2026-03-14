@@ -61,7 +61,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
             accountType: _accountTypeUser,
           );
         }
-        return _mapProfile(
+        return _mapProfileWithVerification(
           resolved.doc,
           fallbackAccountType: resolved.defaultAccountType,
           authUser: auth.currentUser,
@@ -116,7 +116,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
             accountType: normalizedType ?? defaultAccountType,
           );
         }
-        return _mapProfile(
+        return _mapProfileWithVerification(
           doc,
           fallbackAccountType: normalizedType ?? defaultAccountType,
           authUser: auth.currentUser,
@@ -180,6 +180,33 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
     return payload;
   }
 
+  Future<ProfileEntity> _mapProfileWithVerification(
+    DocumentSnapshot<Map<String, dynamic>> doc, {
+    required String fallbackAccountType,
+    User? authUser,
+  }) async {
+    final profile = _mapProfile(
+      doc,
+      fallbackAccountType: fallbackAccountType,
+      authUser: authUser,
+    );
+    if ((profile.accountType ?? '').toLowerCase() != _accountTypeLawyer) {
+      return profile;
+    }
+
+    final verificationDoc = await firestore
+        .collection('license_verifications')
+        .doc(doc.id)
+        .get();
+    final verificationData =
+        verificationDoc.data() ?? const <String, dynamic>{};
+    return profile.copyWith(
+      verificationStatus: ProfileFieldReader.firstNonEmpty([
+        verificationData['status'],
+      ]),
+    );
+  }
+
   ProfileEntity _mapProfile(
     DocumentSnapshot<Map<String, dynamic>> doc, {
     required String fallbackAccountType,
@@ -210,6 +237,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
         _parseBool(data['isTrainee']) ??
         _parseBool(data['acceptsTrainees']) ??
         false;
+    final verified = _parseBool(data['verified']);
 
     return ProfileEntity(
       id: doc.id,
@@ -220,6 +248,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       avatarUrl: avatarUrl,
       accountType: accountType,
       isTrainee: isTrainee,
+      verified: verified,
     );
   }
 

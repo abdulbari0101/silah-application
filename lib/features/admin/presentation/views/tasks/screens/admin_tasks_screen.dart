@@ -13,7 +13,7 @@ class AdminTasksScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => AdminTasksCubit(repository: locator())..load(),
+      create: (_) => AdminTasksCubit(repository: locator())..watch(),
       child: PlatformScreenWrapper(
         title: Strings.admin_tasks.tr(),
         body: const AdminTasksBody(),

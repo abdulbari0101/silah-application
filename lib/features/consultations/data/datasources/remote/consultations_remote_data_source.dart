@@ -25,6 +25,7 @@ abstract class ConsultationsRemoteDataSource {
   Future<List<ConsultationRequestEntity>> fetchRequestsByUser(String userId);
   Stream<List<ConsultationRequestEntity>> watchRequestsByUser(String userId);
   Future<ConsultationRequestEntity?> fetchRequestById(String requestId);
+  Stream<ConsultationRequestEntity?> watchRequestById(String requestId);
   String? currentUserId();
 }
 
@@ -144,6 +145,16 @@ class ConsultationsRemoteDataSourceImpl
         return _mapDoc(doc);
       },
     );
+  }
+
+  @override
+  Stream<ConsultationRequestEntity?> watchRequestById(String requestId) {
+    final resolvedRequestId = requestId.trim();
+    return firestore
+        .collection(_consultationsCollection)
+        .doc(resolvedRequestId)
+        .snapshots()
+        .map((doc) => doc.exists ? _mapDoc(doc) : null);
   }
 
   @override

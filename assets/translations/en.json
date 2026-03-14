@@ -543,6 +543,7 @@
   "confirm_reject_request": "Reject this request?",
   "confirm_close_request": "Close this request?",
   "confirm_end_chat": "End this chat and close the consultation?",
+  "consultation_messaging_unavailable_message": "Messaging is unavailable because this consultation is no longer open.",
   "confirm_accept_application": "Accept this application?",
   "confirm_reject_application": "Reject this application?",
   "training_opportunities": "Training opportunities",

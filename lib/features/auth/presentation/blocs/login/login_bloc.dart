@@ -1,16 +1,14 @@
-import 'dart:async';
-
-import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:silah_app/core/infrastructure/analytics/logger/app_logger.dart';
 import 'package:silah_app/core/infrastructure/errors/error_utils.dart';
 import 'package:silah_app/core/infrastructure/errors/failures.dart';
 import 'package:silah_app/core/injection/injection_container.dart';
 import 'package:silah_app/core/presentation/state_magment/bloc_utils/bloc_utils.dart';
 import 'package:silah_app/core/presentation/state_magment/blocs/app_state/app_state_bloc.dart';
-import 'package:silah_app/core/presentation/state_magment/blocs/app_state/state_data/app_auth_status.dart';
 import 'package:silah_app/features/auth/domain/repositories/auth_repository.dart';
 import 'package:silah_app/features/auth/presentation/blocs/login/login_operation_type.dart';
+import 'package:silah_app/features/auth/presentation/support/auth_user_auth_status_resolver.dart';
 
 part 'login_bloc.freezed.dart';
 part 'login_event.dart';
@@ -51,7 +49,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         appStateBloc.add(
           UserLoggedIn(
             authData: authUser,
-            userAuthStatus: UserAuthStatus.loggedInUnverifiedAccount,
+            userAuthStatus: resolveUserAuthStatus(authUser),
           ),
         );
 

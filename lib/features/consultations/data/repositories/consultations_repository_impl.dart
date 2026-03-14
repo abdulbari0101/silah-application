@@ -86,6 +86,18 @@ class ConsultationsRepositoryImpl implements ConsultationsRepository {
   }
 
   @override
+  Stream<ConsultationRequestEntity?> watchRequestById(String requestId) {
+    final resolvedRequestId = requestId.trim();
+    if (resolvedRequestId.isEmpty) {
+      return Stream<ConsultationRequestEntity?>.error(
+        const MissingDataException('Missing request id'),
+      );
+    }
+
+    return remoteDataSource.watchRequestById(resolvedRequestId);
+  }
+
+  @override
   Future<Either<Failure, ConsultationRequestEntity>> updateRequestStatus(
     String requestId,
     ConsultationStatus status, {

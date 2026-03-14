@@ -13,6 +13,8 @@ abstract class ConsultationsRepository {
 
   Stream<List<ConsultationRequestEntity>> watchMyRequests();
 
+  Stream<ConsultationRequestEntity?> watchRequestById(String requestId);
+
   Future<Either<Failure, ConsultationRequestEntity>> updateRequestStatus(
     String requestId,
     ConsultationStatus status, {

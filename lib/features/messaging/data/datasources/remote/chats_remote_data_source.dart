@@ -1,8 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
 import 'package:silah_app/core/infrastructure/analytics/logger/app_logger.dart';
+import 'package:silah_app/core/infrastructure/errors/error_codes.dart';
+import 'package:silah_app/core/infrastructure/errors/exceptions.dart';
 import 'package:silah_app/core/infrastructure/network/firebase_call.dart';
 import 'package:silah_app/core/infrastructure/network/firestore_helpers.dart';
+import 'package:silah_app/features/consultations/domain/entities/consultation_status.dart';
 import 'package:silah_app/features/messaging/domain/entities/chat_thread_entity.dart';
 import 'package:silah_app/features/messaging/domain/entities/message_entity.dart';
 import 'package:silah_app/features/messaging/domain/entities/message_type.dart';
@@ -11,6 +16,8 @@ import 'chats_service.dart';
 
 abstract class ChatsRemoteDataSource {
   Future<List<ChatThreadEntity>> fetchThreads();
+  Stream<List<ChatThreadEntity>> watchThreads();
+  Stream<ChatThreadEntity?> watchThread(String threadId);
   Future<ChatThreadEntity> ensureThread(ChatThreadEntity thread);
   Future<List<MessageEntity>> fetchMessages(String threadId);
   Stream<List<MessageEntity>> watchMessages(String threadId);
@@ -42,35 +49,32 @@ class ChatsRemoteDataSourceImpl implements ChatsRemoteDataSource {
           return [];
         }
 
-        final snapshot = await firestore
-            .collection('chats')
-            .where('participants', arrayContains: uid)
-            .orderBy('updatedAt', descending: true)
-            .get();
-
-        final threads = <ChatThreadEntity>[];
-        for (final doc in snapshot.docs) {
-          final data = doc.data();
-          final lastMessage = _parseLastMessage(data['lastMessage']);
-          final resolvedMessage =
-              lastMessage ?? await _fetchLastMessage(doc.reference);
-          threads.add(
-            ChatThreadEntity(
-              id: doc.id,
-              participantIds: (data['participants'] as List?)
-                  ?.whereType<String>()
-                  .toList(),
-              lastMessage: resolvedMessage,
-              unreadCount: (data['unreadCount'] as int?) ?? 0,
-              updatedAt: parseFirestoreTimestamp(data['updatedAt']),
-              consultationId: data['consultationId'] as String?,
-              trainingApplicationId: data['trainingApplicationId'] as String?,
-            ),
-          );
-        }
-        return threads;
+        final snapshot = await _threadsQuery(uid).get();
+        return _mapThreadDocs(snapshot.docs);
       },
     );
+  }
+
+  @override
+  Stream<List<ChatThreadEntity>> watchThreads() {
+    final uid = auth.currentUser?.uid;
+    if (uid == null) {
+      return Stream<List<ChatThreadEntity>>.value(const <ChatThreadEntity>[]);
+    }
+
+    return _threadsQuery(uid).snapshots().asyncMap((snapshot) {
+      return _mapThreadDocs(snapshot.docs);
+    });
+  }
+
+  @override
+  Stream<ChatThreadEntity?> watchThread(String threadId) {
+    final resolvedThreadId = threadId.trim();
+    return firestore
+        .collection('chats')
+        .doc(resolvedThreadId)
+        .snapshots()
+        .asyncMap(_mapThreadDoc);
   }
 
   @override
@@ -171,6 +175,17 @@ class ChatsRemoteDataSourceImpl implements ChatsRemoteDataSource {
       payload: {'threadId': threadId},
       call: () async {
         final chatRef = firestore.collection('chats').doc(threadId);
+        final chatSnapshot = await chatRef.get();
+        final chatData = chatSnapshot.data();
+        if (chatData == null) {
+          throw const DatabaseException('Chat thread not found');
+        }
+
+        final consultationId = (chatData['consultationId'] as String?)?.trim();
+        if (consultationId != null && consultationId.isNotEmpty) {
+          await _assertConsultationAllowsMessaging(consultationId);
+        }
+
         final messageRef = chatRef.collection('messages').doc();
         final data = <String, dynamic>{
           'senderId': message.senderId,
@@ -200,6 +215,67 @@ class ChatsRemoteDataSourceImpl implements ChatsRemoteDataSource {
           type: message.type,
         );
       },
+    );
+  }
+
+  Future<void> _assertConsultationAllowsMessaging(String consultationId) async {
+    final consultationSnapshot = await firestore
+        .collection('consultations')
+        .doc(consultationId)
+        .get();
+    final status = ConsultationStatusX.tryParse(
+      consultationSnapshot.data()?['status'] as String?,
+    );
+    if (status?.allowsMessaging == true) {
+      return;
+    }
+
+    throw BadRequestException(
+      Strings.consultation_messaging_unavailable_message.tr(),
+      ErrorCodes.badRequest400,
+    );
+  }
+
+  Query<Map<String, dynamic>> _threadsQuery(String uid) {
+    return firestore
+        .collection('chats')
+        .where('participants', arrayContains: uid)
+        .orderBy('updatedAt', descending: true);
+  }
+
+  Future<List<ChatThreadEntity>> _mapThreadDocs(
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> docs,
+  ) async {
+    final threads = await Future.wait(docs.map(_mapThreadDoc));
+    return threads.whereType<ChatThreadEntity>().toList();
+  }
+
+  Future<ChatThreadEntity?> _mapThreadDoc(
+    DocumentSnapshot<Map<String, dynamic>> doc,
+  ) async {
+    if (!doc.exists) {
+      return null;
+    }
+
+    final data = doc.data();
+    if (data == null) {
+      return null;
+    }
+
+    final lastMessage = _parseLastMessage(data['lastMessage']);
+    final resolvedMessage =
+        lastMessage ?? await _fetchLastMessage(doc.reference);
+
+    return ChatThreadEntity(
+      id: doc.id,
+      participantIds: (data['participants'] as List?)
+          ?.whereType<String>()
+          .toList(),
+      lastMessage: resolvedMessage,
+      unreadCount: (data['unreadCount'] as int?) ?? 0,
+      updatedAt: parseFirestoreTimestamp(data['updatedAt']),
+      consultationId: data['consultationId'] as String?,
+      trainingApplicationId: data['trainingApplicationId'] as String?,
     );
   }
 

@@ -63,13 +63,15 @@ class SecondaryNoBgButton extends StatelessWidget {
         // Keep bg transparent; let overlayColor provide feedback.
         backgroundColor: const WidgetStatePropertyAll(Colors.transparent),
         foregroundColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.disabled))
+          if (states.contains(WidgetState.disabled)) {
             return c.withAlphaOpacity(0.5);
+          }
           return c;
         }),
         overlayColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.pressed))
+          if (states.contains(WidgetState.pressed)) {
             return c.withAlphaOpacity(0.08);
+          }
           if (states.contains(WidgetState.hovered) ||
               states.contains(WidgetState.focused)) {
             return c.withAlphaOpacity(0.06);

@@ -1,0 +1,13 @@
+{
+    "promptcode.respectGitignore": true,
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Launch Silah",
+            "request": "launch",
+            "type": "dart",
+            "program": "lib/main.dart",
+            "toolArgs": []
+        }
+    ]
+}

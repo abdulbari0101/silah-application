@@ -6,6 +6,10 @@ import 'package:silah_app/features/messaging/domain/entities/message_entity.dart
 abstract class MessagingRepository {
   Future<Either<Failure, List<ChatThreadEntity>>> fetchThreads();
 
+  Stream<List<ChatThreadEntity>> watchThreads();
+
+  Stream<ChatThreadEntity?> watchThread(String threadId);
+
   Future<Either<Failure, ChatThreadEntity>> ensureThread(
     ChatThreadEntity thread,
   );

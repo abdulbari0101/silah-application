@@ -9,6 +9,7 @@ import 'package:silah_app/core/presentation/state_magment/bloc_utils/bloc_utils.
 import 'package:silah_app/core/presentation/state_magment/blocs/app_state/app_state_bloc.dart';
 import 'package:silah_app/features/profiles/domain/entities/profile_entity.dart';
 import 'package:silah_app/features/profiles/domain/repositories/profile_repository.dart';
+import 'package:silah_app/features/profiles/presentation/support/profile_app_state_sync.dart';
 
 part 'profile_cubit.freezed.dart';
 
@@ -43,7 +44,7 @@ class ProfileCubit extends Cubit<ProfileState> {
     result.fold(
       (failure) => emit(ProfileState.error(message: _mapFailure(failure))),
       (profile) {
-        _syncAppState(profile);
+        syncProfileToAppState(appStateBloc: appStateBloc, profile: profile);
         emit(ProfileState.loaded(profile: profile));
       },
     );
@@ -70,7 +71,7 @@ class ProfileCubit extends Cubit<ProfileState> {
         ProfileState.error(message: _mapFailure(failure), profile: current),
       ),
       (profile) {
-        _syncAppState(profile);
+        syncProfileToAppState(appStateBloc: appStateBloc, profile: profile);
         emit(ProfileState.loaded(profile: profile));
       },
     );
@@ -101,34 +102,10 @@ class ProfileCubit extends Cubit<ProfileState> {
         ProfileState.error(message: _mapFailure(failure), profile: current),
       ),
       (profile) {
-        _syncAppState(profile);
+        syncProfileToAppState(appStateBloc: appStateBloc, profile: profile);
         emit(ProfileState.loaded(profile: profile));
       },
     );
-  }
-
-  void _syncAppState(ProfileEntity profile) {
-    final authUser = appStateBloc.state.data.customer;
-    if (authUser == null) return;
-
-    final nextProfile = <String, dynamic>{
-      ...?authUser.profile,
-      if (profile.name != null) 'name': profile.name,
-      if (profile.email != null) 'email': profile.email,
-      if (profile.phone != null) 'phone': profile.phone,
-      if (profile.city != null) 'city': profile.city,
-      if (profile.avatarUrl != null) 'avatarUrl': profile.avatarUrl,
-      if (profile.accountType != null) 'accountType': profile.accountType,
-      'isTrainee': profile.isTrainee,
-      if ((profile.accountType ?? authUser.profile?['accountType'])
-              ?.toString()
-              .toLowerCase() ==
-          'lawyer')
-        'acceptsTrainees': profile.isTrainee,
-    };
-
-    final updated = authUser.copyWith(profile: nextProfile);
-    appStateBloc.add(UpdateSession(authData: updated));
   }
 
   String _mapFailure(Failure failure) {
