@@ -47,6 +47,28 @@ class MessagingRepositoryoImpl implements MessagingRepository {
   }
 
   @override
+  Future<Either<Failure, ChatThreadEntity>> ensureThread(
+    ChatThreadEntity thread,
+  ) {
+    return executor.runOnline(() async {
+      final threadId = thread.id?.trim();
+      if (threadId == null || threadId.isEmpty) {
+        throw const MissingDataException('Missing thread id');
+      }
+      final participants = (thread.participantIds ?? const <String>[])
+          .map((item) => item.trim())
+          .where((item) => item.isNotEmpty)
+          .toList();
+      if (participants.isEmpty) {
+        throw const MissingDataException('Missing thread participants');
+      }
+      return remoteDS.ensureThread(
+        thread.copyWith(id: threadId, participantIds: participants),
+      );
+    }, from: 'MessagingRepository.ensureThread');
+  }
+
+  @override
   Future<Either<Failure, MessageEntity>> sendMessage(MessageEntity message) {
     return executor.runOnline(() async {
       final threadId = message.threadId;

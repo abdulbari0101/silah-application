@@ -1,6 +1,7 @@
 import 'package:dart_mappable/dart_mappable.dart';
 import 'package:silah_app/core/data/model/api/base/response_wrapper.dart';
 import 'package:silah_app/core/data/model/api/result_model.dart';
+import 'package:silah_app/features/consultations/domain/entities/consultation_close_reason.dart';
 import 'package:silah_app/features/consultations/domain/entities/consultation_request_entity.dart';
 import 'package:silah_app/features/consultations/domain/entities/consultation_status.dart';
 
@@ -51,13 +52,21 @@ class ConsultationCreateResponseModel extends BaseRespWrapper
 class ConsultationStatusUpdateRequestModel
     with ConsultationStatusUpdateRequestModelMappable {
   final String status;
+  final String? closeReason;
 
-  const ConsultationStatusUpdateRequestModel({required this.status});
+  const ConsultationStatusUpdateRequestModel({
+    required this.status,
+    this.closeReason,
+  });
 
   factory ConsultationStatusUpdateRequestModel.fromStatus(
-    ConsultationStatus status,
-  ) {
-    return ConsultationStatusUpdateRequestModel(status: status.apiValue);
+    ConsultationStatus status, {
+    ConsultationCloseReason? closeReason,
+  }) {
+    return ConsultationStatusUpdateRequestModel(
+      status: status.apiValue,
+      closeReason: closeReason?.apiValue,
+    );
   }
 }
 

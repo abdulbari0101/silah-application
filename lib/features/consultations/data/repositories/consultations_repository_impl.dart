@@ -4,6 +4,7 @@ import 'package:silah_app/core/infrastructure/errors/failures.dart';
 import 'package:silah_app/core/infrastructure/system/executor.dart';
 import 'package:silah_app/features/consultations/data/datasources/remote/consultations_remote_data_source.dart';
 import 'package:silah_app/features/consultations/data/models/consultation_models.dart';
+import 'package:silah_app/features/consultations/domain/entities/consultation_close_reason.dart';
 import 'package:silah_app/features/consultations/domain/entities/consultation_request_entity.dart';
 import 'package:silah_app/features/consultations/domain/entities/consultation_status.dart';
 import 'package:silah_app/features/consultations/domain/repositories/consultations_repository.dart';
@@ -73,10 +74,23 @@ class ConsultationsRepositoryImpl implements ConsultationsRepository {
   }
 
   @override
+  Stream<List<ConsultationRequestEntity>> watchMyRequests() {
+    final uid = remoteDataSource.currentUserId();
+    if (uid == null) {
+      return Stream<List<ConsultationRequestEntity>>.error(
+        const MissingDataException('Missing user id'),
+      );
+    }
+
+    return remoteDataSource.watchRequestsByUser(uid);
+  }
+
+  @override
   Future<Either<Failure, ConsultationRequestEntity>> updateRequestStatus(
     String requestId,
-    ConsultationStatus status,
-  ) {
+    ConsultationStatus status, {
+    ConsultationCloseReason? closeReason,
+  }) {
     return executor.runOnline(() async {
       final resolvedRequestId = requestId.trim();
       if (resolvedRequestId.isEmpty) {
@@ -84,13 +98,20 @@ class ConsultationsRepositoryImpl implements ConsultationsRepository {
       }
       final response = await remoteDataSource.updateStatus(
         resolvedRequestId,
-        ConsultationStatusUpdateRequestModel.fromStatus(status),
+        ConsultationStatusUpdateRequestModel.fromStatus(
+          status,
+          closeReason: closeReason,
+        ),
       );
       final resolved = ConsultationStatusX.tryParse(response.status) ?? status;
 
       final fetched = await _fetchByIdInternal(resolvedRequestId);
       return fetched ??
-          ConsultationRequestEntity(id: resolvedRequestId, status: resolved);
+          ConsultationRequestEntity(
+            id: resolvedRequestId,
+            status: resolved,
+            closeReason: closeReason,
+          );
     }, from: 'ConsultationsRepository.updateRequestStatus');
   }
 

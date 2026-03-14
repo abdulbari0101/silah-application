@@ -5,12 +5,14 @@ import 'package:go_router/go_router.dart';
 import 'package:silah_app/core/config/constants/ui_constants.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
 import 'package:silah_app/core/config/router/app_routes.dart';
+import 'package:silah_app/core/config/router/route_extensions.dart';
 import 'package:silah_app/core/presentation/state_magment/blocs/app_setting/extensions/app_setting_context_extension.dart';
 import 'package:silah_app/core/presentation/ui/widget/buttons/primary_button_with_progress.dart';
 import 'package:silah_app/core/presentation/ui/widget/resolvers/resolved_display_widgets.dart';
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/empty_widget.dart';
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/error_widget.dart';
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/progress_state_widget.dart';
+import 'package:silah_app/features/consultations/presentation/views/details/models/consultation_request_details_args.dart';
 import 'package:silah_app/features/consultations/presentation/cubits/requests/consultation_requests_cubit.dart';
 import 'package:silah_app/features/consultations/domain/entities/consultation_request_entity.dart';
 
@@ -34,7 +36,7 @@ class HomeCurrentRequestsSection extends StatelessWidget {
               ),
             ),
             TextButton(
-              onPressed: () => context.pushNamed(AppRoutes.requests.name),
+              onPressed: () => context.openRoute(AppRoutes.requests),
               child: Text(Strings.view_all.tr()),
             ),
           ],
@@ -88,97 +90,115 @@ class _RequestPreviewCard extends StatelessWidget {
     final description = request.description?.trim();
     final arrowIcon = context.isRTL ? Icons.arrow_back : Icons.arrow_forward;
 
-    return Container(
-      padding: const EdgeInsets.all(UIConstants.mediumPadding),
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.surfaceContainerLow,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
         borderRadius: BorderRadius.circular(18),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-            decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
-              borderRadius: BorderRadius.circular(999),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  arrowIcon,
-                  color: Theme.of(context).colorScheme.onPrimary,
-                  size: 16,
-                ),
-                UIConstants.xsmallWidth,
-                ResolvedSpecializationName(
-                  specializationId: request.specializationId,
-                  fallback: Strings.request_consultation.tr(),
-                  builder: (title) => Text(
-                    title,
-                    style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ),
-              ],
-            ),
+        onTap: () async {
+          await context.pushNamed(
+            AppRoutes.consultationDetails.name,
+            extra: ConsultationRequestDetailsArgs(request: request),
+          );
+          if (context.mounted) {
+            context.read<ConsultationRequestsCubit>().load();
+          }
+        },
+        child: Container(
+          padding: const EdgeInsets.all(UIConstants.mediumPadding),
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.surfaceContainerLow,
+            borderRadius: BorderRadius.circular(18),
           ),
-          if (description != null && description.isNotEmpty) ...[
-            UIConstants.smallHeight,
-            Text(
-              description,
-              style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-          UIConstants.mediumHeight,
-          Row(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                width: 28,
-                height: 28,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
-                  shape: BoxShape.circle,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 6,
                 ),
-                child: Icon(
-                  Icons.chat_bubble_outline,
+                decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.primary,
-                  size: 16,
+                  borderRadius: BorderRadius.circular(999),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      arrowIcon,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      size: 16,
+                    ),
+                    UIConstants.xsmallWidth,
+                    ResolvedSpecializationName(
+                      specializationId: request.specializationId,
+                      fallback: Strings.request_consultation.tr(),
+                      builder: (title) => Text(
+                        title,
+                        style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              UIConstants.smallWidth,
-              Expanded(
-                child: Text(
-                  Strings.view_details.tr(),
-                  style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.w600,
+              if (description != null && description.isNotEmpty) ...[
+                UIConstants.smallHeight,
+                Text(
+                  description,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
                   ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
-              ),
-              Container(
-                width: 28,
-                height: 28,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.surface,
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.person_outline,
-                  color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  size: 16,
-                ),
+              ],
+              UIConstants.mediumHeight,
+              Row(
+                children: [
+                  Container(
+                    width: 28,
+                    height: 28,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surface,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.chat_bubble_outline,
+                      color: Theme.of(context).colorScheme.primary,
+                      size: 16,
+                    ),
+                  ),
+                  UIConstants.smallWidth,
+                  Expanded(
+                    child: Text(
+                      Strings.view_details.tr(),
+                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  Container(
+                    width: 28,
+                    height: 28,
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.surface,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(
+                      Icons.person_outline,
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      size: 16,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }

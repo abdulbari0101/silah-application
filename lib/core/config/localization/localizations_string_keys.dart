@@ -12,7 +12,8 @@ class Strings {
   static const String cp_op_confirm = "cp_op_confirm";
   static const String delete_all_notifications_confirmation =
       "delete_all_notifications_confirmation";
-  static const String delete_all_notificatoin_title = "delete_all_notificatoin_title";
+  static const String delete_all_notificatoin_title =
+      "delete_all_notificatoin_title";
   static const String split_edit_info = "split_edit_info";
   static const String cp_email = "cp_email";
   static const String cp_more = "cp_more";
@@ -61,7 +62,8 @@ class Strings {
   static const String to_date = "to_date";
   static const String btn_search = "btn_search";
   static const String msg_to_date_empty = "msg_to_date_empty";
-  static const String to_date_before_from_date_error = "to_date_before_from_date_error";
+  static const String to_date_before_from_date_error =
+      "to_date_before_from_date_error";
   static const String not_found = "not_found";
   static const String et_others = "et_others";
   static const String err_login = "err_login";
@@ -87,7 +89,8 @@ class Strings {
   static const String itm_share = "itm_share";
   static const String msg_user_pass_not_correct = "msg_user_pass_not_correct";
   static const String btn_confirm = "btn_confirm";
-  static const String msg_amount_greater_than_balance = "msg_amount_greater_than_balance";
+  static const String msg_amount_greater_than_balance =
+      "msg_amount_greater_than_balance";
   static const String msg_device_register = "msg_device_register";
   static const String msg_change_account_device = "msg_change_account_device";
   static const String msg_service_unaval = "msg_service_unaval";
@@ -117,8 +120,10 @@ class Strings {
   static const String sign_up = "sign_up";
   static const String error_enter_email = "error_enter_email";
   static const String error_enter_mobile = "error_enter_mobile";
-  static const String error_enter_password_confirm = "error_enter_password_confirm";
-  static const String error_enter_password_mismatch = "error_enter_password_mismatch";
+  static const String error_enter_password_confirm =
+      "error_enter_password_confirm";
+  static const String error_enter_password_mismatch =
+      "error_enter_password_mismatch";
   static const String favorite = "favorite";
   static const String search = "search";
   static const String apply = "apply";
@@ -132,7 +137,8 @@ class Strings {
   static const String orders = "orders";
   static const String order_details_delivered = "order_details_delivered";
   static const String forget_password_title = "forget_password_title";
-  static const String enter_old_new_password_message = "enter_old_new_password_message";
+  static const String enter_old_new_password_message =
+      "enter_old_new_password_message";
   static const String email_sent = "email_sent";
   static const String sms_sent = "sms_sent";
   static const String current_password = "current_password";
@@ -235,12 +241,16 @@ class Strings {
   static const String user_info_agreement_user = "user_info_agreement_user";
   static const String user_info_user_agreement = "user_info_user_agreement";
   static const String user_info_kvkk_text = "user_info_kvkk_text";
-  static const String user_info_agreement_explicit = "user_info_agreement_explicit";
-  static const String user_info_agreement_promotions = "user_info_agreement_promotions";
+  static const String user_info_agreement_explicit =
+      "user_info_agreement_explicit";
+  static const String user_info_agreement_promotions =
+      "user_info_agreement_promotions";
   static const String user_info_agreement_additional_prefix =
       "user_info_agreement_additional_prefix";
-  static const String user_info_agreement_additional = "user_info_agreement_additional";
-  static const String user_info_continue = "user_info_continue"; //otp_email_title
+  static const String user_info_agreement_additional =
+      "user_info_agreement_additional";
+  static const String user_info_continue =
+      "user_info_continue"; //otp_email_title
   static const String otp_email_title = "otp_email_title";
   static const String otp_email_subtitle = "otp_email_subtitle";
   static const String set_your_password_title = "set_your_password_title";
@@ -276,17 +286,22 @@ class Strings {
   static const String accountDetailsSubtitle = 'account_details_subtitle';
   static const String silahNumber = 'silah_number';
   static const String permissionEmailTitle = 'permission_email_title';
-  static const String permissionEmailDescription = 'permission_email_description';
+  static const String permissionEmailDescription =
+      'permission_email_description';
   static const String permissionSmsTitle = 'permission_sms_title';
   static const String permissionSmsDescription = 'permission_sms_description';
   static const String permissionCallsTitle = 'permission_calls_title';
-  static const String permissionCallsDescription = 'permission_calls_description';
-  static const String notificationsSettingsTitle = 'notifications_settings_title';
+  static const String permissionCallsDescription =
+      'permission_calls_description';
+  static const String notificationsSettingsTitle =
+      'notifications_settings_title';
   static const String notificationsPushTitle = 'notifications_push_title';
-  static const String notificationsPushDescription = 'notifications_push_description';
+  static const String notificationsPushDescription =
+      'notifications_push_description';
   static const String notificationsEmailTitle = 'notifications_email_title';
   static const String notificationsSmsTitle = 'notifications_sms_title';
-  static const String notificationsSmsDescription = 'notifications_sms_description';
+  static const String notificationsSmsDescription =
+      'notifications_sms_description';
   static const String sent_successfully = "sent_successfully";
   static const String open_settings = "open_settings";
   static const String close = 'close';
@@ -309,13 +324,16 @@ class Strings {
   static const String home_page = 'home_page';
   static const String transaction_date = 'transaction_date';
   static const String has_been_sent_to = 'has_been_sent_to';
-  static const String view_transaction_in_history = 'view_transaction_in_history';
+  static const String view_transaction_in_history =
+      'view_transaction_in_history';
   static const String from = 'from';
   static const String code_data_incorrect = 'code_data_incorrect';
   static const String not_available = 'not_available';
   static const String mobile = 'mobile'; //
-  static const String password_updated_successfully = 'password_updated_successfully';
-  static const String password_updated_success_msg = 'password_updated_success_msg';
+  static const String password_updated_successfully =
+      'password_updated_successfully';
+  static const String password_updated_success_msg =
+      'password_updated_success_msg';
   static const String transaction_success_title = 'transaction_success_title';
   static const String receiver = 'receiver';
   static const String join_campaign = 'join_campaign';
@@ -324,8 +342,10 @@ class Strings {
   static const String other_option = 'other_option';
   static const String other_option_share_cta = 'other_option_share_cta';
   static const String pending_request_title = 'pending_request_title';
-  static const String pending_request_description = 'pending_request_description';
-  static const String transfer_successful_message = 'transfer_successful_message';
+  static const String pending_request_description =
+      'pending_request_description';
+  static const String transfer_successful_message =
+      'transfer_successful_message';
   static const String transfer_between_accounts_successful_message =
       'transfer_between_accounts_successful_message';
   static const String transfer_successful = 'transfer_successful';
@@ -347,7 +367,8 @@ class Strings {
   static const String no_profession = "no_profession";
   static const String no_address = "no_address";
   static const String error_mobile_request = 'error_mobile_request';
-  static const String error_resend_mobile_request = 'error_resend_mobile_request';
+  static const String error_resend_mobile_request =
+      'error_resend_mobile_request';
   static const String error_mobile_confirm = 'error_mobile_confirm';
   static const String error_fill_form = 'error_fill_form';
   static const String error_email_request = 'error_email_request';
@@ -371,7 +392,8 @@ class Strings {
   static const String email_updated_successfully = 'email_updated_successfully';
   static const String email_updated_success_msg = 'email_updated_success_msg';
   static const String msg_phone_number_missing = 'msg_phone_number_missing';
-  static const String error_invalid_mobile_prefix = 'error_invalid_mobile_prefix';
+  static const String error_invalid_mobile_prefix =
+      'error_invalid_mobile_prefix';
   static const String password_min_length_error = 'password_min_length_error';
   static const String password_max_length_error = 'password_max_length_error';
   static const String password_number_only_error = 'password_number_only_error';
@@ -379,14 +401,16 @@ class Strings {
   static const String pin_max_length_error = 'pin_max_length_error';
   static const String pin_number_only_error = 'pin_number_only_error';
   static const String pin_updated_successfully = 'pin_updated_successfully';
-  static const String error_invalid_mobile_length = 'error_invalid_mobile_length';
+  static const String error_invalid_mobile_length =
+      'error_invalid_mobile_length';
   static const String err_service_unavailable = 'err_service_unavailable';
   static const String err_not_found = 'err_not_found';
   static const String err_request_cancelled = 'err_request_cancelled';
   static const String err_session_end_login = 'err_session_end_login';
   static const String err_multi_device_login = "err_multi_device_login";
   static const String bad_response = "bad_response";
-  static const String error_invalid_account_prefix = "error_invalid_account_prefix";
+  static const String error_invalid_account_prefix =
+      "error_invalid_account_prefix";
   static const String msg_update_app = "msg_update_app";
   static const String msg_update_version = "msg_update_version";
   static const String error_database = "error_database";
@@ -456,18 +480,23 @@ class Strings {
   static const String commercial = "commercial";
   static const String commercial_law_lawyer = "commercial_law_lawyer";
   static const String commercial_lawyer = "commercial_lawyer";
-  static const String confirm_sending_training_request = "confirm_sending_training_request";
-  static const String consultation_personal_status = "consultation_personal_status";
+  static const String confirm_sending_training_request =
+      "confirm_sending_training_request";
+  static const String consultation_personal_status =
+      "consultation_personal_status";
   static const String contact_us = "contact_us";
   static const String create_user_account = "create_user_account";
   static const String criminal = "criminal";
   static const String current_requests = "current_requests";
   static const String daily_summary = "daily_summary";
-  static const String describe_case_choose_best_lawyer = "describe_case_choose_best_lawyer";
-  static const String describe_issue_ai_suggests_solutions = "describe_issue_ai_suggests_solutions";
+  static const String describe_case_choose_best_lawyer =
+      "describe_case_choose_best_lawyer";
+  static const String describe_issue_ai_suggests_solutions =
+      "describe_issue_ai_suggests_solutions";
   static const String email_or_mobile_number = "email_or_mobile_number";
   static const String email_required = "email_required";
-  static const String enter_data_to_access_account = "enter_data_to_access_account";
+  static const String enter_data_to_access_account =
+      "enter_data_to_access_account";
   static const String example_issue_civil_dispute_unpaid_service =
       "example_issue_civil_dispute_unpaid_service";
   static const String find_right_lawyers_with_ai = "find_right_lawyers_with_ai";
@@ -510,22 +539,29 @@ class Strings {
   static const String new_consultations = "new_consultations";
   static const String no_account_question = "no_account_question";
   static const String personal_status = "personal_status";
-  static const String personal_status_and_criminal_law = "personal_status_and_criminal_law";
+  static const String personal_status_and_criminal_law =
+      "personal_status_and_criminal_law";
   static const String platform_overview = "platform_overview";
   static const String please_describe_the_issue = "please_describe_the_issue";
   static const String privacy_policy = "privacy_policy";
   static const String privacy_policy_body = "privacy_policy_body";
   static const String rate_silah = "rate_silah";
   static const String reference_number = "reference_number";
+  static const String support_report_details = "support_report_details";
+  static const String support_notes = "support_notes";
+  static const String support_reporter_id = "support_reporter_id";
+  static const String support_reporter_role = "support_reporter_role";
   static const String register_new_user = "register_new_user";
   static const String request_verification = "request_verification";
-  static const String request_ai_legal_consultation = "request_ai_legal_consultation";
+  static const String request_ai_legal_consultation =
+      "request_ai_legal_consultation";
   static const String request_consultation = "request_consultation";
   static const String request_consultations_contact_lawyers_apply_training =
       "request_consultations_contact_lawyers_apply_training";
   static const String request_training = "request_training";
   static const String resume_pdf = "resume_pdf";
-  static const String search_for_lawyer_or_specialization = "search_for_lawyer_or_specialization";
+  static const String search_for_lawyer_or_specialization =
+      "search_for_lawyer_or_specialization";
   static const String send_report = "send_report";
   static const String send_training_request = "send_training_request";
   static const String manage_consultations_clients_and_training =
@@ -538,7 +574,8 @@ class Strings {
   static const String start_consultation_now = "start_consultation_now";
   static const String start_now = "start_now";
   static const String admin_tasks = "admin_tasks";
-  static const String provide_legal_services_and_training = "provide_legal_services_and_training";
+  static const String provide_legal_services_and_training =
+      "provide_legal_services_and_training";
   static const String trainees = "trainees";
   static const String training_requests = "training_requests";
   static const String trainee_toggle_title = "trainee_toggle_title";
@@ -548,6 +585,13 @@ class Strings {
   static const String trainee_prompt_action = "trainee_prompt_action";
   static const String trainees_applicants = "trainees_applicants";
   static const String trainees_accepted = "trainees_accepted";
+  static const String trainees_no_accepted_requests =
+      "trainees_no_accepted_requests";
+  static const String trainees_disabled_title = "trainees_disabled_title";
+  static const String trainees_disabled_subtitle = "trainees_disabled_subtitle";
+  static const String trainees_disabled_action = "trainees_disabled_action";
+  static const String training_accept_disabled_message =
+      "training_accept_disabled_message";
   static const String requests_new = "requests_new";
   static const String requests_in_progress = "requests_in_progress";
   static const String requests_completed = "requests_completed";
@@ -570,6 +614,18 @@ class Strings {
   static const String action_reject = "action_reject";
   static const String action_close = "action_close";
   static const String end_chat = "end_chat";
+  static const String end_chat_reason_label = "end_chat_reason_label";
+  static const String
+  end_chat_reason_legal_procedures_started_outside_platform =
+      "end_chat_reason_legal_procedures_started_outside_platform";
+  static const String end_chat_reason_client_inactive_for_long_time =
+      "end_chat_reason_client_inactive_for_long_time";
+  static const String end_chat_reason_outside_service_scope =
+      "end_chat_reason_outside_service_scope";
+  static const String end_chat_reason_conflict_of_interest =
+      "end_chat_reason_conflict_of_interest";
+  static const String end_chat_reason_consultation_completed =
+      "end_chat_reason_consultation_completed";
   static const String action_confirm = "action_confirm";
   static const String action_cancel = "action_cancel";
 
@@ -588,7 +644,8 @@ class Strings {
   static const String valid_license = "valid_license";
   static const String verification_status = "verification_status";
   static const String verification_unverified = "verification_unverified";
-  static const String verification_unverified_desc = "verification_unverified_desc";
+  static const String verification_unverified_desc =
+      "verification_unverified_desc";
   static const String verification_pending = "verification_pending";
   static const String verification_pending_desc = "verification_pending_desc";
   static const String verification_verified = "verification_verified";
@@ -596,9 +653,11 @@ class Strings {
   static const String verification_rejected = "verification_rejected";
   static const String verification_rejected_desc = "verification_rejected_desc";
   static const String verification_needs_review = "verification_needs_review";
-  static const String verification_needs_review_desc = "verification_needs_review_desc";
+  static const String verification_needs_review_desc =
+      "verification_needs_review_desc";
   static const String view_profile = "view_profile";
-  static const String welcome_to_silah_trusted_platform = "welcome_to_silah_trusted_platform";
+  static const String welcome_to_silah_trusted_platform =
+      "welcome_to_silah_trusted_platform";
   static const String write_problem_description_placeholder =
       "write_problem_description_placeholder";
   static const String year_2024 = "year_2024";
@@ -609,8 +668,10 @@ class Strings {
   static const String label_area = "label_area";
   static const String label_faculty = "label_faculty";
   static const String label_cv_url = "label_cv_url";
-  static const String training_request_sent_title = "training_request_sent_title";
-  static const String training_request_sent_subtitle = "training_request_sent_subtitle";
+  static const String training_request_sent_title =
+      "training_request_sent_title";
+  static const String training_request_sent_subtitle =
+      "training_request_sent_subtitle";
 
   static const String national_id = "national_id";
   static const String msg_enter_email_for_reset = "msg_enter_email_for_reset";

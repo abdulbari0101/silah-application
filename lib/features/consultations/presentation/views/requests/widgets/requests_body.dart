@@ -62,12 +62,19 @@ class RequestsBody extends StatelessWidget {
                               final request = requests[index];
                               return RequestCard(
                                 request: request,
-                                onTap: () => context.pushNamed(
-                                  AppRoutes.consultationDetails.name,
-                                  extra: ConsultationRequestDetailsArgs(
-                                    request: request,
-                                  ),
-                                ),
+                                onTap: () async {
+                                  await context.pushNamed(
+                                    AppRoutes.consultationDetails.name,
+                                    extra: ConsultationRequestDetailsArgs(
+                                      request: request,
+                                    ),
+                                  );
+                                  if (context.mounted) {
+                                    context
+                                        .read<ConsultationRequestsCubit>()
+                                        .load();
+                                  }
+                                },
                               );
                             },
                           );

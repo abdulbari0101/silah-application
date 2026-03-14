@@ -94,6 +94,16 @@ class ConsultationCreateResponse(BaseModel):
 
 class ConsultationStatusUpdateRequest(BaseModel):
     status: str = Field(..., pattern="^(accepted|rejected|closed)$")
+    closeReason: Optional[str] = Field(
+        default=None,
+        pattern=(
+            "^(legal_procedures_started_outside_platform|"
+            "client_inactive_for_long_time|"
+            "outside_service_scope|"
+            "conflict_of_interest|"
+            "consultation_completed)$"
+        ),
+    )
 
 
 class ConsultationStatusUpdateResponse(BaseModel):
@@ -169,6 +179,11 @@ class SupportReportItemResponse(BaseModel):
 
 class SupportReportsListResponse(BaseModel):
     reports: list[SupportReportItemResponse]
+
+
+class SupportReportReviewRequest(BaseModel):
+    status: str = Field(..., pattern="^(in_progress|resolved|closed)$")
+    adminNotes: Optional[str] = None
 
 
 class DeviceTokenRequest(BaseModel):

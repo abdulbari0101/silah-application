@@ -11,6 +11,7 @@ import 'chats_service.dart';
 
 abstract class ChatsRemoteDataSource {
   Future<List<ChatThreadEntity>> fetchThreads();
+  Future<ChatThreadEntity> ensureThread(ChatThreadEntity thread);
   Future<List<MessageEntity>> fetchMessages(String threadId);
   Stream<List<MessageEntity>> watchMessages(String threadId);
   Future<MessageEntity> sendMessage(String threadId, MessageEntity message);
@@ -63,10 +64,66 @@ class ChatsRemoteDataSourceImpl implements ChatsRemoteDataSource {
               unreadCount: (data['unreadCount'] as int?) ?? 0,
               updatedAt: parseFirestoreTimestamp(data['updatedAt']),
               consultationId: data['consultationId'] as String?,
+              trainingApplicationId: data['trainingApplicationId'] as String?,
             ),
           );
         }
         return threads;
+      },
+    );
+  }
+
+  @override
+  Future<ChatThreadEntity> ensureThread(ChatThreadEntity thread) {
+    return firebaseCall<ChatThreadEntity>(
+      method: 'ChatsRemoteDataSource.ensureThread',
+      logger: logger,
+      payload: {
+        'threadId': thread.id,
+        'consultationId': thread.consultationId,
+        'trainingApplicationId': thread.trainingApplicationId,
+      },
+      call: () async {
+        final threadId = thread.id?.trim();
+        if (threadId == null || threadId.isEmpty) {
+          throw ArgumentError('Missing thread id');
+        }
+        final participants = (thread.participantIds ?? const <String>[])
+            .map((item) => item.trim())
+            .where((item) => item.isNotEmpty)
+            .toSet()
+            .toList();
+        if (participants.isEmpty) {
+          throw ArgumentError('Missing thread participants');
+        }
+
+        final chatData = <String, dynamic>{
+          'participants': participants,
+          'updatedAt': FieldValue.serverTimestamp(),
+        };
+        final consultationId = thread.consultationId?.trim();
+        if (consultationId != null && consultationId.isNotEmpty) {
+          chatData['consultationId'] = consultationId;
+        }
+        final trainingApplicationId = thread.trainingApplicationId?.trim();
+        if (trainingApplicationId != null && trainingApplicationId.isNotEmpty) {
+          chatData['trainingApplicationId'] = trainingApplicationId;
+        }
+
+        await firestore
+            .collection('chats')
+            .doc(threadId)
+            .set(chatData, SetOptions(merge: true));
+
+        return ChatThreadEntity(
+          id: threadId,
+          participantIds: participants,
+          lastMessage: thread.lastMessage,
+          unreadCount: thread.unreadCount,
+          updatedAt: thread.updatedAt,
+          consultationId: consultationId,
+          trainingApplicationId: trainingApplicationId,
+        );
       },
     );
   }

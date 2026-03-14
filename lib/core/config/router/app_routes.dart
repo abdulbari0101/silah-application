@@ -136,9 +136,9 @@ class AppRoutes {
     name: 'chat-thread',
     path: '/messages/thread',
     stateBuilder: (state) {
-      final extra = state.extra;
-      if (extra is ChatConversationArgs) {
-        return ChatConversationScreen(args: extra);
+      final args = ChatConversationArgs.fromExtra(state.extra);
+      if (args != null) {
+        return ChatConversationScreen(args: args);
       }
       return const MessagesScreen();
     },
@@ -217,9 +217,9 @@ class AppRoutes {
     name: 'training-application-details',
     path: '/training/application/details',
     stateBuilder: (state) {
-      final extra = state.extra;
-      if (extra is TrainingApplicationDetailsArgs) {
-        return TrainingApplicationDetailsScreen(args: extra);
+      final args = TrainingApplicationDetailsArgs.fromExtra(state.extra);
+      if (args != null) {
+        return TrainingApplicationDetailsScreen(args: args);
       }
       return const TraineesScreen();
     },
@@ -253,9 +253,9 @@ class AppRoutes {
     name: 'support-ticket-details',
     path: '/support/details',
     stateBuilder: (state) {
-      final extra = state.extra;
-      if (extra is SupportTicketDetailsArgs) {
-        return SupportTicketDetailsScreen(args: extra);
+      final args = SupportTicketDetailsArgs.fromExtra(state.extra);
+      if (args != null) {
+        return SupportTicketDetailsScreen(args: args);
       }
       return const SupportTicketsScreen();
     },
@@ -269,9 +269,9 @@ class AppRoutes {
     name: 'admin-task-details',
     path: '/admin/tasks/details',
     stateBuilder: (state) {
-      final extra = state.extra;
-      if (extra is AdminTaskDetailsArgs) {
-        return AdminTaskDetailsScreen(args: extra);
+      final args = AdminTaskDetailsArgs.fromExtra(state.extra);
+      if (args != null) {
+        return AdminTaskDetailsScreen(args: args);
       }
       return const AdminTasksScreen();
     },
@@ -336,6 +336,14 @@ class AppRoutes {
   /// Tabs used by the main shell (bottom navigation).
   static final tabRoutes = [home, requests, messages, settings];
   static final shellTabRoutes = [...tabRoutes, specifications, trainees];
+
+  static int? shellBranchIndexOf(RouteInfo route) {
+    final index = shellTabRoutes.indexWhere((item) => item.name == route.name);
+    return index == -1 ? null : index;
+  }
+
+  static bool isShellTabRoute(RouteInfo route) =>
+      shellBranchIndexOf(route) != null;
 
   // Additional screens
   static final language = RouteInfo(

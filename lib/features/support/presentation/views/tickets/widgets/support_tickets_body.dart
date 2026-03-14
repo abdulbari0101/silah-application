@@ -22,10 +22,10 @@ class SupportTicketsBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isAdmin = context.select<AppStateBloc, bool>((bloc) {
-      final accountType = bloc.state.data.customer?.profile?['accountType']
-          ?.toString()
-          .toLowerCase();
-      return accountType == 'admin';
+      final profile = bloc.state.data.customer?.profile;
+      final accountType = profile?['accountType']?.toString().toLowerCase();
+      final role = profile?['role']?.toString().toLowerCase();
+      return accountType == 'admin' || role == 'admin';
     });
 
     return SafeArea(
@@ -96,6 +96,7 @@ class SupportTicketsBody extends StatelessWidget {
                 final ticket = tickets[index];
                 return SupportTicketCard(
                   ticket: ticket,
+                  showReporterInfo: isAdmin,
                   onTap: () => _openDetails(context, ticket),
                 );
               },
@@ -132,7 +133,7 @@ class SupportTicketsBody extends StatelessWidget {
   void _openDetails(BuildContext context, SupportTicketEntity ticket) {
     context.pushNamed(
       AppRoutes.supportTicketDetails.name,
-      extra: SupportTicketDetailsArgs(ticket: ticket),
+      extra: SupportTicketDetailsArgs(ticket: ticket).toJson(),
     );
   }
 }

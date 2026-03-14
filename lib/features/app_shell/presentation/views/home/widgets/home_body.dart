@@ -12,11 +12,11 @@ import 'package:silah_app/core/presentation/ui/widget/pull_to_refresh/pull_to_re
 import 'package:silah_app/core/presentation/ui/widget/wrappers/screen_padding_wrapper.dart';
 import 'package:silah_app/features/app_shell/presentation/blocs/home_bloc/home_bloc.dart';
 import 'package:silah_app/features/app_shell/presentation/views/main/widget/navigation/nav_items_builder.dart';
+import 'package:silah_app/features/consultations/domain/entities/consultation_status.dart';
 import 'package:silah_app/features/consultations/presentation/cubits/requests/consultation_requests_cubit.dart';
 
 import 'home_admin_dashboard.dart';
 import 'home_ai_prompt_card.dart';
-import 'home_carousel_dots.dart';
 import 'home_current_requests_section.dart';
 import 'home_search_bar.dart';
 import 'home_lawyer_dashboard.dart';
@@ -84,8 +84,10 @@ class _HomeContentState extends State<_HomeContent> {
           final content = switch (role) {
             AppUserRole.user => BlocProvider(
               key: ObjectKey(homeState),
-              create: (_) =>
-                  ConsultationRequestsCubit(repository: locator())..load(),
+              create: (_) => ConsultationRequestsCubit(
+                repository: locator(),
+                initialFilter: ConsultationStatus.accepted,
+              )..load(),
               child: _UserHomeContent(showTraineePrompt: showTraineePrompt),
             ),
             AppUserRole.lawyer => _LawyerHomeContent(key: ObjectKey(homeState)),

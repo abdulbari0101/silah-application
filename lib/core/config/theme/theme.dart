@@ -37,13 +37,16 @@ ThemeData buildTheme(
 
   var baseShape = ShapeScale(); // use default shape (radius)
   if (harmonizeBrandWithScheme) {
-    brand = brand.copyWith(primaryDark: brand.primaryDark.harmonizeWith(scheme.primary));
+    brand = brand.copyWith(
+      primaryDark: brand.primaryDark.harmonizeWith(scheme.primary),
+    );
   }
 
   // 3) Typography from M3 ramp using the resolved scheme & brand accents.
   final baseTextTheme = buildTextTheme(scheme, language, brand: brand);
   final baseThemeData = ThemeData(
     useMaterial3: true,
+    fontFamily: 'Cairo',
     colorScheme: scheme,
     scaffoldBackgroundColor: scheme.surface,
     iconTheme: buildIconTheme(scheme),

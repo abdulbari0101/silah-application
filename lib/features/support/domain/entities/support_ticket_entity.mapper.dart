@@ -29,6 +29,18 @@ class SupportTicketEntityMapper extends ClassMapperBase<SupportTicketEntity> {
     _$id,
     opt: true,
   );
+  static String? _$reporterUid(SupportTicketEntity v) => v.reporterUid;
+  static const Field<SupportTicketEntity, String> _f$reporterUid = Field(
+    'reporterUid',
+    _$reporterUid,
+    opt: true,
+  );
+  static String? _$reporterRole(SupportTicketEntity v) => v.reporterRole;
+  static const Field<SupportTicketEntity, String> _f$reporterRole = Field(
+    'reporterRole',
+    _$reporterRole,
+    opt: true,
+  );
   static String? _$subject(SupportTicketEntity v) => v.subject;
   static const Field<SupportTicketEntity, String> _f$subject = Field(
     'subject',
@@ -48,6 +60,12 @@ class SupportTicketEntityMapper extends ClassMapperBase<SupportTicketEntity> {
       v.attachmentUrls;
   static const Field<SupportTicketEntity, List<String>> _f$attachmentUrls =
       Field('attachmentUrls', _$attachmentUrls, opt: true);
+  static String? _$adminNotes(SupportTicketEntity v) => v.adminNotes;
+  static const Field<SupportTicketEntity, String> _f$adminNotes = Field(
+    'adminNotes',
+    _$adminNotes,
+    opt: true,
+  );
   static String? _$createdAt(SupportTicketEntity v) => v.createdAt;
   static const Field<SupportTicketEntity, String> _f$createdAt = Field(
     'createdAt',
@@ -64,10 +82,13 @@ class SupportTicketEntityMapper extends ClassMapperBase<SupportTicketEntity> {
   @override
   final MappableFields<SupportTicketEntity> fields = const {
     #id: _f$id,
+    #reporterUid: _f$reporterUid,
+    #reporterRole: _f$reporterRole,
     #subject: _f$subject,
     #description: _f$description,
     #status: _f$status,
     #attachmentUrls: _f$attachmentUrls,
+    #adminNotes: _f$adminNotes,
     #createdAt: _f$createdAt,
     #updatedAt: _f$updatedAt,
   };
@@ -77,10 +98,13 @@ class SupportTicketEntityMapper extends ClassMapperBase<SupportTicketEntity> {
   static SupportTicketEntity _instantiate(DecodingData data) {
     return SupportTicketEntity(
       id: data.dec(_f$id),
+      reporterUid: data.dec(_f$reporterUid),
+      reporterRole: data.dec(_f$reporterRole),
       subject: data.dec(_f$subject),
       description: data.dec(_f$description),
       status: data.dec(_f$status),
       attachmentUrls: data.dec(_f$attachmentUrls),
+      adminNotes: data.dec(_f$adminNotes),
       createdAt: data.dec(_f$createdAt),
       updatedAt: data.dec(_f$updatedAt),
     );
@@ -160,10 +184,13 @@ abstract class SupportTicketEntityCopyWith<
   get attachmentUrls;
   $R call({
     String? id,
+    String? reporterUid,
+    String? reporterRole,
     String? subject,
     String? description,
     SupportTicketStatus? status,
     List<String>? attachmentUrls,
+    String? adminNotes,
     String? createdAt,
     String? updatedAt,
   });
@@ -192,19 +219,25 @@ class _SupportTicketEntityCopyWithImpl<$R, $Out>
   @override
   $R call({
     Object? id = $none,
+    Object? reporterUid = $none,
+    Object? reporterRole = $none,
     Object? subject = $none,
     Object? description = $none,
     SupportTicketStatus? status,
     Object? attachmentUrls = $none,
+    Object? adminNotes = $none,
     Object? createdAt = $none,
     Object? updatedAt = $none,
   }) => $apply(
     FieldCopyWithData({
       if (id != $none) #id: id,
+      if (reporterUid != $none) #reporterUid: reporterUid,
+      if (reporterRole != $none) #reporterRole: reporterRole,
       if (subject != $none) #subject: subject,
       if (description != $none) #description: description,
       if (status != null) #status: status,
       if (attachmentUrls != $none) #attachmentUrls: attachmentUrls,
+      if (adminNotes != $none) #adminNotes: adminNotes,
       if (createdAt != $none) #createdAt: createdAt,
       if (updatedAt != $none) #updatedAt: updatedAt,
     }),
@@ -212,10 +245,13 @@ class _SupportTicketEntityCopyWithImpl<$R, $Out>
   @override
   SupportTicketEntity $make(CopyWithData data) => SupportTicketEntity(
     id: data.get(#id, or: $value.id),
+    reporterUid: data.get(#reporterUid, or: $value.reporterUid),
+    reporterRole: data.get(#reporterRole, or: $value.reporterRole),
     subject: data.get(#subject, or: $value.subject),
     description: data.get(#description, or: $value.description),
     status: data.get(#status, or: $value.status),
     attachmentUrls: data.get(#attachmentUrls, or: $value.attachmentUrls),
+    adminNotes: data.get(#adminNotes, or: $value.adminNotes),
     createdAt: data.get(#createdAt, or: $value.createdAt),
     updatedAt: data.get(#updatedAt, or: $value.updatedAt),
   );

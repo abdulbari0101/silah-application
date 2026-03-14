@@ -89,8 +89,20 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
       failure: (_, messages) => messages ?? const <MessageEntity>[],
       orElse: () => const <MessageEntity>[],
     );
+    final optimisticMessage = MessageEntity(
+      id: 'local_${DateTime.now().microsecondsSinceEpoch}',
+      threadId: threadId,
+      senderId: senderId,
+      body: trimmed,
+      type: MessageType.text,
+      sentAt: DateTime.now().toIso8601String(),
+    );
+    final optimisticMessages = [...currentMessages, optimisticMessage];
     emit(
-      ChatConversationState.ready(messages: currentMessages, isSending: true),
+      ChatConversationState.ready(
+        messages: optimisticMessages,
+        isSending: true,
+      ),
     );
 
     final message = MessageEntity(
@@ -113,7 +125,7 @@ class ChatConversationCubit extends Cubit<ChatConversationState> {
       (_) async {
         emit(
           ChatConversationState.ready(
-            messages: currentMessages,
+            messages: optimisticMessages,
             isSending: false,
           ),
         );

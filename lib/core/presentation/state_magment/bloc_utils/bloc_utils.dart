@@ -23,13 +23,14 @@ class BlocUtils {
       locator.get<SessionBloc>().expireSesstion(failure: failure);
     }
 
-
     return onError(
       mergeCodeWithMessage(
         failure,
         codeToMessageMap,
-        includeCodeLine: includeCodeLine, // hide raw codes in toasts if you want
-        fallbackMessage: Strings.unexpected_error.tr(), // ensure you have this key
+        includeCodeLine:
+            includeCodeLine, // hide raw codes in toasts if you want
+        fallbackMessage: Strings.unexpected_error
+            .tr(), // ensure you have this key
       ),
     );
   }

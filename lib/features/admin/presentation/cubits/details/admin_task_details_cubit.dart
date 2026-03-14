@@ -6,6 +6,7 @@ import 'package:silah_app/core/infrastructure/errors/failures.dart';
 import 'package:silah_app/core/presentation/state_magment/bloc_utils/bloc_utils.dart';
 import 'package:silah_app/features/admin/domain/entities/admin_task_entity.dart';
 import 'package:silah_app/features/admin/domain/entities/admin_task_status.dart';
+import 'package:silah_app/features/admin/domain/entities/admin_task_subject_details_entity.dart';
 import 'package:silah_app/features/admin/domain/repositories/admin_repository.dart';
 
 part 'admin_task_details_cubit.freezed.dart';
@@ -25,12 +26,17 @@ abstract class AdminTaskDetailsState with _$AdminTaskDetailsState {
 class AdminTaskDetailsCubit extends Cubit<AdminTaskDetailsState> {
   final AdminRepository repository;
   AdminTaskEntity _task;
+  Future<AdminTaskSubjectDetailsEntity?>? _subjectFuture;
 
   AdminTaskDetailsCubit({
     required this.repository,
     required AdminTaskEntity initial,
   }) : _task = initial,
        super(AdminTaskDetailsState.ready(task: initial));
+
+  Future<AdminTaskSubjectDetailsEntity?> loadSubject() {
+    return _subjectFuture ??= _fetchSubject();
+  }
 
   Future<void> updateStatus(AdminTaskStatus status) async {
     emit(AdminTaskDetailsState.ready(task: _task, isUpdating: true));
@@ -45,8 +51,17 @@ class AdminTaskDetailsCubit extends Cubit<AdminTaskDetailsState> {
       ),
       (task) {
         _task = task;
+        _subjectFuture = null;
         emit(AdminTaskDetailsState.ready(task: task));
       },
+    );
+  }
+
+  Future<AdminTaskSubjectDetailsEntity?> _fetchSubject() async {
+    final result = await repository.fetchTaskSubject(_task);
+    return result.fold(
+      (failure) => throw StateError(_mapFailure(failure)),
+      (subject) => subject,
     );
   }
 

@@ -25,7 +25,10 @@ class RoundedIconBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     return CircleAvatar(
       child: TextButton(
-        style: TextButton.styleFrom(padding: EdgeInsets.zero, backgroundColor: color),
+        style: TextButton.styleFrom(
+          padding: EdgeInsets.zero,
+          backgroundColor: color,
+        ),
         onPressed: press,
         child: Icon(icon, size: iconSize, color: iconColor),
       ),

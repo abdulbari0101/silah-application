@@ -120,6 +120,11 @@ class ProfileCubit extends Cubit<ProfileState> {
       if (profile.avatarUrl != null) 'avatarUrl': profile.avatarUrl,
       if (profile.accountType != null) 'accountType': profile.accountType,
       'isTrainee': profile.isTrainee,
+      if ((profile.accountType ?? authUser.profile?['accountType'])
+              ?.toString()
+              .toLowerCase() ==
+          'lawyer')
+        'acceptsTrainees': profile.isTrainee,
     };
 
     final updated = authUser.copyWith(profile: nextProfile);

@@ -64,11 +64,12 @@ class AdminTasksBody extends StatelessWidget {
   }
 
   void _openDetails(BuildContext context, AdminTaskEntity task) {
+    final cubit = context.read<AdminTasksCubit>();
     context
         .pushNamed(
           AppRoutes.adminTaskDetails.name,
-          extra: AdminTaskDetailsArgs(task: task),
+          extra: AdminTaskDetailsArgs(task: task).toJson(),
         )
-        .then((_) => context.read<AdminTasksCubit>().load());
+        .then((_) => cubit.load());
   }
 }

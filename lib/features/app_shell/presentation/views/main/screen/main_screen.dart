@@ -24,7 +24,10 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  void _ensureAllowedBranch(StatefulNavigationShell? navigationShell, List<NavItemData> items) {
+  void _ensureAllowedBranch(
+    StatefulNavigationShell? navigationShell,
+    List<NavItemData> items,
+  ) {
     if (navigationShell == null || items.isEmpty) return;
     final allowedBranches = <int>{};
     for (var i = 0; i < items.length; i++) {
@@ -45,8 +48,7 @@ class _MainScreenState extends State<MainScreen> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {});
   }
 
   @override
@@ -66,11 +68,14 @@ class _MainScreenState extends State<MainScreen> {
       builder: (context) {
         return MultiBlocProvider(
           providers: [BlocProvider<HomeBloc>.value(value: locator<HomeBloc>())],
-    
+
           child: AppStateBlocBuilder(
             child: AppSettingBlocBuilder(
               child: AppPlatform(
-                ios: IOSNavWrapper(navigationShell: widget.navigationShell, items: items),
+                ios: IOSNavWrapper(
+                  navigationShell: widget.navigationShell,
+                  items: items,
+                ),
                 android: AndroidNavWrapper(
                   navigationShell: widget.navigationShell,
                   items: items,

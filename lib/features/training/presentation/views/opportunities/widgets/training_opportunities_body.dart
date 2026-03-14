@@ -5,9 +5,12 @@ import 'package:go_router/go_router.dart';
 import 'package:silah_app/core/config/constants/ui_constants.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
 import 'package:silah_app/core/config/router/app_routes.dart';
+import 'package:silah_app/core/presentation/state_magment/blocs/app_state/app_state_bloc.dart';
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/empty_widget.dart';
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/error_widget.dart';
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/progress_state_widget.dart';
+import 'package:silah_app/features/auth/domain/entities/auth_user_entity.dart';
+import 'package:silah_app/features/training/presentation/support/training_access_policy.dart';
 import 'package:silah_app/features/training/presentation/cubits/opportunities/training_opportunities_cubit.dart';
 import 'package:silah_app/features/training/presentation/views/application/models/training_application_args.dart';
 import 'package:silah_app/features/training/presentation/views/opportunities/widgets/training_opportunity_card.dart';
@@ -17,39 +20,51 @@ class TrainingOpportunitiesBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = context.select<AppStateBloc, AuthUserEntity?>(
+      (bloc) => bloc.state.data.customer,
+    );
+    final canApply = TrainingAccessPolicy.canApplyForOpportunity(currentUser);
+
     return SafeArea(
-      child: BlocBuilder<TrainingOpportunitiesCubit, TrainingOpportunitiesState>(
-        builder: (context, state) {
-          return state.when(
-            loading: () => const Center(child: ProgressStateWidget()),
-            failure: (message) => Center(
-              child: CustomeErrorWidget(
-                message: message,
-                onRetry: () => context.read<TrainingOpportunitiesCubit>().load(),
-              ),
-            ),
-            empty: () => EmptyWidget(title: Strings.no_data_to_display.tr()),
-            ready: (opportunities) => ListView.separated(
-              padding: const EdgeInsets.symmetric(
-                horizontal: UIConstants.screenHorizantalPadding,
-                vertical: UIConstants.bigPadding,
-              ),
-              itemCount: opportunities.length,
-              separatorBuilder: (_, __) => UIConstants.mediumHeight,
-              itemBuilder: (context, index) {
-                final opportunity = opportunities[index];
-                return TrainingOpportunityCard(
-                  opportunity: opportunity,
-                  onTap: () => context.pushNamed(
-                    AppRoutes.trainingApplication.name,
-                    extra: TrainingApplicationArgs(opportunity: opportunity),
+      child:
+          BlocBuilder<TrainingOpportunitiesCubit, TrainingOpportunitiesState>(
+            builder: (context, state) {
+              return state.when(
+                loading: () => const Center(child: ProgressStateWidget()),
+                failure: (message) => Center(
+                  child: CustomeErrorWidget(
+                    message: message,
+                    onRetry: () =>
+                        context.read<TrainingOpportunitiesCubit>().load(),
                   ),
-                );
-              },
-            ),
-          );
-        },
-      ),
+                ),
+                empty: () =>
+                    EmptyWidget(title: Strings.no_data_to_display.tr()),
+                ready: (opportunities) => ListView.separated(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: UIConstants.screenHorizantalPadding,
+                    vertical: UIConstants.bigPadding,
+                  ),
+                  itemCount: opportunities.length,
+                  separatorBuilder: (_, __) => UIConstants.mediumHeight,
+                  itemBuilder: (context, index) {
+                    final opportunity = opportunities[index];
+                    return TrainingOpportunityCard(
+                      opportunity: opportunity,
+                      onTap: canApply
+                          ? () => context.pushNamed(
+                              AppRoutes.trainingApplication.name,
+                              extra: TrainingApplicationArgs(
+                                opportunity: opportunity,
+                              ),
+                            )
+                          : null,
+                    );
+                  },
+                ),
+              );
+            },
+          ),
     );
   }
 }

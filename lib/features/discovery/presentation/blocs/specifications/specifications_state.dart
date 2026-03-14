@@ -1,28 +1,12 @@
 part of 'specifications_bloc.dart';
 
-abstract class SpecificationsState extends Equatable {
-  const SpecificationsState();
-
-  @override
-  List<Object> get props => [];
-}
-
-class DataPaymentInitial extends SpecificationsState {}
-
-class DataPaymentLoading extends SpecificationsState {}
-
-class DataPaymentLoaded extends SpecificationsState {
-  final List<LegalSpecializationEntity> data;
-
-  const DataPaymentLoaded({required this.data});
-
-  @override
-  List<Object> get props => [data];
-}
-
-class DataPaymentError extends SpecificationsState {
-  final String message;
-  const DataPaymentError({required this.message});
-  @override
-  List<Object> get props => [message];
+@freezed
+sealed class SpecificationsState with _$SpecificationsState {
+  const factory SpecificationsState.initial() = DataPaymentInitial;
+  const factory SpecificationsState.loading() = DataPaymentLoading;
+  const factory SpecificationsState.loaded({
+    required List<LegalSpecializationEntity> data,
+  }) = DataPaymentLoaded;
+  const factory SpecificationsState.error({required String message}) =
+      DataPaymentError;
 }

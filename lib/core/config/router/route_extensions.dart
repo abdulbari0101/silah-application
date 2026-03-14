@@ -9,9 +9,14 @@ extension NavigationHelpers on BuildContext {
     RouteInfo route, {
     Map<String, String> params = const {},
     Map<String, String> query = const {},
-    Map<String, dynamic> extra = const {},
+    Object? extra,
   }) {
-    goNamed(route.name, pathParameters: params, queryParameters: query, extra: extra);
+    goNamed(
+      route.name,
+      pathParameters: params,
+      queryParameters: query,
+      extra: extra,
+    );
   }
 
   /// Push a new page on top of the current stack.
@@ -19,9 +24,44 @@ extension NavigationHelpers on BuildContext {
     RouteInfo route, {
     Map<String, String> params = const {},
     Map<String, String> query = const {},
-    Map<String, dynamic> extra = const {},
+    Object? extra,
   }) {
-    pushNamed(route.name, pathParameters: params, queryParameters: query, extra: extra);
+    pushNamed(
+      route.name,
+      pathParameters: params,
+      queryParameters: query,
+      extra: extra,
+    );
+  }
+
+  /// Opens [route], switching shell tabs instead of stacking them.
+  void openRoute(
+    RouteInfo route, {
+    Map<String, String> params = const {},
+    Map<String, String> query = const {},
+    Object? extra,
+  }) {
+    final branchIndex = AppRoutes.shellBranchIndexOf(route);
+    final canSwitchShellBranch =
+        branchIndex != null && params.isEmpty && query.isEmpty && extra == null;
+
+    if (canSwitchShellBranch) {
+      final shellState = StatefulNavigationShell.maybeOf(this);
+      if (shellState != null) {
+        shellState.goBranch(branchIndex);
+        return;
+      }
+
+      goTo(route);
+      return;
+    }
+
+    if (AppRoutes.isShellTabRoute(route)) {
+      goTo(route, params: params, query: query, extra: extra);
+      return;
+    }
+
+    pushTo(route, params: params, query: query, extra: extra);
   }
 
   bool isRouteActive(RouteInfo route) {
@@ -46,7 +86,7 @@ extension NavigationHelpers on BuildContext {
   void restartCurrentRoute({
     Map<String, String>? params,
     Map<String, String>? query,
-    Map<String, dynamic>? extra,
+    Object? extra,
   }) {
     final router = GoRouter.of(this);
     final state = router.state;
@@ -68,7 +108,7 @@ extension NavigationHelpers on BuildContext {
     RouteInfo route, {
     Map<String, String> params = const {},
     Map<String, String> query = const {},
-    Map<String, dynamic> extra = const {},
+    Object? extra,
   }) {
     final router = GoRouter.of(this);
 
@@ -80,7 +120,9 @@ extension NavigationHelpers on BuildContext {
       final state = router.state;
       final String loc = state.matchedLocation;
       final bool isTarget =
-          state.name == route.name || loc == route.path || loc.endsWith(route.path);
+          state.name == route.name ||
+          loc == route.path ||
+          loc.endsWith(route.path);
 
       if (isTarget) {
         found = true;
@@ -98,6 +140,8 @@ extension NavigationHelpers on BuildContext {
     final router = GoRouter.of(this);
     final location = router.state.matchedLocation;
 
-    return AppRoutes.timeoutExempt.any((r) => r.path == location || r.name == router.state.name);
+    return AppRoutes.timeoutExempt.any(
+      (r) => r.path == location || r.name == router.state.name,
+    );
   }
 }

@@ -6,7 +6,7 @@ import 'package:silah_app/core/config/theme/extentions/theme_context_extension.d
 import 'package:silah_app/core/presentation/ui/widget/cards/custom_card.dart';
 import 'package:silah_app/core/presentation/ui/widget/chips/status_chip.dart';
 import 'package:silah_app/features/admin/domain/entities/admin_task_entity.dart';
-import 'package:silah_app/features/admin/domain/entities/admin_task_status.dart';
+import 'package:silah_app/features/admin/presentation/support/admin_task_presenter.dart';
 
 class AdminTaskCard extends StatelessWidget {
   const AdminTaskCard({super.key, required this.task, this.onTap});
@@ -16,7 +16,6 @@ class AdminTaskCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final title = task.type?.trim();
     final notes = task.notes?.trim();
 
     return InkWell(
@@ -30,17 +29,24 @@ class AdminTaskCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    title?.isNotEmpty == true
-                        ? title!
-                        : Strings.admin_tasks.tr(),
+                    AdminTaskPresenter.title(context, task),
                     style: context.textTheme.titleSmall,
                   ),
                 ),
                 StatusChip(
-                  label: _statusLabel(context, task.status),
-                  color: _statusColor(context, task.status),
+                  label: AdminTaskPresenter.statusLabel(context, task.status),
+                  color: AdminTaskPresenter.statusColor(context, task.status),
                 ),
               ],
+            ),
+            UIConstants.smallHeight,
+            Text(
+              AdminTaskPresenter.summary(context, task),
+              style: context.textTheme.bodySmall?.copyWith(
+                color: context.colors.onSurfaceVariant,
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
             if (notes != null && notes.isNotEmpty) ...[
               UIConstants.smallHeight,
@@ -53,10 +59,17 @@ class AdminTaskCard extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ],
+            UIConstants.smallHeight,
+            Text(
+              '${Strings.reference_number.tr()}: ${AdminTaskPresenter.referenceCode(task)}',
+              style: context.textTheme.labelSmall?.copyWith(
+                color: context.colors.onSurfaceVariant,
+              ),
+            ),
             if ((task.createdAt ?? '').isNotEmpty) ...[
               UIConstants.smallHeight,
               Text(
-                task.createdAt!,
+                AdminTaskPresenter.formattedCreatedAt(context, task.createdAt),
                 style: context.textTheme.labelSmall?.copyWith(
                   color: context.colors.onSurfaceVariant,
                 ),
@@ -66,31 +79,5 @@ class AdminTaskCard extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  String _statusLabel(BuildContext context, AdminTaskStatus status) {
-    switch (status) {
-      case AdminTaskStatus.pending:
-        return Strings.status_pending.tr();
-      case AdminTaskStatus.inReview:
-        return Strings.status_in_review.tr();
-      case AdminTaskStatus.approved:
-        return Strings.status_approved.tr();
-      case AdminTaskStatus.rejected:
-        return Strings.status_rejected.tr();
-    }
-  }
-
-  Color _statusColor(BuildContext context, AdminTaskStatus status) {
-    switch (status) {
-      case AdminTaskStatus.pending:
-        return context.semantic.warning;
-      case AdminTaskStatus.inReview:
-        return context.semantic.info;
-      case AdminTaskStatus.approved:
-        return context.semantic.success;
-      case AdminTaskStatus.rejected:
-        return context.colors.error;
-    }
   }
 }

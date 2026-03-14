@@ -2,8 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
 import 'package:silah_app/core/domain/entities/api/request/post_request_entity.dart';
 import 'package:silah_app/core/infrastructure/errors/error_utils.dart';
@@ -12,32 +11,34 @@ import 'package:silah_app/core/presentation/state_magment/bloc_utils/bloc_utils.
 import 'package:silah_app/features/discovery/domain/entities/legal_specialization_entity.dart';
 import 'package:silah_app/features/discovery/domain/repositories/discovery_repository.dart';
 
+part 'specifications_bloc.freezed.dart';
 part 'specifications_event.dart';
 part 'specifications_state.dart';
 
 class SpecificationsBloc
     extends Bloc<SpecificationsEvent, SpecificationsState> {
-  final DiscoveryRepository repository;
-  PostRequestEntity postRequest = PostRequestEntity();
-
-  SpecificationsBloc({required this.repository}) : super(DataPaymentInitial()) {
+  SpecificationsBloc({required this.repository})
+    : super(const SpecificationsState.initial()) {
     on<LoadSpecifications>(
       _onSpecificationsEvent,
       transformer: BlocUtils.debounce(const Duration(milliseconds: 200)),
     );
   }
 
+  final DiscoveryRepository repository;
+  final PostRequestEntity postRequest = PostRequestEntity();
+
   Future<void> _onSpecificationsEvent(
     LoadSpecifications event,
     Emitter<SpecificationsState> emit,
   ) async {
-    emit(DataPaymentLoading());
+    emit(const SpecificationsState.loading());
 
     final result = await repository.fetchSpecializations();
 
     result.fold(
       (failure) => _emitFailure(failure, emit),
-      (data) => emit(DataPaymentLoaded(data: data)),
+      (data) => emit(SpecificationsState.loaded(data: data)),
     );
   }
 
@@ -69,7 +70,7 @@ class SpecificationsBloc
         );
       },
       (_) {
-        add(LoadSpecifications());
+        add(const LoadSpecifications());
         return null;
       },
     );
@@ -79,7 +80,7 @@ class SpecificationsBloc
     emit(
       BlocUtils.handleFailure(
         failure: failure,
-        onError: (msg) => DataPaymentError(message: msg),
+        onError: (msg) => SpecificationsState.error(message: msg),
         codeToMessageMap: codeToMessageMap,
       ),
     );

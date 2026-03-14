@@ -4,6 +4,7 @@ import 'package:silah_app/core/config/localization/localizations_string_keys.dar
 import 'package:silah_app/core/infrastructure/errors/error_utils.dart';
 import 'package:silah_app/core/infrastructure/errors/failures.dart';
 import 'package:silah_app/core/presentation/state_magment/bloc_utils/bloc_utils.dart';
+import 'package:silah_app/features/consultations/domain/entities/consultation_close_reason.dart';
 import 'package:silah_app/features/consultations/domain/entities/consultation_request_entity.dart';
 import 'package:silah_app/features/consultations/domain/entities/consultation_status.dart';
 import 'package:silah_app/features/consultations/domain/repositories/consultations_repository.dart';
@@ -56,7 +57,10 @@ class ConsultationRequestDetailsCubit
     );
   }
 
-  Future<void> updateStatus(ConsultationStatus status) async {
+  Future<void> updateStatus(
+    ConsultationStatus status, {
+    ConsultationCloseReason? closeReason,
+  }) async {
     final current = _request;
     if (current == null || current.id == null) return;
 
@@ -64,7 +68,11 @@ class ConsultationRequestDetailsCubit
       ConsultationRequestDetailsState.ready(request: current, isUpdating: true),
     );
 
-    final result = await repository.updateRequestStatus(current.id!, status);
+    final result = await repository.updateRequestStatus(
+      current.id!,
+      status,
+      closeReason: closeReason,
+    );
     result.fold(
       (failure) => emit(
         ConsultationRequestDetailsState.failure(

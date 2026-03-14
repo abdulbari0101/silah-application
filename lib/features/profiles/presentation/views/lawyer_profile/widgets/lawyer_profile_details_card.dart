@@ -25,6 +25,29 @@ class LawyerProfileDetailsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final actionButtons = <Widget>[
+      if (onRequestConsultation != null)
+        Expanded(
+          child: ActionPillButton(
+            text: Strings.request_consultation.tr(),
+            icon: Icons.chat_bubble_outline,
+            expand: true,
+            onTap: onRequestConsultation,
+          ),
+        ),
+      if (onRequestTraining != null) ...[
+        if (onRequestConsultation != null) UIConstants.mediumWidth,
+        Expanded(
+          child: ActionPillButton(
+            text: Strings.request_training.tr(),
+            icon: Icons.send_rounded,
+            expand: true,
+            onTap: onRequestTraining,
+          ),
+        ),
+      ],
+    ];
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
@@ -84,27 +107,7 @@ class LawyerProfileDetailsCard extends StatelessWidget {
             ),
           ),
           UIConstants.bigHeight,
-          Row(
-            children: [
-              Expanded(
-                child: ActionPillButton(
-                  text: Strings.request_consultation.tr(),
-                  icon: Icons.chat_bubble_outline,
-                  expand: true,
-                  onTap: onRequestConsultation,
-                ),
-              ),
-              UIConstants.mediumWidth,
-              Expanded(
-                child: ActionPillButton(
-                  text: Strings.request_training.tr(),
-                  icon: Icons.send_rounded,
-                  expand: true,
-                  onTap: onRequestTraining,
-                ),
-              ),
-            ],
-          ),
+          if (actionButtons.isNotEmpty) Row(children: actionButtons),
         ],
       ),
     );

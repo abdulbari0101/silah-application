@@ -121,8 +121,13 @@ def update_consultation_status(
         status=payload.status,
     )
     try:
+        update_data = {"status": payload.status, "updatedAt": utc_now_iso()}
+        if payload.status == "closed":
+            update_data["closedAt"] = utc_now_iso()
+            if payload.closeReason:
+                update_data["closeReason"] = payload.closeReason
         db.collection("consultations").document(consultation_id).set(
-            {"status": payload.status, "updatedAt": utc_now_iso()},
+            update_data,
             merge=True,
         )
         log_firestore_response("consultations.update", consultation_id=consultation_id)

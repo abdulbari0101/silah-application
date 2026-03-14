@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:silah_app/core/config/theme/extentions/theme_context_extension.dart';
 
-IconThemeData buildIconTheme(ColorScheme cs) => IconThemeData(color: cs.primary);
+IconThemeData buildIconTheme(ColorScheme cs) =>
+    IconThemeData(color: cs.primary);
 
 ChipThemeData buildChipTheme(ColorScheme cs, TextTheme text) => ChipThemeData(
   shape: StadiumBorder(side: BorderSide(color: cs.outline)),
@@ -17,17 +18,30 @@ ChipThemeData buildChipTheme(ColorScheme cs, TextTheme text) => ChipThemeData(
   shadowColor: Colors.transparent,
 );
 
-SnackBarThemeData buildSnackBarTheme(ColorScheme cs, TextTheme text, ShapeScale shapes) =>
-    SnackBarThemeData(
-      behavior: SnackBarBehavior.floating,
-      backgroundColor: cs.inverseSurface,
-      contentTextStyle: text.bodyMedium!.copyWith(color: cs.onInverseSurface),
-      actionTextColor: cs.primary,
-      elevation: 2,
-      shape: RoundedRectangleBorder(borderRadius: shapes.brMd),
-    );
+SnackBarThemeData buildSnackBarTheme(
+  ColorScheme cs,
+  TextTheme text,
+  ShapeScale shapes,
+) => SnackBarThemeData(
+  behavior: SnackBarBehavior.floating,
+  backgroundColor: cs.brightness == Brightness.light
+      ? cs.surfaceContainerHighest
+      : cs.inverseSurface,
+  contentTextStyle: text.bodyMedium!.copyWith(
+    color: cs.brightness == Brightness.light
+        ? cs.onSurface
+        : cs.onInverseSurface,
+  ),
+  actionTextColor: cs.primary,
+  elevation: 2,
+  shape: RoundedRectangleBorder(borderRadius: shapes.brMd),
+);
 
-TooltipThemeData buildTooltipTheme(ColorScheme cs, TextTheme text, ShapeScale shapes) {
+TooltipThemeData buildTooltipTheme(
+  ColorScheme cs,
+  TextTheme text,
+  ShapeScale shapes,
+) {
   final tiny = text.labelSmall!.copyWith(
     fontSize: 10,
     height: 12 / 10,
@@ -45,10 +59,11 @@ TooltipThemeData buildTooltipTheme(ColorScheme cs, TextTheme text, ShapeScale sh
   );
 }
 
-BadgeThemeData buildBadgeTheme(ColorScheme cs, TextTheme text) => BadgeThemeData(
-  backgroundColor: cs.error,
-  textColor: cs.onError,
-  largeSize: 22,
-  smallSize: 8,
-  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-);
+BadgeThemeData buildBadgeTheme(ColorScheme cs, TextTheme text) =>
+    BadgeThemeData(
+      backgroundColor: cs.error,
+      textColor: cs.onError,
+      largeSize: 22,
+      smallSize: 8,
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+    );

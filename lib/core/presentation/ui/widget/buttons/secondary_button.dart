@@ -48,7 +48,9 @@ class SecondaryButton extends StatelessWidget {
             text,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
-            style: (fontSize != null) ? tt.labelLarge?.copyWith(fontSize: fontSize) : null,
+            style: (fontSize != null)
+                ? tt.labelLarge?.copyWith(fontSize: fontSize)
+                : null,
           ),
         ),
         if (suffixWidget != null) ...[UIConstants.smallWidth, suffixWidget!],
@@ -56,20 +58,30 @@ class SecondaryButton extends StatelessWidget {
     );
 
     final bool hasLocalOverrides =
-        backgroundColor != null || borderColor != null || backgroundRadius != 16;
+        backgroundColor != null ||
+        borderColor != null ||
+        backgroundRadius != 16;
 
     final ButtonStyle? localStyle = hasLocalOverrides
         ? OutlinedButton.styleFrom(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(backgroundRadius)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(backgroundRadius),
+            ),
             backgroundColor: backgroundColor,
-            side: borderColor != null ? BorderSide(color: borderColor!, width: 1.5) : null,
+            side: borderColor != null
+                ? BorderSide(color: borderColor!, width: 1.5)
+                : null,
           )
         : null;
 
     return SizedBox(
       width: width ?? double.infinity,
       height: height ?? UIConstants.buttonHeight,
-      child: OutlinedButton(onPressed: isDisabled ? null : onTap, style: localStyle, child: child),
+      child: OutlinedButton(
+        onPressed: isDisabled ? null : onTap,
+        style: localStyle,
+        child: child,
+      ),
     );
   }
 }
@@ -106,8 +118,9 @@ class SecondaryButtonWithFormCubit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FormCubit, bool>(
-      builder: (context, isFormValid) {
+    return BlocBuilder<FormCubit, FormCubitState>(
+      builder: (context, state) {
+        final isFormValid = state.isValid;
         return Stack(
           alignment: Alignment.center,
           children: [

@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:silah_app/core/config/constants/ui_constants.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
 import 'package:silah_app/core/config/router/app_routes.dart';
+import 'package:silah_app/core/config/router/route_extensions.dart';
 import 'package:silah_app/core/config/theme/extentions/theme_context_extension.dart';
 import 'package:silah_app/core/infrastructure/network/firestore_display_resolver.dart';
 import 'package:silah_app/core/infrastructure/errors/failures.dart';
@@ -167,7 +168,7 @@ class _HomeLawyerDashboardState extends State<HomeLawyerDashboard> {
                   child: _MetricCard(
                     title: Strings.new_consultations.tr(),
                     count: data.pendingConsultations,
-                    onTap: () => context.pushNamed(AppRoutes.requests.name),
+                    onTap: () => context.openRoute(AppRoutes.requests),
                   ),
                 ),
                 UIConstants.mediumWidth,
@@ -175,7 +176,7 @@ class _HomeLawyerDashboardState extends State<HomeLawyerDashboard> {
                   child: _MetricCard(
                     title: Strings.training_requests.tr(),
                     count: data.pendingTraining,
-                    onTap: () => context.pushNamed(AppRoutes.trainees.name),
+                    onTap: () => context.openRoute(AppRoutes.trainees),
                   ),
                 ),
               ],
@@ -193,16 +194,14 @@ class _HomeLawyerDashboardState extends State<HomeLawyerDashboard> {
                   ),
                 ),
                 TextButton(
-                  onPressed: () => context.pushNamed(AppRoutes.requests.name),
+                  onPressed: () => context.openRoute(AppRoutes.requests),
                   child: Text(Strings.view_all.tr()),
                 ),
               ],
             ),
             UIConstants.smallHeight,
             if (data.previewRequest == null)
-              _EmptyCaseCard(
-                onTap: () => context.pushNamed(AppRoutes.requests.name),
-              )
+              _EmptyCaseCard(onTap: () => context.openRoute(AppRoutes.requests))
             else
               _ActiveCaseCard(
                 request: data.previewRequest!,

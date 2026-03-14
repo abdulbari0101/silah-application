@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
 import 'package:silah_app/core/infrastructure/errors/error_utils.dart';
 import 'package:silah_app/core/infrastructure/errors/failures.dart';
 import 'package:silah_app/core/presentation/state_magment/bloc_utils/bloc_utils.dart';
+import 'package:silah_app/features/consultations/domain/entities/consultation_close_reason.dart';
 import 'package:silah_app/features/consultations/domain/entities/consultation_request_entity.dart';
 import 'package:silah_app/features/consultations/domain/entities/consultation_status.dart';
 import 'package:silah_app/features/consultations/domain/repositories/consultations_repository.dart';
@@ -33,18 +36,19 @@ sealed class ConsultationRequestsState with _$ConsultationRequestsState {
 }
 
 class ConsultationRequestsCubit extends Cubit<ConsultationRequestsState> {
-  ConsultationRequestsCubit({required this.repository})
-    : super(
-        const ConsultationRequestsState.initial(
-          filter: ConsultationStatus.pending,
-        ),
-      );
+  ConsultationRequestsCubit({
+    required this.repository,
+    ConsultationStatus initialFilter = ConsultationStatus.pending,
+  }) : _filter = initialFilter,
+       super(ConsultationRequestsState.initial(filter: initialFilter));
 
   final ConsultationsRepository repository;
-  ConsultationStatus _filter = ConsultationStatus.pending;
+  ConsultationStatus _filter;
   List<ConsultationRequestEntity> _requests = [];
+  StreamSubscription<List<ConsultationRequestEntity>>? _requestsSubscription;
 
   Future<void> load() async {
+    await _requestsSubscription?.cancel();
     emit(ConsultationRequestsState.loading(filter: _filter));
     final result = await repository.fetchMyRequests();
     result.fold(
@@ -57,6 +61,20 @@ class ConsultationRequestsCubit extends Cubit<ConsultationRequestsState> {
       (data) {
         _requests = data;
         _emitFiltered();
+        _requestsSubscription = repository.watchMyRequests().listen(
+          (items) {
+            _requests = items;
+            _emitFiltered();
+          },
+          onError: (Object error, StackTrace stackTrace) {
+            emit(
+              ConsultationRequestsState.error(
+                filter: _filter,
+                message: _mapStreamError(error),
+              ),
+            );
+          },
+        );
       },
     );
   }
@@ -66,7 +84,11 @@ class ConsultationRequestsCubit extends Cubit<ConsultationRequestsState> {
     _emitFiltered();
   }
 
-  Future<void> updateStatus(String requestId, ConsultationStatus status) async {
+  Future<void> updateStatus(
+    String requestId,
+    ConsultationStatus status, {
+    ConsultationCloseReason? closeReason,
+  }) async {
     emit(
       ConsultationRequestsState.loaded(
         filter: _filter,
@@ -75,7 +97,11 @@ class ConsultationRequestsCubit extends Cubit<ConsultationRequestsState> {
       ),
     );
 
-    final result = await repository.updateRequestStatus(requestId, status);
+    final result = await repository.updateRequestStatus(
+      requestId,
+      status,
+      closeReason: closeReason,
+    );
     result.fold(
       (failure) => emit(
         ConsultationRequestsState.error(
@@ -118,5 +144,18 @@ class ConsultationRequestsCubit extends Cubit<ConsultationRequestsState> {
       includeCodeLine: false,
       fallbackMessage: Strings.unexpected_error,
     );
+  }
+
+  String _mapStreamError(Object error) {
+    if (error is Failure) {
+      return _mapFailure(error);
+    }
+    return Strings.unexpected_error;
+  }
+
+  @override
+  Future<void> close() async {
+    await _requestsSubscription?.cancel();
+    return super.close();
   }
 }

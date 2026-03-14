@@ -1,10 +1,6 @@
 part of 'specifications_bloc.dart';
 
-abstract class SpecificationsEvent extends Equatable {
-  const SpecificationsEvent();
-
-  @override
-  List<Object> get props => [];
+@freezed
+sealed class SpecificationsEvent with _$SpecificationsEvent {
+  const factory SpecificationsEvent.load() = LoadSpecifications;
 }
-
-class LoadSpecifications extends SpecificationsEvent {}

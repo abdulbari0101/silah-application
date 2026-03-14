@@ -8,7 +8,12 @@ class ProgressButton extends StatelessWidget {
   final Color? primaryColor;
   final Color? waveColor;
 
-  const ProgressButton({super.key, this.size = 30.0, this.primaryColor, this.waveColor});
+  const ProgressButton({
+    super.key,
+    this.size = 30.0,
+    this.primaryColor,
+    this.waveColor,
+  });
 
   @override
   Widget build(BuildContext context) {

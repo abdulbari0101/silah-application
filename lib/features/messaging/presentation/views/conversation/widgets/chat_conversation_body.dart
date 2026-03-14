@@ -22,10 +22,13 @@ class ChatConversationBody extends StatefulWidget {
 
 class _ChatConversationBodyState extends State<ChatConversationBody> {
   final TextEditingController _controller = TextEditingController();
+  final ScrollController _scrollController = ScrollController();
+  String? _lastRenderedMessageKey;
 
   @override
   void dispose() {
     _controller.dispose();
+    _scrollController.dispose();
     super.dispose();
   }
 
@@ -48,6 +51,13 @@ class _ChatConversationBodyState extends State<ChatConversationBody> {
   Widget build(BuildContext context) {
     return BlocBuilder<ChatConversationCubit, ChatConversationState>(
       builder: (context, state) {
+        final renderedMessages = state.maybeWhen(
+          ready: (messages, _) => messages,
+          failure: (_, messages) => messages ?? const <MessageEntity>[],
+          orElse: () => const <MessageEntity>[],
+        );
+        _syncScroll(renderedMessages);
+
         return state.when(
           loading: () => const Center(child: ProgressStateWidget()),
           failure: (message, messages) => Column(
@@ -80,6 +90,7 @@ class _ChatConversationBodyState extends State<ChatConversationBody> {
   Widget _buildMessagesList(List<MessageEntity> messages) {
     final uid = FirebaseAuth.instance.currentUser?.uid;
     return ListView.separated(
+      controller: _scrollController,
       padding: const EdgeInsets.fromLTRB(16, 20, 16, 12),
       itemCount: messages.length,
       separatorBuilder: (_, __) => UIConstants.smallHeight,
@@ -89,6 +100,30 @@ class _ChatConversationBodyState extends State<ChatConversationBody> {
         return _buildMessageBubble(message, isMe);
       },
     );
+  }
+
+  void _syncScroll(List<MessageEntity> messages) {
+    final lastMessage = messages.isNotEmpty ? messages.last : null;
+    final messageKey =
+        '${lastMessage?.id ?? ''}:${lastMessage?.sentAt ?? ''}:${messages.length}';
+    if (_lastRenderedMessageKey == messageKey) {
+      return;
+    }
+    _lastRenderedMessageKey = messageKey;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || !_scrollController.hasClients) {
+        return;
+      }
+      final target = _scrollController.position.maxScrollExtent;
+      if (target <= 0) {
+        return;
+      }
+      _scrollController.animateTo(
+        target,
+        duration: const Duration(milliseconds: 220),
+        curve: Curves.easeOut,
+      );
+    });
   }
 
   Widget _buildMessageBubble(MessageEntity message, bool isMe) {
@@ -136,16 +171,27 @@ class _ChatConversationBodyState extends State<ChatConversationBody> {
           child: Row(
             children: [
               Expanded(
-                child: TextField(
-                  controller: _controller,
-                  minLines: 1,
-                  maxLines: 3,
-                  textInputAction: TextInputAction.newline,
-                  decoration: InputDecoration(
-                    hintText: Strings.messages.tr(),
-                    border: InputBorder.none,
-                    isDense: true,
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: TextField(
+                    controller: _controller,
+                    minLines: 1,
+                    maxLines: 3,
+                    textInputAction: TextInputAction.newline,
+                    decoration: InputDecoration(
+                      isCollapsed: true,
+                      hintText: Strings.messages.tr(),
+                      hintStyle: context.textTheme.bodyMedium?.copyWith(
+                        color: context.colors.onSurfaceVariant,
+                      ),
+                      filled: false,
+                      border: InputBorder.none,
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                      disabledBorder: InputBorder.none,
+                      errorBorder: InputBorder.none,
+                      focusedErrorBorder: InputBorder.none,
+                    ),
                   ),
                 ),
               ),

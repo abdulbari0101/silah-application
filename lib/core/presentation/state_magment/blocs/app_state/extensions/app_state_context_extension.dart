@@ -5,7 +5,6 @@ import 'package:silah_app/core/presentation/state_magment/blocs/app_state/state_
 import 'package:silah_app/core/presentation/state_magment/blocs/app_state/state_data/app_state_data.dart';
 import 'package:silah_app/features/auth/domain/entities/auth_user_entity.dart';
 
-
 extension AppStateContext on BuildContext {
   /// Reads the AppStateData from AppStateBloc without rebuilding
   AppStateState get appStateState => read<AppStateBloc>().state;
@@ -17,9 +16,6 @@ extension AppStateContext on BuildContext {
 
   AuthUserEntity? get customer => appStateData.customer;
 
-
-
   /// Reads the current user auth status (e.g. loggedInFullyVerified, etc.)
   UserAuthStatus get userAuthStatus => appStateData.userAuthStatus;
-
 }

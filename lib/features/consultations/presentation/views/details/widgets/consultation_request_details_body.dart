@@ -7,6 +7,7 @@ import 'package:silah_app/core/config/theme/extentions/text_styling_extantion.da
 import 'package:silah_app/core/config/theme/extentions/theme_context_extension.dart';
 import 'package:silah_app/core/injection/injection_container.dart';
 import 'package:silah_app/core/presentation/state_magment/blocs/app_state/app_state_bloc.dart';
+import 'package:silah_app/core/presentation/ui/overlays/dialogs/confirmation_dialog.dart';
 import 'package:silah_app/core/presentation/ui/overlays/toasts.dart';
 import 'package:silah_app/core/presentation/ui/widget/actions/action_row.dart';
 import 'package:silah_app/core/presentation/ui/widget/buttons/primary_button.dart';
@@ -23,6 +24,7 @@ import 'package:silah_app/features/consultations/presentation/cubits/details/con
 import 'package:silah_app/features/consultations/presentation/support/consultation_status_presenter.dart';
 import 'package:silah_app/features/messaging/domain/repositories/messaging_repository.dart';
 import 'package:silah_app/core/config/router/app_routes.dart';
+import 'package:silah_app/core/config/router/route_extensions.dart';
 import 'package:go_router/go_router.dart';
 import 'package:silah_app/features/messaging/domain/entities/chat_thread_entity.dart';
 import 'package:silah_app/features/messaging/presentation/views/conversation/models/chat_conversation_args.dart';
@@ -109,6 +111,7 @@ class ConsultationRequestDetailsBody extends StatelessWidget {
               : () => _confirmAction(
                   context,
                   message: Strings.confirm_reject_request.tr(),
+                  confirmStyle: FintureButtonStyle.danger,
                   onConfirm: () => context
                       .read<ConsultationRequestDetailsCubit>()
                       .updateStatus(ConsultationStatus.rejected),
@@ -124,6 +127,7 @@ class ConsultationRequestDetailsBody extends StatelessWidget {
               : () => _confirmAction(
                   context,
                   message: Strings.confirm_accept_request.tr(),
+                  confirmStyle: FintureButtonStyle.success,
                   onConfirm: () => context
                       .read<ConsultationRequestDetailsCubit>()
                       .updateStatus(ConsultationStatus.accepted),
@@ -142,6 +146,7 @@ class ConsultationRequestDetailsBody extends StatelessWidget {
               : () => _confirmAction(
                   context,
                   message: Strings.confirm_close_request.tr(),
+                  confirmStyle: FintureButtonStyle.danger,
                   onConfirm: () => context
                       .read<ConsultationRequestDetailsCubit>()
                       .updateStatus(ConsultationStatus.closed),
@@ -239,13 +244,12 @@ class ConsultationRequestDetailsBody extends StatelessWidget {
           orElse: () => const ChatThreadEntity(),
         );
         if (thread.id == null) {
-          Toasts.info(context, Strings.messages.tr());
-          context.pushNamed(AppRoutes.messages.name);
+          context.openRoute(AppRoutes.messages);
           return;
         }
         context.pushNamed(
           AppRoutes.chatThread.name,
-          extra: ChatConversationArgs(thread: thread),
+          extra: ChatConversationArgs(thread: thread).toJson(),
         );
       },
     );
@@ -254,27 +258,16 @@ class ConsultationRequestDetailsBody extends StatelessWidget {
   Future<void> _confirmAction(
     BuildContext context, {
     required String message,
+    FintureButtonStyle confirmStyle = FintureButtonStyle.primary,
     required VoidCallback onConfirm,
   }) async {
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(Strings.confirm_action_title.tr()),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(Strings.action_cancel.tr()),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: Text(Strings.action_confirm.tr()),
-          ),
-        ],
-      ),
+    final confirmed = await showAppConfirmationDialog(
+      context,
+      message: message,
+      confirmStyle: confirmStyle,
     );
 
-    if (confirmed == true) {
+    if (confirmed) {
       onConfirm();
     }
   }

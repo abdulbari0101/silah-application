@@ -12,9 +12,24 @@ class SnackBars {
     Duration? duration,
   }) {
     final scheme = context.colors;
+    final defaultBackground = scheme.brightness == Brightness.light
+        ? scheme.surfaceContainerHighest
+        : scheme.inverseSurface;
+    final resolvedBackground = (background ?? defaultBackground)
+        .withAlphaOpacity(0.96);
+    final resolvedForeground =
+        ThemeData.estimateBrightnessForColor(resolvedBackground) ==
+            Brightness.dark
+        ? Colors.white
+        : scheme.onSurface;
     final bar = SnackBar(
-      content: Text(message, style: context.textTheme.bodyMedium),
-      backgroundColor: (background ?? scheme.inverseSurface).withAlphaOpacity(0.92),
+      content: Text(
+        message,
+        style: context.textTheme.bodyMedium?.copyWith(
+          color: resolvedForeground,
+        ),
+      ),
+      backgroundColor: resolvedBackground,
       behavior: SnackBarBehavior.floating,
       shape: context.shapes.roundedMd,
       margin: const EdgeInsets.all(UIConstants.defaultPadding12),
@@ -27,8 +42,11 @@ class SnackBars {
       ..showSnackBar(bar);
   }
 
-  static void info(BuildContext ctx, String msg) =>
-      show(ctx, message: msg, background: ctx.semantic.info.withAlphaOpacity(0.18));
+  static void info(BuildContext ctx, String msg) => show(
+    ctx,
+    message: msg,
+    background: ctx.semantic.info.withAlphaOpacity(0.18),
+  );
 
   static void success(BuildContext ctx, String msg) =>
       show(ctx, message: msg, background: ctx.semantic.success);

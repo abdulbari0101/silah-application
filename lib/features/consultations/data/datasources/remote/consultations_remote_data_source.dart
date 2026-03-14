@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:rxdart/rxdart.dart';
 import 'package:silah_app/core/data/model/api/base/base_api_response.dart';
 import 'package:silah_app/core/infrastructure/analytics/logger/app_logger.dart';
 import 'package:silah_app/core/infrastructure/network/decoders/api_json_decoder.dart';
@@ -7,6 +8,7 @@ import 'package:silah_app/core/infrastructure/network/firestore_helpers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:silah_app/features/consultations/data/datasources/remote/consultations_service.dart';
 import 'package:silah_app/features/consultations/data/models/consultation_models.dart';
+import 'package:silah_app/features/consultations/domain/entities/consultation_close_reason.dart';
 import 'package:silah_app/features/consultations/domain/entities/consultation_request_entity.dart';
 import 'package:silah_app/features/consultations/domain/entities/consultation_status.dart';
 
@@ -21,6 +23,7 @@ abstract class ConsultationsRemoteDataSource {
   );
 
   Future<List<ConsultationRequestEntity>> fetchRequestsByUser(String userId);
+  Stream<List<ConsultationRequestEntity>> watchRequestsByUser(String userId);
   Future<ConsultationRequestEntity?> fetchRequestById(String requestId);
   String? currentUserId();
 }
@@ -97,6 +100,35 @@ class ConsultationsRemoteDataSourceImpl
   }
 
   @override
+  Stream<List<ConsultationRequestEntity>> watchRequestsByUser(String userId) {
+    final resolvedUserId = userId.trim();
+    final clientStream = _watchRequestsByField('clientUid', resolvedUserId);
+    final lawyerStream = _watchRequestsByField('lawyerUid', resolvedUserId);
+
+    return Rx.combineLatest2<
+      QuerySnapshot<Map<String, dynamic>>,
+      QuerySnapshot<Map<String, dynamic>>,
+      List<ConsultationRequestEntity>
+    >(clientStream, lawyerStream, (clientSnapshot, lawyerSnapshot) {
+      final results = <String, ConsultationRequestEntity>{};
+
+      for (final snapshot in [clientSnapshot, lawyerSnapshot]) {
+        for (final doc in snapshot.docs) {
+          results[doc.id] = _mapDoc(doc);
+        }
+      }
+
+      final items = results.values.toList();
+      items.sort((a, b) {
+        final left = a.updatedAt ?? a.createdAt ?? '';
+        final right = b.updatedAt ?? b.createdAt ?? '';
+        return right.compareTo(left);
+      });
+      return items;
+    });
+  }
+
+  @override
   Future<ConsultationRequestEntity?> fetchRequestById(String requestId) {
     final resolvedRequestId = requestId.trim();
     return firebaseCall<ConsultationRequestEntity?>(
@@ -132,6 +164,9 @@ class ConsultationsRemoteDataSourceImpl
       status:
           ConsultationStatusX.tryParse(data['status'] as String?) ??
           ConsultationStatus.pending,
+      closeReason: ConsultationCloseReasonX.tryParse(
+        data['closeReason'] as String?,
+      ),
       createdAt: parseFirestoreTimestamp(data['createdAt']),
       updatedAt: parseFirestoreTimestamp(data['updatedAt']),
       closedAt: parseFirestoreTimestamp(data['closedAt']),
@@ -146,5 +181,15 @@ class ConsultationsRemoteDataSourceImpl
         .collection(_consultationsCollection)
         .where(field, isEqualTo: value)
         .get();
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> _watchRequestsByField(
+    String field,
+    String value,
+  ) {
+    return firestore
+        .collection(_consultationsCollection)
+        .where(field, isEqualTo: value)
+        .snapshots();
   }
 }

@@ -42,7 +42,9 @@ class SecondaryNoBgButton extends StatelessWidget {
             text,
             overflow: TextOverflow.ellipsis,
             textAlign: TextAlign.center,
-            style: (fontSize != null) ? tt.labelLarge?.copyWith(fontSize: fontSize) : null,
+            style: (fontSize != null)
+                ? tt.labelLarge?.copyWith(fontSize: fontSize)
+                : null,
           ),
         ),
         if (suffixWidget != null) ...[UIConstants.smallWidth, suffixWidget!],
@@ -54,17 +56,22 @@ class SecondaryNoBgButton extends StatelessWidget {
       final c = textColor ?? cs.primary;
       localStyle = ButtonStyle(
         shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(backgroundRadius)),
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(backgroundRadius),
+          ),
         ),
         // Keep bg transparent; let overlayColor provide feedback.
         backgroundColor: const WidgetStatePropertyAll(Colors.transparent),
         foregroundColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.disabled)) return c.withAlphaOpacity(0.5);
+          if (states.contains(WidgetState.disabled))
+            return c.withAlphaOpacity(0.5);
           return c;
         }),
         overlayColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.pressed)) return c.withAlphaOpacity(0.08);
-          if (states.contains(WidgetState.hovered) || states.contains(WidgetState.focused)) {
+          if (states.contains(WidgetState.pressed))
+            return c.withAlphaOpacity(0.08);
+          if (states.contains(WidgetState.hovered) ||
+              states.contains(WidgetState.focused)) {
             return c.withAlphaOpacity(0.06);
           }
           return null;

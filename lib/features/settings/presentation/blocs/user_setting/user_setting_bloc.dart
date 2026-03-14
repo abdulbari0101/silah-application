@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:silah_app/core/domain/entities/local/setting/user_setting_entity.dart';
 import 'package:silah_app/core/infrastructure/errors/error_utils.dart';
 import 'package:silah_app/core/infrastructure/errors/failures.dart';
@@ -7,15 +7,13 @@ import 'package:silah_app/core/presentation/state_magment/bloc_utils/bloc_utils.
 import 'package:silah_app/core/presentation/state_magment/blocs/app_state/app_state_bloc.dart';
 import 'package:silah_app/features/settings/domain/repositories/user_setting_repo.dart';
 
+part 'user_setting_bloc.freezed.dart';
 part 'user_setting_event.dart';
 part 'user_setting_state.dart';
 
 class UserSettingBloc extends Bloc<UserSettingEvent, UserSettingState> {
-  final UserSettingsRepo settingRep;
-  final AppStateBloc appStateBloc;
-
   UserSettingBloc({required this.settingRep, required this.appStateBloc})
-    : super(UserSettingInitial()) {
+    : super(const UserSettingState.initial()) {
     on<InjectUserSettingEvent>(
       _onInjectUserSettingEvent,
       transformer: BlocUtils.debounce(const Duration(milliseconds: 200)),
@@ -27,19 +25,25 @@ class UserSettingBloc extends Bloc<UserSettingEvent, UserSettingState> {
     );
   }
 
+  final UserSettingsRepo settingRep;
+  final AppStateBloc appStateBloc;
+
   Future<void> _onInjectUserSettingEvent(
     InjectUserSettingEvent event,
     Emitter<UserSettingState> emit,
   ) async {
-    emit(UserSettingLoaded(setting: event.setting));
+    emit(UserSettingState.loaded(data: event.setting));
   }
 
-  Future<void> _onGetSetting(GetUserSettingEvent event, Emitter<UserSettingState> emit) async {
-    emit(UserSettingLoading(state.data));
+  Future<void> _onGetSetting(
+    GetUserSettingEvent event,
+    Emitter<UserSettingState> emit,
+  ) async {
+    emit(UserSettingState.loading(data: state.data));
     final result = await settingRep.setting();
 
     result.fold((failure) => _emitFailure(emit, failure), (setting) {
-      emit(UserSettingLoaded(setting: setting));
+      emit(UserSettingState.loaded(data: setting));
     });
   }
 
@@ -48,15 +52,18 @@ class UserSettingBloc extends Bloc<UserSettingEvent, UserSettingState> {
     Emitter<UserSettingState> emit,
   ) async {
     final current = state.data;
+    final updated = current.copyWith(
+      notification: event.notification ?? current.notification,
+    );
 
-    final updated = current.copyWith(notification: event.notification ?? current.notification);
-
-    if (event.isRefresh || event.rebuildApp) emit(UserSettingLoading(state.data));
+    if (event.isRefresh || event.rebuildApp) {
+      emit(UserSettingState.loading(data: state.data));
+    }
 
     final result = await settingRep.updateSetting(updated);
 
     result.fold((failure) => _emitFailure(emit, failure), (_) {
-      emit(UserSettingLoaded(setting: updated));
+      emit(UserSettingState.loaded(data: updated));
     });
   }
 
@@ -64,7 +71,8 @@ class UserSettingBloc extends Bloc<UserSettingEvent, UserSettingState> {
     emit(
       BlocUtils.handleFailure(
         failure: failure,
-        onError: (msg) => UserSettingError(message: msg, previous: state.data),
+        onError: (msg) =>
+            UserSettingState.error(message: msg, data: state.data),
         codeToMessageMap: codeToMessageMap,
       ),
     );

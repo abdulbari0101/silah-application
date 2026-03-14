@@ -16,7 +16,11 @@ class MainDrawerButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: AppSvgIcon(assetName: Assets.icons.drawerIcon, height: 26, width: 26),
+      icon: AppSvgIcon(
+        assetName: Assets.icons.drawerIcon,
+        height: 26,
+        width: 26,
+      ),
       onPressed: () {
         controlMainScreenDrawer();
       },

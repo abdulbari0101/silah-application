@@ -6,14 +6,9 @@ import 'package:silah_app/features/messaging/data/datasources/remote/chats_remot
 import 'package:silah_app/features/messaging/data/datasources/remote/chats_service.dart';
 import 'package:silah_app/features/messaging/data/repositories/chats_repository_impl.dart';
 import 'package:silah_app/features/messaging/domain/repositories/messaging_repository.dart';
-import 'package:silah_app/features/messaging/presentation/blocs/chats/chats_bloc.dart';
 //! Features -Chats
 
 Future<void> initChats() async {
-  // Bloc
-
-  locator.registerLazySingleton(() => ChatsBloc(repository: locator()));
-
   // Repo
   locator.registerLazySingleton<MessagingRepository>(
     () => MessagingRepositoryoImpl(

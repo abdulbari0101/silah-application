@@ -40,6 +40,34 @@ def _build_training_application_id(*, lawyer_uid: str, trainee_uid: str) -> str:
     return f"{lawyer_uid.strip()}_{trainee_uid.strip()}"
 
 
+def _build_training_chat_id(application_id: str) -> str:
+    return f"training_{application_id.strip()}"
+
+
+def _fetch_user_doc(db, uid: str):
+    resolved_uid = uid.strip()
+    log_firestore_request("users.get", uid=resolved_uid)
+    try:
+        doc = db.collection("users").document(resolved_uid).get()
+        log_firestore_response("users.get", uid=resolved_uid, exists=doc.exists)
+        return doc
+    except Exception as exc:
+        log_firestore_error("users.get", exc, uid=resolved_uid)
+        raise
+
+
+def _fetch_lawyer_doc(db, lawyer_uid: str):
+    resolved_uid = lawyer_uid.strip()
+    log_firestore_request("lawyers.get", lawyer_uid=resolved_uid)
+    try:
+        doc = db.collection("lawyers").document(resolved_uid).get()
+        log_firestore_response("lawyers.get", lawyer_uid=resolved_uid, exists=doc.exists)
+        return doc
+    except Exception as exc:
+        log_firestore_error("lawyers.get", exc, lawyer_uid=resolved_uid)
+        raise
+
+
 @router.post("/applications")
 def create_training_application(
     payload: TrainingApplicationCreateRequest,
@@ -68,14 +96,17 @@ def create_training_application(
     if not lawyer_uid:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Missing lawyer uid")
 
-    log_firestore_request("lawyers.get", lawyer_uid=lawyer_uid)
-    try:
-        lawyer_doc = db.collection("lawyers").document(lawyer_uid).get()
-        log_firestore_response("lawyers.get", lawyer_uid=lawyer_uid, exists=lawyer_doc.exists)
-    except Exception as exc:
-        log_firestore_error("lawyers.get", exc, lawyer_uid=lawyer_uid)
-        raise
+    trainee_doc = _fetch_user_doc(db, payload.traineeUid)
+    if not trainee_doc.exists:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+    trainee_data = trainee_doc.to_dict() or {}
+    if not _to_bool(trainee_data.get("isTrainee")):
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="User is not enabled as trainee",
+        )
 
+    lawyer_doc = _fetch_lawyer_doc(db, lawyer_uid)
     if not lawyer_doc.exists:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Lawyer not found")
 
@@ -184,11 +215,6 @@ def create_training_application(
             message="A trainee submitted a training application.",
             data={"type": "training", "applicationId": ref.id},
         )
-    try:
-        db.collection("users").document(payload.traineeUid).set({"isTrainee": True}, merge=True)
-    except Exception:
-        # non-blocking: do not fail application if profile update fails
-        pass
 
     response = TrainingApplicationCreateResponse(applicationId=ref.id)
     return success_response(response.model_dump())
@@ -222,6 +248,26 @@ def update_training_application_status(
     if decoded.get("role") != "admin" and decoded.get("uid") != lawyer_uid:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Forbidden")
 
+    if payload.status == "accepted":
+        resolved_lawyer_uid = str(lawyer_uid or "").strip()
+        if not resolved_lawyer_uid:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Missing lawyer uid",
+            )
+        lawyer_doc = _fetch_lawyer_doc(db, resolved_lawyer_uid)
+        if not lawyer_doc.exists:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Lawyer not found",
+            )
+        lawyer_data = lawyer_doc.to_dict() or {}
+        if not _to_bool(lawyer_data.get("acceptsTrainees")):
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Lawyer is not accepting trainees",
+            )
+
     log_firestore_request(
         "training_applications.update",
         application_id=application_id,
@@ -236,6 +282,37 @@ def update_training_application_status(
     except Exception as exc:
         log_firestore_error("training_applications.update", exc, application_id=application_id)
         raise
+
+    if payload.status == "accepted":
+        chat_id = _build_training_chat_id(application_id)
+        log_firestore_request(
+            "training_chats.upsert",
+            application_id=application_id,
+            chat_id=chat_id,
+        )
+        try:
+            db.collection("chats").document(chat_id).set(
+                {
+                    "participants": [trainee_uid, lawyer_uid],
+                    "trainingApplicationId": application_id,
+                    "lastMessage": None,
+                    "updatedAt": utc_now_iso(),
+                },
+                merge=True,
+            )
+            log_firestore_response(
+                "training_chats.upsert",
+                application_id=application_id,
+                chat_id=chat_id,
+            )
+        except Exception as exc:
+            log_firestore_error(
+                "training_chats.upsert",
+                exc,
+                application_id=application_id,
+                chat_id=chat_id,
+            )
+            raise
 
     if trainee_uid:
         create_notification(

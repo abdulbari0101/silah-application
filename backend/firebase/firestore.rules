@@ -17,6 +17,51 @@ service cloud.firestore {
       return isSignedIn() && request.auth.uid == userId;
     }
 
+    function isChatParticipant(participants) {
+      return isSignedIn() && request.auth.uid in participants;
+    }
+
+    function consultationAllowsChat(consultationId) {
+      return consultationId != null
+        && exists(/databases/$(database)/documents/consultations/$(consultationId))
+        && get(/databases/$(database)/documents/consultations/$(consultationId)).data.status in ["accepted", "active"];
+    }
+
+    function trainingApplicationAllowsChat(applicationId) {
+      return applicationId != null
+        && exists(/databases/$(database)/documents/training_applications/$(applicationId))
+        && get(/databases/$(database)/documents/training_applications/$(applicationId)).data.status == "accepted";
+    }
+
+    function traineeProfileAllowsTraining(traineeUid) {
+      return traineeUid != null
+        && exists(/databases/$(database)/documents/users/$(traineeUid))
+        && get(/databases/$(database)/documents/users/$(traineeUid)).data.isTrainee == true;
+    }
+
+    function lawyerAllowsTrainees(lawyerUid) {
+      return lawyerUid != null
+        && exists(/databases/$(database)/documents/lawyers/$(lawyerUid))
+        && get(/databases/$(database)/documents/lawyers/$(lawyerUid)).data.verified == true
+        && get(/databases/$(database)/documents/lawyers/$(lawyerUid)).data.acceptsTrainees == true;
+    }
+
+    function existingChatAllowsWrite(chatData) {
+      return isAdmin()
+        || (chatData.trainingApplicationId != null
+          && trainingApplicationAllowsChat(chatData.trainingApplicationId))
+        || (chatData.consultationId != null
+          && consultationAllowsChat(chatData.consultationId));
+    }
+
+    function requestedChatAllowsWrite(chatData) {
+      return isAdmin()
+        || (chatData.trainingApplicationId != null
+          && trainingApplicationAllowsChat(chatData.trainingApplicationId))
+        || (chatData.consultationId != null
+          && consultationAllowsChat(chatData.consultationId));
+    }
+
     match /users/{userId} {
       allow read: if isOwner(userId) || isAdmin() || isLawyer();
       allow write: if isOwner(userId) || isAdmin();
@@ -44,9 +89,22 @@ service cloud.firestore {
     }
 
     match /chats/{chatId} {
-      allow read, write: if isSignedIn() && request.auth.uid in resource.data.participants;
+      allow read: if isChatParticipant(resource.data.participants);
+      allow create: if isChatParticipant(request.resource.data.participants)
+        && requestedChatAllowsWrite(request.resource.data);
+      allow update: if isChatParticipant(resource.data.participants)
+        && existingChatAllowsWrite(resource.data);
+      allow delete: if isAdmin();
       match /messages/{messageId} {
-        allow read, write: if isSignedIn() && request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants;
+        allow read: if isChatParticipant(
+          get(/databases/$(database)/documents/chats/$(chatId)).data.participants
+        );
+        allow write: if isChatParticipant(
+            get(/databases/$(database)/documents/chats/$(chatId)).data.participants
+          )
+          && existingChatAllowsWrite(
+            get(/databases/$(database)/documents/chats/$(chatId)).data
+          );
       }
     }
 
@@ -56,13 +114,28 @@ service cloud.firestore {
     }
 
     match /training_applications/{applicationId} {
-      allow create: if isSignedIn() && request.auth.uid == request.resource.data.traineeUid;
+      allow create: if isSignedIn()
+        && request.auth.uid == request.resource.data.traineeUid
+        && request.resource.data.lawyerUid != null
+        && request.resource.data.traineeUid != null
+        && traineeProfileAllowsTraining(request.resource.data.traineeUid)
+        && lawyerAllowsTrainees(request.resource.data.lawyerUid)
+        && applicationId == (request.resource.data.lawyerUid + "_" + request.resource.data.traineeUid);
       // Keep list/get query-compatible by using explicit equality checks.
       allow read: if isAdmin()
         || (isSignedIn()
           && (request.auth.uid == resource.data.traineeUid
             || request.auth.uid == resource.data.lawyerUid));
-      allow update: if isAdmin() || (isSignedIn() && request.auth.uid == resource.data.lawyerUid);
+      allow update: if isAdmin()
+        || (isSignedIn()
+          && request.auth.uid == resource.data.lawyerUid
+          && request.resource.data.traineeUid == resource.data.traineeUid
+          && request.resource.data.lawyerUid == resource.data.lawyerUid
+          && request.resource.data.opportunityId == resource.data.opportunityId
+          && request.resource.data.submittedAt == resource.data.submittedAt
+          && request.resource.data.status in ["pending", "accepted", "rejected", "cancelled"]
+          && (request.resource.data.status != "accepted"
+            || lawyerAllowsTrainees(resource.data.lawyerUid)));
       allow delete: if isAdmin();
     }
 
@@ -74,8 +147,13 @@ service cloud.firestore {
     }
 
     match /support_reports/{reportId} {
-      allow create: if isSignedIn();
-      allow read, update: if isAdmin() || request.auth.uid == resource.data.reporterUid;
+      allow create: if isSignedIn()
+        && request.auth.uid == request.resource.data.reporterUid
+        && request.resource.data.status == "open"
+        && request.resource.data.adminNotes == null
+        && request.resource.data.role in ["user", "lawyer"];
+      allow read: if isAdmin() || request.auth.uid == resource.data.reporterUid;
+      allow update: if isAdmin();
     }
 
     match /admin_tasks/{taskId} {

@@ -9,7 +9,8 @@ class PrimaryButton extends StatelessWidget {
   final VoidCallback? onTap;
   final bool isDisabled;
   final bool isLoading;
-  final FintureButtonStyle style; // currently not switching styles; using theme's primary
+  final FintureButtonStyle
+  style; // currently not switching styles; using theme's primary
   final Widget? prefixWidget;
   final Widget? suffixWidget;
   final double? fontSize;
@@ -41,7 +42,10 @@ class PrimaryButton extends StatelessWidget {
       _ => null,
     };
     final ButtonStyle? localStyle = background != null
-        ? FilledButton.styleFrom(backgroundColor: background, foregroundColor: foreground)
+        ? FilledButton.styleFrom(
+            backgroundColor: background,
+            foregroundColor: foreground,
+          )
         : null;
 
     Widget child;
@@ -67,7 +71,10 @@ class PrimaryButton extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          if (prefixWidget != null) ...[prefixWidget!, const SizedBox(width: 8)],
+          if (prefixWidget != null) ...[
+            prefixWidget!,
+            const SizedBox(width: 8),
+          ],
           Flexible(
             child: Text(
               text,
@@ -78,14 +85,18 @@ class PrimaryButton extends StatelessWidget {
                   : null,
             ),
           ),
-          if (suffixWidget != null) ...[const SizedBox(width: 8), suffixWidget!],
+          if (suffixWidget != null) ...[
+            const SizedBox(width: 8),
+            suffixWidget!,
+          ],
         ],
       );
     }
 
     return SizedBox(
       width: double.infinity,
-      height: UIConstants.buttonHeight, // keep your height contract at call site
+      height:
+          UIConstants.buttonHeight, // keep your height contract at call site
       child: FilledButton(
         onPressed: (isDisabled || isLoading) ? null : onTap,
         style: localStyle,

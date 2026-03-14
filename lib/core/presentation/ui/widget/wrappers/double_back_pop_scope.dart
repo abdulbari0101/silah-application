@@ -30,7 +30,8 @@ class _DoubleBackPopScopeState extends State<DoubleBackPopScope> {
     if (didPop) return;
 
     final now = DateTime.now();
-    final tappedTwice = _lastPressed != null && now.difference(_lastPressed!) < widget.interval;
+    final tappedTwice =
+        _lastPressed != null && now.difference(_lastPressed!) < widget.interval;
 
     if (tappedTwice) {
       if (!AppPlatform.isIOS) {
@@ -48,7 +49,11 @@ class _DoubleBackPopScopeState extends State<DoubleBackPopScope> {
       _lastPressed = now;
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(widget.snackBarMessage ?? Strings.press_again_to_exit.tr())),
+          SnackBar(
+            content: Text(
+              widget.snackBarMessage ?? Strings.press_again_to_exit.tr(),
+            ),
+          ),
         );
       }
     }

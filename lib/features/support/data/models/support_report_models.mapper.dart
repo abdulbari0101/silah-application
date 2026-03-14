@@ -171,6 +171,177 @@ class _SupportReportRequestModelCopyWithImpl<$R, $Out>
       _SupportReportRequestModelCopyWithImpl<$R2, $Out2>($value, $cast, t);
 }
 
+class SupportReportReviewRequestModelMapper
+    extends ClassMapperBase<SupportReportReviewRequestModel> {
+  SupportReportReviewRequestModelMapper._();
+
+  static SupportReportReviewRequestModelMapper? _instance;
+  static SupportReportReviewRequestModelMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(
+        _instance = SupportReportReviewRequestModelMapper._(),
+      );
+    }
+    return _instance!;
+  }
+
+  @override
+  final String id = 'SupportReportReviewRequestModel';
+
+  static String _$status(SupportReportReviewRequestModel v) => v.status;
+  static const Field<SupportReportReviewRequestModel, String> _f$status = Field(
+    'status',
+    _$status,
+  );
+  static String? _$adminNotes(SupportReportReviewRequestModel v) =>
+      v.adminNotes;
+  static const Field<SupportReportReviewRequestModel, String> _f$adminNotes =
+      Field('adminNotes', _$adminNotes, opt: true);
+
+  @override
+  final MappableFields<SupportReportReviewRequestModel> fields = const {
+    #status: _f$status,
+    #adminNotes: _f$adminNotes,
+  };
+  @override
+  final bool ignoreNull = true;
+
+  static SupportReportReviewRequestModel _instantiate(DecodingData data) {
+    return SupportReportReviewRequestModel(
+      status: data.dec(_f$status),
+      adminNotes: data.dec(_f$adminNotes),
+    );
+  }
+
+  @override
+  final Function instantiate = _instantiate;
+
+  static SupportReportReviewRequestModel fromJson(Map<String, dynamic> map) {
+    return ensureInitialized().decodeMap<SupportReportReviewRequestModel>(map);
+  }
+
+  static SupportReportReviewRequestModel fromJsonString(String json) {
+    return ensureInitialized().decodeJson<SupportReportReviewRequestModel>(
+      json,
+    );
+  }
+}
+
+mixin SupportReportReviewRequestModelMappable {
+  String toJsonString() {
+    return SupportReportReviewRequestModelMapper.ensureInitialized()
+        .encodeJson<SupportReportReviewRequestModel>(
+          this as SupportReportReviewRequestModel,
+        );
+  }
+
+  Map<String, dynamic> toJson() {
+    return SupportReportReviewRequestModelMapper.ensureInitialized()
+        .encodeMap<SupportReportReviewRequestModel>(
+          this as SupportReportReviewRequestModel,
+        );
+  }
+
+  SupportReportReviewRequestModelCopyWith<
+    SupportReportReviewRequestModel,
+    SupportReportReviewRequestModel,
+    SupportReportReviewRequestModel
+  >
+  get copyWith =>
+      _SupportReportReviewRequestModelCopyWithImpl<
+        SupportReportReviewRequestModel,
+        SupportReportReviewRequestModel
+      >(this as SupportReportReviewRequestModel, $identity, $identity);
+  @override
+  String toString() {
+    return SupportReportReviewRequestModelMapper.ensureInitialized()
+        .stringifyValue(this as SupportReportReviewRequestModel);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return SupportReportReviewRequestModelMapper.ensureInitialized()
+        .equalsValue(this as SupportReportReviewRequestModel, other);
+  }
+
+  @override
+  int get hashCode {
+    return SupportReportReviewRequestModelMapper.ensureInitialized().hashValue(
+      this as SupportReportReviewRequestModel,
+    );
+  }
+}
+
+extension SupportReportReviewRequestModelValueCopy<$R, $Out>
+    on ObjectCopyWith<$R, SupportReportReviewRequestModel, $Out> {
+  SupportReportReviewRequestModelCopyWith<
+    $R,
+    SupportReportReviewRequestModel,
+    $Out
+  >
+  get $asSupportReportReviewRequestModel => $base.as(
+    (v, t, t2) =>
+        _SupportReportReviewRequestModelCopyWithImpl<$R, $Out>(v, t, t2),
+  );
+}
+
+abstract class SupportReportReviewRequestModelCopyWith<
+  $R,
+  $In extends SupportReportReviewRequestModel,
+  $Out
+>
+    implements ClassCopyWith<$R, $In, $Out> {
+  $R call({String? status, String? adminNotes});
+  SupportReportReviewRequestModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
+    Then<$Out2, $R2> t,
+  );
+}
+
+class _SupportReportReviewRequestModelCopyWithImpl<$R, $Out>
+    extends ClassCopyWithBase<$R, SupportReportReviewRequestModel, $Out>
+    implements
+        SupportReportReviewRequestModelCopyWith<
+          $R,
+          SupportReportReviewRequestModel,
+          $Out
+        > {
+  _SupportReportReviewRequestModelCopyWithImpl(
+    super.value,
+    super.then,
+    super.then2,
+  );
+
+  @override
+  late final ClassMapperBase<SupportReportReviewRequestModel> $mapper =
+      SupportReportReviewRequestModelMapper.ensureInitialized();
+  @override
+  $R call({String? status, Object? adminNotes = $none}) => $apply(
+    FieldCopyWithData({
+      if (status != null) #status: status,
+      if (adminNotes != $none) #adminNotes: adminNotes,
+    }),
+  );
+  @override
+  SupportReportReviewRequestModel $make(CopyWithData data) =>
+      SupportReportReviewRequestModel(
+        status: data.get(#status, or: $value.status),
+        adminNotes: data.get(#adminNotes, or: $value.adminNotes),
+      );
+
+  @override
+  SupportReportReviewRequestModelCopyWith<
+    $R2,
+    SupportReportReviewRequestModel,
+    $Out2
+  >
+  $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
+      _SupportReportReviewRequestModelCopyWithImpl<$R2, $Out2>(
+        $value,
+        $cast,
+        t,
+      );
+}
+
 class SupportReportResponseModelMapper
     extends ClassMapperBase<SupportReportResponseModel> {
   SupportReportResponseModelMapper._();
@@ -335,6 +506,216 @@ class _SupportReportResponseModelCopyWithImpl<$R, $Out>
   SupportReportResponseModelCopyWith<$R2, SupportReportResponseModel, $Out2>
   $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
       _SupportReportResponseModelCopyWithImpl<$R2, $Out2>($value, $cast, t);
+}
+
+class SupportReportReviewResponseModelMapper
+    extends ClassMapperBase<SupportReportReviewResponseModel> {
+  SupportReportReviewResponseModelMapper._();
+
+  static SupportReportReviewResponseModelMapper? _instance;
+  static SupportReportReviewResponseModelMapper ensureInitialized() {
+    if (_instance == null) {
+      MapperContainer.globals.use(
+        _instance = SupportReportReviewResponseModelMapper._(),
+      );
+      BaseRespWrapperMapper.ensureInitialized();
+      ResultModelMapper.ensureInitialized();
+    }
+    return _instance!;
+  }
+
+  @override
+  final String id = 'SupportReportReviewResponseModel';
+
+  static ResultModel? _$result(SupportReportReviewResponseModel v) => v.result;
+  static const Field<SupportReportReviewResponseModel, ResultModel> _f$result =
+      Field('result', _$result, key: r'Result');
+  static String? _$reportId(SupportReportReviewResponseModel v) => v.reportId;
+  static const Field<SupportReportReviewResponseModel, String> _f$reportId =
+      Field('reportId', _$reportId, opt: true);
+  static String? _$status(SupportReportReviewResponseModel v) => v.status;
+  static const Field<SupportReportReviewResponseModel, String> _f$status =
+      Field('status', _$status, opt: true);
+  static String? _$adminNotes(SupportReportReviewResponseModel v) =>
+      v.adminNotes;
+  static const Field<SupportReportReviewResponseModel, String> _f$adminNotes =
+      Field('adminNotes', _$adminNotes, opt: true);
+  static String? _$updatedAt(SupportReportReviewResponseModel v) => v.updatedAt;
+  static const Field<SupportReportReviewResponseModel, String> _f$updatedAt =
+      Field('updatedAt', _$updatedAt, opt: true);
+
+  @override
+  final MappableFields<SupportReportReviewResponseModel> fields = const {
+    #result: _f$result,
+    #reportId: _f$reportId,
+    #status: _f$status,
+    #adminNotes: _f$adminNotes,
+    #updatedAt: _f$updatedAt,
+  };
+  @override
+  final bool ignoreNull = true;
+
+  static SupportReportReviewResponseModel _instantiate(DecodingData data) {
+    return SupportReportReviewResponseModel(
+      result: data.dec(_f$result),
+      reportId: data.dec(_f$reportId),
+      status: data.dec(_f$status),
+      adminNotes: data.dec(_f$adminNotes),
+      updatedAt: data.dec(_f$updatedAt),
+    );
+  }
+
+  @override
+  final Function instantiate = _instantiate;
+
+  static SupportReportReviewResponseModel fromJson(Map<String, dynamic> map) {
+    return ensureInitialized().decodeMap<SupportReportReviewResponseModel>(map);
+  }
+
+  static SupportReportReviewResponseModel fromJsonString(String json) {
+    return ensureInitialized().decodeJson<SupportReportReviewResponseModel>(
+      json,
+    );
+  }
+}
+
+mixin SupportReportReviewResponseModelMappable {
+  String toJsonString() {
+    return SupportReportReviewResponseModelMapper.ensureInitialized()
+        .encodeJson<SupportReportReviewResponseModel>(
+          this as SupportReportReviewResponseModel,
+        );
+  }
+
+  Map<String, dynamic> toJson() {
+    return SupportReportReviewResponseModelMapper.ensureInitialized()
+        .encodeMap<SupportReportReviewResponseModel>(
+          this as SupportReportReviewResponseModel,
+        );
+  }
+
+  SupportReportReviewResponseModelCopyWith<
+    SupportReportReviewResponseModel,
+    SupportReportReviewResponseModel,
+    SupportReportReviewResponseModel
+  >
+  get copyWith =>
+      _SupportReportReviewResponseModelCopyWithImpl<
+        SupportReportReviewResponseModel,
+        SupportReportReviewResponseModel
+      >(this as SupportReportReviewResponseModel, $identity, $identity);
+  @override
+  String toString() {
+    return SupportReportReviewResponseModelMapper.ensureInitialized()
+        .stringifyValue(this as SupportReportReviewResponseModel);
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return SupportReportReviewResponseModelMapper.ensureInitialized()
+        .equalsValue(this as SupportReportReviewResponseModel, other);
+  }
+
+  @override
+  int get hashCode {
+    return SupportReportReviewResponseModelMapper.ensureInitialized().hashValue(
+      this as SupportReportReviewResponseModel,
+    );
+  }
+}
+
+extension SupportReportReviewResponseModelValueCopy<$R, $Out>
+    on ObjectCopyWith<$R, SupportReportReviewResponseModel, $Out> {
+  SupportReportReviewResponseModelCopyWith<
+    $R,
+    SupportReportReviewResponseModel,
+    $Out
+  >
+  get $asSupportReportReviewResponseModel => $base.as(
+    (v, t, t2) =>
+        _SupportReportReviewResponseModelCopyWithImpl<$R, $Out>(v, t, t2),
+  );
+}
+
+abstract class SupportReportReviewResponseModelCopyWith<
+  $R,
+  $In extends SupportReportReviewResponseModel,
+  $Out
+>
+    implements BaseRespWrapperCopyWith<$R, $In, $Out> {
+  @override
+  ResultModelCopyWith<$R, ResultModel, ResultModel>? get result;
+  @override
+  $R call({
+    ResultModel? result,
+    String? reportId,
+    String? status,
+    String? adminNotes,
+    String? updatedAt,
+  });
+  SupportReportReviewResponseModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
+    Then<$Out2, $R2> t,
+  );
+}
+
+class _SupportReportReviewResponseModelCopyWithImpl<$R, $Out>
+    extends ClassCopyWithBase<$R, SupportReportReviewResponseModel, $Out>
+    implements
+        SupportReportReviewResponseModelCopyWith<
+          $R,
+          SupportReportReviewResponseModel,
+          $Out
+        > {
+  _SupportReportReviewResponseModelCopyWithImpl(
+    super.value,
+    super.then,
+    super.then2,
+  );
+
+  @override
+  late final ClassMapperBase<SupportReportReviewResponseModel> $mapper =
+      SupportReportReviewResponseModelMapper.ensureInitialized();
+  @override
+  ResultModelCopyWith<$R, ResultModel, ResultModel>? get result =>
+      $value.result?.copyWith.$chain((v) => call(result: v));
+  @override
+  $R call({
+    Object? result = $none,
+    Object? reportId = $none,
+    Object? status = $none,
+    Object? adminNotes = $none,
+    Object? updatedAt = $none,
+  }) => $apply(
+    FieldCopyWithData({
+      if (result != $none) #result: result,
+      if (reportId != $none) #reportId: reportId,
+      if (status != $none) #status: status,
+      if (adminNotes != $none) #adminNotes: adminNotes,
+      if (updatedAt != $none) #updatedAt: updatedAt,
+    }),
+  );
+  @override
+  SupportReportReviewResponseModel $make(CopyWithData data) =>
+      SupportReportReviewResponseModel(
+        result: data.get(#result, or: $value.result),
+        reportId: data.get(#reportId, or: $value.reportId),
+        status: data.get(#status, or: $value.status),
+        adminNotes: data.get(#adminNotes, or: $value.adminNotes),
+        updatedAt: data.get(#updatedAt, or: $value.updatedAt),
+      );
+
+  @override
+  SupportReportReviewResponseModelCopyWith<
+    $R2,
+    SupportReportReviewResponseModel,
+    $Out2
+  >
+  $chain<$R2, $Out2>(Then<$Out2, $R2> t) =>
+      _SupportReportReviewResponseModelCopyWithImpl<$R2, $Out2>(
+        $value,
+        $cast,
+        t,
+      );
 }
 
 class SupportTicketItemModelMapper

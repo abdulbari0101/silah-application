@@ -32,13 +32,17 @@ class CardButton extends StatelessWidget {
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
         borderRadius: radius,
-        side: borderColor != null ? BorderSide(color: borderColor!) : BorderSide.none,
+        side: borderColor != null
+            ? BorderSide(color: borderColor!)
+            : BorderSide.none,
       ),
       clipBehavior: Clip.antiAlias, // ensures ripple is clipped
       child: InkWell(
         onTap: onTap,
         borderRadius: radius,
-        overlayColor: WidgetStatePropertyAll(splashColor ?? cs.primary.withAlphaOpacity(.06)),
+        overlayColor: WidgetStatePropertyAll(
+          splashColor ?? cs.primary.withAlphaOpacity(.06),
+        ),
         child: Padding(padding: padding, child: child),
       ),
     );

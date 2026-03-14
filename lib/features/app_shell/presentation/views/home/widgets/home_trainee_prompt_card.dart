@@ -1,9 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:silah_app/core/config/constants/ui_constants.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
 import 'package:silah_app/core/config/router/app_routes.dart';
+import 'package:silah_app/core/config/router/route_extensions.dart';
 import 'package:silah_app/core/config/theme/extentions/theme_context_extension.dart';
 import 'package:silah_app/core/presentation/ui/widget/buttons/primary_button.dart';
 
@@ -37,7 +37,7 @@ class HomeTraineePromptCard extends StatelessWidget {
           UIConstants.mediumHeight,
           PrimaryButton(
             text: Strings.trainee_prompt_action.tr(),
-            onTap: () => context.pushNamed(AppRoutes.settings.name),
+            onTap: () => context.openRoute(AppRoutes.settings),
           ),
         ],
       ),

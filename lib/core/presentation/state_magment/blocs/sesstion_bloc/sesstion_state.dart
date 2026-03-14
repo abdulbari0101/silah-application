@@ -1,26 +1,10 @@
 part of 'sesstion_bloc.dart';
 
-sealed class SessionState extends Equatable {
-  const SessionState();
-  @override
-  List<Object?> get props => [];
+@freezed
+sealed class SessionState with _$SessionState {
+  const factory SessionState.initial() = SessionInitial;
+  const factory SessionState.idleTimedOut({required int randomId}) =
+      SessionIdleTimedOut;
+  const factory SessionState.tokenExpired({required ErrorSource source}) =
+      SessionTokenExpired;
 }
-
-class SessionInitial extends SessionState {}
-
-class SessionIdleTimedOut extends SessionState {
-  final randomId;
-
-  SessionIdleTimedOut() : randomId = Random().nextInt(1000000);
-  @override
-  List<Object?> get props => [...super.props, randomId];
-}
-
-class SessionTokenExpired extends SessionState {
-  final ErrorSource source;
-  const SessionTokenExpired(this.source);
-  @override
-  List<Object?> get props => [source];
-}
-
-

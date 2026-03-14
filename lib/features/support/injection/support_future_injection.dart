@@ -5,14 +5,9 @@ import 'package:silah_app/features/support/data/datasources/remote/support_remot
 import 'package:silah_app/features/support/data/datasources/remote/support_service.dart';
 import 'package:silah_app/features/support/data/repositories/support_repository_impl.dart';
 import 'package:silah_app/features/support/domain/repositories/support_tickets_repository.dart';
-import 'package:silah_app/features/support/presentation/blocs/support/support_bloc.dart';
 //! Features -Support
 
 Future<void> initSupport() async {
-  // Bloc
-
-  locator.registerLazySingleton(() => SupportBloc(repository: locator()));
-
   // Repo
   locator.registerLazySingleton<SupportTicketsRepository>(
     () =>

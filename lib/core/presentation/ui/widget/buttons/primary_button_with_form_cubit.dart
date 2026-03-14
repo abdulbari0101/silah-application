@@ -36,8 +36,9 @@ class PrimaryButtonWithFormCubit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FormCubit, bool>(
-      builder: (context, isFormValid) {
+    return BlocBuilder<FormCubit, FormCubitState>(
+      builder: (context, state) {
+        final isFormValid = state.isValid;
         return PrimaryButtonWithProgress(
           text: text,
           onTap: !isDisabled || isFormValid && extraBool

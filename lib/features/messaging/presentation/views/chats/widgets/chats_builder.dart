@@ -110,7 +110,7 @@ class _ChatThreadTile extends StatelessWidget {
       borderRadius: context.shapes.brMd,
       onTap: () => context.pushNamed(
         AppRoutes.chatThread.name,
-        extra: ChatConversationArgs(thread: thread),
+        extra: ChatConversationArgs(thread: thread).toJson(),
       ),
       child: Card(
         elevation: 0,

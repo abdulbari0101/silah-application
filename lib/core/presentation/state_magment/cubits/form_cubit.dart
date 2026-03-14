@@ -1,16 +1,24 @@
-
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class FormCubit extends Cubit<bool> {
-  FormCubit() : super(false);
+part 'form_cubit.freezed.dart';
+
+@freezed
+sealed class FormCubitState with _$FormCubitState {
+  const factory FormCubitState({@Default(false) bool isValid}) =
+      _FormCubitState;
+}
+
+class FormCubit extends Cubit<FormCubitState> {
+  FormCubit() : super(const FormCubitState());
 
   void updateValidity(bool isValid) {
-    if (state != isValid) {
-      emit(isValid);
+    if (state.isValid != isValid) {
+      emit(state.copyWith(isValid: isValid));
     }
   }
 
   void reset() {
-    emit(false);
+    emit(const FormCubitState());
   }
 }

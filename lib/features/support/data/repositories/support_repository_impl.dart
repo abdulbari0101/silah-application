@@ -20,11 +20,6 @@ class SupportTicketsRepositoryoImpl implements SupportTicketsRepository {
   @override
   Future<Either<Failure, List<SupportTicketEntity>>> fetchTickets() {
     return executor.runOffline(() async {
-      final role = await remoteDS.currentUserRole();
-      if (role != 'admin') {
-        return const <SupportTicketEntity>[];
-      }
-
       return remoteDS.fetchReports();
     }, from: 'SupportTicketsRepository.fetchTickets');
   }
@@ -66,10 +61,13 @@ class SupportTicketsRepositoryoImpl implements SupportTicketsRepository {
 
       return SupportTicketEntity(
         id: id,
+        reporterUid: uid,
+        reporterRole: role,
         subject: ticket.subject,
         description: description,
         status: SupportTicketStatus.open,
         attachmentUrls: ticket.attachmentUrls,
+        adminNotes: ticket.adminNotes,
         createdAt: createdAt,
         updatedAt: updatedAt,
       );

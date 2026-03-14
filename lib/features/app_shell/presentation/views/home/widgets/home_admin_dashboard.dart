@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:silah_app/core/config/constants/ui_constants.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
 import 'package:silah_app/core/config/router/app_routes.dart';
+import 'package:silah_app/core/config/router/route_extensions.dart';
 import 'package:silah_app/core/config/theme/extentions/theme_context_extension.dart';
 import 'package:silah_app/core/infrastructure/errors/failures.dart';
 import 'package:silah_app/core/injection/injection_container.dart';
@@ -111,7 +112,7 @@ class _HomeAdminDashboardState extends State<HomeAdminDashboard> {
                   child: _AdminMetricCard(
                     title: Strings.admin_tasks.tr(),
                     count: data.actionableTaskCount,
-                    onTap: () => context.pushNamed(AppRoutes.adminTasks.name),
+                    onTap: () => context.openRoute(AppRoutes.adminTasks),
                   ),
                 ),
                 UIConstants.mediumWidth,
@@ -119,8 +120,7 @@ class _HomeAdminDashboardState extends State<HomeAdminDashboard> {
                   child: _AdminMetricCard(
                     title: Strings.support.tr(),
                     count: data.openSupportCount,
-                    onTap: () =>
-                        context.pushNamed(AppRoutes.supportTickets.name),
+                    onTap: () => context.openRoute(AppRoutes.supportTickets),
                   ),
                 ),
               ],
@@ -129,7 +129,7 @@ class _HomeAdminDashboardState extends State<HomeAdminDashboard> {
             _AdminLinkCard(
               title: Strings.specializations.tr(),
               subtitle: Strings.manage_consultations_clients_and_training.tr(),
-              onTap: () => context.pushNamed(AppRoutes.specifications.name),
+              onTap: () => context.openRoute(AppRoutes.specifications),
             ),
             UIConstants.xbigHeight,
             Text(
@@ -142,7 +142,7 @@ class _HomeAdminDashboardState extends State<HomeAdminDashboard> {
             UIConstants.smallHeight,
             if (data.tasks.isEmpty)
               _AdminEmptyCard(
-                onTap: () => context.pushNamed(AppRoutes.adminTasks.name),
+                onTap: () => context.openRoute(AppRoutes.adminTasks),
               )
             else
               ...data.tasks.map(
@@ -154,7 +154,7 @@ class _HomeAdminDashboardState extends State<HomeAdminDashboard> {
                     task: task,
                     onTap: () => context.pushNamed(
                       AppRoutes.adminTaskDetails.name,
-                      extra: AdminTaskDetailsArgs(task: task),
+                      extra: AdminTaskDetailsArgs(task: task).toJson(),
                     ),
                   ),
                 ),

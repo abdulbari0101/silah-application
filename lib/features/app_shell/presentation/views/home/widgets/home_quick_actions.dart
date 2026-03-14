@@ -1,10 +1,10 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:silah_app/core/config/constants/ui_constants.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
 import 'package:silah_app/core/config/router/app_routes.dart';
+import 'package:silah_app/core/config/router/route_extensions.dart';
 import 'package:silah_app/core/config/router/route_info.dart';
 import 'package:silah_app/core/config/theme/extentions/theme_context_extension.dart';
 import 'package:silah_app/core/presentation/state_magment/blocs/app_setting/extensions/app_setting_context_extension.dart';
@@ -125,7 +125,7 @@ class _HomeActionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       borderRadius: context.shapes.brLg,
-      onTap: () => context.pushNamed(action.route.name),
+      onTap: () => context.openRoute(action.route),
       child: Container(
         padding: const EdgeInsets.all(UIConstants.mediumPadding),
         decoration: BoxDecoration(

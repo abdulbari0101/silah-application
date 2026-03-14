@@ -40,7 +40,12 @@ class ScreenPaddingWrapper extends StatelessWidget {
     if (!fullWidth && !onlyEndPadding) start = defaultHorizontalPadding;
     if (!fullWidth && !onlyStartPadding) end = defaultHorizontalPadding;
 
-    final effectivePadding = EdgeInsetsDirectional.fromSTEB(start, 0, end, bottom);
+    final effectivePadding = EdgeInsetsDirectional.fromSTEB(
+      start,
+      0,
+      end,
+      bottom,
+    );
 
     final wrappedChild = Padding(padding: effectivePadding, child: child);
 

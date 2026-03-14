@@ -37,22 +37,30 @@ class LinkButton extends StatelessWidget {
     return TextButton(
       onPressed: isDisabled ? null : onTap,
       style: ButtonStyle(
-        padding: const WidgetStatePropertyAll(EdgeInsets.symmetric(vertical: 8, horizontal: 4)),
+        padding: const WidgetStatePropertyAll(
+          EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+        ),
         minimumSize: const WidgetStatePropertyAll(Size(0, 0)),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         textStyle: WidgetStateProperty.resolveWith((states) {
           final showUnderline =
-              states.contains(WidgetState.hovered) || states.contains(WidgetState.focused);
+              states.contains(WidgetState.hovered) ||
+              states.contains(WidgetState.focused);
           return baseStyled.copyWith(
             decoration:
-                decoration ?? (showUnderline ? TextDecoration.underline : TextDecoration.none),
+                decoration ??
+                (showUnderline
+                    ? TextDecoration.underline
+                    : TextDecoration.none),
           );
         }),
         // Color per M3 roles
         foregroundColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.disabled)) {
             // M3 disabled text ≈ onSurface @ 38%
-            return Theme.of(context).colorScheme.onSurface.withAlphaOpacity(0.38);
+            return Theme.of(
+              context,
+            ).colorScheme.onSurface.withAlphaOpacity(0.38);
           }
           return cs.primary;
         }),

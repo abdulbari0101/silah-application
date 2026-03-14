@@ -1,16 +1,15 @@
 import 'package:bloc/bloc.dart';
-import 'package:dart_mappable/dart_mappable.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:silah_app/core/presentation/state_magment/blocs/app_state/state_data/app_auth_status.dart';
 import 'package:silah_app/core/presentation/state_magment/blocs/app_state/state_data/app_state_data.dart';
-
 import 'package:silah_app/features/auth/domain/entities/auth_user_entity.dart';
 
-part 'app_state_bloc.mapper.dart';
+part 'app_state_bloc.freezed.dart';
 part 'app_state_event.dart';
 part 'app_state_state.dart';
 
 class AppStateBloc extends Bloc<AppStateEvent, AppStateState> {
-  AppStateBloc() : super(AppStateInitial()) {
+  AppStateBloc() : super(AppStateState.initial(data: AppStateData())) {
     on<UserLoggedIn>(_handleUserLoggedIn);
     on<UpdateSession>(_handleUpdateSession);
     on<InjectDataBeforeAppStart>(_handleInjectDataBeforeAppStart);
@@ -20,11 +19,10 @@ class AppStateBloc extends Bloc<AppStateEvent, AppStateState> {
   void _handleUpdateSession(UpdateSession event, Emitter<AppStateState> emit) {
     final updated = state.data.copyWith(
       customer: event.authData ?? state.data.customer,
-     
       isLoggedIn: event.isLoggedIn ?? state.data.isLoggedIn,
       userAuthStatus: event.userAuthStatus ?? state.data.userAuthStatus,
     );
-    emit(AppStateLoaded(updated));
+    emit(AppStateState.loaded(data: updated));
   }
 
   void _handleUserLoggedIn(UserLoggedIn event, Emitter<AppStateState> emit) {
@@ -33,12 +31,15 @@ class AppStateBloc extends Bloc<AppStateEvent, AppStateState> {
       isLoggedIn: true,
       userAuthStatus: event.userAuthStatus,
     );
-    emit(AppStateLoaded(updated));
+    emit(AppStateState.loaded(data: updated));
   }
 
-  void _handleSyncLocalDataToAppState(SyncLocalDataToAppState event, Emitter<AppStateState> emit) {
+  void _handleSyncLocalDataToAppState(
+    SyncLocalDataToAppState event,
+    Emitter<AppStateState> emit,
+  ) {
     final next = event.mapper(state.data);
-    emit(AppStateLoaded(next));
+    emit(AppStateState.loaded(data: next));
   }
 
   void _handleInjectDataBeforeAppStart(
@@ -55,6 +56,6 @@ class AppStateBloc extends Bloc<AppStateEvent, AppStateState> {
       customer: event.customer,
     );
 
-    emit(AppStateLoaded(updated));
+    emit(AppStateState.loaded(data: updated));
   }
 }

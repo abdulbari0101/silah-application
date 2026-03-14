@@ -15,7 +15,10 @@ class SessionBlocListener extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Future<void> goToLogin({required BuildContext ctx, required bool isNewUser}) async {
+    Future<void> goToLogin({
+      required BuildContext ctx,
+      required bool isNewUser,
+    }) async {
       ctx.goTo(AppRoutes.login);
     }
 
@@ -25,13 +28,11 @@ class SessionBlocListener extends StatelessWidget {
       required SessionTokenExpired state,
     }) {
       DialogService.showSessionExpiredDialog(
-        
         onOk: () {
-             goToLogin(ctx: routerCtx, isNewUser: ctx.customer == null);
+          goToLogin(ctx: routerCtx, isNewUser: ctx.customer == null);
         },
       );
     }
-
 
     return BlocListener<SessionBloc, SessionState>(
       listener: (ctx, state) async {
@@ -47,7 +48,11 @@ class SessionBlocListener extends StatelessWidget {
           case SessionTokenExpired():
             if (goRouteContext.isTimeoutExempt()) return;
 
-            handleSessionExpired(routerCtx: goRouteContext, ctx: ctx, state: state);
+            handleSessionExpired(
+              routerCtx: goRouteContext,
+              ctx: ctx,
+              state: state,
+            );
             break;
 
           default:

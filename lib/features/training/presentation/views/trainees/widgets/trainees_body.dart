@@ -40,11 +40,11 @@ class _TraineesBodyState extends State<TraineesBody> {
               items: [
                 SegmentedItem(
                   value: _TraineesTab.applicants,
-                  label: Strings.trainees_applicants.tr(),
+                  label: Strings.status_pending.tr(),
                 ),
                 SegmentedItem(
                   value: _TraineesTab.accepted,
-                  label: Strings.trainees_accepted.tr(),
+                  label: Strings.status_accepted.tr(),
                 ),
               ],
             ),
@@ -77,6 +77,9 @@ class _TraineesBodyState extends State<TraineesBody> {
 
                       if (filtered.isEmpty) {
                         return EmptyWidget(
+                          title: _selected == _TraineesTab.accepted
+                              ? Strings.trainees_no_accepted_requests.tr()
+                              : Strings.no_data_to_display.tr(),
                           retryWidget: PrimaryButton(
                             text: Strings.try_again.tr(),
                             onTap: () => context.read<TraineesCubit>().load(),
@@ -96,12 +99,17 @@ class _TraineesBodyState extends State<TraineesBody> {
                             variant: _selected == _TraineesTab.accepted
                                 ? TraineeCardVariant.compact
                                 : TraineeCardVariant.detailed,
-                            onTap: () => context.pushNamed(
-                              AppRoutes.trainingApplicationDetails.name,
-                              extra: TrainingApplicationDetailsArgs(
-                                application: application,
-                              ),
-                            ),
+                            onTap: () async {
+                              await context.pushNamed(
+                                AppRoutes.trainingApplicationDetails.name,
+                                extra: TrainingApplicationDetailsArgs(
+                                  application: application,
+                                ).toJson(),
+                              );
+                              if (context.mounted) {
+                                context.read<TraineesCubit>().load();
+                              }
+                            },
                           );
                         },
                       );

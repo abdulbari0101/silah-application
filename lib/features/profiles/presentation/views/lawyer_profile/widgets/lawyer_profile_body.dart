@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:silah_app/core/config/constants/ui_constants.dart';
 import 'package:silah_app/core/config/router/app_routes.dart';
+import 'package:silah_app/core/presentation/state_magment/blocs/app_state/app_state_bloc.dart';
+import 'package:silah_app/features/auth/domain/entities/auth_user_entity.dart';
 import 'package:silah_app/core/presentation/ui/widget/headers/specialization_header.dart';
 import 'package:silah_app/features/consultations/presentation/views/create_request/models/consultation_request_args.dart';
 import 'package:silah_app/features/profiles/domain/entities/lawyer_profile_entity.dart';
 import 'package:silah_app/features/profiles/presentation/views/lawyer_profile/widgets/lawyer_profile_details_card.dart';
 import 'package:silah_app/features/profiles/presentation/views/lawyer_profile/widgets/lawyer_profile_summary_card.dart';
+import 'package:silah_app/features/training/presentation/support/training_access_policy.dart';
 import 'package:silah_app/features/training/domain/entities/training_opportunity_entity.dart';
 import 'package:silah_app/features/training/presentation/views/application/models/training_application_args.dart';
 
@@ -24,6 +28,14 @@ class LawyerProfileBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = context.select<AppStateBloc, AuthUserEntity?>(
+      (bloc) => bloc.state.data.customer,
+    );
+    final canRequestTraining = TrainingAccessPolicy.canRequestTraining(
+      viewer: currentUser,
+      lawyer: lawyer,
+    );
+
     return SafeArea(
       child: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(
@@ -47,9 +59,9 @@ class LawyerProfileBody extends StatelessWidget {
                   specializationId == null && specialization == null
                   ? null
                   : () => _requestConsultation(context),
-              onRequestTraining: lawyer.id == null || !lawyer.acceptsTrainees
-                  ? null
-                  : () => _openTrainingApplication(context, lawyer.id!),
+              onRequestTraining: canRequestTraining
+                  ? () => _openTrainingApplication(context, lawyer.id!.trim())
+                  : null,
             ),
           ],
         ),

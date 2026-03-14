@@ -1,22 +1,12 @@
 part of 'sesstion_bloc.dart';
 
-sealed class SessionEvent extends Equatable {
-  const SessionEvent();
-  @override
-  List<Object?> get props => [];
+@freezed
+sealed class SessionEvent with _$SessionEvent {
+  const factory SessionEvent.resumeInteractionListener() =
+      ResumeInteractionListener;
+  const factory SessionEvent.pauseInteractionListener() =
+      PauseInteractionListener;
+  const factory SessionEvent.interactionTimedOut() = InteractionTimedOutEvent;
+  const factory SessionEvent.tokenExpired({required ErrorSource source}) =
+      TokenExpiredEvent;
 }
-
-//
-class ResumeInteractionListener extends SessionEvent {}
-
-class PauseInteractionListener extends SessionEvent {}
-
-class InteractionTimedOutEvent extends SessionEvent {}
-
-class TokenExpiredEvent extends SessionEvent {
-  final ErrorSource source;
-  const TokenExpiredEvent({required this.source});
-  @override
-  List<Object?> get props => [source];
-}
-

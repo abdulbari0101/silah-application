@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
 import 'package:silah_app/core/infrastructure/network/firestore_display_resolver.dart';
 import 'package:silah_app/core/injection/injection_container.dart';
@@ -14,6 +15,7 @@ import 'package:silah_app/features/consultations/domain/repositories/consultatio
 import 'package:silah_app/features/messaging/presentation/cubits/conversation/chat_conversation_cubit.dart';
 import 'package:silah_app/features/messaging/presentation/views/conversation/models/chat_conversation_args.dart';
 import 'package:silah_app/features/messaging/presentation/views/conversation/widgets/chat_conversation_body.dart';
+import 'package:silah_app/features/messaging/presentation/views/conversation/widgets/chat_end_conversation_sheet.dart';
 
 class ChatConversationScreen extends StatefulWidget {
   const ChatConversationScreen({super.key, required this.args});
@@ -51,25 +53,9 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
       return;
     }
 
-    final confirmed = await showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(Strings.confirm_action_title.tr()),
-        content: Text(Strings.confirm_end_chat.tr()),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: Text(Strings.action_cancel.tr()),
-          ),
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(true),
-            child: Text(Strings.end_chat.tr()),
-          ),
-        ],
-      ),
-    );
+    final closeReason = await showChatEndConversationSheet(context);
 
-    if (confirmed != true || !mounted) {
+    if (closeReason == null || !mounted) {
       return;
     }
 
@@ -80,6 +66,7 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
     final result = await locator<ConsultationsRepository>().updateRequestStatus(
       consultationId,
       ConsultationStatus.closed,
+      closeReason: closeReason,
     );
 
     if (!mounted) {
@@ -87,8 +74,7 @@ class _ChatConversationScreenState extends State<ChatConversationScreen> {
     }
 
     result.fold((failure) => Toasts.error(context, failure.message), (_) {
-      Toasts.success(context, Strings.status_closed.tr());
-      Navigator.of(context).pop();
+      context.pop();
     });
 
     if (mounted) {

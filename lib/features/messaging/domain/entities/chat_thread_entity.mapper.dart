@@ -60,6 +60,13 @@ class ChatThreadEntityMapper extends ClassMapperBase<ChatThreadEntity> {
     _$consultationId,
     opt: true,
   );
+  static String? _$trainingApplicationId(ChatThreadEntity v) =>
+      v.trainingApplicationId;
+  static const Field<ChatThreadEntity, String> _f$trainingApplicationId = Field(
+    'trainingApplicationId',
+    _$trainingApplicationId,
+    opt: true,
+  );
 
   @override
   final MappableFields<ChatThreadEntity> fields = const {
@@ -69,6 +76,7 @@ class ChatThreadEntityMapper extends ClassMapperBase<ChatThreadEntity> {
     #unreadCount: _f$unreadCount,
     #updatedAt: _f$updatedAt,
     #consultationId: _f$consultationId,
+    #trainingApplicationId: _f$trainingApplicationId,
   };
   @override
   final bool ignoreNull = true;
@@ -81,6 +89,7 @@ class ChatThreadEntityMapper extends ClassMapperBase<ChatThreadEntity> {
       unreadCount: data.dec(_f$unreadCount),
       updatedAt: data.dec(_f$updatedAt),
       consultationId: data.dec(_f$consultationId),
+      trainingApplicationId: data.dec(_f$trainingApplicationId),
     );
   }
 
@@ -156,6 +165,7 @@ abstract class ChatThreadEntityCopyWith<$R, $In extends ChatThreadEntity, $Out>
     int? unreadCount,
     String? updatedAt,
     String? consultationId,
+    String? trainingApplicationId,
   });
   ChatThreadEntityCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
     Then<$Out2, $R2> t,
@@ -190,6 +200,7 @@ class _ChatThreadEntityCopyWithImpl<$R, $Out>
     int? unreadCount,
     Object? updatedAt = $none,
     Object? consultationId = $none,
+    Object? trainingApplicationId = $none,
   }) => $apply(
     FieldCopyWithData({
       if (id != $none) #id: id,
@@ -198,6 +209,8 @@ class _ChatThreadEntityCopyWithImpl<$R, $Out>
       if (unreadCount != null) #unreadCount: unreadCount,
       if (updatedAt != $none) #updatedAt: updatedAt,
       if (consultationId != $none) #consultationId: consultationId,
+      if (trainingApplicationId != $none)
+        #trainingApplicationId: trainingApplicationId,
     }),
   );
   @override
@@ -208,6 +221,10 @@ class _ChatThreadEntityCopyWithImpl<$R, $Out>
     unreadCount: data.get(#unreadCount, or: $value.unreadCount),
     updatedAt: data.get(#updatedAt, or: $value.updatedAt),
     consultationId: data.get(#consultationId, or: $value.consultationId),
+    trainingApplicationId: data.get(
+      #trainingApplicationId,
+      or: $value.trainingApplicationId,
+    ),
   );
 
   @override

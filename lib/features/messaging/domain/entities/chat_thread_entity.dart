@@ -12,6 +12,7 @@ class ChatThreadEntity with ChatThreadEntityMappable {
   final int unreadCount;
   final String? updatedAt;
   final String? consultationId;
+  final String? trainingApplicationId;
 
   const ChatThreadEntity({
     this.id,
@@ -20,5 +21,6 @@ class ChatThreadEntity with ChatThreadEntityMappable {
     this.unreadCount = 0,
     this.updatedAt,
     this.consultationId,
+    this.trainingApplicationId,
   });
 }

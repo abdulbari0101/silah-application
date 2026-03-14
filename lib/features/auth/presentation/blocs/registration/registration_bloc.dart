@@ -1,8 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
-import 'package:equatable/equatable.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:silah_app/core/infrastructure/errors/error_utils.dart';
 import 'package:silah_app/core/infrastructure/errors/failures.dart';
 import 'package:silah_app/core/presentation/state_magment/bloc_utils/bloc_utils.dart';
@@ -13,19 +12,28 @@ import 'package:silah_app/features/auth/domain/repositories/auth_repository.dart
 
 import 'registration_operation_type.dart';
 
+part 'registration_bloc.freezed.dart';
 part 'registration_event.dart';
 part 'registration_state.dart';
 
 class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
-  final AuthRepo repository;
-  final AppStateBloc appStateBloc;
   RegistrationBloc({required this.repository, required this.appStateBloc})
-    : super(RegistrationInitialState()) {
+    : super(const RegistrationState.initial()) {
     on<RegisterUser>(_handleRegisterUser);
   }
 
-  Future<void> _handleRegisterUser(RegisterUser event, Emitter<RegistrationState> emit) async {
-    emit(const RegistrationInProgress(operationType: RegistrationOperType.reqComplete));
+  final AuthRepo repository;
+  final AppStateBloc appStateBloc;
+
+  Future<void> _handleRegisterUser(
+    RegisterUser event,
+    Emitter<RegistrationState> emit,
+  ) async {
+    emit(
+      const RegistrationState.inProgress(
+        operationType: RegistrationOperType.reqComplete,
+      ),
+    );
 
     final result = await repository.register(event.payload);
     result.fold(
@@ -35,7 +43,11 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
         operationType: RegistrationOperType.reqComplete,
       ),
       (authData) {
-        emit(const RegistrationStepSuccess(operationType: RegistrationOperType.reqComplete));
+        emit(
+          const RegistrationState.stepSuccess(
+            operationType: RegistrationOperType.reqComplete,
+          ),
+        );
         appStateBloc.add(
           UserLoggedIn(
             authData: authData,
@@ -55,7 +67,8 @@ class RegistrationBloc extends Bloc<RegistrationEvent, RegistrationState> {
       BlocUtils.handleFailure(
         includeCodeLine: false,
         failure: failure,
-        onError: (msg) => RegistrationError(operationType: operationType, message: msg),
+        onError: (msg) =>
+            RegistrationState.error(operationType: operationType, message: msg),
         codeToMessageMap: codeToMessageMap,
       ),
     );

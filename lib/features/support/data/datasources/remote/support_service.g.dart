@@ -75,6 +75,39 @@ class _SupportService implements SupportService {
     );
   }
 
+  Future<dynamic> _reviewReport(
+    String reportId,
+    SupportReportReviewRequestModel request,
+  ) async {
+    final _extra = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{};
+    final _headers = <String, dynamic>{};
+    final _data = request;
+    final _options = _setStreamType<SupportReportReviewResponseModel>(
+      Options(method: 'PATCH', headers: _headers, extra: _extra)
+          .compose(
+            _dio.options,
+            '/support/reports/${reportId}',
+            queryParameters: queryParameters,
+            data: _data,
+          )
+          .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
+    );
+    final _result = await _dio.fetch(_options);
+    final _value = _result.data;
+    return _value;
+  }
+
+  @override
+  Future<SupportReportReviewResponseModel> reviewReport(
+    String reportId,
+    SupportReportReviewRequestModel request,
+  ) {
+    return JsonBodyMappableAdapter<SupportReportReviewResponseModel>().adapt(
+      () => _reviewReport(reportId, request),
+    );
+  }
+
   RequestOptions _setStreamType<T>(RequestOptions requestOptions) {
     if (T != dynamic &&
         !(requestOptions.responseType == ResponseType.bytes ||

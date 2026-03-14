@@ -15,8 +15,8 @@ class SelectableItemBuilder<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocSelector<SelectedItemCubit<T>, T?, bool>(
-      selector: (selected) => selected == item,
+    return BlocSelector<SelectedItemCubit<T>, SelectedItemState<T>, bool>(
+      selector: (state) => state.selected == item,
       builder: (context, isSelected) => builder(context, isSelected),
     );
   }

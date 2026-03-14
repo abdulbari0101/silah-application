@@ -20,11 +20,40 @@ class SupportReportRequestModel with SupportReportRequestModelMappable {
 }
 
 @MappableClass(ignoreNull: true)
+class SupportReportReviewRequestModel
+    with SupportReportReviewRequestModelMappable {
+  final String status;
+  final String? adminNotes;
+
+  const SupportReportReviewRequestModel({
+    required this.status,
+    this.adminNotes,
+  });
+}
+
+@MappableClass(ignoreNull: true)
 class SupportReportResponseModel extends BaseRespWrapper
     with SupportReportResponseModelMappable {
   final String? reportId;
 
   const SupportReportResponseModel({required super.result, this.reportId});
+}
+
+@MappableClass(ignoreNull: true)
+class SupportReportReviewResponseModel extends BaseRespWrapper
+    with SupportReportReviewResponseModelMappable {
+  final String? reportId;
+  final String? status;
+  final String? adminNotes;
+  final String? updatedAt;
+
+  const SupportReportReviewResponseModel({
+    required super.result,
+    this.reportId,
+    this.status,
+    this.adminNotes,
+    this.updatedAt,
+  });
 }
 
 @MappableClass(ignoreNull: true)
@@ -54,10 +83,13 @@ class SupportTicketItemModel with SupportTicketItemModelMappable {
   SupportTicketEntity toEntity() {
     return SupportTicketEntity(
       id: reportId,
+      reporterUid: reporterUid,
+      reporterRole: role,
       subject: subject,
       description: details,
       status: _parseStatus(status),
       attachmentUrls: const <String>[],
+      adminNotes: adminNotes,
       createdAt: createdAt,
       updatedAt: updatedAt ?? createdAt,
     );

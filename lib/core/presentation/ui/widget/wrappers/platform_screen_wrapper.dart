@@ -60,7 +60,10 @@ class PlatformScreenWrapper extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppPlatform(ios: _buildIosScaffold(), android: _buildAndroidScaffold());
+    return AppPlatform(
+      ios: _buildIosScaffold(),
+      android: _buildAndroidScaffold(),
+    );
   }
 
   Widget _buildIosScaffold() {

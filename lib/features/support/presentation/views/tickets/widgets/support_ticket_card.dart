@@ -6,20 +6,34 @@ import 'package:silah_app/core/config/theme/extentions/theme_context_extension.d
 import 'package:silah_app/core/presentation/ui/widget/cards/custom_card.dart';
 import 'package:silah_app/core/presentation/ui/widget/chips/status_chip.dart';
 import 'package:silah_app/features/support/domain/entities/support_ticket_entity.dart';
-import 'package:silah_app/features/support/domain/entities/support_ticket_status.dart';
+import 'package:silah_app/features/support/presentation/support/support_ticket_presenter.dart';
 
 class SupportTicketCard extends StatelessWidget {
-  const SupportTicketCard({super.key, required this.ticket, this.onTap});
+  const SupportTicketCard({
+    super.key,
+    required this.ticket,
+    this.onTap,
+    this.showReporterInfo = false,
+  });
 
   final SupportTicketEntity ticket;
   final VoidCallback? onTap;
+  final bool showReporterInfo;
 
   @override
   Widget build(BuildContext context) {
-    final subject = ticket.subject?.trim();
-    final description = ticket.description?.trim();
-    final label = _statusLabel(context, ticket.status);
-    final color = _statusColor(context, ticket.status);
+    final title = SupportTicketPresenter.title(context, ticket);
+    final description = SupportTicketPresenter.descriptionPreview(ticket);
+    final reference = SupportTicketPresenter.reference(ticket);
+    final createdAt = SupportTicketPresenter.formattedDate(
+      context,
+      ticket.createdAt,
+    );
+    final label = SupportTicketPresenter.statusLabel(context, ticket.status);
+    final color = SupportTicketPresenter.statusColor(context, ticket.status);
+    final reporterRole = showReporterInfo
+        ? SupportTicketPresenter.reporterRoleLabel(context, ticket.reporterRole)
+        : null;
 
     return InkWell(
       onTap: onTap,
@@ -32,16 +46,18 @@ class SupportTicketCard extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    subject?.isNotEmpty == true
-                        ? subject!
-                        : Strings.support.tr(),
-                    style: context.textTheme.titleSmall,
+                    title,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: context.textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
                 StatusChip(label: label, color: color),
               ],
             ),
-            if (description != null && description.isNotEmpty) ...[
+            if (description.isNotEmpty) ...[
               UIConstants.smallHeight,
               Text(
                 description,
@@ -52,44 +68,57 @@ class SupportTicketCard extends StatelessWidget {
                 ),
               ),
             ],
-            if (ticket.createdAt != null) ...[
-              UIConstants.smallHeight,
-              Text(
-                ticket.createdAt!,
-                style: context.textTheme.labelSmall?.copyWith(
-                  color: context.colors.onSurfaceVariant,
+            UIConstants.mediumHeight,
+            Wrap(
+              spacing: UIConstants.mediumPadding,
+              runSpacing: UIConstants.smallPadding,
+              children: [
+                _buildMetaText(
+                  context,
+                  label: Strings.reference_number.tr(),
+                  value: reference,
                 ),
-              ),
-            ],
+                _buildMetaText(
+                  context,
+                  label: Strings.created_at.tr(),
+                  value: createdAt,
+                ),
+                if (showReporterInfo && reporterRole != null)
+                  _buildMetaText(
+                    context,
+                    label: Strings.support_reporter_role.tr(),
+                    value: reporterRole,
+                  ),
+              ],
+            ),
           ],
         ),
       ),
     );
   }
 
-  String _statusLabel(BuildContext context, SupportTicketStatus status) {
-    switch (status) {
-      case SupportTicketStatus.open:
-        return Strings.status_open.tr();
-      case SupportTicketStatus.inProgress:
-        return Strings.status_in_progress.tr();
-      case SupportTicketStatus.resolved:
-        return Strings.status_resolved.tr();
-      case SupportTicketStatus.closed:
-        return Strings.status_closed.tr();
-    }
-  }
-
-  Color _statusColor(BuildContext context, SupportTicketStatus status) {
-    switch (status) {
-      case SupportTicketStatus.open:
-        return context.semantic.info;
-      case SupportTicketStatus.inProgress:
-        return context.semantic.warning;
-      case SupportTicketStatus.resolved:
-        return context.semantic.success;
-      case SupportTicketStatus.closed:
-        return context.colors.outlineVariant;
-    }
+  Widget _buildMetaText(
+    BuildContext context, {
+    required String label,
+    required String value,
+  }) {
+    return Text.rich(
+      TextSpan(
+        children: [
+          TextSpan(
+            text: '$label: ',
+            style: context.textTheme.labelSmall?.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          TextSpan(
+            text: value,
+            style: context.textTheme.labelSmall?.copyWith(
+              color: context.colors.onSurfaceVariant,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

@@ -2,7 +2,6 @@ import 'package:get_it/get_it.dart';
 import 'package:silah_app/core/bootstrap/once_runner.dart';
 import 'package:silah_app/core/injection/init_timer.dart';
 import 'package:silah_app/features/admin/injection/admin_future_injection.dart';
-import 'package:silah_app/features/app_shell/injection/intro_future_injection.dart';
 import 'package:silah_app/features/app_shell/injection/main_future_injection.dart';
 import 'package:silah_app/features/auth/injection/auth_future_injection.dart';
 import 'package:silah_app/features/auth/injection/auth_readers_injection.dart';
@@ -51,8 +50,6 @@ Future<void> init() async {
     await initOnceWithTimeNeededLog('initNotifications', initNotifications);
     await initOnceWithTimeNeededLog('initAuth', initAuth);
     await initOnceWithTimeNeededLog('initMain', initMain);
-
-    await initOnceWithTimeNeededLog('initIntro', initIntro);
 
     await initOnceWithTimeNeededLog('initChats', initChats);
     await initOnceWithTimeNeededLog('initConsultation', initConsultation);

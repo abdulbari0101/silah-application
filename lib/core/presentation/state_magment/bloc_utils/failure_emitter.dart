@@ -5,7 +5,10 @@ import 'package:silah_app/core/presentation/state_magment/bloc_utils/bloc_utils.
 
 extension FailureEmitter<S> on Emitter<S> {
   /// Emit a localized error state using your shared BlocUtils + codeToMessageMap.
-  void emitFailure(Failure failure, {required S Function(String message) onError}) {
+  void emitFailure(
+    Failure failure, {
+    required S Function(String message) onError,
+  }) {
     final state = BlocUtils.handleFailure(
       failure: failure,
       onError: onError,

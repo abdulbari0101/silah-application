@@ -411,16 +411,24 @@ class ConsultationStatusUpdateRequestModelMapper
   static String _$status(ConsultationStatusUpdateRequestModel v) => v.status;
   static const Field<ConsultationStatusUpdateRequestModel, String> _f$status =
       Field('status', _$status);
+  static String? _$closeReason(ConsultationStatusUpdateRequestModel v) =>
+      v.closeReason;
+  static const Field<ConsultationStatusUpdateRequestModel, String>
+  _f$closeReason = Field('closeReason', _$closeReason, opt: true);
 
   @override
   final MappableFields<ConsultationStatusUpdateRequestModel> fields = const {
     #status: _f$status,
+    #closeReason: _f$closeReason,
   };
   @override
   final bool ignoreNull = true;
 
   static ConsultationStatusUpdateRequestModel _instantiate(DecodingData data) {
-    return ConsultationStatusUpdateRequestModel(status: data.dec(_f$status));
+    return ConsultationStatusUpdateRequestModel(
+      status: data.dec(_f$status),
+      closeReason: data.dec(_f$closeReason),
+    );
   }
 
   @override
@@ -504,7 +512,7 @@ abstract class ConsultationStatusUpdateRequestModelCopyWith<
   $Out
 >
     implements ClassCopyWith<$R, $In, $Out> {
-  $R call({String? status});
+  $R call({String? status, String? closeReason});
   ConsultationStatusUpdateRequestModelCopyWith<$R2, $In, $Out2>
   $chain<$R2, $Out2>(Then<$Out2, $R2> t);
 }
@@ -527,12 +535,17 @@ class _ConsultationStatusUpdateRequestModelCopyWithImpl<$R, $Out>
   late final ClassMapperBase<ConsultationStatusUpdateRequestModel> $mapper =
       ConsultationStatusUpdateRequestModelMapper.ensureInitialized();
   @override
-  $R call({String? status}) =>
-      $apply(FieldCopyWithData({if (status != null) #status: status}));
+  $R call({String? status, Object? closeReason = $none}) => $apply(
+    FieldCopyWithData({
+      if (status != null) #status: status,
+      if (closeReason != $none) #closeReason: closeReason,
+    }),
+  );
   @override
   ConsultationStatusUpdateRequestModel $make(CopyWithData data) =>
       ConsultationStatusUpdateRequestModel(
         status: data.get(#status, or: $value.status),
+        closeReason: data.get(#closeReason, or: $value.closeReason),
       );
 
   @override

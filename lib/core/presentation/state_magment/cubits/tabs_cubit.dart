@@ -1,17 +1,17 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:silah_app/core/presentation/ui/screen/tabs_screen/utils/tab_view.dart';
 
+part 'tabs_cubit.freezed.dart';
+
 /// Represents the state of tabs including the list of tabs
 /// and the index of the currently selected tab.
-class TabsState {
-  final List<TabView> tabs;
-  final int selectedIndex;
-
-  TabsState({required this.tabs, required this.selectedIndex});
-
-  TabsState copyWith({List<TabView>? tabs, int? selectedIndex}) {
-    return TabsState(tabs: tabs ?? this.tabs, selectedIndex: selectedIndex ?? this.selectedIndex);
-  }
+@freezed
+sealed class TabsState with _$TabsState {
+  const factory TabsState({
+    required List<TabView> tabs,
+    required int selectedIndex,
+  }) = _TabsState;
 }
 
 class TabsCubit extends Cubit<TabsState> {

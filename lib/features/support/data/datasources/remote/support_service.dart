@@ -17,4 +17,10 @@ abstract class SupportService {
 
   @GET('/support/reports')
   Future<BaseApiResponse<SupportTicketsResponseModel>> fetchReports();
+
+  @PATCH('/support/reports/{reportId}')
+  Future<BaseApiResponse<SupportReportReviewResponseModel>> reviewReport(
+    @Path('reportId') String reportId,
+    @Body() SupportReportReviewRequestModel request,
+  );
 }

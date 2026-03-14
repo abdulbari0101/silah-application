@@ -30,16 +30,16 @@ class ConsultationCloseReasonMapper
   @override
   ConsultationCloseReason decode(dynamic value) {
     switch (value) {
-      case r'completed':
-        return ConsultationCloseReason.completed;
-      case r'usercancelled':
-        return ConsultationCloseReason.userCancelled;
-      case r'lawyerrejected':
-        return ConsultationCloseReason.lawyerRejected;
-      case r'timeout':
-        return ConsultationCloseReason.timeout;
-      case r'other':
-        return ConsultationCloseReason.other;
+      case r'legal_procedures_started_outside_platform':
+        return ConsultationCloseReason.legalProceduresStartedOutsidePlatform;
+      case r'client_inactive_for_long_time':
+        return ConsultationCloseReason.clientInactiveForLongTime;
+      case r'outside_service_scope':
+        return ConsultationCloseReason.outsideServiceScope;
+      case r'conflict_of_interest':
+        return ConsultationCloseReason.conflictOfInterest;
+      case r'consultation_completed':
+        return ConsultationCloseReason.consultationCompleted;
       default:
         throw MapperException.unknownEnumValue(value);
     }
@@ -48,16 +48,16 @@ class ConsultationCloseReasonMapper
   @override
   dynamic encode(ConsultationCloseReason self) {
     switch (self) {
-      case ConsultationCloseReason.completed:
-        return r'completed';
-      case ConsultationCloseReason.userCancelled:
-        return r'usercancelled';
-      case ConsultationCloseReason.lawyerRejected:
-        return r'lawyerrejected';
-      case ConsultationCloseReason.timeout:
-        return r'timeout';
-      case ConsultationCloseReason.other:
-        return r'other';
+      case ConsultationCloseReason.legalProceduresStartedOutsidePlatform:
+        return r'legal_procedures_started_outside_platform';
+      case ConsultationCloseReason.clientInactiveForLongTime:
+        return r'client_inactive_for_long_time';
+      case ConsultationCloseReason.outsideServiceScope:
+        return r'outside_service_scope';
+      case ConsultationCloseReason.conflictOfInterest:
+        return r'conflict_of_interest';
+      case ConsultationCloseReason.consultationCompleted:
+        return r'consultation_completed';
     }
   }
 }
