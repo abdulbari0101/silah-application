@@ -5,6 +5,8 @@ import 'package:silah_app/core/config/constants/ui_constants.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
 import 'package:silah_app/core/presentation/ui/widget/buttons/primary_button_with_progress.dart';
 import 'package:silah_app/core/presentation/ui/widget/text_fields/f_text2_feild.dart';
+import 'package:silah_app/core/data/local/cache/readers/auth_readers.dart';
+import 'package:silah_app/core/injection/injection_container.dart';
 import 'package:silah_app/features/verification/presentation/cubits/request/verification_request_cubit.dart';
 
 class VerificationRequestBody extends StatefulWidget {
@@ -19,6 +21,22 @@ class _VerificationRequestBodyState extends State<VerificationRequestBody> {
   final _licenseController = TextEditingController();
   final _nationalIdController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  @override
+  void initState() {
+    super.initState();
+    _loadCachedProfile();
+  }
+
+  Future<void> _loadCachedProfile() async {
+    final customer = await locator<SessionReader>().customer();
+    final profile = customer?.profile;
+    if (profile != null && mounted) {
+      final license = profile['licenseNumber'] as String? ?? '';
+      final nationalId = profile['nationalId'] as String? ?? '';
+      _licenseController.text = license;
+      _nationalIdController.text = nationalId;
+    }
+  }
 
   @override
   void dispose() {
