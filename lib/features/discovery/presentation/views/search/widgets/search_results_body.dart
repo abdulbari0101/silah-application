@@ -58,8 +58,11 @@ class SearchResultsBody extends StatelessWidget {
                           lawyer: lawyer,
                           specializationLabel: title,
                           specializationId:
-                              specialization.id ?? specialization.code ?? specialization.name,
-                          onRequestConsultation: () => _openRequest(context, lawyer),
+                              specialization.id ??
+                              specialization.code ??
+                              specialization.name,
+                          onRequestConsultation: () =>
+                              _openRequest(context, lawyer),
                         );
                       },
                     ),
@@ -77,8 +80,10 @@ class SearchResultsBody extends StatelessWidget {
       AppRoutes.requestConsultation.name,
       extra: ConsultationRequestArgs(
         lawyer: lawyer,
-        specializationId: specialization.id ?? specialization.code ?? specialization.name,
-        specializationLabel: specialization.name ?? specialization.code ?? specialization.id,
+        specializationId:
+            specialization.id ?? specialization.code ?? specialization.name,
+        specializationLabel:
+            specialization.name ?? specialization.code ?? specialization.id,
       ),
     );
   }

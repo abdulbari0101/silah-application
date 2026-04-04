@@ -22,9 +22,17 @@ class OfferModel with OfferModelMappable {
 
   final int? language;
 
-  const OfferModel({this.language, this.no, this.link, this.desc, this.name, this.title});
+  const OfferModel({
+    this.language,
+    this.no,
+    this.link,
+    this.desc,
+    this.name,
+    this.title,
+  });
 
-  OfferEntity toEntity() => OfferEntity(no: no, link: link, desc: desc, name: name, title: title);
+  OfferEntity toEntity() =>
+      OfferEntity(no: no, link: link, desc: desc, name: name, title: title);
 
   factory OfferModel.fromEntity(OfferEntity entity) => OfferModel(
     no: entity.no,

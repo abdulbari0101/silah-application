@@ -8,7 +8,9 @@ extension WidgetExtensions on Widget {
       child: InkWell(
         onTap: onTap, // Now accepts nullable onTap
         borderRadius: context.shapes.brLg,
-        splashColor: onTap != null ? context.colors.primary : Colors.transparent,
+        splashColor: onTap != null
+            ? context.colors.primary
+            : Colors.transparent,
         highlightColor: onTap != null
             ? context.colors.primary.withAlphaOpacity(0.1)
             : Colors.transparent,

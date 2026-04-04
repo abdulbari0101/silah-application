@@ -18,10 +18,15 @@ class OTPField extends StatelessWidget {
         borderRadius: context.shapes.brXs,
         borderWidth: 2,
         filled: true,
-        fillColor: context.themeValue(light: context.colors.surface, dark: Colors.black),
+        fillColor: context.themeValue(
+          light: context.colors.surface,
+          dark: Colors.black,
+        ),
         keyboardType: TextInputType.number,
         fieldWidth: AppDimension(context).width * 0.125,
-        textStyle: context.textTheme.labelLarge!.copyWith(color: context.colors.greyDark()),
+        textStyle: context.textTheme.labelLarge!.copyWith(
+          color: context.colors.greyDark(),
+        ),
         margin: const EdgeInsets.symmetric(horizontal: 4),
         borderColor: context.colors.primary,
         showFieldAsBox: true,

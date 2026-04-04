@@ -11,7 +11,12 @@ class IOSProgress extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: CupertinoActivityIndicator(
-        color: color ?? (context.themeValue(light: context.colors.primary, dark: Colors.white)),
+        color:
+            color ??
+            (context.themeValue(
+              light: context.colors.primary,
+              dark: Colors.white,
+            )),
         radius: size,
       ),
     );

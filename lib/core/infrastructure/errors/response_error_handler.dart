@@ -16,7 +16,8 @@ class ResponseErrorHandler {
       if (isResultOK(baseResObject)) {
         return null;
       }
-      final result = baseResObject?.result; // if any of them null will throw exeption form
+      final result =
+          baseResObject?.result; // if any of them null will throw exeption form
 
       final code = result?.code ?? ErrorCodes.internalServer500;
       final msg = result?.message ?? Strings.err_error_occured.tr();
@@ -37,7 +38,10 @@ class ResponseErrorHandler {
       }
     } catch (ex, st) {
       _log.apiError(tag: 'ResponseErrorHandler.handle', ex, stack: st);
-      return ServerException(Strings.err_error_occured.tr(), ErrorCodes.internalServer500);
+      return ServerException(
+        Strings.err_error_occured.tr(),
+        ErrorCodes.internalServer500,
+      );
     }
   }
 
@@ -45,7 +49,10 @@ class ResponseErrorHandler {
     final result = baseResObject?.result;
 
     if (result == null) {
-      throw ServerException(Strings.bad_response.tr(), ErrorCodes.badResponseNegtive400);
+      throw ServerException(
+        Strings.bad_response.tr(),
+        ErrorCodes.badResponseNegtive400,
+      );
     }
 
     return result.code == ResultOK;

@@ -33,7 +33,9 @@ class UserSettingsRepoImpl implements UserSettingsRepo {
   @override
   Future<Either<Failure, bool>> updateSetting(UserSettingEntity setting) async {
     return executor.runOffline(() async {
-      final local = await cacheDS.updateUserSetting(UserSettingModel.fromEntity(setting));
+      final local = await cacheDS.updateUserSetting(
+        UserSettingModel.fromEntity(setting),
+      );
       return local;
     }, from: "UserSettingsRepoImpl.updateSetting");
   }

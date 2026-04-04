@@ -51,10 +51,12 @@ class CustomLogInterceptor extends Interceptor {
 
     final headerLen = _byteLength(options.headers);
 
-    if (headerLen > 0) buf.writeln("header:${_jsonStr(options.headers, pretty: true)}");
+    if (headerLen > 0)
+      buf.writeln("header:${_jsonStr(options.headers, pretty: true)}");
 
     final bodyLen = _byteLength(options.data);
-    if (bodyLen > 0) buf.writeln("body: ${_jsonStr(options.data, pretty: false)}");
+    if (bodyLen > 0)
+      buf.writeln("body: ${_jsonStr(options.data, pretty: false)}");
 
     buf.writeln('--> END $method ($bodyLen-byte body)');
 
@@ -72,7 +74,8 @@ class CustomLogInterceptor extends Interceptor {
     //_writeHeaders(buf, response.headers.map);
 
     final bodyLen = _byteLength(response.data);
-    if (bodyLen > 0) buf.writeln(_jsonStr(response.data, pretty: false)); // compact
+    if (bodyLen > 0)
+      buf.writeln(_jsonStr(response.data, pretty: false)); // compact
     buf.writeln('<-- END HTTP ($bodyLen-byte body)');
 
     _log.networkDebug(buf.toString(), tag: 'Response');

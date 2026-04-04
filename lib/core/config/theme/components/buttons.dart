@@ -12,7 +12,9 @@ ButtonStyle _baseFilled(ColorScheme cs, TextTheme text) {
     padding: WidgetStateProperty.all(_kPadding),
     shape: const WidgetStatePropertyAll(StadiumBorder()),
     // Label-2 15/18, make CTAs SemiBold
-    textStyle: WidgetStateProperty.all(text.labelLarge?.copyWith(fontWeight: FontWeight.w600)),
+    textStyle: WidgetStateProperty.all(
+      text.labelLarge?.copyWith(fontWeight: FontWeight.w600),
+    ),
     // Colors per state
     foregroundColor: WidgetStateProperty.resolveWith((states) {
       if (states.contains(WidgetState.disabled)) {
@@ -30,7 +32,8 @@ ButtonStyle _baseFilled(ColorScheme cs, TextTheme text) {
       return cs.primary;
     }),
     overlayColor: WidgetStateProperty.resolveWith((states) {
-      if (states.contains(WidgetState.hovered) || states.contains(WidgetState.focused)) {
+      if (states.contains(WidgetState.hovered) ||
+          states.contains(WidgetState.focused)) {
         return cs.onPrimary.withAlphaOpacity(0.08);
       }
       if (states.contains(WidgetState.pressed)) {
@@ -38,7 +41,9 @@ ButtonStyle _baseFilled(ColorScheme cs, TextTheme text) {
       }
       return null;
     }),
-    elevation: WidgetStateProperty.all(0), // keep flat (you were using boxShadow before)
+    elevation: WidgetStateProperty.all(
+      0,
+    ), // keep flat (you were using boxShadow before)
     shadowColor: WidgetStateProperty.all(Colors.transparent),
   );
 }
@@ -49,7 +54,9 @@ ButtonStyle _baseOutlined(ColorScheme cs, TextTheme text) {
     padding: WidgetStateProperty.all(_kPadding),
     shape: const WidgetStatePropertyAll(StadiumBorder()),
     // textStyle: WidgetStateProperty.all(const TextStyle(fontWeight: FontWeight.w600)),
-    textStyle: WidgetStateProperty.all(text.labelLarge?.copyWith(fontWeight: FontWeight.w600)),
+    textStyle: WidgetStateProperty.all(
+      text.labelLarge?.copyWith(fontWeight: FontWeight.w600),
+    ),
     foregroundColor: WidgetStateProperty.resolveWith((states) {
       if (states.contains(WidgetState.disabled)) {
         return cs.primary.withAlphaOpacity(0.5);
@@ -65,10 +72,14 @@ ButtonStyle _baseOutlined(ColorScheme cs, TextTheme text) {
     side: WidgetStateProperty.resolveWith((states) {
       final base = cs.primary;
       final disabled = base.withAlphaOpacity(.4);
-      return BorderSide(color: states.contains(WidgetState.disabled) ? disabled : base, width: 1.5);
+      return BorderSide(
+        color: states.contains(WidgetState.disabled) ? disabled : base,
+        width: 1.5,
+      );
     }),
     overlayColor: WidgetStateProperty.resolveWith((states) {
-      if (states.contains(WidgetState.hovered) || states.contains(WidgetState.focused)) {
+      if (states.contains(WidgetState.hovered) ||
+          states.contains(WidgetState.focused)) {
         return cs.primary.withAlphaOpacity(0.05);
       }
       if (states.contains(WidgetState.pressed)) {
@@ -85,25 +96,32 @@ FilledButtonThemeData buildFilledButtonTheme(ColorScheme cs, TextTheme text) =>
     FilledButtonThemeData(style: _baseFilled(cs, text));
 
 /// Optional: tonal variant for use with `FilledButton.tonal(...)`
-ElevatedButtonThemeData buildElevatedButtonTheme(ColorScheme cs, TextTheme text) =>
-    ElevatedButtonThemeData(
-      style: ButtonStyle(
-        textStyle: WidgetStatePropertyAll(text.labelLarge), // 15/18
-        elevation: const WidgetStatePropertyAll(1),
-      ),
-      // _baseFilled(cs, text),
-    );
+ElevatedButtonThemeData buildElevatedButtonTheme(
+  ColorScheme cs,
+  TextTheme text,
+) => ElevatedButtonThemeData(
+  style: ButtonStyle(
+    textStyle: WidgetStatePropertyAll(text.labelLarge), // 15/18
+    elevation: const WidgetStatePropertyAll(1),
+  ),
+  // _baseFilled(cs, text),
+);
 
-OutlinedButtonThemeData buildOutlinedButtonTheme(ColorScheme cs, TextTheme text) =>
-    OutlinedButtonThemeData(style: _baseOutlined(cs, text));
+OutlinedButtonThemeData buildOutlinedButtonTheme(
+  ColorScheme cs,
+  TextTheme text,
+) => OutlinedButtonThemeData(style: _baseOutlined(cs, text));
 
 /// If you also use TextButtons anywhere, nice to align them too
-TextButtonThemeData buildTextButtonTheme(ColorScheme cs, TextTheme text) => TextButtonThemeData(
-  style: ButtonStyle(
-    textStyle: WidgetStatePropertyAll(text.labelLarge),
-    padding: const WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 16)),
-  ),
-);
+TextButtonThemeData buildTextButtonTheme(ColorScheme cs, TextTheme text) =>
+    TextButtonThemeData(
+      style: ButtonStyle(
+        textStyle: WidgetStatePropertyAll(text.labelLarge),
+        padding: const WidgetStatePropertyAll(
+          EdgeInsets.symmetric(horizontal: 16),
+        ),
+      ),
+    );
 
 // import 'package:silah_app/core/config/constants/ui_constants.dart';
 // import 'package:silah_app/core/config/extentions/color_extantion.dart';

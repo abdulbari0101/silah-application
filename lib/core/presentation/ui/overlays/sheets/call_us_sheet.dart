@@ -26,9 +26,13 @@ class CallUsSheet {
       isScrollControlled: true,
       useRootNavigator: true,
       anchorPoint: anchorPoint,
-      builder: (_) => _MaterialBody(number: number, prettyNumber: pretty, context: context),
-      cupertinoBuilder: (_) =>
-          _CupertinoBody(number: number, prettyNumber: pretty, context: context),
+      builder: (_) =>
+          _MaterialBody(number: number, prettyNumber: pretty, context: context),
+      cupertinoBuilder: (_) => _CupertinoBody(
+        number: number,
+        prettyNumber: pretty,
+        context: context,
+      ),
     );
   }
 
@@ -104,14 +108,20 @@ class CallUsSheet {
                       shape: BoxShape.circle,
                       color: Colors.white.withAlpha(0x20),
                     ),
-                    child: Icon(CupertinoIcons.phone_fill, color: Colors.white, size: 20),
+                    child: Icon(
+                      CupertinoIcons.phone_fill,
+                      color: Colors.white,
+                      size: 20,
+                    ),
                   ),
                   Expanded(
                     child: Text(
                       prettyNumber,
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,
-                      style: ct.textTheme.actionTextStyle.copyWith(color: Colors.white),
+                      style: ct.textTheme.actionTextStyle.copyWith(
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 34, height: 34),
@@ -124,7 +134,8 @@ class CallUsSheet {
           SizedBox(
             width: double.infinity,
             child: SecondaryButton(
-              onTap: () => Navigator.pop(rootNavigatorKey.currentState!.context),
+              onTap: () =>
+                  Navigator.pop(rootNavigatorKey.currentState!.context),
               text: Strings.cancel.tr(),
             ),
           ),

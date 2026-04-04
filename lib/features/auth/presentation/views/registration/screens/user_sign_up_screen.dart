@@ -28,7 +28,11 @@ class UserSignUpScreen extends StatelessWidget {
       child: BlocListener<RegistrationBloc, RegistrationState>(
         listener: (context, state) {
           if (state is RegistrationError) {
-            DialogService.showErrorDialog(context, title: Strings.error.tr(), desc: state.message);
+            DialogService.showErrorDialog(
+              context,
+              title: Strings.error.tr(),
+              desc: state.message,
+            );
           }
           if (state is RegistrationStepSuccess &&
               state.operationType == RegistrationOperType.reqComplete) {

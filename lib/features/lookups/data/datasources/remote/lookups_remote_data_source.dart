@@ -15,8 +15,10 @@ class LookupsRemoteDataSourceImpl implements LookupsRemoteDataSource {
   final FirebaseFirestore firestore;
   final AppLogger logger;
 
-  LookupsRemoteDataSourceImpl({required this.logger, FirebaseFirestore? firestore})
-    : firestore = firestore ?? FirebaseFirestore.instance;
+  LookupsRemoteDataSourceImpl({
+    required this.logger,
+    FirebaseFirestore? firestore,
+  }) : firestore = firestore ?? FirebaseFirestore.instance;
 
   @override
   Future<List<LookupItemEntity>> fetchGenders() => _fetchCollection('genders');
@@ -41,7 +43,8 @@ class LookupsRemoteDataSourceImpl implements LookupsRemoteDataSource {
   }
 
   @override
-  Future<List<LookupItemEntity>> fetchWorkDestinations() => _fetchCollection('work_destinations');
+  Future<List<LookupItemEntity>> fetchWorkDestinations() =>
+      _fetchCollection('work_destinations');
 
   Future<List<LookupItemEntity>> _fetchCollection(String collection) {
     return firebaseCall<List<LookupItemEntity>>(

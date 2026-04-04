@@ -8,7 +8,10 @@ class TextUtil {
     return value == null || value.isEmpty;
   }
 
-  static String generateDefaultCustomerName({required String customerAccount, bool? isRtl}) {
+  static String generateDefaultCustomerName({
+    required String customerAccount,
+    bool? isRtl,
+  }) {
     final shortName = Strings.app_short_name.tr(); // e.g., "Finture"
     final userLabel = Strings.user.tr(); // e.g., "User" or "حساب"
 

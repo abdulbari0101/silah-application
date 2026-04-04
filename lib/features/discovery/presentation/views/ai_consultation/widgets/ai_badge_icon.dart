@@ -23,19 +23,11 @@ class AiBadgeIcon extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          Icon(
-            Icons.text_fields_rounded,
-            color: color,
-            size: size * 0.52,
-          ),
+          Icon(Icons.text_fields_rounded, color: color, size: size * 0.52),
           PositionedDirectional(
             end: size * 0.18,
             bottom: size * 0.18,
-            child: Icon(
-              Icons.auto_awesome,
-              color: color,
-              size: size * 0.28,
-            ),
+            child: Icon(Icons.auto_awesome, color: color, size: size * 0.28),
           ),
         ],
       ),

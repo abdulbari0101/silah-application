@@ -26,7 +26,10 @@ class SharedFormWidget extends StatelessWidget {
                 context.read<FormCubit>().updateValidity(isValid);
               },
               key: formKey,
-              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [...fields]),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [...fields],
+              ),
             ),
           ),
         ),

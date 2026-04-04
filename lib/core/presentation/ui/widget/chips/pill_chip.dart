@@ -17,7 +17,8 @@ class PillChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final resolvedColor = color ?? context.colors.primary;
     final resolvedBackground =
-        backgroundColor ?? context.colors.primaryContainer.withAlphaOpacity(0.2);
+        backgroundColor ??
+        context.colors.primaryContainer.withAlphaOpacity(0.2);
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),

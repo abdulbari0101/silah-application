@@ -33,7 +33,9 @@ class AppSettingsRepoImpl implements AppSettingsRepo {
   @override
   Future<Either<Failure, bool>> updateSetting(AppSettingEntity setting) async {
     return executor.runOffline(() async {
-      final local = await cacheDS.updateAppSetting(AppSettingModel.fromEntity(setting));
+      final local = await cacheDS.updateAppSetting(
+        AppSettingModel.fromEntity(setting),
+      );
       return local;
     }, from: "AppSettingsRepoImpl.updateSetting");
   }

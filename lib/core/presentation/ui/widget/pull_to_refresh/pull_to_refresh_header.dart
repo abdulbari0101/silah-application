@@ -18,7 +18,10 @@ class PullToRefershHeader extends StatelessWidget {
         light: context.colors.primary,
       ),
 
-      complete: Text(Strings.refresh_done.tr(), style: context.textTheme.bodySmall),
+      complete: Text(
+        Strings.refresh_done.tr(),
+        style: context.textTheme.bodySmall,
+      ),
     );
   }
 }

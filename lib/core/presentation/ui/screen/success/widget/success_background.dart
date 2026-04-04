@@ -21,12 +21,16 @@ class SuccessBackground extends StatelessWidget {
                   colors.surfaceContainerHighest,
               colors.surface,
             ]
-          : [colors.primary.mix(colors.surface, 0.85) ?? colors.surface, colors.surface],
+          : [
+              colors.primary.mix(colors.surface, 0.85) ?? colors.surface,
+              colors.surface,
+            ],
     );
 
     final primaryGlow = colors.primary.withValues(alpha: isDark ? 0.18 : 0.12);
-    final secondaryGlow = (isDark ? colors.surfaceContainerHighest : colors.primaryContainer)
-        .withValues(alpha: 0.22);
+    final secondaryGlow =
+        (isDark ? colors.surfaceContainerHighest : colors.primaryContainer)
+            .withValues(alpha: 0.22);
 
     return Positioned.fill(
       child: DecoratedBox(
@@ -60,7 +64,11 @@ class _GlowCircle extends StatelessWidget {
   final double diameter;
   final Color color;
 
-  const _GlowCircle({required this.alignment, required this.diameter, required this.color});
+  const _GlowCircle({
+    required this.alignment,
+    required this.diameter,
+    required this.color,
+  });
 
   @override
   Widget build(BuildContext context) {

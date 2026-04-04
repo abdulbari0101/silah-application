@@ -13,8 +13,8 @@ class ThemeGradients {
       LinearGradient(colors: [colors.primary, colors.primary.withAlpha(220)]);
 
   LinearGradient get secondaryGradient => LinearGradient(
-        colors: [colors.primaryContainer, colors.surfaceContainerLow],
-      );
+    colors: [colors.primaryContainer, colors.surfaceContainerLow],
+  );
 
   LinearGradient get primaryToSurfaceGradient =>
       LinearGradient(colors: [colors.primary, colors.surface]);

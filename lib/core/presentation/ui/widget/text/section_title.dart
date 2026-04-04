@@ -5,7 +5,12 @@ import 'package:silah_app/core/config/theme/extentions/text_styling_extantion.da
 import 'package:silah_app/core/config/theme/extentions/theme_context_extension.dart';
 
 class SectionTitle extends StatelessWidget {
-  const SectionTitle({super.key, required this.title, this.moreTap, this.moreText});
+  const SectionTitle({
+    super.key,
+    required this.title,
+    this.moreTap,
+    this.moreText,
+  });
   final GestureTapCallback? moreTap;
   final String? moreText;
 
@@ -24,7 +29,9 @@ class SectionTitle extends StatelessWidget {
               children: [
                 Text(
                   moreText ?? Strings.see_more.tr(),
-                  style: context.textTheme.labelSmall!.semiBold.primary(context),
+                  style: context.textTheme.labelSmall!.semiBold.primary(
+                    context,
+                  ),
                 ),
                 Icon(Icons.navigate_next, size: 16),
               ],

@@ -12,7 +12,12 @@ class AndroidProgress extends StatelessWidget {
     return Center(
       child: CircularProgressIndicator(
         strokeWidth: strokeWidth ?? 4,
-        color: color ?? (context.themeValue(light: context.colors.primary, dark: Colors.white)),
+        color:
+            color ??
+            (context.themeValue(
+              light: context.colors.primary,
+              dark: Colors.white,
+            )),
       ),
     );
   }

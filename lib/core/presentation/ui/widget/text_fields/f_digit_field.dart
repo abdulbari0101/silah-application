@@ -77,7 +77,7 @@ class _FDigitFieldState extends State<FDigitField> {
               child: TextField(
                 focusNode: widget.focusNode,
                 controller: widget.controller,
-               // keyboardType: TextInputType.number,
+                // keyboardType: TextInputType.number,
                 maxLength: widget.length,
                 onChanged: (value) {
                   setState(() {});
@@ -86,8 +86,11 @@ class _FDigitFieldState extends State<FDigitField> {
                     widget.onCompleted?.call(value);
                   }
                 },
-               // inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                decoration: const InputDecoration(border: InputBorder.none, counterText: ''),
+                // inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                decoration: const InputDecoration(
+                  border: InputBorder.none,
+                  counterText: '',
+                ),
               ),
             ),
           ),

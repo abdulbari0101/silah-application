@@ -36,11 +36,20 @@ Future<BootData?> loadAndApplyInitialSettings() async {
       logger.initInfo("Customer is null", tag: "loadAndApplyInitialCustomer");
     }
 
-    appStateBloc.add(InjectDataBeforeAppStart(customer: customerResult?.toEntity()));
+    appStateBloc.add(
+      InjectDataBeforeAppStart(customer: customerResult?.toEntity()),
+    );
     settingBloc.add(InjectAppSettingEvent(setting: settingResult.toEntity()));
-    return BootData(appSetting: settingResult.toEntity(), sesstionTime: sesstionTime);
+    return BootData(
+      appSetting: settingResult.toEntity(),
+      sesstionTime: sesstionTime,
+    );
   } catch (e, stack) {
-    di.locator<AppLogger>().initError(e, tag: "loadAndApplyInitialSettings", stack: stack);
+    di.locator<AppLogger>().initError(
+      e,
+      tag: "loadAndApplyInitialSettings",
+      stack: stack,
+    );
   }
 
   return null;

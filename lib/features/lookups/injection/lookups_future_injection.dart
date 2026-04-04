@@ -7,7 +7,8 @@ import 'package:silah_app/features/lookups/domain/repositories/lookups_repositor
 
 Future<void> initLookups() async {
   locator.registerLazySingleton<LookupsRepository>(
-    () => LookupsRepositoryImpl(executor: locator(), remoteDataSource: locator()),
+    () =>
+        LookupsRepositoryImpl(executor: locator(), remoteDataSource: locator()),
   );
 
   locator.registerLazySingleton<LookupsRemoteDataSource>(

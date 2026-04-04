@@ -29,7 +29,9 @@ class LookupsRepositoryImpl implements LookupsRepository {
   }
 
   @override
-  Future<Either<Failure, List<LookupItemEntity>>> fetchCities({String? areaId}) {
+  Future<Either<Failure, List<LookupItemEntity>>> fetchCities({
+    String? areaId,
+  }) {
     return executor.runOnline(() async {
       return remoteDataSource.fetchCities(areaId: areaId);
     }, from: 'LookupsRepository.fetchCities');

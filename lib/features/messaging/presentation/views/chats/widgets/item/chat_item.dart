@@ -7,7 +7,12 @@ import 'package:silah_app/features/messaging/domain/entities/chat_item_entity.da
 import 'package:silah_app/gen/assets.gen.dart';
 
 class ChatItem extends StatelessWidget {
-  const ChatItem({super.key, required this.item, this.onTap, this.enabled = true});
+  const ChatItem({
+    super.key,
+    required this.item,
+    this.onTap,
+    this.enabled = true,
+  });
 
   final ChatItemEntity item;
   final VoidCallback? onTap;

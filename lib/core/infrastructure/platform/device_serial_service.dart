@@ -11,7 +11,8 @@ abstract class DeviceSerialService {
 }
 
 class DeviceSerialServiceImpl implements DeviceSerialService {
-  DeviceSerialServiceImpl({required DeviceInfoPlugin deviceInfo}) : _deviceInfo = deviceInfo;
+  DeviceSerialServiceImpl({required DeviceInfoPlugin deviceInfo})
+    : _deviceInfo = deviceInfo;
 
   final DeviceInfoPlugin _deviceInfo;
 

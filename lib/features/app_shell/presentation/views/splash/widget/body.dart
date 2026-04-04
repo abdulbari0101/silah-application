@@ -82,7 +82,10 @@ class SplashCoverWidget extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                   color: context.colors.onSurfaceVariant,
                 )
-                .copyWith(fontSize: 14, color: Colors.white.withValues(alpha: 0.9)),
+                .copyWith(
+                  fontSize: 14,
+                  color: Colors.white.withValues(alpha: 0.9),
+                ),
           ),
         ],
       ),

@@ -17,19 +17,22 @@ class DiscoverySearchState with _$DiscoverySearchState {
     LegalSpecializationEntity? selected,
     String? query,
   }) = _DiscoverySearchReady;
-  const factory DiscoverySearchState.failure({required String message}) = _DiscoverySearchFailure;
+  const factory DiscoverySearchState.failure({required String message}) =
+      _DiscoverySearchFailure;
 }
 
 class DiscoverySearchCubit extends Cubit<DiscoverySearchState> {
   final DiscoveryRepository repository;
 
-  DiscoverySearchCubit({required this.repository}) : super(const DiscoverySearchState.loading());
+  DiscoverySearchCubit({required this.repository})
+    : super(const DiscoverySearchState.loading());
 
   Future<void> load() async {
     emit(const DiscoverySearchState.loading());
     final result = await repository.fetchSpecializations();
     result.fold(
-      (failure) => emit(DiscoverySearchState.failure(message: _mapFailure(failure))),
+      (failure) =>
+          emit(DiscoverySearchState.failure(message: _mapFailure(failure))),
       (data) => emit(DiscoverySearchState.ready(specializations: data)),
     );
   }

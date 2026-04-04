@@ -46,22 +46,24 @@ class DeviceInfoHelper {
       final devMo = AppPlatform.platformName();
       final langNo = settings.languageNumber.toString();
 
-      return request.copyWith(devName: devName, devType: devMo, devVersion: devVer, langNo: langNo);
+      return request.copyWith(
+        devName: devName,
+        devType: devMo,
+        devVersion: devVer,
+        langNo: langNo,
+      );
     } catch (error, stack) {
       logger.appError(tag: 'setDeviceInfo', error, stack: stack);
       throw AppException('Failed to set device info to request');
     }
   }
 
-  
   Future<String> custIMEI() => identityRepo.generateIMI();
-  
+
   Future<PostRequestModel> buildBaseRequest(PostRequestModel request) async {
     try {
       // 1)  device attributes + language
       var result = await setDeviceInfo(request);
-
-
 
       // 4) IMI (custIMEI)
       final imi = await custIMEI();
@@ -74,7 +76,6 @@ class DeviceInfoHelper {
     }
   }
 
-
   Future<PostRequestModel> buildNewDeviceRequest(
     PostRequestModel request, {
     required String? mobile,
@@ -85,8 +86,6 @@ class DeviceInfoHelper {
       }
       // 1)  device attributes + language
       var result = await setDeviceInfo(request);
-
-
 
       // 4) IMI (custIMEI)
       final imi = await custIMEI();

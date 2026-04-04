@@ -19,7 +19,10 @@ class RequiredEmailValidator extends ValueValidator {
 }
 
 class EmailFormatValidator extends ValueValidator {
-  static final _emailRegex = RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$", caseSensitive: false);
+  static final _emailRegex = RegExp(
+    r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$",
+    caseSensitive: false,
+  );
 
   @override
   String get type => 'email_format';

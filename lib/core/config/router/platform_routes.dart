@@ -13,7 +13,13 @@ List<RouteBase> getPlatformRoutes(GlobalKey<NavigatorState> rootKey) {
       branches: [
         for (final r in AppRoutes.shellTabRoutes)
           StatefulShellBranch(
-            routes: [GoRoute(path: r.path, name: r.name, builder: (_, __) => r.builder!())],
+            routes: [
+              GoRoute(
+                path: r.path,
+                name: r.name,
+                builder: (_, __) => r.builder!(),
+              ),
+            ],
           ),
       ],
     ),

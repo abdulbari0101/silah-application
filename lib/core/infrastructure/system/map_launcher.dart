@@ -2,7 +2,10 @@ import 'package:silah_app/core/infrastructure/platform/app_platform.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MapLauncher {
-  static Future<bool> openDirections({required double lat, required double lng}) async {
+  static Future<bool> openDirections({
+    required double lat,
+    required double lng,
+  }) async {
     if (!_isValidLatLng(lat, lng)) return false;
     final destination = '$lat,$lng';
 
@@ -16,7 +19,9 @@ class MapLauncher {
       if (await _launch(appleMaps)) return true;
     }
 
-    final web = Uri.parse('https://www.google.com/maps/dir/?api=1&destination=$destination');
+    final web = Uri.parse(
+      'https://www.google.com/maps/dir/?api=1&destination=$destination',
+    );
     return _launch(web);
   }
 

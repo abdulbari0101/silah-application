@@ -11,7 +11,11 @@ class InitLoadingWidget extends StatelessWidget {
       child: Container(
         alignment: Alignment.bottomCenter,
         margin: EdgeInsets.only(bottom: AppDimension(context).height * 0.05),
-        child: SpinKitWaveSpinner(color: Colors.white, waveColor: Colors.white, size: 70.0),
+        child: SpinKitWaveSpinner(
+          color: Colors.white,
+          waveColor: Colors.white,
+          size: 70.0,
+        ),
       ),
     );
   }

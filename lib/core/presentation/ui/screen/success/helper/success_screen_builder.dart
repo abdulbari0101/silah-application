@@ -110,14 +110,19 @@ class SuccessScreenBuilder {
     final extra = extraRaw;
 
     final title =
-        extra.safe<String>(SuccessScreenKeys.title) ?? Strings.msg_reset_password_done.tr();
+        extra.safe<String>(SuccessScreenKeys.title) ??
+        Strings.msg_reset_password_done.tr();
     final subtitle =
-        extra.safe<String>(SuccessScreenKeys.subtitle) ?? Strings.msg_reset_success.tr();
+        extra.safe<String>(SuccessScreenKeys.subtitle) ??
+        Strings.msg_reset_success.tr();
     final primaryButtonLabel =
-        extra.safe<String>(SuccessScreenKeys.primaryButtonLabel) ?? Strings.btn_go_login.tr();
-    final showSecondButton = extra.safe<bool>(SuccessScreenKeys.secondButton) ?? false;
+        extra.safe<String>(SuccessScreenKeys.primaryButtonLabel) ??
+        Strings.btn_go_login.tr();
+    final showSecondButton =
+        extra.safe<bool>(SuccessScreenKeys.secondButton) ?? false;
     final secondButtonLabel =
-        extra.safe<String>(SuccessScreenKeys.secondButtonLabel) ?? Strings.btn_go_login.tr();
+        extra.safe<String>(SuccessScreenKeys.secondButtonLabel) ??
+        Strings.btn_go_login.tr();
 
     final onTapId = extra.safe<String>(SuccessScreenKeys.onTapId);
     final onPrimaryTap = onTapId != null
@@ -127,13 +132,22 @@ class SuccessScreenBuilder {
     final onPrimaryRoute = extra.safe<String>(SuccessScreenKeys.onPrimaryRoute);
 
     final onSecondTapId = extra.safe<String>(SuccessScreenKeys.onSecondTapId);
-    final onSecondaryTap = onSecondTapId != null ? CallbackRegistry.retrieve(onSecondTapId) : null;
+    final onSecondaryTap = onSecondTapId != null
+        ? CallbackRegistry.retrieve(onSecondTapId)
+        : null;
 
-    final transactionNumber = extra.safe<String>(SuccessScreenKeys.transactionNumber);
-    final showShareButton = extra.safe<bool>(SuccessScreenKeys.shareButton) ?? false;
-    final shareButtonLabel = extra.safe<String>(SuccessScreenKeys.shareButtonLabel);
+    final transactionNumber = extra.safe<String>(
+      SuccessScreenKeys.transactionNumber,
+    );
+    final showShareButton =
+        extra.safe<bool>(SuccessScreenKeys.shareButton) ?? false;
+    final shareButtonLabel = extra.safe<String>(
+      SuccessScreenKeys.shareButtonLabel,
+    );
     final shareTapId = extra.safe<String>(SuccessScreenKeys.onShareTapId);
-    final onShareTap = shareTapId != null ? CallbackRegistry.retrieve(shareTapId) : null;
+    final onShareTap = shareTapId != null
+        ? CallbackRegistry.retrieve(shareTapId)
+        : null;
 
     return SuccessScreenArgs(
       title: title,

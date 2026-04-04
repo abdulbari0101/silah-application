@@ -61,8 +61,12 @@ class _ResendCodeState extends State<ResendCode> {
         Text(Strings.not_receive_code.tr(), style: themeStyle),
         UIConstants.smallWidth,
         if (resendState == OtpResendState.processing)
-          const Padding(padding: EdgeInsets.all(8.0), child: IOSProgress(size: 10))
-        else if (resendState == OtpResendState.success || resendState == OtpResendState.initial)
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: IOSProgress(size: 10),
+          )
+        else if (resendState == OtpResendState.success ||
+            resendState == OtpResendState.initial)
           _secondsRemaining > 0
               ? Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -88,7 +92,10 @@ class _ResendCodeState extends State<ResendCode> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(Strings.resend.tr(), style: themeStyle.copyWith(color: accentColor)),
+            Text(
+              Strings.resend.tr(),
+              style: themeStyle.copyWith(color: accentColor),
+            ),
             const SizedBox(width: 4),
             Icon(Icons.refresh, size: 14, color: context.colors.primary),
           ],

@@ -102,9 +102,9 @@ class _UiErrorHostState extends State<UiErrorHost> {
                     );
                   }
                   if (mounted) {
-                    ScaffoldMessenger.of(
-                      context,
-                    ).showSnackBar(const SnackBar(content: Text('Report sent')));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Report sent')),
+                    );
                   }
                 } catch (_) {}
               },

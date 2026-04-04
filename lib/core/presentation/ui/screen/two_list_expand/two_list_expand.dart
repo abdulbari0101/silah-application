@@ -7,7 +7,12 @@ import 'package:silah_app/core/presentation/ui/screen/two_list_expand/models/sub
 import 'package:silah_app/core/presentation/ui/widget/cards/sub_list_card.dart';
 
 class TwoListExpand extends StatelessWidget {
-  const TwoListExpand({super.key, required this.firstList, required this.secondList, this.padding});
+  const TwoListExpand({
+    super.key,
+    required this.firstList,
+    required this.secondList,
+    this.padding,
+  });
 
   final SubListView firstList;
   final SubListView secondList;
@@ -39,7 +44,9 @@ class TwoListExpand extends StatelessWidget {
                       SubListCard(
                         childList: firstList.child,
                         title: firstList.title,
-                        moreText: state.isFirstExpanded ? firstCloseText : firstMoreText,
+                        moreText: state.isFirstExpanded
+                            ? firstCloseText
+                            : firstMoreText,
                         onMoreTap: () {
                           firstList.onMoreTap?.call();
                           _toggleFirstView(context, state);
@@ -52,7 +59,9 @@ class TwoListExpand extends StatelessWidget {
                       SubListCard(
                         childList: secondList.child,
                         title: secondList.title,
-                        moreText: state.isSecondExpanded ? secondCloseText : secondMoreText,
+                        moreText: state.isSecondExpanded
+                            ? secondCloseText
+                            : secondMoreText,
                         onMoreTap: () {
                           secondList.onMoreTap?.call();
                           _toggleSecondView(context, state);

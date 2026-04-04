@@ -54,9 +54,16 @@ class CustomeScreenHeader extends StatelessWidget {
 
                     child: Row(
                       children: [
-                        Icon(Icons.language, color: context.colors.primary, size: 22),
+                        Icon(
+                          Icons.language,
+                          color: context.colors.primary,
+                          size: 22,
+                        ),
                         UIConstants.xxsmallWidth,
-                        Text(selectedLang.code, style: context.textTheme.titleMedium),
+                        Text(
+                          selectedLang.code,
+                          style: context.textTheme.titleMedium,
+                        ),
                         UIConstants.xxsmallWidth,
                         Icon(
                           Icons.keyboard_arrow_down,
@@ -80,26 +87,28 @@ class CallUsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-      return InkWell(
-          onTap: () {
-          
-
-              final isoHint = IsoCode.TR;
-              CallUsSheet.show(context, AppConstants.defaultCompanyNumber, isoHint: isoHint);
-            
-          },
-
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: UIConstants.mediumPadding),
-            child: Container(
-              child: AppSvgIcon(
-                matchTextDirection: false,
-                darkDynamicColor: true,
-                assetName: Assets.icons.icHaedphone,
-              ),
-            ),
-          ),
+    return InkWell(
+      onTap: () {
+        final isoHint = IsoCode.TR;
+        CallUsSheet.show(
+          context,
+          AppConstants.defaultCompanyNumber,
+          isoHint: isoHint,
         );
-      
+      },
+
+      child: Padding(
+        padding: const EdgeInsets.symmetric(
+          horizontal: UIConstants.mediumPadding,
+        ),
+        child: Container(
+          child: AppSvgIcon(
+            matchTextDirection: false,
+            darkDynamicColor: true,
+            assetName: Assets.icons.icHaedphone,
+          ),
+        ),
+      ),
+    );
   }
 }

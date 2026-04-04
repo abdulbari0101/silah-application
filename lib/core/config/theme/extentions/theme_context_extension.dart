@@ -32,14 +32,16 @@ extension ThemeContextX on BuildContext {
   AppThemeMode get appAppThemeMode => read<ThemeController>().appAppThemeMode;
   // If you want the widget to rebuild on theme change
 
-  AppThemeMode get appAppThemeModeWatch => watch<ThemeController>().appAppThemeMode;
+  AppThemeMode get appAppThemeModeWatch =>
+      watch<ThemeController>().appAppThemeMode;
 
   /// ColorScheme is the new single source of truth (Material 3).
   /// Theme.of(context) is an InheritedWidget; callers will rebuild on theme changes.
   ThemeData get theme => Theme.of(this);
   ColorScheme get colors => Theme.of(this).colorScheme;
   IconThemeData get iconsTheme => Theme.of(this).iconTheme;
-  InputDecorationThemeData get inputTheme => Theme.of(this).inputDecorationTheme;
+  InputDecorationThemeData get inputTheme =>
+      Theme.of(this).inputDecorationTheme;
   // InputDecorationTheme get inputTheme => Theme.of(this).inputDecorationTheme;
   TextTheme get textTheme => Theme.of(this).textTheme;
   AppBarThemeData get appBarTheme => Theme.of(this).appBarTheme;
@@ -63,7 +65,8 @@ extension ThemeContextX on BuildContext {
   }
 
   /// Full token object (auto-updates when Theme changes).
-  AppShadows get appShadows => Theme.of(this).extension<AppShadows>() ?? AppShadows.light;
+  AppShadows get appShadows =>
+      Theme.of(this).extension<AppShadows>() ?? AppShadows.light;
 
   List<BoxShadow> get shadowSoft => appShadows.soft;
   List<BoxShadow> get shadowMedium => appShadows.medium;

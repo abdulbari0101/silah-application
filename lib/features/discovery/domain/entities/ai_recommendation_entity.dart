@@ -9,8 +9,5 @@ class AiRecommendationEntity with AiRecommendationEntityMappable {
   final LegalSpecializationEntity? specialization;
   final List<LawyerProfileEntity>? lawyers;
 
-  const AiRecommendationEntity({
-    this.specialization,
-    this.lawyers,
-  });
+  const AiRecommendationEntity({this.specialization, this.lawyers});
 }

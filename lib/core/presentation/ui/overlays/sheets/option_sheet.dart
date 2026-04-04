@@ -70,7 +70,8 @@ class OptionSheet<T> extends StatelessWidget {
               }
 
               final trailing =
-                  trailingBuilder?.call(e, isSelected) ?? (isSelected ? Icon(Icons.check) : null);
+                  trailingBuilder?.call(e, isSelected) ??
+                  (isSelected ? Icon(Icons.check) : null);
               final subtitle = subtitleResolver?.call(e, isSelected);
 
               return ListTile(
@@ -82,7 +83,9 @@ class OptionSheet<T> extends StatelessWidget {
 
                 title: Text(
                   labelResolver(e, isSelected),
-                  style: context.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w600),
+                  style: context.textTheme.bodyMedium!.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 subtitle: subtitle != null
                     ? Text(

@@ -35,7 +35,9 @@ class JustRequiredValidator extends ValueValidator {
 }
 
 class NameFormatValidator extends ValueValidator {
-  static final _nameRegex = RegExp(r"^[a-zA-ZçÇğĞıİöÖşŞüÜ\u0600-\u06FF\s'-]{2,50}$");
+  static final _nameRegex = RegExp(
+    r"^[a-zA-ZçÇğĞıİöÖşŞüÜ\u0600-\u06FF\s'-]{2,50}$",
+  );
 
   @override
   String get type => 'name_format';

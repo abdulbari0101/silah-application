@@ -12,5 +12,6 @@ class ChatItemModel with ChatItemModelMappable {
 
   ChatItemEntity toEntity() => ChatItemEntity(name: name);
 
-  factory ChatItemModel.fromEntity(ChatItemEntity entity) => ChatItemModel(name: entity.name);
+  factory ChatItemModel.fromEntity(ChatItemEntity entity) =>
+      ChatItemModel(name: entity.name);
 }

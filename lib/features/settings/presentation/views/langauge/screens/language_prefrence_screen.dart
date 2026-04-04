@@ -14,7 +14,10 @@ class LanguagePreferencesScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AppSettingBloc, AppSettingState>(
       builder: (context, state) {
-        return PlatformScreenWrapper(body: LanguageBody(), title: Strings.et_change_lang.tr());
+        return PlatformScreenWrapper(
+          body: LanguageBody(),
+          title: Strings.et_change_lang.tr(),
+        );
       },
     );
   }

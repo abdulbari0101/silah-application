@@ -15,7 +15,9 @@ class DioAdapter {
   /// Only use in development or test environments.
   HttpClientAdapter adapterWithoutCertificateCheck({bool logBypass = true}) {
     if (logBypass) {
-      logger.networkWarn('⚠️ Certificate validation is disabled. Do NOT use this in production.');
+      logger.networkWarn(
+        '⚠️ Certificate validation is disabled. Do NOT use this in production.',
+      );
     }
 
     return Http2Adapter(

@@ -8,7 +8,6 @@ class OperatorsLoading extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-
         return GridView.builder(
           physics: const AlwaysScrollableScrollPhysics(),
           itemCount: 13,
@@ -23,5 +22,4 @@ class OperatorsLoading extends StatelessWidget {
       },
     );
   }
-
 }

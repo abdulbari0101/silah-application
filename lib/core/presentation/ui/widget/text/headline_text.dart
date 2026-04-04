@@ -11,8 +11,13 @@ class MainHeadLine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: UIConstants.defaultPadding),
-      child: Text(title, style: context.textTheme.headlineMedium!.onPrimaryContainer(context)),
+      padding: const EdgeInsets.symmetric(
+        horizontal: UIConstants.defaultPadding,
+      ),
+      child: Text(
+        title,
+        style: context.textTheme.headlineMedium!.onPrimaryContainer(context),
+      ),
     );
   }
 }

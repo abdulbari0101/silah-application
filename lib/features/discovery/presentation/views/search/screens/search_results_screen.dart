@@ -14,9 +14,13 @@ class SearchResultsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) =>
-          DiscoveryResultsCubit(repository: locator(), specialization: specialization)..load(),
-      child: PlatformScreenWrapper(body: SearchResultsBody(specialization: specialization)),
+      create: (_) => DiscoveryResultsCubit(
+        repository: locator(),
+        specialization: specialization,
+      )..load(),
+      child: PlatformScreenWrapper(
+        body: SearchResultsBody(specialization: specialization),
+      ),
     );
   }
 }

@@ -13,5 +13,7 @@ abstract class SettingsService {
   factory SettingsService(Dio dio, {String? baseUrl}) = _SettingsService;
 
   @POST('Client/doSomething')
-  Future<BaseApiResponse<SettingsRespWrapper>> doSomething(@Body() PostRequestModel request);
+  Future<BaseApiResponse<SettingsRespWrapper>> doSomething(
+    @Body() PostRequestModel request,
+  );
 }

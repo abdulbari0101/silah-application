@@ -37,11 +37,17 @@ Future<void> initSettings() async {
   );
 
   locator.registerLazySingleton<SettingsRemoteDataSource>(
-    () => SettingsRemoteDataSourceImpl(settingsService: locator(), logger: locator()),
+    () => SettingsRemoteDataSourceImpl(
+      settingsService: locator(),
+      logger: locator(),
+    ),
   );
 
   // Settings services
   locator.registerLazySingleton(
-    () => SettingsService(locator<DioClient>().dio, baseUrl: ApiConstants.baseUrl),
+    () => SettingsService(
+      locator<DioClient>().dio,
+      baseUrl: ApiConstants.baseUrl,
+    ),
   );
 }

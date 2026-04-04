@@ -116,7 +116,10 @@ class _IOSThemeSettingDialogState extends State<IOSThemeSettingDialog> {
       onTap: onTap,
       selectedColor: context.colors.primary,
       title: Text(title, style: const TextStyle(fontSize: 16)),
-      subtitle: Text(subtitle, style: context.textTheme.bodySmall!.copyWith(fontSize: 10)),
+      subtitle: Text(
+        subtitle,
+        style: context.textTheme.bodySmall!.copyWith(fontSize: 10),
+      ),
       selected: selected,
     );
   }

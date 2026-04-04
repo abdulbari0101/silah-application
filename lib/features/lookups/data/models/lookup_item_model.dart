@@ -20,10 +20,10 @@ class LookupItemModel with LookupItemModelMappable {
   });
 
   LookupItemEntity toEntity() => LookupItemEntity(
-        id: id,
-        nameAr: nameAr,
-        nameEn: nameEn,
-        iconUrl: iconUrl,
-        areaId: areaId,
-      );
+    id: id,
+    nameAr: nameAr,
+    nameEn: nameEn,
+    iconUrl: iconUrl,
+    areaId: areaId,
+  );
 }

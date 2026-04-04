@@ -7,7 +7,11 @@ import 'package:silah_app/core/presentation/ui/widget/icons/app_svg_icon.dart';
 import 'nav_item_data.dart';
 
 class AndroidBottomNavBar extends StatelessWidget {
-  const AndroidBottomNavBar({super.key, required this.items, this.navigationShell});
+  const AndroidBottomNavBar({
+    super.key,
+    required this.items,
+    this.navigationShell,
+  });
 
   final List<NavItemData> items;
   final StatefulNavigationShell? navigationShell;
@@ -51,16 +55,24 @@ class AndroidBottomNavBar extends StatelessWidget {
       showSelectedLabels: false,
       showUnselectedLabels: false,
       onTap: (i) => _onTap(context, i),
-      items: List.generate(items.length, (i) => _buildItem(context, i, current == i)),
+      items: List.generate(
+        items.length,
+        (i) => _buildItem(context, i, current == i),
+      ),
     );
   }
 
-  BottomNavigationBarItem _buildItem(BuildContext context, int index, bool selected) {
+  BottomNavigationBarItem _buildItem(
+    BuildContext context,
+    int index,
+    bool selected,
+  ) {
     final item = items[index];
     final theme = Theme.of(context);
     final navTheme = theme.bottomNavigationBarTheme;
     final selectedColor = theme.colorScheme.primary;
-    final unselectedColor = navTheme.unselectedItemColor ?? theme.colorScheme.onSurfaceVariant;
+    final unselectedColor =
+        navTheme.unselectedItemColor ?? theme.colorScheme.onSurfaceVariant;
     final iconColor = selected ? selectedColor : unselectedColor;
 
     final iconWidget = AppSvgIcon(
@@ -73,8 +85,12 @@ class AndroidBottomNavBar extends StatelessWidget {
       lightDynamicColor: false,
     );
 
-    final style = selected ? navTheme.selectedLabelStyle : navTheme.unselectedLabelStyle;
-    final labelStyle = (style ?? theme.textTheme.labelMedium)?.copyWith(color: iconColor);
+    final style = selected
+        ? navTheme.selectedLabelStyle
+        : navTheme.unselectedLabelStyle;
+    final labelStyle = (style ?? theme.textTheme.labelMedium)?.copyWith(
+      color: iconColor,
+    );
 
     return BottomNavigationBarItem(
       icon: Column(

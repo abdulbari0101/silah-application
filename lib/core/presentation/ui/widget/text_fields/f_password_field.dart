@@ -69,7 +69,10 @@ class _FPasswordFieldState extends State<FPasswordField> {
 
     _validator =
         widget.validator ??
-        (value) => validateCurrentPassword(currentPassword: value, label: widget.label);
+        (value) => validateCurrentPassword(
+          currentPassword: value,
+          label: widget.label,
+        );
   }
 
   @override
@@ -126,7 +129,9 @@ class _FPasswordFieldState extends State<FPasswordField> {
                       suffixIcon: IconButton(
                         tooltip: _obscure ? 'Show password' : 'Hide password',
                         icon: AppSvgIcon(
-                          assetName: _obscure ? Assets.icons.eyeClosed : Assets.icons.eyeOpen,
+                          assetName: _obscure
+                              ? Assets.icons.eyeClosed
+                              : Assets.icons.eyeOpen,
                         ),
                         onPressed: _toggleVisibility,
                       ),
@@ -134,7 +139,12 @@ class _FPasswordFieldState extends State<FPasswordField> {
                   ),
                 ),
                 if (widget.prefixOutSideWidget != null)
-                  Row(children: [UIConstants.smallWidth, widget.prefixOutSideWidget!]),
+                  Row(
+                    children: [
+                      UIConstants.smallWidth,
+                      widget.prefixOutSideWidget!,
+                    ],
+                  ),
               ],
             ),
           ],

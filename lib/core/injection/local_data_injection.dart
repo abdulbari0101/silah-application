@@ -1,4 +1,3 @@
-
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:silah_app/core/data/local/cache/app_cache.dart';
 import 'package:silah_app/core/data/local/cache/prefs/prefs_store.dart';
@@ -12,7 +11,9 @@ Future<void> initLocalData() async {
   final sl = locator;
 
   // Secure storage
-  await sl.registerSingletonAsyncOnce<SecureStore>(() async => SecureStore.init());
+  await sl.registerSingletonAsyncOnce<SecureStore>(
+    () async => SecureStore.init(),
+  );
 
   // SharedPreferences
   await sl.registerSingletonAsyncOnce<SharedPreferences>(

@@ -30,10 +30,13 @@ class AppPlatform extends StatelessWidget {
   // platform flags
   static bool get isWeb => kIsWeb;
   static bool get _nativeIsIOS => defaultTargetPlatform == TargetPlatform.iOS;
-  static bool get _nativeIsAndroid => defaultTargetPlatform == TargetPlatform.android;
+  static bool get _nativeIsAndroid =>
+      defaultTargetPlatform == TargetPlatform.android;
 
-  static bool get isIOS => _reverseIOSAndroidForUITest ? !_nativeIsIOS : _nativeIsIOS;
-  static bool get isAndroid => _reverseIOSAndroidForUITest ? !_nativeIsAndroid : _nativeIsAndroid;
+  static bool get isIOS =>
+      _reverseIOSAndroidForUITest ? !_nativeIsIOS : _nativeIsIOS;
+  static bool get isAndroid =>
+      _reverseIOSAndroidForUITest ? !_nativeIsAndroid : _nativeIsAndroid;
 
   static String deviceType() {
     if (_nativeIsAndroid) return '1';
@@ -78,7 +81,10 @@ class AppPlatform extends StatelessWidget {
 
   /// Convenience helper to print the current snapshot via [debugPrint].
   static void debugPrintSnapshot() {
-    AppLogger().uiInfo(tag: "AppPlatform", "debugPrintSnapshot =>${snapshot()}");
+    AppLogger().uiInfo(
+      tag: "AppPlatform",
+      "debugPrintSnapshot =>${snapshot()}",
+    );
   }
 
   @override

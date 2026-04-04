@@ -1,4 +1,3 @@
-
 import 'package:silah_app/core/infrastructure/analytics/logger/app_log_group.dart';
 
 import '../analytics/logger/loggable_exception.dart';
@@ -118,4 +117,3 @@ class SessionException extends ServerException {
 class BadRequestException extends ServerException {
   const BadRequestException(super.m, super.c);
 }
-

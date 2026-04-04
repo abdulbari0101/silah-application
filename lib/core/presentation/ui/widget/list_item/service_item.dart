@@ -40,7 +40,8 @@ class ServiceItem extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (icon != null) AppSvgIcon(assetName: icon!, width: 20, height: 20),
+            if (icon != null)
+              AppSvgIcon(assetName: icon!, width: 20, height: 20),
             if (icon != null) UIConstants.bigWidth,
             Expanded(
               child: Column(
@@ -52,7 +53,9 @@ class ServiceItem extends StatelessWidget {
                   if (serviceDesc != null)
                     Text(
                       serviceDesc!,
-                      style: context.textTheme.labelSmall!.onSurfaceVariant(context),
+                      style: context.textTheme.labelSmall!.onSurfaceVariant(
+                        context,
+                      ),
                     ),
                 ],
               ),

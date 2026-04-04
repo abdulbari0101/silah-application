@@ -12,24 +12,38 @@ import 'package:silah_app/features/discovery/presentation/blocs/specifications/s
 Future<void> initSpecifications() async {
   // Bloc
 
-  locator.registerLazySingleton(() => SpecificationsBloc(repository: locator()));
+  locator.registerLazySingleton(
+    () => SpecificationsBloc(repository: locator()),
+  );
 
   // Repo
   locator.registerLazySingleton<DiscoveryRepository>(
-    () => DiscoveryRepositoryImpl(remoteDataSource: locator(), executor: locator()),
+    () => DiscoveryRepositoryImpl(
+      remoteDataSource: locator(),
+      executor: locator(),
+    ),
   );
 
   // Data sources
   locator.registerLazySingleton<SpecificationsLocalDataSource>(
-    () => SpecificationsLocalDataSourceImpl(logger: locator(), appCache: locator()),
+    () => SpecificationsLocalDataSourceImpl(
+      logger: locator(),
+      appCache: locator(),
+    ),
   );
 
   locator.registerLazySingleton<SpecificationsRemoteDataSource>(
-    () => SpecificationsRemoteDataSourceImpl(specificationsService: locator(), logger: locator()),
+    () => SpecificationsRemoteDataSourceImpl(
+      specificationsService: locator(),
+      logger: locator(),
+    ),
   );
 
   // Specifications services
   locator.registerLazySingleton(
-    () => SpecificationsService(locator<DioClient>().dio, baseUrl: ApiConstants.baseUrl),
+    () => SpecificationsService(
+      locator<DioClient>().dio,
+      baseUrl: ApiConstants.baseUrl,
+    ),
   );
 }

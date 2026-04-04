@@ -33,10 +33,7 @@ class AuthFooterLink extends StatelessWidget {
             minimumSize: const Size(0, 34),
             shape: const StadiumBorder(),
           ),
-          child: Text(
-            actionText,
-            style: context.textTheme.labelLarge,
-          ),
+          child: Text(actionText, style: context.textTheme.labelLarge),
         ),
       ],
     );

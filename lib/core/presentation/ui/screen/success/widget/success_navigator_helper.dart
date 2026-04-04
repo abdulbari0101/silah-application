@@ -41,7 +41,8 @@ class SuccessNavigatorHelper {
         KeyExtra.buttonLabel: buttonLabel,
         if (onTapId != null) KeyExtra.onTapId: onTapId,
         KeyExtra.secondButton: secondButton,
-        if (secondButtonLabel != null) KeyExtra.secondButtonLabel: secondButtonLabel,
+        if (secondButtonLabel != null)
+          KeyExtra.secondButtonLabel: secondButtonLabel,
         if (onSecondTapId != null) KeyExtra.onSecondTapId: onSecondTapId,
       },
     );

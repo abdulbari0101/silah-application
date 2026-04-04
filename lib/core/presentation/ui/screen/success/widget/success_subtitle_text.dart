@@ -11,7 +11,9 @@ class SuccessSubtitleText extends StatelessWidget {
     return Text(
       subtitle,
       textAlign: TextAlign.center,
-      style: context.textTheme.bodyMedium!.copyWith(color: context.colors.primary.darker(20)),
+      style: context.textTheme.bodyMedium!.copyWith(
+        color: context.colors.primary.darker(20),
+      ),
     );
   }
 }

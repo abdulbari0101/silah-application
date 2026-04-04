@@ -62,7 +62,9 @@ class _GeneralWebViewState extends State<GeneralWebView> {
             children: [
               InAppWebView(
                 gestureRecognizers: {
-                  Factory<VerticalDragGestureRecognizer>(() => VerticalDragGestureRecognizer()),
+                  Factory<VerticalDragGestureRecognizer>(
+                    () => VerticalDragGestureRecognizer(),
+                  ),
                 },
                 initialUrlRequest: URLRequest(url: WebUri(_url)),
                 initialSettings: settings,
@@ -80,7 +82,9 @@ class _GeneralWebViewState extends State<GeneralWebView> {
                 child: const Align(
                   alignment: Alignment.center,
                   child: AppPlatform(
-                    android: ProgressButton(size: UIConstants.buttonHeight * 1.2),
+                    android: ProgressButton(
+                      size: UIConstants.buttonHeight * 1.2,
+                    ),
                     ios: IOSProgress(),
                   ),
                 ),

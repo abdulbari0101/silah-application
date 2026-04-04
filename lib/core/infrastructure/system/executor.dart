@@ -46,10 +46,15 @@ class Executor {
       final result = await action();
       return Right(result);
     } on BaseAppException catch (e, stack) {
-      logger.networkDebug(tag: "execturor BaseAppException", "e type = ${e.runtimeType}");
+      logger.networkDebug(
+        tag: "execturor BaseAppException",
+        "e type = ${e.runtimeType}",
+      );
 
       logError(from: from, e: e, stack: stack);
-      final mapped = onError?.call(e, stack) ?? ExceptionMapper.map(e, from: from, stack: stack);
+      final mapped =
+          onError?.call(e, stack) ??
+          ExceptionMapper.map(e, from: from, stack: stack);
       return Left(mapped);
     } catch (e, stack) {
       logger.networkDebug(tag: "execturor", "e type = ${e.runtimeType}");
@@ -66,7 +71,11 @@ class Executor {
 
     final loggerFn = <AppLogGroup, void Function()>{
       AppLogGroup.api: () {
-        logger.apiError(tag: from, e, stack: stack); // already logged in remoteDS data source
+        logger.apiError(
+          tag: from,
+          e,
+          stack: stack,
+        ); // already logged in remoteDS data source
       },
       AppLogGroup.cache: () {
         logger.cacheInfo(tag: from, e, stack: stack); // already logged

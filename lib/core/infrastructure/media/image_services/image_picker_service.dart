@@ -25,13 +25,19 @@ class ImagePickerService {
   static const _fileName = 'profile_image.jpg';
 
   Future<File?> pickImageWithOutCrop({required ImageSource source}) async {
-    final pickedFile = await _picker.pickImage(source: source, imageQuality: 85);
+    final pickedFile = await _picker.pickImage(
+      source: source,
+      imageQuality: 85,
+    );
     if (pickedFile == null) return null;
     return File(pickedFile.path);
   }
 
   Future<File?> pickImage({required ImageSource source}) async {
-    final pickedFile = await _picker.pickImage(source: source, imageQuality: 85);
+    final pickedFile = await _picker.pickImage(
+      source: source,
+      imageQuality: 85,
+    );
     if (pickedFile == null) return null;
     final File? croppedFile = await _cropImage(File(pickedFile.path));
     return croppedFile;

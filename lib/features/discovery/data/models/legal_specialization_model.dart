@@ -20,11 +20,11 @@ class LegalSpecializationModel with LegalSpecializationModelMappable {
   });
 
   LegalSpecializationEntity toEntity() => LegalSpecializationEntity(
-        id: id,
-        code: nameEn,
-        name: (nameAr?.isNotEmpty == true) ? nameAr : nameEn,
-        description: null,
-        iconUrl: iconUrl,
-        keywords: null,
-      );
+    id: id,
+    code: nameEn,
+    name: (nameAr?.isNotEmpty == true) ? nameAr : nameEn,
+    description: null,
+    iconUrl: iconUrl,
+    keywords: null,
+  );
 }

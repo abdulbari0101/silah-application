@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:silah_app/core/config/constants/ui_constants.dart';
 import 'package:silah_app/core/config/theme/extentions/theme_context_extension.dart';
 
-class IOSAppBar extends StatelessWidget implements ObstructingPreferredSizeWidget {
+class IOSAppBar extends StatelessWidget
+    implements ObstructingPreferredSizeWidget {
   const IOSAppBar({
     super.key,
     required this.title,
@@ -30,7 +31,11 @@ class IOSAppBar extends StatelessWidget implements ObstructingPreferredSizeWidge
               children: <Widget>[
                 CupertinoButton(
                   padding: const EdgeInsets.all(0),
-                  child: const Icon(CupertinoIcons.back, color: Colors.white, size: 30),
+                  child: const Icon(
+                    CupertinoIcons.back,
+                    color: Colors.white,
+                    size: 30,
+                  ),
                   onPressed: () => Navigator.pop(context),
                 ),
               ],

@@ -97,10 +97,15 @@ class _FSearchTextFieldState extends State<FSearchTextField> {
                   )
                 : null,
             labelText: showLabel ? null : null,
-            hintText: showLabel ? widget.hintText : (widget.hintText ?? widget.labelText),
+            hintText: showLabel
+                ? widget.hintText
+                : (widget.hintText ?? widget.labelText),
             filled: true,
             fillColor: fillColor,
-            contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 12),
+            contentPadding: const EdgeInsets.symmetric(
+              vertical: 10,
+              horizontal: 12,
+            ),
           ),
           validator: widget.validator,
         ),

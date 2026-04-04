@@ -10,7 +10,9 @@ class RequiredPasswordValidator extends ValueValidator {
 
   @override
   String? validate({required String label, required String? value}) =>
-      (value == null || value.isEmpty) ? Strings.error_enter_password.tr() : null;
+      (value == null || value.isEmpty)
+      ? Strings.error_enter_password.tr()
+      : null;
 
   @override
   Map<String, dynamic> toJson() => {'type': type};
@@ -72,8 +74,11 @@ class ConsecutiveRepeatingDigitsValidator extends ValueValidator {
   String? validate({required String label, required String? value}) {
     if (value == null || value.isEmpty) return null;
     for (int i = 0; i < value.length - 2; i++) {
-      final a = int.parse(value[i]), b = int.parse(value[i + 1]), c = int.parse(value[i + 2]);
-      if (b == a + 1 && c == b + 1) return Strings.password_consecutive_error.tr();
+      final a = int.parse(value[i]),
+          b = int.parse(value[i + 1]),
+          c = int.parse(value[i + 2]);
+      if (b == a + 1 && c == b + 1)
+        return Strings.password_consecutive_error.tr();
       if (a == b && b == c) return Strings.password_repeating_error.tr();
     }
     return null;

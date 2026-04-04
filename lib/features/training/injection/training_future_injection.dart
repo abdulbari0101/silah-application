@@ -10,7 +10,10 @@ import 'package:silah_app/features/training/domain/repositories/training_reposit
 
 Future<void> initTraining() async {
   locator.registerLazySingleton<TrainingRepository>(
-    () => TrainingRepositoryImpl(remoteDataSource: locator(), executor: locator()),
+    () => TrainingRepositoryImpl(
+      remoteDataSource: locator(),
+      executor: locator(),
+    ),
   );
 
   locator.registerLazySingleton<TrainingRemoteDataSource>(
@@ -18,6 +21,9 @@ Future<void> initTraining() async {
   );
 
   locator.registerLazySingleton(
-    () => TrainingService(locator<DioClient>().dio, baseUrl: ApiConstants.baseUrl),
+    () => TrainingService(
+      locator<DioClient>().dio,
+      baseUrl: ApiConstants.baseUrl,
+    ),
   );
 }

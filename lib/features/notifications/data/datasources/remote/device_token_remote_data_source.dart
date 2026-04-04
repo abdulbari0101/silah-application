@@ -14,7 +14,10 @@ class DeviceTokenRemoteDataSourceImpl implements DeviceTokenRemoteDataSource {
   final DeviceTokenService service;
   final AppLogger logger;
 
-  DeviceTokenRemoteDataSourceImpl({required this.service, required this.logger});
+  DeviceTokenRemoteDataSourceImpl({
+    required this.service,
+    required this.logger,
+  });
 
   @override
   Future<BaseApiResponse<DeviceTokenResponseModel>> registerDeviceFcmToken(

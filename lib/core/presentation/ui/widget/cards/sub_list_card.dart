@@ -48,7 +48,11 @@ class SubListCard extends StatelessWidget {
 
             const SizedBox(height: 4),
             Expanded(
-              child: Card(elevation: 0, shape: context.shapes.roundedLg, child: childList),
+              child: Card(
+                elevation: 0,
+                shape: context.shapes.roundedLg,
+                child: childList,
+              ),
             ),
           ],
         ),

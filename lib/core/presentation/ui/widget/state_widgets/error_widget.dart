@@ -29,7 +29,9 @@ class CustomeErrorWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height != null ? height! + 80 : AppDimension(context).height / 1.5,
+      height: height != null
+          ? height! + 80
+          : AppDimension(context).height / 1.5,
       alignment: Alignment.center,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -39,8 +41,8 @@ class CustomeErrorWidget extends StatelessWidget {
             flex: 2,
             child: Lottie.asset(
               context.themeValue(
-                dark: (darksAsset ?? lightAsset) ?? Assets.lottie.cat,
-                light: (lightAsset ?? darksAsset) ?? Assets.lottie.cat,
+                dark: (darksAsset ?? lightAsset) ?? Assets.lottie.noDataError,
+                light: (lightAsset ?? darksAsset) ?? Assets.lottie.noDataError,
               ),
               height: height ?? 300,
               width: width ?? 300,
@@ -52,7 +54,11 @@ class CustomeErrorWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(message, style: context.textTheme.bodyMedium, textAlign: TextAlign.center),
+                Text(
+                  message,
+                  style: context.textTheme.bodyMedium,
+                  textAlign: TextAlign.center,
+                ),
                 UIConstants.smallHeight,
                 InkWell(
                   onTap: onRetry,
@@ -65,7 +71,10 @@ class CustomeErrorWidget extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Text(Strings.try_again.tr(), style: context.textTheme.bodyMedium),
+                        Text(
+                          Strings.try_again.tr(),
+                          style: context.textTheme.bodyMedium,
+                        ),
                         UIConstants.xxsmallWidth,
                         Icon(CupertinoIcons.restart, size: 20),
                       ],

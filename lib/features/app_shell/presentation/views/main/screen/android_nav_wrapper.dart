@@ -27,19 +27,29 @@ class AndroidNavWrapper extends StatelessWidget {
     return DoubleBackPopScope(
       onDoubleTapped: () {
         locator.get<AppStateBloc>().add(
-          UpdateSession(isLoggedIn: false, userAuthStatus: UserAuthStatus.loggedOutReturningUser),
+          UpdateSession(
+            isLoggedIn: false,
+            userAuthStatus: UserAuthStatus.loggedOutReturningUser,
+          ),
         );
-
       },
 
-      child: _ScaffoldBody(items: items, navigationShell: navigationShell, child: child),
+      child: _ScaffoldBody(
+        items: items,
+        navigationShell: navigationShell,
+        child: child,
+      ),
     );
   }
 }
 
 // Extracted to keep the BlocBuilder rebuilds local.
 class _ScaffoldBody extends StatelessWidget {
-  const _ScaffoldBody({required this.child, required this.items, this.navigationShell});
+  const _ScaffoldBody({
+    required this.child,
+    required this.items,
+    this.navigationShell,
+  });
 
   final Widget child;
   final StatefulNavigationShell? navigationShell;
@@ -51,7 +61,10 @@ class _ScaffoldBody extends StatelessWidget {
 
     return Scaffold(
       body: SafeArea(child: content),
-      bottomNavigationBar: AndroidBottomNavBar(items: items, navigationShell: navigationShell),
+      bottomNavigationBar: AndroidBottomNavBar(
+        items: items,
+        navigationShell: navigationShell,
+      ),
     );
   }
 }

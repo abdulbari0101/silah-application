@@ -16,7 +16,11 @@ Future<void> timeReady<T extends Object>(String name) async {
   _log().initInfo('$name.ready took ${sw.elapsedMilliseconds} ms', tag: 'Init');
 }
 
-Future<T> timeAsync<T>(String name, Future<T> Function() run, {String tag = 'Init'}) async {
+Future<T> timeAsync<T>(
+  String name,
+  Future<T> Function() run, {
+  String tag = 'Init',
+}) async {
   if (kReleaseMode) return await run();
   final sw = Stopwatch()..start();
   try {

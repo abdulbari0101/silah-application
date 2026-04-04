@@ -26,7 +26,8 @@ class SecureStore implements KeyValueStore<SecureKey> {
         aOptions: const AndroidOptions(
           encryptedSharedPreferences: true,
           resetOnError: true,
-          keyCipherAlgorithm: KeyCipherAlgorithm.RSA_ECB_OAEPwithSHA_256andMGF1Padding,
+          keyCipherAlgorithm:
+              KeyCipherAlgorithm.RSA_ECB_OAEPwithSHA_256andMGF1Padding,
           storageCipherAlgorithm: StorageCipherAlgorithm.AES_GCM_NoPadding,
         ),
         iOptions: IOSOptions(
@@ -49,7 +50,11 @@ class SecureStore implements KeyValueStore<SecureKey> {
   String _k(SecureKey key, String? userId) => key.generateKey(userId: userId);
 
   @override
-  Future<bool> write({required SecureKey key, required String value, String? userId}) {
+  Future<bool> write({
+    required SecureKey key,
+    required String value,
+    String? userId,
+  }) {
     return guard<bool>(
       key: key,
       op: 'write',
@@ -124,7 +129,11 @@ class SecureStore implements KeyValueStore<SecureKey> {
       try {
         controller.add(v);
       } catch (e, s) {
-        _logger.cacheError(tag: 'SecureStore.watch.listener/${key.name}', e, stack: s);
+        _logger.cacheError(
+          tag: 'SecureStore.watch.listener/${key.name}',
+          e,
+          stack: s,
+        );
       }
     }
 
@@ -134,7 +143,8 @@ class SecureStore implements KeyValueStore<SecureKey> {
         userId: userId,
         deleteOnError: false,
         op: 'watch.register',
-        body: () async => _secureStorage.registerListener(key: kk, listener: listener),
+        body: () async =>
+            _secureStorage.registerListener(key: kk, listener: listener),
       );
 
       await for (final v in controller.stream) {
@@ -144,18 +154,29 @@ class SecureStore implements KeyValueStore<SecureKey> {
       try {
         _secureStorage.unregisterListener(key: kk, listener: listener);
       } catch (e, s) {
-        _logger.cacheError(tag: 'SecureStore.watch.unregister/${key.name}', e, stack: s);
+        _logger.cacheError(
+          tag: 'SecureStore.watch.unregister/${key.name}',
+          e,
+          stack: s,
+        );
       }
       await controller.close();
     }
   }
 
   @override
-  Future<void> tryDeleteSilently({required SecureKey key, String? userId}) async {
+  Future<void> tryDeleteSilently({
+    required SecureKey key,
+    String? userId,
+  }) async {
     try {
       await delete(key: key, userId: userId);
     } catch (e, s) {
-      _logger.cacheError(tag: 'SecureStore.tryDeleteSilently/${key.name}', e, stack: s);
+      _logger.cacheError(
+        tag: 'SecureStore.tryDeleteSilently/${key.name}',
+        e,
+        stack: s,
+      );
     }
   }
 
@@ -181,7 +202,11 @@ class SecureStore implements KeyValueStore<SecureKey> {
       if (deleteOnError) {
         await tryDeleteSilently(key: key, userId: userId);
       }
-      _logger.cacheError(tag: 'SecureStore.$op/${key.name}', error, stack: stack);
+      _logger.cacheError(
+        tag: 'SecureStore.$op/${key.name}',
+        error,
+        stack: stack,
+      );
       throw SecureStorageException(Strings.cache_error.tr());
     }
   }

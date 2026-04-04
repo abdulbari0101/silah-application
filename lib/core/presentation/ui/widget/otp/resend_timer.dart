@@ -23,12 +23,17 @@ class ResendTimer extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(Strings.tv_remaining.tr(), style: context.textTheme.bodyMedium),
+              Text(
+                Strings.tv_remaining.tr(),
+                style: context.textTheme.bodyMedium,
+              ),
 
               UIConstants.smallHeight,
               Text(
                 '$secondsRemaining s',
-                style: context.textTheme.labelLarge!.copyWith(color: context.colors.primary),
+                style: context.textTheme.labelLarge!.copyWith(
+                  color: context.colors.primary,
+                ),
               ),
             ],
           ),

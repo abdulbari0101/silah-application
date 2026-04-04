@@ -57,7 +57,8 @@ class _FMobileFieldState extends State<FMobileField> {
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<TextEditingValue>(
-      valueListenable: widget.mobileNoController, // rebuild on every text change
+      valueListenable:
+          widget.mobileNoController, // rebuild on every text change
       builder: (context, value, child) {
         final hasValue = value.text.isNotEmpty;
         final hasError = (widget.errorText?.isNotEmpty ?? false);
@@ -80,8 +81,13 @@ class _FMobileFieldState extends State<FMobileField> {
               focusNode: _node,
               enabled: widget.enabled,
               maxLength: 10,
-              keyboardType: const TextInputType.numberWithOptions(decimal: false, signed: false),
-              inputFormatters: [FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*$'))],
+              keyboardType: const TextInputType.numberWithOptions(
+                decimal: false,
+                signed: false,
+              ),
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'^[0-9]*$')),
+              ],
               decoration: InputDecoration(
                 labelText: showLabel ? null : labelText,
                 hintText: widget.hintText,

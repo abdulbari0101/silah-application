@@ -16,12 +16,11 @@ final GoRouter appRouter = GoRouter(
   initialLocation: AppRoutes.splash.path,
   debugLogDiagnostics: true,
   redirect: (context, state) {
+    logger.appDebug("routerState=${state.fullPath}", tag: "redirect");
 
-    logger.appDebug( "routerState=${state.fullPath}" ,tag:  "redirect");
-  
     final blocState = locator.get<AppStateBloc>().state;
 
-        logger.appDebug( "blocState=$blocState" ,tag:  "redirect");
+    logger.appDebug("blocState=$blocState", tag: "redirect");
 
     if (blocState is! AppStateLoaded) return null;
 
@@ -49,32 +48,47 @@ final GoRouter appRouter = GoRouter(
           return CustomTransitionPage(
             key: state.pageKey,
             child: route.build(state),
-            transitionsBuilder: (context, animation, secondaryAnimation, child) {
-              switch (route.transitionType) {
-                case RouteTransitionType.fade:
-                  return FadeTransition(opacity: animation, child: child);
-                case RouteTransitionType.slideBottom:
-                  return SlideTransition(
-                    position: Tween<Offset>(
-                      begin: const Offset(0, 1),
-                      end: Offset.zero,
-                    ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOut)),
-                    child: child,
-                  );
-                case RouteTransitionType.none:
-                  return child;
-                case RouteTransitionType.slide:
-                  return SlideTransition(
-                    position: Tween<Offset>(
-                      begin: Directionality.of(context) == TextDirection.rtl
-                          ? const Offset(-1, 0)
-                          : const Offset(1, 0),
-                      end: Offset.zero,
-                    ).animate(CurvedAnimation(parent: animation, curve: Curves.easeInOut)),
-                    child: child,
-                  );
-              }
-            },
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+                  switch (route.transitionType) {
+                    case RouteTransitionType.fade:
+                      return FadeTransition(opacity: animation, child: child);
+                    case RouteTransitionType.slideBottom:
+                      return SlideTransition(
+                        position:
+                            Tween<Offset>(
+                              begin: const Offset(0, 1),
+                              end: Offset.zero,
+                            ).animate(
+                              CurvedAnimation(
+                                parent: animation,
+                                curve: Curves.easeOut,
+                              ),
+                            ),
+                        child: child,
+                      );
+                    case RouteTransitionType.none:
+                      return child;
+                    case RouteTransitionType.slide:
+                      return SlideTransition(
+                        position:
+                            Tween<Offset>(
+                              begin:
+                                  Directionality.of(context) ==
+                                      TextDirection.rtl
+                                  ? const Offset(-1, 0)
+                                  : const Offset(1, 0),
+                              end: Offset.zero,
+                            ).animate(
+                              CurvedAnimation(
+                                parent: animation,
+                                curve: Curves.easeInOut,
+                              ),
+                            ),
+                        child: child,
+                      );
+                  }
+                },
             transitionDuration: const Duration(milliseconds: 150),
           );
         },

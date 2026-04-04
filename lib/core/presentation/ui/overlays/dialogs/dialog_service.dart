@@ -34,13 +34,14 @@ class DialogService {
     Function()? onCancelClick,
     Widget? body,
     String? iconAsset,
-  })
-  {
+  }) {
     Widget buildBody() {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          message != null ? Text(message, style: context.textTheme.bodySmall) : body ?? Text(''),
+          message != null
+              ? Text(message, style: context.textTheme.bodySmall)
+              : body ?? Text(''),
           if (message != null || body != null) UIConstants.xbigHeight,
         ],
       );
@@ -60,7 +61,10 @@ class DialogService {
             children: <Widget>[
               Container(
                 padding: const EdgeInsets.all(UIConstants.defaultPadding12),
-                decoration: BoxDecoration(color: context.colors.lightBlue4, shape: BoxShape.circle),
+                decoration: BoxDecoration(
+                  color: context.colors.lightBlue4,
+                  shape: BoxShape.circle,
+                ),
                 child: iconAsset != null
                     ? AppSvgIcon(assetName: iconAsset)
                     : Icon(Icons.info_outline_rounded, size: 32),
@@ -77,7 +81,8 @@ class DialogService {
                 PrimaryButton(
                   // backgroundRadius: 25,
                   onTap: () {
-                    onConfirmsClick() ?? Navigator.of(dialogContext, rootNavigator: true).pop();
+                    onConfirmsClick() ??
+                        Navigator.of(dialogContext, rootNavigator: true).pop();
                   },
                   text: confirmButtonLabel ?? Strings.btn_confirm.tr(),
                 ),
@@ -89,7 +94,6 @@ class DialogService {
                     onCancelClick();
                   }
                   Navigator.of(dialogContext, rootNavigator: true).pop();
-                  
                 },
                 text: cancelButtonLabel ?? Strings.cancel.tr(),
               ),
@@ -110,8 +114,7 @@ class DialogService {
     Function()? onYesClick,
     Function()? onNoClick,
     Widget? titleWidget,
-  })
-  {
+  }) {
     if (AppPlatform.isIOS) {
       showCupertinoDialog(
         context: context,
@@ -154,8 +157,7 @@ class DialogService {
     Widget? titleWidget,
     String? yesTitle,
     String? noTitle,
-  })
-  {
+  }) {
     bool hasBody = content.isNotNullOrEmpty;
     return AwesomeDialog(
       // barrierColor: context.brand.primaryDark.withAlphaOpacity(0.8),
@@ -170,7 +172,9 @@ class DialogService {
             Center(
               child: Text(
                 content ?? '',
-                style: context.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w700),
+                style: context.textTheme.titleMedium!.copyWith(
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
           if (hasBody) UIConstants.xbigHeight,
@@ -178,7 +182,9 @@ class DialogService {
           if (!hasBody) ...[
             Text(
               title,
-              style: context.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w700),
+              style: context.textTheme.titleMedium!.copyWith(
+                fontWeight: FontWeight.w700,
+              ),
             ),
             UIConstants.mediumHeight,
             ExpandableTextWidget(
@@ -218,18 +224,15 @@ class DialogService {
 
   static bool _isSessionDialogOpen = false;
 
-  static void showSessionExpiredDialog({
-    required VoidCallback onOk,
-  })
-  {
+  static void showSessionExpiredDialog({required VoidCallback onOk}) {
     if (_isSessionDialogOpen) return;
 
     _isSessionDialogOpen = true;
 
     final context = rootNavigatorKey.currentContext!;
-    final description =Strings.err_session_end_login.tr();
+    final description = Strings.err_session_end_login.tr();
 
-    final buttonTitle =Strings.login.tr();
+    final buttonTitle = Strings.login.tr();
 
     AwesomeDialog(
       // barrierColor: context.brand.primaryDark.withAlphaOpacity(0.8),
@@ -238,7 +241,10 @@ class DialogService {
       dialogType: DialogType.warning,
       animType: AnimType.scale,
       dismissOnTouchOutside: false,
-      customHeader: LottieBuilder.asset(Assets.lottie.logout, decoder: LottieComposition.decodeZip),
+      customHeader: LottieBuilder.asset(
+        Assets.lottie.logout,
+        decoder: LottieComposition.decodeZip,
+      ),
       dismissOnBackKeyPress: false,
       title: Strings.err_session_end.tr(),
       desc: description,
@@ -250,10 +256,8 @@ class DialogService {
     _isSessionDialogOpen = false;
   }
 
-
   static showErrorDialog(
-    BuildContext context,
-      {
+    BuildContext context, {
     Function()? onOKPressed,
     Function()? onCancelPressed,
     String? content,
@@ -261,8 +265,7 @@ class DialogService {
     String? cancelBtnTitle,
     String? title,
     String? desc,
-  })
-  {
+  }) {
     final text = context.textTheme;
 
     final hasBody = content != null && content.trim().isNotEmpty;
@@ -301,7 +304,9 @@ class DialogService {
             ExpandableTextWidget(
               text: desc ?? "",
               textAlign: TextAlign.center,
-              style: text.bodyMedium?.copyWith(color: context.colors.onSurfaceVariant),
+              style: text.bodyMedium?.copyWith(
+                color: context.colors.onSurfaceVariant,
+              ),
               trimLines: 2,
             ),
             UIConstants.xbigHeight,
@@ -329,8 +334,7 @@ class DialogService {
     ).show();
   }
 
-  static void showThemeSetting(BuildContext context)
-  {
+  static void showThemeSetting(BuildContext context) {
     if (AppPlatform.isIOS) {
       showCupertinoDialog(
         context: context,
@@ -351,7 +355,6 @@ class DialogService {
     }
   }
 
-
   static showWarningDialog(
     BuildContext context, {
 
@@ -363,8 +366,7 @@ class DialogService {
     String? cancelBtnTitle,
     String? title,
     String? desc,
-  })
-  {
+  }) {
     showBaseDialog(
       context,
       title: title,
@@ -385,21 +387,19 @@ class DialogService {
     );
   }
 
-
   static showSucessDialog(
-      BuildContext context, {
-        bool dismissible = true,
+    BuildContext context, {
+    bool dismissible = true,
 
-        Function()? onOKPressed,
-        Function()? btnCancelOnPress,
+    Function()? onOKPressed,
+    Function()? btnCancelOnPress,
 
-        String? content,
-        String? okBtnTitle,
-        String? cancelBtnTitle,
-        String? title,
-        String? desc,
-      })
-  {
+    String? content,
+    String? okBtnTitle,
+    String? cancelBtnTitle,
+    String? title,
+    String? desc,
+  }) {
     return AwesomeDialog(
       context: context,
       barrierColor: context.colors.primary.withValues(alpha: 0.8),
@@ -409,22 +409,21 @@ class DialogService {
       dismissOnBackKeyPress: dismissible,
       dialogType: DialogType.success,
       alignment: AlignmentDirectional.bottomCenter,
-      width:  null,
-      body:
-      content.isNotNullOrEmpty
+      width: null,
+      body: content.isNotNullOrEmpty
           ? Center(
-        child: Text(
-          content ?? "",
-          style: const TextStyle(fontStyle: FontStyle.italic),
-        ),
-      )
+              child: Text(
+                content ?? "",
+                style: const TextStyle(fontStyle: FontStyle.italic),
+              ),
+            )
           : null,
 
       title: title,
       btnOkText: okBtnTitle ?? Strings.btn_next.tr(),
       desc: desc,
       btnCancelText: cancelBtnTitle,
-      btnCancelOnPress:btnCancelOnPress ,
+      btnCancelOnPress: btnCancelOnPress,
       btnOkOnPress: onOKPressed,
     ).show();
   }

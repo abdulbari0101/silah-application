@@ -20,9 +20,9 @@ class AuthService {
     FirebaseAuth? auth,
     FirebaseFirestore? firestore,
     AuthRoleService? roleService,
-  })  : _auth = auth ?? FirebaseAuth.instance,
-        _firestore = firestore ?? FirebaseFirestore.instance,
-        _roleService = roleService;
+  }) : _auth = auth ?? FirebaseAuth.instance,
+       _firestore = firestore ?? FirebaseFirestore.instance,
+       _roleService = roleService;
 
   User? get currentUser => _auth.currentUser;
 
@@ -77,10 +77,7 @@ class AuthService {
     await _firestore.collection('users').doc(firebaseUser.uid).set(profile);
 
     final didSyncRole = await _syncRoleClaim(firebaseUser);
-    final idToken = await _safeIdToken(
-      firebaseUser,
-      forceRefresh: didSyncRole,
-    );
+    final idToken = await _safeIdToken(firebaseUser, forceRefresh: didSyncRole);
     return _buildUserModel(
       user: firebaseUser,
       profile: _ProfileData(AuthAccountType.user, profile),
@@ -128,10 +125,7 @@ class AuthService {
     await _firestore.collection('lawyers').doc(firebaseUser.uid).set(profile);
 
     final didSyncRole = await _syncRoleClaim(firebaseUser);
-    final idToken = await _safeIdToken(
-      firebaseUser,
-      forceRefresh: didSyncRole,
-    );
+    final idToken = await _safeIdToken(firebaseUser, forceRefresh: didSyncRole);
     return _buildUserModel(
       user: firebaseUser,
       profile: _ProfileData(AuthAccountType.lawyer, profile),
@@ -293,15 +287,16 @@ class AuthService {
       await _roleService.syncRole('Bearer $idToken');
       return true;
     } catch (error, stack) {
-      AppLogger().networkError(tag: 'AuthService.syncRoleClaim', error, stack: stack);
+      AppLogger().networkError(
+        tag: 'AuthService.syncRoleClaim',
+        error,
+        stack: stack,
+      );
       return false;
     }
   }
 
-  Future<String?> _safeIdToken(
-    User user, {
-    bool forceRefresh = false,
-  }) async {
+  Future<String?> _safeIdToken(User user, {bool forceRefresh = false}) async {
     try {
       return await user.getIdToken(forceRefresh);
     } catch (_) {

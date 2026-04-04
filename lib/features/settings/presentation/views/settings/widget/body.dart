@@ -40,7 +40,12 @@ class Body extends StatelessWidget {
                 onRetry: () => context.read<ProfileCubit>().load(),
               );
             }
-            return _buildContent(context, profile, isSaving: false, errorMessage: message);
+            return _buildContent(
+              context,
+              profile,
+              isSaving: false,
+              errorMessage: message,
+            );
           },
           loaded: (profile, isSaving) =>
               _buildContent(context, profile, isSaving: isSaving ?? false),
@@ -55,7 +60,9 @@ class Body extends StatelessWidget {
     required bool isSaving,
     String? errorMessage,
   }) {
-    final name = profile.name?.trim().isNotEmpty == true ? profile.name!.trim() : Strings.user.tr();
+    final name = profile.name?.trim().isNotEmpty == true
+        ? profile.name!.trim()
+        : Strings.user.tr();
     final email = profile.email?.trim();
     final accountType = profile.accountType?.toLowerCase();
     final isAdmin = accountType == 'admin';
@@ -98,7 +105,8 @@ class Body extends StatelessWidget {
                           context,
                           title: Strings.personal_information.tr(),
                           icon: Icons.person_outline,
-                          onTap: () => context.pushNamed(AppRoutes.personalInfo.name),
+                          onTap: () =>
+                              context.pushNamed(AppRoutes.personalInfo.name),
                         ),
                         if (!isAdmin) ...[
                           _buildDivider(),
@@ -109,7 +117,9 @@ class Body extends StatelessWidget {
                             value: profile.isTrainee,
                             onChanged: isSaving
                                 ? null
-                                : (value) => context.read<ProfileCubit>().updateIsTrainee(value),
+                                : (value) => context
+                                      .read<ProfileCubit>()
+                                      .updateIsTrainee(value),
                           ),
                         ],
                         _buildDivider(),
@@ -118,7 +128,9 @@ class Body extends StatelessWidget {
                             context,
                             title: Strings.verification_status.tr(),
                             icon: Icons.verified_user_outlined,
-                            onTap: () => context.pushNamed(AppRoutes.verificationStatus.name),
+                            onTap: () => context.pushNamed(
+                              AppRoutes.verificationStatus.name,
+                            ),
                           ),
                           _buildDivider(),
                         ],
@@ -135,7 +147,8 @@ class Body extends StatelessWidget {
                           context,
                           title: Strings.privacy_policy.tr(),
                           icon: Icons.shield_outlined,
-                          onTap: () => context.pushNamed(AppRoutes.privacyPolicy.name),
+                          onTap: () =>
+                              context.pushNamed(AppRoutes.privacyPolicy.name),
                         ),
                         _buildDivider(),
                         _buildTile(
@@ -152,7 +165,8 @@ class Body extends StatelessWidget {
                             context,
                             title: Strings.admin_tasks.tr(),
                             icon: Icons.admin_panel_settings_outlined,
-                            onTap: () => context.pushNamed(AppRoutes.adminTasks.name),
+                            onTap: () =>
+                                context.pushNamed(AppRoutes.adminTasks.name),
                           ),
                         ],
                         _buildDivider(),
@@ -181,7 +195,9 @@ class Body extends StatelessWidget {
                     UIConstants.smallHeight,
                     Text(
                       errorMessage,
-                      style: context.textTheme.labelSmall?.copyWith(color: context.colors.error),
+                      style: context.textTheme.labelSmall?.copyWith(
+                        color: context.colors.error,
+                      ),
                     ),
                   ],
                 ],
@@ -223,21 +239,35 @@ class Body extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: context.colors.surface,
                     shape: BoxShape.circle,
-                    border: Border.all(color: context.colors.primaryContainer, width: 1.5),
+                    border: Border.all(
+                      color: context.colors.primaryContainer,
+                      width: 1.5,
+                    ),
                   ),
-                  child: Icon(Icons.edit_outlined, size: 16, color: context.colors.primary),
+                  child: Icon(
+                    Icons.edit_outlined,
+                    size: 16,
+                    color: context.colors.primary,
+                  ),
                 ),
               ),
             ],
           ),
         ),
         UIConstants.smallHeight,
-        Text(name, style: context.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
+        Text(
+          name,
+          style: context.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
         if (email != null && email.isNotEmpty) ...[
           UIConstants.xsmallHeight,
           Text(
             email,
-            style: context.textTheme.bodySmall?.copyWith(color: context.colors.onSurfaceVariant),
+            style: context.textTheme.bodySmall?.copyWith(
+              color: context.colors.onSurfaceVariant,
+            ),
           ),
         ],
       ],
@@ -318,7 +348,9 @@ class Body extends StatelessWidget {
       ),
       title: Text(
         title,
-        style: context.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+        style: context.textTheme.bodyMedium?.copyWith(
+          fontWeight: FontWeight.w600,
+        ),
       ),
       trailing: Switch.adaptive(value: value, onChanged: onChanged),
     );
@@ -342,7 +374,10 @@ class Body extends StatelessWidget {
       ),
       (_) {
         context.read<AppStateBloc>().add(
-          UpdateSession(isLoggedIn: false, userAuthStatus: UserAuthStatus.loggedOutReturningUser),
+          UpdateSession(
+            isLoggedIn: false,
+            userAuthStatus: UserAuthStatus.loggedOutReturningUser,
+          ),
         );
         context.goNamed(AppRoutes.login.name);
       },
@@ -350,7 +385,8 @@ class Body extends StatelessWidget {
   }
 
   Future<void> _openReportScreen(BuildContext context) async {
-    final didSubmitReport = await context.pushNamed<bool>(AppRoutes.supportReport.name) ?? false;
+    final didSubmitReport =
+        await context.pushNamed<bool>(AppRoutes.supportReport.name) ?? false;
 
     if (!context.mounted || !didSubmitReport) return;
 

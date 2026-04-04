@@ -7,20 +7,26 @@ import '../../models/settings_response_wrapper.dart';
 import 'settings_service.dart';
 
 abstract class SettingsRemoteDataSource {
-  Future<BaseApiResponse<SettingsRespWrapper>> doSomething(PostRequestModel request);
+  Future<BaseApiResponse<SettingsRespWrapper>> doSomething(
+    PostRequestModel request,
+  );
 }
 
 class SettingsRemoteDataSourceImpl implements SettingsRemoteDataSource {
   final SettingsService settingsService;
   final AppLogger logger;
 
-  SettingsRemoteDataSourceImpl({required this.settingsService, required this.logger});
+  SettingsRemoteDataSourceImpl({
+    required this.settingsService,
+    required this.logger,
+  });
 
   @override
-  Future<BaseApiResponse<SettingsRespWrapper>> doSomething(PostRequestModel request) =>
-      handleBaseApiResponse<SettingsRespWrapper>(
-        method: 'SettingsRemoteDataSource.doSomething',
-        logger: logger,
-        call: () => settingsService.doSomething(request),
-      );
+  Future<BaseApiResponse<SettingsRespWrapper>> doSomething(
+    PostRequestModel request,
+  ) => handleBaseApiResponse<SettingsRespWrapper>(
+    method: 'SettingsRemoteDataSource.doSomething',
+    logger: logger,
+    call: () => settingsService.doSomething(request),
+  );
 }

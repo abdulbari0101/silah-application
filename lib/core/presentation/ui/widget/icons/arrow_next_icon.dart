@@ -32,8 +32,9 @@ class ArrowNextIcon extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final defColor =
-        context.colors.isDark ? context.colors.onSurface : context.colors.onSurfaceVariant;
+    final defColor = context.colors.isDark
+        ? context.colors.onSurface
+        : context.colors.onSurfaceVariant;
     final iconColor = color ?? defColor;
     final iconD = icon ?? Icons.arrow_forward_ios;
 

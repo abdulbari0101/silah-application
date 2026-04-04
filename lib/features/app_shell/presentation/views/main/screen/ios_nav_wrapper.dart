@@ -7,7 +7,11 @@ import 'package:silah_app/core/presentation/ui/widget/icons/app_svg_icon.dart';
 import 'package:silah_app/features/app_shell/presentation/views/main/widget/navigation/nav_item_data.dart';
 
 class IOSNavWrapper extends StatelessWidget {
-  const IOSNavWrapper({super.key, required this.navigationShell, required this.items});
+  const IOSNavWrapper({
+    super.key,
+    required this.navigationShell,
+    required this.items,
+  });
 
   final StatefulNavigationShell? navigationShell;
   final List<NavItemData> items;
@@ -54,8 +58,14 @@ class IOSNavWrapper extends StatelessWidget {
     );
   }
 
-  Widget _buildTintedIcon(NavItemData item, bool selected, BuildContext context) {
-    final color = selected ? context.colors.onPrimaryContainer : context.colors.onSurfaceVariant;
+  Widget _buildTintedIcon(
+    NavItemData item,
+    bool selected,
+    BuildContext context,
+  ) {
+    final color = selected
+        ? context.colors.onPrimaryContainer
+        : context.colors.onSurfaceVariant;
 
     return AppSvgIcon(
       assetName: selected ? item.selectedIconAsset : item.unselectedIconAsset,
@@ -68,7 +78,11 @@ class IOSNavWrapper extends StatelessWidget {
     );
   }
 
-  BottomNavigationBarItem _buildTab(BuildContext context, NavItemData item, bool selected) {
+  BottomNavigationBarItem _buildTab(
+    BuildContext context,
+    NavItemData item,
+    bool selected,
+  ) {
     return BottomNavigationBarItem(
       icon: _buildTintedIcon(item, selected, context),
       label: item.labelKey.tr(),

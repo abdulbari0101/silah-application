@@ -10,10 +10,12 @@ class DateRangeValue {
 
   DateRangeValue({required this.label, this.from, this.to});
 
-  String get formattedFrom =>
-      from != null ? DateFormat('dd/MM/yyyy', AppLanguage.english.code).format(from!) : '';
+  String get formattedFrom => from != null
+      ? DateFormat('dd/MM/yyyy', AppLanguage.english.code).format(from!)
+      : '';
 
-  String get formattedTo => to != null ? DateFormat('dd/MM/yyyy', 'en').format(to!) : '';
+  String get formattedTo =>
+      to != null ? DateFormat('dd/MM/yyyy', 'en').format(to!) : '';
 }
 
 extension DateRangeTypeExtension on DateRangeType {

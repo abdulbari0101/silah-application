@@ -19,10 +19,21 @@ class DataModel with DataModelMappable {
   @MappableField(key: 'OTP')
   final String? token;
 
-  const DataModel({this.currency, this.balance, this.custName, this.otp, this.token});
+  const DataModel({
+    this.currency,
+    this.balance,
+    this.custName,
+    this.otp,
+    this.token,
+  });
 
-  DataEntity toEntity() =>
-      DataEntity(currency: currency, balance: balance, custName: custName, otp: otp, token: token);
+  DataEntity toEntity() => DataEntity(
+    currency: currency,
+    balance: balance,
+    custName: custName,
+    otp: otp,
+    token: token,
+  );
 
   factory DataModel.fromEntity(DataEntity entity) => DataModel(
     currency: entity.currency,

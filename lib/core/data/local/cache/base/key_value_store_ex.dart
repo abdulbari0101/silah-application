@@ -68,7 +68,11 @@ extension KeyValueStoreExt<K> on KeyValueStore<K> {
       try {
         await tryDeleteSilently(key: key, userId: userId);
       } catch (_) {}
-      _log.cacheError(tag: 'KeyValueStore.readObject.parse/${_keyLabel(key)}', error, stack: stack);
+      _log.cacheError(
+        tag: 'KeyValueStore.readObject.parse/${_keyLabel(key)}',
+        error,
+        stack: stack,
+      );
       throw LocalStorageException(Strings.cache_error.tr());
     }
   }
@@ -118,7 +122,11 @@ extension KeyValueStoreExt<K> on KeyValueStore<K> {
     }
   }
 
-  Future<bool> writeStringList({required K key, String? userId, required List<String> list}) async {
+  Future<bool> writeStringList({
+    required K key,
+    String? userId,
+    required List<String> list,
+  }) async {
     final payload = jsonEncode(list);
     // parent-guarded I/O
     return write(key: key, value: payload, userId: userId);

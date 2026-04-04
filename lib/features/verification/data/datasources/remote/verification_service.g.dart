@@ -52,7 +52,8 @@ class _VerificationService implements VerificationService {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = request;
+    final _data = <String, dynamic>{};
+    _data.addAll(request);
     final _options = _setStreamType<VerificationResponseModel>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(

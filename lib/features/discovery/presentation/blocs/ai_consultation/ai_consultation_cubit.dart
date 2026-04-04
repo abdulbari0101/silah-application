@@ -18,13 +18,15 @@ class AiConsultationState with _$AiConsultationState {
   const factory AiConsultationState.success({
     required AiRecommendationEntity recommendation,
   }) = _AiConsultationSuccess;
-  const factory AiConsultationState.failure({required String message}) = _AiConsultationFailure;
+  const factory AiConsultationState.failure({required String message}) =
+      _AiConsultationFailure;
 }
 
 class AiConsultationCubit extends Cubit<AiConsultationState> {
   final DiscoveryRepository repository;
 
-  AiConsultationCubit({required this.repository}) : super(const AiConsultationState.idle());
+  AiConsultationCubit({required this.repository})
+    : super(const AiConsultationState.idle());
 
   Future<void> submit(String prompt) async {
     final trimmed = prompt.trim();
@@ -40,10 +42,10 @@ class AiConsultationCubit extends Cubit<AiConsultationState> {
     );
 
     recommendResult.fold(
-      (failure) => emit(AiConsultationState.failure(message: _mapFailure(failure))),
-      (recommendation) => emit(
-        AiConsultationState.success(recommendation: recommendation),
-      ),
+      (failure) =>
+          emit(AiConsultationState.failure(message: _mapFailure(failure))),
+      (recommendation) =>
+          emit(AiConsultationState.success(recommendation: recommendation)),
     );
   }
 

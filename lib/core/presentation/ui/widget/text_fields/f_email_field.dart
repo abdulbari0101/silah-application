@@ -59,7 +59,8 @@ class _FEmailFieldState extends State<FEmailField> {
     final hasValue = widget.controller.text.isNotEmpty;
     final hasError = (widget.errorText?.isNotEmpty ?? false);
     final labelText = widget.labelText ?? Strings.email_address.tr();
-    final showLabel = widget.showLabel && (widget.decoration == null) && labelText.isNotEmpty;
+    final showLabel =
+        widget.showLabel && (widget.decoration == null) && labelText.isNotEmpty;
 
     final fillColor = resolveInputFillColor(
       context,

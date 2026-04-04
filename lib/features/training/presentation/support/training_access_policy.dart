@@ -13,6 +13,12 @@ class TrainingAccessPolicy {
     if (user == null || !_isLawyer(user)) {
       return false;
     }
+    if (user.accountType == AuthAccountType.lawyer &&
+        user.profile?['workplace'].toString().trim() ==
+            'أعمل لدى مكتب محاماة'.trim()) {
+      return false;
+    }
+
     return _parseBool(user.profile?['acceptsTrainees']) ||
         _parseBool(user.profile?['isTrainee']);
   }
@@ -25,6 +31,7 @@ class TrainingAccessPolicy {
     return lawyerId != null &&
         lawyerId.isNotEmpty &&
         lawyer.acceptsTrainees &&
+        lawyer.workplace?.trim() != 'أعمل لدى مكتب محاماة'.trim() &&
         isTraineeUser(viewer);
   }
 

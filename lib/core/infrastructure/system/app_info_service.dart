@@ -8,7 +8,6 @@ import 'package:silah_app/core/infrastructure/errors/failures.dart';
 abstract class AppInfoService {
   Future<Either<Failure, String>> getAppVersion();
   Future<Either<Failure, String>> getPackageName();
-
 }
 
 class AppInfoServiceImpl implements AppInfoService {
@@ -22,7 +21,9 @@ class AppInfoServiceImpl implements AppInfoService {
   Future<Either<Failure, String>> getAppVersion() async {
     try {
       final v = packageInfo.version.trim();
-      return v.isNotNullOrEmpty ? Right(v) : Left(AppFailure("can't extract app version"));
+      return v.isNotNullOrEmpty
+          ? Right(v)
+          : Left(AppFailure("can't extract app version"));
     } catch (e, st) {
       logger.appError(e.toString(), tag: '$_tag.getAppVersion', stack: st);
       return Left(AppFailure(e.toString()));
@@ -33,12 +34,12 @@ class AppInfoServiceImpl implements AppInfoService {
   Future<Either<Failure, String>> getPackageName() async {
     try {
       final p = packageInfo.packageName.trim();
-      return p.isNotNullOrEmpty ? Right(p) : Left(AppFailure("can't extract packageName"));
+      return p.isNotNullOrEmpty
+          ? Right(p)
+          : Left(AppFailure("can't extract packageName"));
     } catch (e, st) {
       logger.appError(e.toString(), tag: '$_tag.getPackageName', stack: st);
       return Left(AppFailure(e.toString()));
     }
   }
-
-
 }

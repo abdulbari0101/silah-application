@@ -20,7 +20,8 @@ class ConsultationRequestBody extends StatefulWidget {
   final ConsultationRequestArgs args;
 
   @override
-  State<ConsultationRequestBody> createState() => _ConsultationRequestBodyState();
+  State<ConsultationRequestBody> createState() =>
+      _ConsultationRequestBodyState();
 }
 
 class _ConsultationRequestBodyState extends State<ConsultationRequestBody> {

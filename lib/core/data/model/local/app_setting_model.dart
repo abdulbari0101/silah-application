@@ -18,7 +18,8 @@ class AppSettingModel with AppSettingModelMappable {
   /// Convert to domain entity
   AppSettingEntity toEntity() {
     return AppSettingEntity(
-      appAppThemeMode: appAppThemeMode!, // can't be null will be loaded by default setting if null
+      appAppThemeMode:
+          appAppThemeMode!, // can't be null will be loaded by default setting if null
       language: AppLanguage.fromNumber(
         languageNumber!,
       ), // can't be null will be loaded by default setting if null

@@ -25,7 +25,8 @@ class TraineesState with _$TraineesState {
 }
 
 class TraineesCubit extends Cubit<TraineesState> {
-  TraineesCubit({required this.repository}) : super(const TraineesState.initial());
+  TraineesCubit({required this.repository})
+    : super(const TraineesState.initial());
 
   final TrainingRepository repository;
   List<TrainingApplicationEntity> _applications = [];
@@ -52,7 +53,10 @@ class TraineesCubit extends Cubit<TraineesState> {
     );
   }
 
-  Future<void> updateStatus(String applicationId, TrainingApplicationStatus status) async {
+  Future<void> updateStatus(
+    String applicationId,
+    TrainingApplicationStatus status,
+  ) async {
     emit(
       TraineesState.loaded(
         applications: _applications,
@@ -60,12 +64,19 @@ class TraineesCubit extends Cubit<TraineesState> {
       ),
     );
 
-    final result = await repository.updateApplicationStatus(applicationId, status);
+    final result = await repository.updateApplicationStatus(
+      applicationId,
+      status,
+    );
     result.fold(
       (failure) => emit(TraineesState.error(message: _mapFailure(failure))),
       (updated) {
         _applications = _applications
-            .map((item) => item.id == updated.id ? item.copyWith(status: updated.status) : item)
+            .map(
+              (item) => item.id == updated.id
+                  ? item.copyWith(status: updated.status)
+                  : item,
+            )
             .toList();
         emit(TraineesState.loaded(applications: _applications));
       },

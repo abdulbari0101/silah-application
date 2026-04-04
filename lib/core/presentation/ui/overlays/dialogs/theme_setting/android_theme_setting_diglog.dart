@@ -14,7 +14,8 @@ class AndroidThemeSettingDialog extends StatefulWidget {
   const AndroidThemeSettingDialog({super.key});
 
   @override
-  State<AndroidThemeSettingDialog> createState() => _AndroidThemeSettingDialogState();
+  State<AndroidThemeSettingDialog> createState() =>
+      _AndroidThemeSettingDialogState();
 }
 
 class _AndroidThemeSettingDialogState extends State<AndroidThemeSettingDialog> {
@@ -37,7 +38,10 @@ class _AndroidThemeSettingDialogState extends State<AndroidThemeSettingDialog> {
         child: Text(
           Strings.theme_setting.tr(),
           style: context.textTheme.labelLarge!
-              .copyWith(fontWeight: FontWeight.w600, color: context.colors.onSurface)
+              .copyWith(
+                fontWeight: FontWeight.w600,
+                color: context.colors.onSurface,
+              )
               .copyWith(fontSize: 18),
         ),
       ),
@@ -91,7 +95,11 @@ class _AndroidThemeSettingDialogState extends State<AndroidThemeSettingDialog> {
   }
 
   bool _shouldDisableButton(BuildContext context) {
-    final currentMode = context.read<AppSettingBloc>().state.data.appAppThemeMode;
+    final currentMode = context
+        .read<AppSettingBloc>()
+        .state
+        .data
+        .appAppThemeMode;
     final intendedMode = isSystemThemeSelected
         ? AppThemeMode.system
         : BrightnessUtils.isSystemDark()
@@ -138,7 +146,10 @@ class _ThemeOptionTile extends StatelessWidget {
       title: Text(
         title,
         style: context.textTheme.labelLarge!
-            .copyWith(fontWeight: FontWeight.w600, color: context.colors.onSurface)
+            .copyWith(
+              fontWeight: FontWeight.w600,
+              color: context.colors.onSurface,
+            )
             .copyWith(fontSize: 15),
       ),
       subtitle: Text(

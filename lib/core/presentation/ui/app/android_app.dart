@@ -148,7 +148,9 @@ class AndroidAppErrorStateWidget extends StatelessWidget {
           debugShowCheckedModeBanner: false,
 
           home: Scaffold(
-            body: Center(child: Center(child: Text('An error has been occured $message'))),
+            body: Center(
+              child: Center(child: Text('An error has been occured $message')),
+            ),
           ),
         );
       },

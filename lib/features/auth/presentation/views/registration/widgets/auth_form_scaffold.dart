@@ -38,7 +38,10 @@ class AuthFormScaffold extends StatelessWidget {
             Align(
               alignment: AlignmentDirectional.centerStart,
               child: IconButton(
-                icon: Icon(Icons.arrow_back_ios_new_rounded, color: context.colors.primary),
+                icon: Icon(
+                  Icons.arrow_back_ios_new_rounded,
+                  color: context.colors.primary,
+                ),
                 onPressed: onBack,
               ),
             ),

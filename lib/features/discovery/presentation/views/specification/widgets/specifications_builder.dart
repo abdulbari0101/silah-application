@@ -24,7 +24,8 @@ class OperatorsBuilder extends StatelessWidget {
           return _ScrollableState(
             child: CustomeErrorWidget(
               message: state.message,
-              onRetry: () => context.read<SpecificationsBloc>().add(LoadSpecifications()),
+              onRetry: () =>
+                  context.read<SpecificationsBloc>().add(LoadSpecifications()),
             ),
           );
         }
@@ -35,7 +36,9 @@ class OperatorsBuilder extends StatelessWidget {
               child: EmptyWidget(
                 retryWidget: PrimaryButtonWithProgress(
                   text: Strings.try_again.tr(),
-                  onTap: () => context.read<SpecificationsBloc>().add(LoadSpecifications()),
+                  onTap: () => context.read<SpecificationsBloc>().add(
+                    LoadSpecifications(),
+                  ),
                   isLoading: false,
                 ),
               ),

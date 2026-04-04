@@ -13,5 +13,7 @@ Future<void> initSettingReaders() async {
       identityReader: locator.get<IdentityReader>(),
     ),
   );
-  locator.registerLazySingleton<SettingReader>(() => locator<SettingsCacheDataSource>());
+  locator.registerLazySingleton<SettingReader>(
+    () => locator<SettingsCacheDataSource>(),
+  );
 }

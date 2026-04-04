@@ -22,7 +22,11 @@ class PrefsStore implements KeyValueStore<PrefsKey> {
   String _k(PrefsKey key, String? userId) => key.generateKey(userId: userId);
 
   @override
-  Future<bool> write({required PrefsKey key, required String value, String? userId}) {
+  Future<bool> write({
+    required PrefsKey key,
+    required String value,
+    String? userId,
+  }) {
     return guard<bool>(
       key: key,
       userId: userId,
@@ -109,13 +113,20 @@ class PrefsStore implements KeyValueStore<PrefsKey> {
   // ---------- shared pattern: silent delete + guard ----------
 
   @override
-  Future<void> tryDeleteSilently({required PrefsKey key, String? userId}) async {
+  Future<void> tryDeleteSilently({
+    required PrefsKey key,
+    String? userId,
+  }) async {
     final k = _k(key, userId);
     try {
       final ok = await prefs.remove(k);
       if (ok) _changes.add(MapEntry(k, null));
     } catch (e, s) {
-      _logger.cacheError(tag: 'PrefsStore.tryDeleteSilently/${key.name}', e, stack: s);
+      _logger.cacheError(
+        tag: 'PrefsStore.tryDeleteSilently/${key.name}',
+        e,
+        stack: s,
+      );
     }
   }
 
@@ -133,7 +144,11 @@ class PrefsStore implements KeyValueStore<PrefsKey> {
       if (deleteOnError) {
         await tryDeleteSilently(key: key, userId: userId);
       }
-      _logger.cacheError(tag: 'PrefsStore.$op/${key.name}', error, stack: stack);
+      _logger.cacheError(
+        tag: 'PrefsStore.$op/${key.name}',
+        error,
+        stack: stack,
+      );
       // Prefs layer should surface LocalStorageException
       throw LocalStorageException(Strings.cache_error.tr());
     }

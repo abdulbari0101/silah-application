@@ -8,7 +8,8 @@ part 'consultations_service.g.dart';
 
 @RestApi(parser: Parser.JsonSerializable, callAdapter: JsonBodyMappableAdapter)
 abstract class ConsultationsService {
-  factory ConsultationsService(Dio dio, {String? baseUrl}) = _ConsultationsService;
+  factory ConsultationsService(Dio dio, {String? baseUrl}) =
+      _ConsultationsService;
 
   @POST('/consultations')
   Future<BaseApiResponse<ConsultationCreateResponseModel>> createConsultation(

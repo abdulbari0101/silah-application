@@ -31,7 +31,9 @@ class ThemeController extends ChangeNotifier {
   void _subscribeToBloc() {
     _settingSub = settingBloc.stream.listen((state) {
       if (state is AppSettingLoaded) {
-        final newTheme = state.data.isDarkTheme ? AppThemeMode.dark : AppThemeMode.light;
+        final newTheme = state.data.isDarkTheme
+            ? AppThemeMode.dark
+            : AppThemeMode.light;
 
         if (!state.data.isSystemThemeTheme && newTheme != _themeMode) {
           setTheme(newTheme);

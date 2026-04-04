@@ -7,7 +7,12 @@ class FAreaCodeField extends StatelessWidget {
   final VoidCallback? onTap;
   final bool enabled;
 
-  const FAreaCodeField({super.key, this.selectedCode = '+967', this.onTap, this.enabled = true});
+  const FAreaCodeField({
+    super.key,
+    this.selectedCode = '+967',
+    this.onTap,
+    this.enabled = true,
+  });
 
   @override
   Widget build(BuildContext context) {

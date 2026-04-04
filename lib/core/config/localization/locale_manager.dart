@@ -32,11 +32,17 @@ class LocaleManagerImpl implements LocaleManager {
 
       final target = language.toLocale();
       if (ctx.locale == target) {
-        logger.uiInfo('Locale already ${target.languageCode}', tag: 'LocaleManager.applyLanguage');
+        logger.uiInfo(
+          'Locale already ${target.languageCode}',
+          tag: 'LocaleManager.applyLanguage',
+        );
         return const Right(true);
       }
 
-      logger.uiInfo('Changing locale to $target', tag: 'LocaleManager.applyLanguage');
+      logger.uiInfo(
+        'Changing locale to $target',
+        tag: 'LocaleManager.applyLanguage',
+      );
       await ctx.setLocale(target);
       logger.uiInfo(
         'Locale changed successfully applayd to ${ctx.locale}',

@@ -13,11 +13,11 @@ abstract class TrainingRepository {
     TrainingApplicationEntity application,
   );
 
-  Future<Either<Failure, List<TrainingApplicationEntity>>> fetchMyApplications();
+  Future<Either<Failure, List<TrainingApplicationEntity>>>
+  fetchMyApplications();
 
-  Future<Either<Failure, List<TrainingApplicationEntity>>> fetchApplicationsForLawyer(
-    String lawyerUid,
-  );
+  Future<Either<Failure, List<TrainingApplicationEntity>>>
+  fetchApplicationsForLawyer(String lawyerUid);
 
   Future<Either<Failure, TrainingApplicationEntity>> updateApplicationStatus(
     String applicationId,

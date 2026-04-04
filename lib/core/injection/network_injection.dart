@@ -30,7 +30,10 @@ Future<void> initNetwork() async {
         sendTimeout: kSendTimeoutRegular,
         receiveTimeout: kReceiveTimeoutRegular,
         responseType: ResponseType.json,
-        headers: const {'Accept': 'application/json', 'Content-Type': 'application/json'},
+        headers: const {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        },
       ),
     );
 

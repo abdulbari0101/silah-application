@@ -296,6 +296,9 @@ class $AssetsLottieGen {
   /// File path: assets/lottie/logout.json
   String get logout => 'assets/lottie/logout.json';
 
+  /// File path: assets/lottie/no_data_error.json
+  String get noDataError => 'assets/lottie/no_data_error.json';
+
   /// File path: assets/lottie/offline.json
   String get offline => 'assets/lottie/offline.json';
 
@@ -309,6 +312,7 @@ class $AssetsLottieGen {
     garbage,
     logIn,
     logout,
+    noDataError,
     offline,
     search,
   ];

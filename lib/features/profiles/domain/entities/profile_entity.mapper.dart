@@ -223,8 +223,7 @@ class _ProfileEntityCopyWithImpl<$R, $Out>
       if (accountType != $none) #accountType: accountType,
       if (isTrainee != null) #isTrainee: isTrainee,
       if (verified != $none) #verified: verified,
-      if (verificationStatus != $none)
-        #verificationStatus: verificationStatus,
+      if (verificationStatus != $none) #verificationStatus: verificationStatus,
     }),
   );
   @override
@@ -238,8 +237,10 @@ class _ProfileEntityCopyWithImpl<$R, $Out>
     accountType: data.get(#accountType, or: $value.accountType),
     isTrainee: data.get(#isTrainee, or: $value.isTrainee),
     verified: data.get(#verified, or: $value.verified),
-    verificationStatus:
-        data.get(#verificationStatus, or: $value.verificationStatus),
+    verificationStatus: data.get(
+      #verificationStatus,
+      or: $value.verificationStatus,
+    ),
   );
 
   @override
@@ -247,3 +248,4 @@ class _ProfileEntityCopyWithImpl<$R, $Out>
     Then<$Out2, $R2> t,
   ) => _ProfileEntityCopyWithImpl<$R2, $Out2>($value, $cast, t);
 }
+

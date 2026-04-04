@@ -11,16 +11,25 @@ import 'package:silah_app/features/consultations/domain/repositories/consultatio
 Future<void> initConsultation() async {
   // Repo
   locator.registerLazySingleton<ConsultationsRepository>(
-    () => ConsultationsRepositoryImpl(remoteDataSource: locator(), executor: locator()),
+    () => ConsultationsRepositoryImpl(
+      remoteDataSource: locator(),
+      executor: locator(),
+    ),
   );
 
   // Data sources
   locator.registerLazySingleton<ConsultationsRemoteDataSource>(
-    () => ConsultationsRemoteDataSourceImpl(service: locator(), logger: locator()),
+    () => ConsultationsRemoteDataSourceImpl(
+      service: locator(),
+      logger: locator(),
+    ),
   );
 
   // Services
   locator.registerLazySingleton(
-    () => ConsultationsService(locator<DioClient>().dio, baseUrl: ApiConstants.baseUrl),
+    () => ConsultationsService(
+      locator<DioClient>().dio,
+      baseUrl: ApiConstants.baseUrl,
+    ),
   );
 }

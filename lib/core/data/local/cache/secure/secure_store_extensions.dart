@@ -43,7 +43,8 @@ extension BiometricExt on SecureStore {
       final ok = await _auth.authenticate(
         localizedReason: localizedReason ?? Strings.biometrics_reason.tr(),
         options: AuthenticationOptions(
-          biometricOnly: !allowDeviceCredential, // enforce biometrics by default
+          biometricOnly:
+              !allowDeviceCredential, // enforce biometrics by default
           stickyAuth: true,
 
           sensitiveTransaction: true,

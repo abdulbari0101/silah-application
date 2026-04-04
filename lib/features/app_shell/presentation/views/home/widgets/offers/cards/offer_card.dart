@@ -14,7 +14,12 @@ class OfferItemWidget extends StatelessWidget {
   final int itemIndex;
   final void Function()? onTap;
 
-  const OfferItemWidget({super.key, required this.offer, required this.itemIndex, this.onTap});
+  const OfferItemWidget({
+    super.key,
+    required this.offer,
+    required this.itemIndex,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +32,10 @@ class OfferItemWidget extends StatelessWidget {
     final radius = context.shapes.brMd;
     return Container(
       margin: const EdgeInsetsDirectional.only(end: 8, bottom: 5),
-      decoration: BoxDecoration(borderRadius: radius, boxShadow: context.shadowSoft),
+      decoration: BoxDecoration(
+        borderRadius: radius,
+        boxShadow: context.shadowSoft,
+      ),
       child: CardButton(
         onTap: onTap,
         padding: EdgeInsets.zero,
@@ -42,7 +50,10 @@ class OfferItemWidget extends StatelessWidget {
                 fit: BoxFit.cover,
                 height: double.infinity,
                 width: double.infinity,
-                borderRadius: radius.copyWith(bottomLeft: Radius.zero, bottomRight: Radius.zero),
+                borderRadius: radius.copyWith(
+                  bottomLeft: Radius.zero,
+                  bottomRight: Radius.zero,
+                ),
               ),
             ),
             Container(
@@ -68,7 +79,9 @@ class OfferItemWidget extends StatelessWidget {
                   if (offer.desc != null && offer.desc!.isNotEmpty)
                     Text(
                       offer.desc!,
-                      style: context.textTheme.labelMedium!.onSurfaceVariant(context),
+                      style: context.textTheme.labelMedium!.onSurfaceVariant(
+                        context,
+                      ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),

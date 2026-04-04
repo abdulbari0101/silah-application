@@ -61,7 +61,9 @@ class _InAppWebViewScreenState extends State<AgreementWebView> {
             children: [
               InAppWebView(
                 gestureRecognizers: {
-                  Factory<VerticalDragGestureRecognizer>(() => VerticalDragGestureRecognizer()),
+                  Factory<VerticalDragGestureRecognizer>(
+                    () => VerticalDragGestureRecognizer(),
+                  ),
                 },
                 initialUrlRequest: URLRequest(url: WebUri(widget.url)),
                 initialSettings: settings,
@@ -79,7 +81,10 @@ class _InAppWebViewScreenState extends State<AgreementWebView> {
                 visible: loadingProgress < 100,
                 child: const Align(
                   alignment: Alignment.center,
-                  child: AppPlatform(android: AndroidProgress(), ios: IOSProgress()),
+                  child: AppPlatform(
+                    android: AndroidProgress(),
+                    ios: IOSProgress(),
+                  ),
                 ),
               ),
             ],

@@ -7,6 +7,10 @@ Future<void> initAuthReaders() async {
   locator.registerLazySingleton<AuthCacheDataSource>(
     () => AuthCacheDataSourceImpl(logger: locator(), appCache: locator()),
   );
-  locator.registerLazySingleton<IdentityReader>(() => locator<AuthCacheDataSource>());
-  locator.registerLazySingleton<SessionReader>(() => locator<AuthCacheDataSource>());
+  locator.registerLazySingleton<IdentityReader>(
+    () => locator<AuthCacheDataSource>(),
+  );
+  locator.registerLazySingleton<SessionReader>(
+    () => locator<AuthCacheDataSource>(),
+  );
 }

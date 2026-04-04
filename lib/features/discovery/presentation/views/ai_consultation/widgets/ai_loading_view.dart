@@ -28,7 +28,9 @@ class AiLoadingView extends StatelessWidget {
           Text(
             Strings.silah_helps_you_find_the_right_lawyer.tr(),
             textAlign: TextAlign.center,
-            style: context.textTheme.bodyLarge?.copyWith(color: context.colors.primary),
+            style: context.textTheme.bodyLarge?.copyWith(
+              color: context.colors.primary,
+            ),
           ),
         ],
       ),

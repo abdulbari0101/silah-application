@@ -17,15 +17,27 @@ class PullToRefreshFooter extends StatelessWidget {
         Widget body;
 
         if (mode == LoadStatus.idle) {
-          body = Text(Strings.drop_up_to_upload_more.tr(), style: context.textTheme.bodySmall);
+          body = Text(
+            Strings.drop_up_to_upload_more.tr(),
+            style: context.textTheme.bodySmall,
+          );
         } else if (mode == LoadStatus.loading) {
           body = loadingWidget;
         } else if (mode == LoadStatus.failed) {
-          body = Text(Strings.load_faild.tr(), style: context.textTheme.bodySmall);
+          body = Text(
+            Strings.load_faild.tr(),
+            style: context.textTheme.bodySmall,
+          );
         } else if (mode == LoadStatus.canLoading) {
-          body = Text(Strings.leave_screen_to_load.tr(), style: context.textTheme.bodySmall);
+          body = Text(
+            Strings.leave_screen_to_load.tr(),
+            style: context.textTheme.bodySmall,
+          );
         } else {
-          body = Text(Strings.seem_you_reach_end.tr(), style: context.textTheme.bodySmall);
+          body = Text(
+            Strings.seem_you_reach_end.tr(),
+            style: context.textTheme.bodySmall,
+          );
         }
         return SizedBox(child: Center(child: body));
       },

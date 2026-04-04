@@ -65,15 +65,20 @@ class _SearchFilterBodyState extends State<SearchFilterBody> {
                   children: [
                     SearchFilterHeader(
                       controller: _controller,
-                      onChanged: (value) => context.read<DiscoverySearchCubit>().updateQuery(value),
-                      onCleared: () => context.read<DiscoverySearchCubit>().updateQuery(''),
+                      onChanged: (value) => context
+                          .read<DiscoverySearchCubit>()
+                          .updateQuery(value),
+                      onCleared: () =>
+                          context.read<DiscoverySearchCubit>().updateQuery(''),
                     ),
                     UIConstants.bigHeight,
                     Align(
                       alignment: AlignmentDirectional.centerEnd,
                       child: Text(
                         Strings.specializations.tr(),
-                        style: context.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+                        style: context.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                     UIConstants.mediumHeight,

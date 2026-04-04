@@ -62,7 +62,9 @@ class TabButtonItem extends StatelessWidget {
             width: AppDimension(context).width / 2.31,
             alignment: Alignment.center,
             decoration: BoxDecoration(
-              color: isSelected ? context.colors.surfaceContainer : Colors.transparent,
+              color: isSelected
+                  ? context.colors.surfaceContainer
+                  : Colors.transparent,
               borderRadius: context.shapes.brSm,
             ),
             child: Row(
@@ -78,8 +80,12 @@ class TabButtonItem extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   softWrap: false,
                   style: TextStyle(
-                    color: isSelected ? context.colors.onSurface : context.colors.greyDark(),
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                    color: isSelected
+                        ? context.colors.onSurface
+                        : context.colors.greyDark(),
+                    fontWeight: isSelected
+                        ? FontWeight.bold
+                        : FontWeight.normal,
                   ),
                 ),
               ],

@@ -32,8 +32,12 @@ class TrainingOpportunityCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            title?.isNotEmpty == true ? title! : Strings.training_opportunity.tr(),
-            style: context.textTheme.titleSmall?.copyWith(fontWeight: FontWeight.w700),
+            title?.isNotEmpty == true
+                ? title!
+                : Strings.training_opportunity.tr(),
+            style: context.textTheme.titleSmall?.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
           ),
           if (city != null && city.isNotEmpty) ...[
             UIConstants.xsmallHeight,

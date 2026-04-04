@@ -13,7 +13,11 @@ class SuccessTitleText extends StatelessWidget {
       textAlign: TextAlign.center,
       style: context.textTheme.titleLarge!
           .copyWith(fontWeight: FontWeight.w700)
-          .copyWith(color: context.colors.primary.darker(30), fontSize: 24, height: 1.2),
+          .copyWith(
+            color: context.colors.primary.darker(30),
+            fontSize: 24,
+            height: 1.2,
+          ),
     );
   }
 }

@@ -11,12 +11,12 @@ abstract class TrainingService {
   factory TrainingService(Dio dio, {String? baseUrl}) = _TrainingService;
 
   @POST('/training/applications')
-  Future<BaseApiResponse<TrainingApplicationCreateResponseModel>> createApplication(
-    @Body() TrainingApplicationCreateRequestModel request,
-  );
+  Future<BaseApiResponse<TrainingApplicationCreateResponseModel>>
+  createApplication(@Body() TrainingApplicationCreateRequestModel request);
 
   @PATCH('/training/applications/{applicationId}')
-  Future<BaseApiResponse<TrainingApplicationStatusUpdateResponseModel>> updateStatus(
+  Future<BaseApiResponse<TrainingApplicationStatusUpdateResponseModel>>
+  updateStatus(
     @Path('applicationId') String applicationId,
     @Body() TrainingApplicationStatusUpdateRequestModel request,
   );

@@ -16,7 +16,9 @@ class AiRecommendRequestModel with AiRecommendRequestModelMappable {
 
   const AiRecommendRequestModel({required this.caseText, this.filters});
 
-  factory AiRecommendRequestModel.fromEntity(AiClassificationRequestEntity entity) {
+  factory AiRecommendRequestModel.fromEntity(
+    AiClassificationRequestEntity entity,
+  ) {
     return AiRecommendRequestModel(caseText: entity.prompt);
   }
 }
@@ -30,7 +32,8 @@ class AiRecommendFiltersModel with AiRecommendFiltersModelMappable {
 }
 
 @MappableClass(ignoreNull: true)
-class AiRecommendResponseModel extends BaseRespWrapper with AiRecommendResponseModelMappable {
+class AiRecommendResponseModel extends BaseRespWrapper
+    with AiRecommendResponseModelMappable {
   final LegalSpecializationModel? specialization;
   final String? specializationId;
   final List<LawyerProfileEntity>? lawyers;
@@ -43,7 +46,8 @@ class AiRecommendResponseModel extends BaseRespWrapper with AiRecommendResponseM
   });
 
   AiRecommendationEntity toEntity() {
-    final specializationEntity = specialization?.toEntity() ??
+    final specializationEntity =
+        specialization?.toEntity() ??
         (specializationId != null
             ? LegalSpecializationEntity(id: specializationId)
             : null);

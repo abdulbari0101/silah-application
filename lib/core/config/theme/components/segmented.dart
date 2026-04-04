@@ -9,7 +9,9 @@ SegmentedButtonThemeData buildSegmentedTheme(ColorScheme cs, TextTheme text) {
     style: ButtonStyle(
       // M3 recommends pill corners
       shape: const WidgetStatePropertyAll(StadiumBorder()),
-      padding: const WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 12, vertical: 8)),
+      padding: const WidgetStatePropertyAll(
+        EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+      ),
       side: WidgetStateProperty.resolveWith((states) {
         final sel = states.contains(WidgetState.selected);
         return sel ? BorderSide.none : BorderSide(color: cs.outline);
@@ -29,7 +31,8 @@ SegmentedButtonThemeData buildSegmentedTheme(ColorScheme cs, TextTheme text) {
                   : cs.onSurfaceVariant)
               .withAlphaOpacity(.08);
         }
-        if (states.contains(WidgetState.hovered) || states.contains(WidgetState.focused)) {
+        if (states.contains(WidgetState.hovered) ||
+            states.contains(WidgetState.focused)) {
           return (states.contains(WidgetState.selected)
                   ? cs.onPrimaryContainer
                   : cs.onSurfaceVariant)
@@ -39,7 +42,9 @@ SegmentedButtonThemeData buildSegmentedTheme(ColorScheme cs, TextTheme text) {
       }),
       textStyle: WidgetStateProperty.resolveWith((states) {
         final sel = states.contains(WidgetState.selected);
-        return label?.copyWith(fontWeight: sel ? FontWeight.w600 : FontWeight.w400);
+        return label?.copyWith(
+          fontWeight: sel ? FontWeight.w600 : FontWeight.w400,
+        );
       }),
       iconColor: WidgetStateProperty.resolveWith((states) {
         final sel = states.contains(WidgetState.selected);

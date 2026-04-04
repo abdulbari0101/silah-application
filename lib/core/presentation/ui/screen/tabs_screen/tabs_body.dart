@@ -32,7 +32,10 @@ class TabsBody extends StatelessWidget {
           Expanded(
             child: BlocBuilder<TabsCubit, TabsState>(
               builder: (context, state) {
-                return Padding(padding: padding, child: state.tabs[state.selectedIndex].widget);
+                return Padding(
+                  padding: padding,
+                  child: state.tabs[state.selectedIndex].widget,
+                );
               },
             ),
           ),

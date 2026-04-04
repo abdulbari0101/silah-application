@@ -12,7 +12,8 @@ part 'training_application_cubit.freezed.dart';
 @freezed
 class TrainingApplicationState with _$TrainingApplicationState {
   const factory TrainingApplicationState.idle() = _TrainingApplicationIdle;
-  const factory TrainingApplicationState.submitting() = _TrainingApplicationSubmitting;
+  const factory TrainingApplicationState.submitting() =
+      _TrainingApplicationSubmitting;
   const factory TrainingApplicationState.success({
     required TrainingApplicationEntity application,
   }) = _TrainingApplicationSuccess;
@@ -24,13 +25,14 @@ class TrainingApplicationCubit extends Cubit<TrainingApplicationState> {
   final TrainingRepository repository;
 
   TrainingApplicationCubit({required this.repository})
-      : super(const TrainingApplicationState.idle());
+    : super(const TrainingApplicationState.idle());
 
   Future<void> submit(TrainingApplicationEntity application) async {
     emit(const TrainingApplicationState.submitting());
     final result = await repository.submitApplication(application);
     result.fold(
-      (failure) => emit(TrainingApplicationState.failure(message: _mapFailure(failure))),
+      (failure) =>
+          emit(TrainingApplicationState.failure(message: _mapFailure(failure))),
       (created) => emit(TrainingApplicationState.success(application: created)),
     );
   }

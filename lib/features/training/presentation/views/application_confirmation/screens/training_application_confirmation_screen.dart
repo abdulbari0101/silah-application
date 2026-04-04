@@ -30,7 +30,7 @@ class TrainingApplicationConfirmationScreen extends StatelessWidget {
     final canRequestTraining = TrainingAccessPolicy.isTraineeUser(currentUser);
 
     return PlatformScreenWrapper(
-      title: Strings.confirm_sending_training_request.tr(),
+      title: Strings.training_requests.tr(),
       body: canRequestTraining
           ? BlocProvider(
               create: (_) => TrainingApplicationCubit(repository: locator()),

@@ -48,7 +48,8 @@ class _ExpandableTextWidgetState extends State<ExpandableTextWidget> {
         return Column(
           crossAxisAlignment: widget.textAlign == TextAlign.center
               ? CrossAxisAlignment.center
-              : widget.textAlign == TextAlign.end || widget.textAlign == TextAlign.right
+              : widget.textAlign == TextAlign.end ||
+                    widget.textAlign == TextAlign.right
               ? CrossAxisAlignment.end
               : CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -65,7 +66,9 @@ class _ExpandableTextWidgetState extends State<ExpandableTextWidget> {
                 onTap: _toggleExpanded,
                 child: Padding(
                   padding: const EdgeInsets.only(top: 4.0),
-                  child: Icon(_isExpanded ? Icons.expand_less : Icons.expand_more),
+                  child: Icon(
+                    _isExpanded ? Icons.expand_less : Icons.expand_more,
+                  ),
                 ),
               ),
           ],

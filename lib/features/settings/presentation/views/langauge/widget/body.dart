@@ -32,7 +32,10 @@ class _LanguageBodyState extends State<LanguageBody> {
         name: AppLanguage.english.name,
         flag: CircleAvatar(
           radius: 16,
-          child: AppSvgIcon(assetName: Assets.icons.flags.icUsd, darkDynamicColor: false),
+          child: AppSvgIcon(
+            assetName: Assets.icons.flags.icUsd,
+            darkDynamicColor: false,
+          ),
           //backgroundImage: NetworkImage('https://flagcdn.com/w40/gb.png'),
         ),
       ),
@@ -69,7 +72,10 @@ class _LanguageBodyState extends State<LanguageBody> {
             final bool isSelected = language.id == _selectedLanguageId;
 
             return ListTile(
-              contentPadding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 20.0,
+                vertical: 8.0,
+              ),
               leading: language.flag,
               title: Text(language.name, style: context.textTheme.labelLarge),
               trailing: isSelected
@@ -96,7 +102,11 @@ class _LanguageBodyState extends State<LanguageBody> {
           separatorBuilder: (context, index) {
             return Padding(
               padding: const EdgeInsets.only(left: 72.0),
-              child: Divider(height: 1, thickness: 0.5, color: context.colors.outlineVariant),
+              child: Divider(
+                height: 1,
+                thickness: 0.5,
+                color: context.colors.outlineVariant,
+              ),
             );
           },
         ),

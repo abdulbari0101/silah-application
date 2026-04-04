@@ -16,12 +16,14 @@ class AppSettingEntity with AppSettingEntityMappable {
   });
 
   bool get isDarkTheme =>
-      (appAppThemeMode == AppThemeMode.system && BrightnessUtils.isSystemDark()) ||
+      (appAppThemeMode == AppThemeMode.system &&
+          BrightnessUtils.isSystemDark()) ||
       appAppThemeMode == AppThemeMode.dark;
 
   bool get isLightTheme => !isDarkTheme;
   bool get isSystemThemeTheme => appAppThemeMode == AppThemeMode.system;
 
   @override
-  String toString() => 'AppSettingEntity(appAppThemeMode: $appAppThemeMode, language: $language)';
+  String toString() =>
+      'AppSettingEntity(appAppThemeMode: $appAppThemeMode, language: $language)';
 }

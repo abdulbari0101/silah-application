@@ -138,7 +138,7 @@ class _HomeAdminDashboardState extends State<HomeAdminDashboard> {
                   ],
                 ),
                 UIConstants.mediumHeight,
-              
+
                 Text(
                   Strings.admin_tasks.tr(),
                   style: context.textTheme.titleMedium?.copyWith(

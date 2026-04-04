@@ -2,7 +2,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:silah_app/core/domain/entities/api/offer_entity.dart';
 
-
 import '../cards/offer_card.dart';
 
 class OfferLoadedWidget extends StatelessWidget {
@@ -30,8 +29,7 @@ class OfferLoadedWidget extends StatelessWidget {
         return OfferItemWidget(
           itemIndex: itemIndex,
           offer: offers[itemIndex],
-          onTap: () {
-          },
+          onTap: () {},
         );
       },
     );

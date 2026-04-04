@@ -17,11 +17,16 @@ class OfferCardShimer extends StatelessWidget {
 
       child: Container(
         height: 200,
-        margin: const EdgeInsetsDirectional.only(end: UIConstants.mediumPadding),
+        margin: const EdgeInsetsDirectional.only(
+          end: UIConstants.mediumPadding,
+        ),
 
         width: double.infinity,
 
-        decoration: BoxDecoration(color: context.colors.primary, borderRadius: context.shapes.brMd),
+        decoration: BoxDecoration(
+          color: context.colors.primary,
+          borderRadius: context.shapes.brMd,
+        ),
 
         child: const Icon(Icons.image, color: Colors.white),
       ),

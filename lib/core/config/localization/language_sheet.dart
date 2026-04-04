@@ -20,7 +20,12 @@ class LanguageSheet extends StatelessWidget {
         return SafeArea(
           top: false,
           child: Padding(
-            padding: const EdgeInsets.only(top: 24, bottom: 24, left: 20, right: 20),
+            padding: const EdgeInsets.only(
+              top: 24,
+              bottom: 24,
+              left: 20,
+              right: 20,
+            ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -82,7 +87,11 @@ class _LanguageTile extends StatelessWidget {
             ? null
             : () {
                 context.read<AppSettingBloc>().add(
-                  ChangeLanguageEvent(language: lang, isRefresh: false, fromWhere: "_LanguageTile"),
+                  ChangeLanguageEvent(
+                    language: lang,
+                    isRefresh: false,
+                    fromWhere: "_LanguageTile",
+                  ),
                 );
               },
         child: DefaultTextStyle.merge(
@@ -100,7 +109,10 @@ class _LanguageTile extends StatelessWidget {
                     child: Text(
                       lang.code.toUpperCase(),
                       // use TinyText once; only add what's different
-                      style: tiny.copyWith(color: fg, fontWeight: FontWeight.w600),
+                      style: tiny.copyWith(
+                        color: fg,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -109,7 +121,10 @@ class _LanguageTile extends StatelessWidget {
                       lang.name,
                       // Only change what truly differs on selection (weight)
                       style: isSelected
-                          ? label.copyWith(color: fg, fontWeight: FontWeight.w700)
+                          ? label.copyWith(
+                              color: fg,
+                              fontWeight: FontWeight.w700,
+                            )
                           : label, // relies on default color from DefaultTextStyle
                     ),
                   ),

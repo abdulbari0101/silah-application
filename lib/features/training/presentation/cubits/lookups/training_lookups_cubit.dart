@@ -18,26 +18,31 @@ class TrainingLookupsState with _$TrainingLookupsState {
     LookupItemEntity? selectedArea,
     LookupItemEntity? selectedCity,
   }) = _TrainingLookupsReady;
-  const factory TrainingLookupsState.failure({required String message}) = _TrainingLookupsFailure;
+  const factory TrainingLookupsState.failure({required String message}) =
+      _TrainingLookupsFailure;
 }
 
 class TrainingLookupsCubit extends Cubit<TrainingLookupsState> {
   final LookupsRepository repository;
 
   TrainingLookupsCubit({required this.repository})
-      : super(const TrainingLookupsState.loading());
+    : super(const TrainingLookupsState.loading());
 
   Future<void> load() async {
     emit(const TrainingLookupsState.loading());
 
     final areasResult = await repository.fetchAreas();
     await areasResult.fold(
-      (failure) async => emit(TrainingLookupsState.failure(message: _mapFailure(failure))),
+      (failure) async =>
+          emit(TrainingLookupsState.failure(message: _mapFailure(failure))),
       (areas) async {
         final firstArea = areas.isNotEmpty ? areas.first : null;
-        final citiesResult = await repository.fetchCities(areaId: firstArea?.id);
+        final citiesResult = await repository.fetchCities(
+          areaId: firstArea?.id,
+        );
         citiesResult.fold(
-          (failure) => emit(TrainingLookupsState.failure(message: _mapFailure(failure))),
+          (failure) =>
+              emit(TrainingLookupsState.failure(message: _mapFailure(failure))),
           (cities) => emit(
             TrainingLookupsState.ready(
               areas: areas,
@@ -75,7 +80,8 @@ class TrainingLookupsCubit extends Cubit<TrainingLookupsState> {
 
     final citiesResult = await repository.fetchCities(areaId: resolvedArea?.id);
     citiesResult.fold(
-      (failure) => emit(TrainingLookupsState.failure(message: _mapFailure(failure))),
+      (failure) =>
+          emit(TrainingLookupsState.failure(message: _mapFailure(failure))),
       (cities) => emit(
         TrainingLookupsState.ready(
           areas: current.areas,

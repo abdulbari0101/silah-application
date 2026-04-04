@@ -7,6 +7,9 @@ import 'package:silah_app/core/presentation/ui/overlays/toasts.dart';
 class CopyUtil {
   static void copyValue(String value, BuildContext context) {
     Clipboard.setData(ClipboardData(text: value));
-    Toasts.success(context, Strings.copy_success.tr(namedArgs: {'code': value}));
+    Toasts.success(
+      context,
+      Strings.copy_success.tr(namedArgs: {'code': value}),
+    );
   }
 }

@@ -18,7 +18,8 @@ class DiscoveryResultsState with _$DiscoveryResultsState {
     required LegalSpecializationEntity specialization,
     required List<LawyerProfileEntity> lawyers,
   }) = _DiscoveryResultsReady;
-  const factory DiscoveryResultsState.failure({required String message}) = _DiscoveryResultsFailure;
+  const factory DiscoveryResultsState.failure({required String message}) =
+      _DiscoveryResultsFailure;
 }
 
 class DiscoveryResultsCubit extends Cubit<DiscoveryResultsState> {
@@ -38,10 +39,19 @@ class DiscoveryResultsCubit extends Cubit<DiscoveryResultsState> {
     );
     final result = await repository.fetchLawyersBySpecialization(request);
     result.fold(
-      (failure) => emit(DiscoveryResultsState.failure(message: _mapFailure(failure))),
+      (failure) =>
+          emit(DiscoveryResultsState.failure(message: _mapFailure(failure))),
       (data) {
-        final lawyers = data.map((item) => item.lawyer).whereType<LawyerProfileEntity>().toList();
-        emit(DiscoveryResultsState.ready(specialization: specialization, lawyers: lawyers));
+        final lawyers = data
+            .map((item) => item.lawyer)
+            .whereType<LawyerProfileEntity>()
+            .toList();
+        emit(
+          DiscoveryResultsState.ready(
+            specialization: specialization,
+            lawyers: lawyers,
+          ),
+        );
       },
     );
   }

@@ -59,7 +59,10 @@ class _ResendWidgetState extends State<ResendWidget> {
         Text(Strings.not_receive_code.tr(), style: themeStyle),
         UIConstants.smallWidth,
         if (widget.isLouding)
-          const Padding(padding: EdgeInsets.all(8.0), child: IOSProgress(size: 10))
+          const Padding(
+            padding: EdgeInsets.all(8.0),
+            child: IOSProgress(size: 10),
+          )
         else
           _secondsRemaining > 0
               ? Padding(
@@ -84,7 +87,10 @@ class _ResendWidgetState extends State<ResendWidget> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(Strings.resend.tr(), style: themeStyle.copyWith(color: accentColor)),
+            Text(
+              Strings.resend.tr(),
+              style: themeStyle.copyWith(color: accentColor),
+            ),
             const SizedBox(width: 4),
             Icon(Icons.refresh, size: 14, color: context.colors.primary),
           ],

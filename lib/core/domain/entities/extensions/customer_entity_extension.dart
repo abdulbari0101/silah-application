@@ -10,10 +10,11 @@ extension AuthUserEx on AuthUserEntity? {
     return Strings.no_name.tr();
   }
 
-  String get safeEmail =>
-      this?.email?.trim().isNotEmpty == true ? this!.email! : Strings.no_email.tr();
+  String get safeEmail => this?.email?.trim().isNotEmpty == true
+      ? this!.email!
+      : Strings.no_email.tr();
 
-  String get safePhone =>
-      this?.phone?.trim().isNotEmpty == true ? this!.phone! : Strings.no_phone.tr();
-
+  String get safePhone => this?.phone?.trim().isNotEmpty == true
+      ? this!.phone!
+      : Strings.no_phone.tr();
 }

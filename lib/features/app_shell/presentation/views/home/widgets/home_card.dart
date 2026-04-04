@@ -32,7 +32,11 @@ class HomeCard extends StatelessWidget {
           if (title != null)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: SectionTitle(title: title!, moreText: moreText, moreTap: moreTap),
+              child: SectionTitle(
+                title: title!,
+                moreText: moreText,
+                moreTap: moreTap,
+              ),
             ),
           if (title != null) UIConstants.bigHeight,
           SizedBox(width: double.infinity, height: height, child: child),

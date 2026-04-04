@@ -109,13 +109,8 @@ class MissingDataFailure extends Failure {
 class SessionFailure extends Failure {
   final ErrorSource source;
 
-  const SessionFailure(
-    super.m, {
-    this.source = ErrorSource.server,
-    super.code,
-  });
+  const SessionFailure(super.m, {this.source = ErrorSource.server, super.code});
 
   @override
   List<Object?> get props => [message, code, source];
 }
-

@@ -17,7 +17,10 @@ import '../widgets/lawyer_license_verification_form.dart';
 class LawyerLicenseVerificationScreen extends StatelessWidget {
   final LawyerProfessionalInfo professionalInfo;
 
-  const LawyerLicenseVerificationScreen({super.key, required this.professionalInfo});
+  const LawyerLicenseVerificationScreen({
+    super.key,
+    required this.professionalInfo,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +32,11 @@ class LawyerLicenseVerificationScreen extends StatelessWidget {
       child: BlocListener<RegistrationBloc, RegistrationState>(
         listener: (context, state) {
           if (state is RegistrationError) {
-            DialogService.showErrorDialog(context, title: Strings.error.tr(), desc: state.message);
+            DialogService.showErrorDialog(
+              context,
+              title: Strings.error.tr(),
+              desc: state.message,
+            );
           }
           if (state is RegistrationStepSuccess &&
               state.operationType == RegistrationOperType.reqComplete) {
@@ -47,7 +54,9 @@ class LawyerLicenseVerificationScreen extends StatelessWidget {
                 professionalInfo: professionalInfo,
                 isLoading: isLoading,
                 onSubmit: (payload) {
-                  context.read<RegistrationBloc>().add(RegisterUser(payload: payload));
+                  context.read<RegistrationBloc>().add(
+                    RegisterUser(payload: payload),
+                  );
                 },
               );
             },

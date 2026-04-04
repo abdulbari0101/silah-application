@@ -13,10 +13,13 @@ class ActionRow extends StatelessWidget {
     }
 
     return Row(
-      children: actions
-          .expand((widget) => [Expanded(child: widget), UIConstants.smallWidth])
-          .toList()
-        ..removeLast(),
+      children:
+          actions
+              .expand(
+                (widget) => [Expanded(child: widget), UIConstants.smallWidth],
+              )
+              .toList()
+            ..removeLast(),
     );
   }
 }

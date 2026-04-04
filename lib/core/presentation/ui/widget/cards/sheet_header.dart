@@ -13,7 +13,12 @@ class SheetHeader extends StatelessWidget {
       children: [
         IconButton(onPressed: () => context.pop(), icon: Icon(Icons.close)),
         const SizedBox(width: 8),
-        Expanded(child: Text(title, style: context.textTheme.titleMedium?.primaryDark(context))),
+        Expanded(
+          child: Text(
+            title,
+            style: context.textTheme.titleMedium?.primaryDark(context),
+          ),
+        ),
       ],
     );
   }

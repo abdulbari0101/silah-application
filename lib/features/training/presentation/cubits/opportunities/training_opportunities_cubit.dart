@@ -11,11 +11,13 @@ part 'training_opportunities_cubit.freezed.dart';
 
 @freezed
 class TrainingOpportunitiesState with _$TrainingOpportunitiesState {
-  const factory TrainingOpportunitiesState.loading() = _TrainingOpportunitiesLoading;
+  const factory TrainingOpportunitiesState.loading() =
+      _TrainingOpportunitiesLoading;
   const factory TrainingOpportunitiesState.ready({
     required List<TrainingOpportunityEntity> opportunities,
   }) = _TrainingOpportunitiesReady;
-  const factory TrainingOpportunitiesState.empty() = _TrainingOpportunitiesEmpty;
+  const factory TrainingOpportunitiesState.empty() =
+      _TrainingOpportunitiesEmpty;
   const factory TrainingOpportunitiesState.failure({required String message}) =
       _TrainingOpportunitiesFailure;
 }
@@ -25,13 +27,15 @@ class TrainingOpportunitiesCubit extends Cubit<TrainingOpportunitiesState> {
   final String? lawyerUid;
 
   TrainingOpportunitiesCubit({required this.repository, this.lawyerUid})
-      : super(const TrainingOpportunitiesState.loading());
+    : super(const TrainingOpportunitiesState.loading());
 
   Future<void> load() async {
     emit(const TrainingOpportunitiesState.loading());
     final result = await repository.fetchOpportunities(lawyerUid: lawyerUid);
     result.fold(
-      (failure) => emit(TrainingOpportunitiesState.failure(message: _mapFailure(failure))),
+      (failure) => emit(
+        TrainingOpportunitiesState.failure(message: _mapFailure(failure)),
+      ),
       (data) {
         if (data.isEmpty) {
           emit(const TrainingOpportunitiesState.empty());

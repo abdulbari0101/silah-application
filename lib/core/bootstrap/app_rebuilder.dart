@@ -10,7 +10,8 @@ class AppRebuilder extends StatefulWidget {
   const AppRebuilder({super.key, this.initialBootData});
   final BootData? initialBootData;
 
-  static final GlobalKey<_AppRebuilderState> _key = GlobalKey<_AppRebuilderState>();
+  static final GlobalKey<_AppRebuilderState> _key =
+      GlobalKey<_AppRebuilderState>();
 
   /// Public entry used by the fatal screen's "Try again" to refresh BootData
   /// and rebuild the app tree.

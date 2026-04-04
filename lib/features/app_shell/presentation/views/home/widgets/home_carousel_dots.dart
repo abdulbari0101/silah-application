@@ -18,7 +18,9 @@ class HomeCarouselDots extends StatelessWidget {
           height: 6,
           margin: const EdgeInsets.symmetric(horizontal: 3),
           decoration: BoxDecoration(
-            color: isActive ? context.colors.primary : context.colors.outlineVariant,
+            color: isActive
+                ? context.colors.primary
+                : context.colors.outlineVariant,
             borderRadius: BorderRadius.circular(99),
           ),
         );

@@ -36,12 +36,22 @@ class UiErrorOverlay extends StatelessWidget {
             decoration: BoxDecoration(
               color: theme.colorScheme.surface,
               borderRadius: BorderRadius.circular(20),
-              boxShadow: const [BoxShadow(blurRadius: 18, spreadRadius: 2, offset: Offset(0, 6))],
+              boxShadow: const [
+                BoxShadow(
+                  blurRadius: 18,
+                  spreadRadius: 2,
+                  offset: Offset(0, 6),
+                ),
+              ],
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.error_outline, size: 48, color: theme.colorScheme.onSurface),
+                Icon(
+                  Icons.error_outline,
+                  size: 48,
+                  color: theme.colorScheme.onSurface,
+                ),
                 const SizedBox(height: 16),
                 Text(
                   title,
@@ -49,7 +59,11 @@ class UiErrorOverlay extends StatelessWidget {
                   style: text.titleLarge?.copyWith(fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 8),
-                Text(message, textAlign: TextAlign.center, style: text.bodyMedium),
+                Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: text.bodyMedium,
+                ),
                 const SizedBox(height: 18),
 
                 // Buttons
@@ -68,9 +82,9 @@ class UiErrorOverlay extends StatelessWidget {
                         final data = detailsProvider();
                         await Clipboard.setData(ClipboardData(text: data));
                         if (context.mounted) {
-                          ScaffoldMessenger.of(
-                            context,
-                          ).showSnackBar(const SnackBar(content: Text('Details copied')));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Details copied')),
+                          );
                         }
                       },
                       icon: const Icon(Icons.copy_all),
@@ -85,7 +99,10 @@ class UiErrorOverlay extends StatelessWidget {
                 ),
                 if (kDebugMode) ...[
                   const SizedBox(height: 12),
-                  Text('A non-fatal UI error occurred.', style: text.labelSmall),
+                  Text(
+                    'A non-fatal UI error occurred.',
+                    style: text.labelSmall,
+                  ),
                 ],
                 const SizedBox(height: 4),
                 TextButton(onPressed: onClose, child: const Text('Dismiss')),

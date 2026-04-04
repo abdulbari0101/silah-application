@@ -25,10 +25,16 @@ class BootErrorScreen extends StatelessWidget {
                   Text(
                     "We're having trouble starting the app",
                     textAlign: TextAlign.center,
-                    style: textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w600),
+                    style: textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                   const SizedBox(height: 8),
-                  Text(message, textAlign: TextAlign.center, style: textTheme.bodyMedium),
+                  Text(
+                    message,
+                    textAlign: TextAlign.center,
+                    style: textTheme.bodyMedium,
+                  ),
                   const SizedBox(height: 16),
                   FilledButton(
                     onPressed: () async {

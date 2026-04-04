@@ -10,7 +10,6 @@ class ExceptionMapper {
       case SessionException _:
         return SessionFailure(e.message, code: e.code);
 
-
       case ConflictException _:
         return ConflictFailure(e.message, e.code);
       case NetworkException _:

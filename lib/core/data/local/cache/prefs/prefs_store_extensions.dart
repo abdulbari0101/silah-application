@@ -28,7 +28,10 @@ extension ImageCacheExt on PrefsStore {
     }
   }
 
-  Future<Uint8List?> readImageBytes({required PrefsKey key, required String userId}) async {
+  Future<Uint8List?> readImageBytes({
+    required PrefsKey key,
+    required String userId,
+  }) async {
     final raw = await read(key: key, userId: userId); // parent-guarded
     if (raw == null || raw.isEmpty) return null;
 
@@ -44,7 +47,10 @@ extension ImageCacheExt on PrefsStore {
     }
   }
 
-  Future<File?> readImageFile({required PrefsKey key, required String userId}) async {
+  Future<File?> readImageFile({
+    required PrefsKey key,
+    required String userId,
+  }) async {
     final bytes = await readImageBytes(key: key, userId: userId);
     if (bytes == null) return null;
 

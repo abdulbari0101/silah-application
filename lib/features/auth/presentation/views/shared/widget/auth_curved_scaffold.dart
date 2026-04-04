@@ -35,7 +35,8 @@ class AuthCurvedScaffold extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Container(
-                  padding: headerPadding ??
+                  padding:
+                      headerPadding ??
                       const EdgeInsets.fromLTRB(
                         UIConstants.screenHorizantalPadding,
                         UIConstants.bigPadding,
@@ -51,7 +52,8 @@ class AuthCurvedScaffold extends StatelessWidget {
                   child: header,
                 ),
                 Padding(
-                  padding: bodyPadding ??
+                  padding:
+                      bodyPadding ??
                       const EdgeInsets.fromLTRB(
                         UIConstants.screenHorizantalPadding,
                         UIConstants.bigPadding,

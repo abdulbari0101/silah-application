@@ -8,7 +8,8 @@ part 'specifications_service.g.dart';
 
 @RestApi(parser: Parser.JsonSerializable, callAdapter: JsonBodyMappableAdapter)
 abstract class SpecificationsService {
-  factory SpecificationsService(Dio dio, {String? baseUrl}) = _SpecificationsService;
+  factory SpecificationsService(Dio dio, {String? baseUrl}) =
+      _SpecificationsService;
 
   @POST('/ai/recommend')
   Future<BaseApiResponse<AiRecommendResponseModel>> recommend(

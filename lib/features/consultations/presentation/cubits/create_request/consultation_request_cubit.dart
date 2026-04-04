@@ -12,7 +12,8 @@ part 'consultation_request_cubit.freezed.dart';
 @freezed
 class ConsultationRequestState with _$ConsultationRequestState {
   const factory ConsultationRequestState.idle() = _ConsultationRequestIdle;
-  const factory ConsultationRequestState.submitting() = _ConsultationRequestSubmitting;
+  const factory ConsultationRequestState.submitting() =
+      _ConsultationRequestSubmitting;
   const factory ConsultationRequestState.success({
     required ConsultationRequestEntity request,
   }) = _ConsultationRequestSuccess;
@@ -24,13 +25,14 @@ class ConsultationRequestCubit extends Cubit<ConsultationRequestState> {
   final ConsultationsRepository repository;
 
   ConsultationRequestCubit({required this.repository})
-      : super(const ConsultationRequestState.idle());
+    : super(const ConsultationRequestState.idle());
 
   Future<void> submit(ConsultationRequestEntity request) async {
     emit(const ConsultationRequestState.submitting());
     final result = await repository.createRequest(request);
     result.fold(
-      (failure) => emit(ConsultationRequestState.failure(message: _mapFailure(failure))),
+      (failure) =>
+          emit(ConsultationRequestState.failure(message: _mapFailure(failure))),
       (created) => emit(ConsultationRequestState.success(request: created)),
     );
   }

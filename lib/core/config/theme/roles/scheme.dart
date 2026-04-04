@@ -1,7 +1,6 @@
 // import 'package:silah_app/core/config/theme/extentions/theme_context_extension.dart';
 import 'package:flutter/material.dart';
 
-
 const ColorScheme _lightScheme = ColorScheme(
   brightness: Brightness.light,
   primary: Color(0xff65558f),

@@ -13,7 +13,8 @@ class DeviceTokenRequestModel with DeviceTokenRequestModelMappable {
 }
 
 @MappableClass(ignoreNull: true)
-class DeviceTokenResponseModel extends BaseRespWrapper with DeviceTokenResponseModelMappable {
+class DeviceTokenResponseModel extends BaseRespWrapper
+    with DeviceTokenResponseModelMappable {
   final String? status;
 
   const DeviceTokenResponseModel({required super.result, this.status});

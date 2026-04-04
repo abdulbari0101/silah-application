@@ -55,7 +55,8 @@ class _FDropDownState<T> extends State<FDropDown<T>> {
     }
 
     final itemsChanged =
-        !identical(widget.items, oldWidget.items) || widget.items.length != oldWidget.items.length;
+        !identical(widget.items, oldWidget.items) ||
+        widget.items.length != oldWidget.items.length;
 
     if (itemsChanged) {
       if (_current != null && !widget.items.contains(_current)) {
@@ -86,11 +87,15 @@ class _FDropDownState<T> extends State<FDropDown<T>> {
             DropdownButtonHideUnderline(
               child: DropdownButton2<T>(
                 isExpanded: true,
-                hint: Text(widget.hintText ?? "choose", style: theme.bodySmall?.regular),
+                hint: Text(
+                  widget.hintText ?? "choose",
+                  style: theme.bodySmall?.regular,
+                ),
                 items: widget.items.map((item) {
                   final title = widget.labelBuilder(item);
                   final subtitle = widget.subTitleBuilder?.call(item);
-                  final hasSubtitle = subtitle != null && subtitle.trim().isNotEmpty;
+                  final hasSubtitle =
+                      subtitle != null && subtitle.trim().isNotEmpty;
 
                   return DropdownMenuItem<T>(
                     value: item,
@@ -127,10 +132,15 @@ class _FDropDownState<T> extends State<FDropDown<T>> {
                   widget.onChanged?.call(value);
                 },
                 buttonStyleData: ButtonStyleData(
-                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 14,
+                    vertical: 12,
+                  ),
                   decoration: BoxDecoration(
                     borderRadius: context.shapes.brMd,
-                    border: Border.all(color: field.hasError ? colors.error : colors.outline),
+                    border: Border.all(
+                      color: field.hasError ? colors.error : colors.outline,
+                    ),
                     color: field.value != null
                         ? colors.surfaceContainerLowest
                         : colors.surfaceContainerLowest,
@@ -141,7 +151,9 @@ class _FDropDownState<T> extends State<FDropDown<T>> {
                   icon: const Icon(Icons.keyboard_arrow_down_rounded),
                   iconSize: 20,
                   iconEnabledColor: colors.onSurfaceVariant,
-                  iconDisabledColor: colors.onSurfaceVariant.withAlphaOpacity(0.5),
+                  iconDisabledColor: colors.onSurfaceVariant.withAlphaOpacity(
+                    0.5,
+                  ),
                 ),
                 dropdownStyleData: DropdownStyleData(
                   maxHeight: 400,

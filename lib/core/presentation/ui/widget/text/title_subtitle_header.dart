@@ -7,7 +7,11 @@ class TitleSubtitleHeader extends StatelessWidget {
   final String title;
   final String subtitle;
 
-  const TitleSubtitleHeader({super.key, required this.title, required this.subtitle});
+  const TitleSubtitleHeader({
+    super.key,
+    required this.title,
+    required this.subtitle,
+  });
 
   @override
   Widget build(BuildContext context) {
