@@ -46,9 +46,11 @@ class AppStateBloc extends Bloc<AppStateEvent, AppStateState> {
     InjectDataBeforeAppStart event,
     Emitter<AppStateState> emit,
   ) {
+    final bool isLoggedIn = event.customer != null;
     final updated = state.data.copyWith(
+      isLoggedIn: isLoggedIn,
       userAuthStatus: AppStateData.computeUserAuthStatus(
-        isLoggedIn: false,
+        isLoggedIn: isLoggedIn,
         isDeviceVerified: false,
         isAccountVerified: false,
         wasLoggedInBefore: event.customer?.phone != null,

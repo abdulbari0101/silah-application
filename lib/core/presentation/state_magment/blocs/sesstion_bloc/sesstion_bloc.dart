@@ -71,7 +71,7 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
     InteractionTimedOutEvent event,
     Emitter<SessionState> emit,
   ) {
-    _logout();
+    //_logout();
     emit(SessionState.idleTimedOut(randomId: Random().nextInt(1000000)));
   }
 
@@ -79,7 +79,7 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
     TokenExpiredEvent event,
     Emitter<SessionState> emit,
   ) {
-    _logout();
+    //_logout();
     emit(SessionState.tokenExpired(source: event.source));
   }
 
