@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:silah_app/core/config/constants/ui_constants.dart';
+import 'package:silah_app/core/config/extentions/string_validation.dart';
 import 'package:silah_app/core/config/localization/localizations_string_keys.dart';
 import 'package:silah_app/core/config/theme/extentions/theme_context_extension.dart';
 import 'package:silah_app/core/presentation/ui/widget/buttons/action_pill_button.dart';
@@ -91,17 +92,59 @@ class LawyerProfileDetailsCard extends StatelessWidget {
             ),
           ),
           UIConstants.bigHeight,
+
+          Row(
+            children: [
+              Column(
+                children: [
+                  Text(
+                    Strings.law_firm.tr(),
+                    style: context.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  UIConstants.smallHeight,
+                  Text(
+                    lawyer.workplace?.trim().isNotNullOrEmpty == true
+                        ? lawyer.workplace ?? ''
+                        : Strings.not_available.tr(),
+                    style: context.textTheme.bodyLarge?.copyWith(
+                      color: context.colors.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+              Column(
+                children: [
+                  Text(
+                    'اسم المكتب',
+                    style: context.textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  UIConstants.smallHeight,
+                  Text(
+                    lawyer.officeName?.trim().isNotNullOrEmpty == true
+                        ? lawyer.officeName ?? ''
+                        : Strings.not_available.tr(),
+                    style: context.textTheme.bodyLarge?.copyWith(
+                      color: context.colors.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          UIConstants.smallHeight,
           Text(
-            Strings.law_firm.tr(),
+            Strings.label_city.tr(),
             style: context.textTheme.bodyMedium?.copyWith(
               fontWeight: FontWeight.w700,
             ),
           ),
           UIConstants.smallHeight,
           Text(
-            lawyer.workplace?.trim().isNotEmpty == true
-                ? lawyer.workplace!.trim()
-                : Strings.not_available.tr(),
+            lawyer.city?.trim() ?? "",
             style: context.textTheme.bodyLarge?.copyWith(
               color: context.colors.onSurfaceVariant,
             ),

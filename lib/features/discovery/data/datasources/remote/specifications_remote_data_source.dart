@@ -312,6 +312,7 @@ class SpecificationsRemoteDataSourceImpl
     final cityName = (data['city'] as String?)?.trim();
     final workDestinationId = (data['workDestinationId'] as String?)?.trim();
     final workplaceName = (data['workplace'] as String?)?.trim();
+    final officeName = (data['officeName'] as String?)?.trim();
 
     return LawyerProfileEntity(
       id: doc.id,
@@ -325,6 +326,7 @@ class SpecificationsRemoteDataSourceImpl
       workplace: (workplaceName != null && workplaceName.isNotEmpty)
           ? workplaceName
           : workDestinationId,
+      officeName: officeName,
       workDestinationId: workDestinationId,
       yearsOfExperience:
           parseFirestoreInt(data['experienceYears']) ??

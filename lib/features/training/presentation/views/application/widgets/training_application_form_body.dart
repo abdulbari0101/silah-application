@@ -12,6 +12,7 @@ import 'package:silah_app/core/presentation/ui/widget/state_widgets/error_widget
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/progress_state_widget.dart';
 import 'package:silah_app/core/presentation/ui/widget/text_fields/f_text2_feild.dart';
 import 'package:silah_app/core/presentation/ui/overlays/toasts.dart';
+import 'package:silah_app/core/presentation/state_magment/blocs/app_state/app_state_bloc.dart';
 import 'package:silah_app/features/lookups/domain/entities/lookup_item_entity.dart';
 import 'package:silah_app/features/training/domain/entities/training_application_entity.dart';
 import 'package:silah_app/features/training/domain/entities/training_opportunity_entity.dart';
@@ -36,6 +37,13 @@ class _TrainingApplicationFormBodyState
   final _facultyController = TextEditingController();
   final _graduationYearController = TextEditingController();
   final _cvUrlController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    final user = context.read<AppStateBloc>().state.data.customer;
+    _nameController.text = user?.fullName ?? '';
+  }
 
   @override
   void dispose() {

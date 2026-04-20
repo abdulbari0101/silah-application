@@ -20,6 +20,7 @@ class LawyerProfileEntity with LawyerProfileEntityMappable {
   final String? avatarUrl;
   final bool acceptsTrainees;
   final AvailabilityStatus availability;
+  final String? officeName;
 
   const LawyerProfileEntity({
     this.id,
@@ -31,6 +32,7 @@ class LawyerProfileEntity with LawyerProfileEntityMappable {
     this.cityId,
     this.areaId,
     this.workplace,
+    this.officeName,
     this.workDestinationId,
     this.yearsOfExperience,
     this.avatarUrl,
