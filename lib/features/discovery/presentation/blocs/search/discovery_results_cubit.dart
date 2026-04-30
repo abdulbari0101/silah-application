@@ -42,10 +42,12 @@ class DiscoveryResultsCubit extends Cubit<DiscoveryResultsState> {
       (failure) =>
           emit(DiscoveryResultsState.failure(message: _mapFailure(failure))),
       (data) {
-        final lawyers = data
-            .map((item) => item.lawyer)
-            .whereType<LawyerProfileEntity>()
-            .toList();
+        final lawyers =
+            data
+                .map((item) => item.lawyer)
+                .whereType<LawyerProfileEntity>()
+                .toList()
+              ..sort((a, b) => (a.fullName ?? '').compareTo(b.fullName ?? ''));
         emit(
           DiscoveryResultsState.ready(
             specialization: specialization,

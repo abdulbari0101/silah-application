@@ -255,7 +255,9 @@ class _AiConsultationBodyState extends State<AiConsultationBody> {
 
   Widget _buildRecommendationSection(AiRecommendationEntity recommendation) {
     final specialization = recommendation.specialization;
-    final lawyers = recommendation.lawyers ?? const <LawyerProfileEntity>[];
+    final lawyers = [
+      ...(recommendation.lawyers ?? const <LawyerProfileEntity>[]),
+    ]..sort((a, b) => (a.fullName ?? '').compareTo(b.fullName ?? ''));
     final specializationId = specialization?.id;
     final specializationLabel = specialization?.name;
     final displayLabel = specializationLabel ?? Strings.not_available.tr();
