@@ -92,14 +92,6 @@ class TrainingApplicationConfirmationBody extends StatelessWidget {
                   labelWidth: 120,
                   crossAxisAlignment: CrossAxisAlignment.start,
                 ),
-                if ((opportunity.title ?? '').isNotEmpty)
-                  LabeledValueRow(
-                    label: Strings.training_opportunity.tr(),
-                    value: opportunity.title!,
-                    padding: const EdgeInsets.only(bottom: 8),
-                    labelWidth: 120,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                  ),
               ],
             ),
           ),

@@ -16,6 +16,7 @@ class TrainingApplicationCreateRequestModel
   final String? university;
   final String? faculty;
   final String? cityId;
+  final String? city;
   final String? areaId;
   final int? graduationYear;
 
@@ -27,6 +28,7 @@ class TrainingApplicationCreateRequestModel
     this.university,
     this.faculty,
     this.cityId,
+    this.city,
     this.areaId,
     this.graduationYear,
   });
@@ -42,6 +44,7 @@ class TrainingApplicationCreateRequestModel
       university: entity.university,
       faculty: entity.faculty,
       cityId: entity.cityId ?? entity.city,
+      city: entity.city,
       areaId: entity.areaId,
       graduationYear: entity.graduationYear,
     );

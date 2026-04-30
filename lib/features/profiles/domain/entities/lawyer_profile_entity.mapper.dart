@@ -75,6 +75,12 @@ class LawyerProfileEntityMapper extends ClassMapperBase<LawyerProfileEntity> {
     _$workplace,
     opt: true,
   );
+  static String? _$officeName(LawyerProfileEntity v) => v.officeName;
+  static const Field<LawyerProfileEntity, String> _f$officeName = Field(
+    'officeName',
+    _$officeName,
+    opt: true,
+  );
   static String? _$workDestinationId(LawyerProfileEntity v) =>
       v.workDestinationId;
   static const Field<LawyerProfileEntity, String> _f$workDestinationId = Field(
@@ -122,6 +128,7 @@ class LawyerProfileEntityMapper extends ClassMapperBase<LawyerProfileEntity> {
     #cityId: _f$cityId,
     #areaId: _f$areaId,
     #workplace: _f$workplace,
+    #officeName: _f$officeName,
     #workDestinationId: _f$workDestinationId,
     #yearsOfExperience: _f$yearsOfExperience,
     #avatarUrl: _f$avatarUrl,
@@ -142,6 +149,7 @@ class LawyerProfileEntityMapper extends ClassMapperBase<LawyerProfileEntity> {
       cityId: data.dec(_f$cityId),
       areaId: data.dec(_f$areaId),
       workplace: data.dec(_f$workplace),
+      officeName: data.dec(_f$officeName),
       workDestinationId: data.dec(_f$workDestinationId),
       yearsOfExperience: data.dec(_f$yearsOfExperience),
       avatarUrl: data.dec(_f$avatarUrl),
@@ -233,6 +241,7 @@ abstract class LawyerProfileEntityCopyWith<
     String? cityId,
     String? areaId,
     String? workplace,
+    String? officeName,
     String? workDestinationId,
     int? yearsOfExperience,
     String? avatarUrl,
@@ -281,6 +290,7 @@ class _LawyerProfileEntityCopyWithImpl<$R, $Out>
     Object? cityId = $none,
     Object? areaId = $none,
     Object? workplace = $none,
+    Object? officeName = $none,
     Object? workDestinationId = $none,
     Object? yearsOfExperience = $none,
     Object? avatarUrl = $none,
@@ -297,6 +307,7 @@ class _LawyerProfileEntityCopyWithImpl<$R, $Out>
       if (cityId != $none) #cityId: cityId,
       if (areaId != $none) #areaId: areaId,
       if (workplace != $none) #workplace: workplace,
+      if (officeName != $none) #officeName: officeName,
       if (workDestinationId != $none) #workDestinationId: workDestinationId,
       if (yearsOfExperience != $none) #yearsOfExperience: yearsOfExperience,
       if (avatarUrl != $none) #avatarUrl: avatarUrl,
@@ -315,6 +326,7 @@ class _LawyerProfileEntityCopyWithImpl<$R, $Out>
     cityId: data.get(#cityId, or: $value.cityId),
     areaId: data.get(#areaId, or: $value.areaId),
     workplace: data.get(#workplace, or: $value.workplace),
+    officeName: data.get(#officeName, or: $value.officeName),
     workDestinationId: data.get(
       #workDestinationId,
       or: $value.workDestinationId,

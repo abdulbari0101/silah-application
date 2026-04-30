@@ -120,23 +120,24 @@ class _TrainingApplicationFormBodyState
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     FTextField(
+                      enabled: false,
                       controller: _nameController,
                       labelText: Strings.label_name.tr(),
-                      hintText: Strings.label_name.tr(),
+
                       validator: (value) => _requiredValidator(value),
                     ),
                     UIConstants.mediumHeight,
                     FTextField(
                       controller: _universityController,
                       labelText: Strings.label_university.tr(),
-                      hintText: Strings.label_university.tr(),
+                      hintText: 'مثال جامعة الملك عبدالعزيز',
                       validator: (value) => _requiredValidator(value),
                     ),
                     UIConstants.mediumHeight,
                     FTextField(
                       controller: _facultyController,
                       labelText: Strings.label_faculty.tr(),
-                      hintText: Strings.label_faculty.tr(),
+                      hintText: 'مثال كلية الحقوق',
                       validator: (value) => _requiredValidator(value),
                     ),
                     UIConstants.mediumHeight,
@@ -167,7 +168,7 @@ class _TrainingApplicationFormBodyState
                     FTextField(
                       controller: _graduationYearController,
                       labelText: Strings.label_graduation_year.tr(),
-                      hintText: Strings.label_graduation_year.tr(),
+                      hintText: 'مثال 2025',
                       keyboardType: TextInputType.number,
                       validator: (value) => _requiredValidator(value),
                     ),
@@ -175,7 +176,7 @@ class _TrainingApplicationFormBodyState
                     FTextField(
                       controller: _cvUrlController,
                       labelText: Strings.label_cv_url.tr(),
-                      hintText: Strings.label_cv_url.tr(),
+                      hintText: 'https://example.com',
                       validator: (value) => _requiredValidator(value),
                     ),
                     UIConstants.bigHeight,

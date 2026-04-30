@@ -94,44 +94,52 @@ class LawyerProfileDetailsCard extends StatelessWidget {
           UIConstants.bigHeight,
 
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                children: [
-                  Text(
-                    Strings.law_firm.tr(),
-                    style: context.textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      Strings.law_firm.tr(),
+                      style: context.textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
-                  ),
-                  UIConstants.smallHeight,
-                  Text(
-                    lawyer.workplace?.trim().isNotNullOrEmpty == true
-                        ? lawyer.workplace ?? ''
-                        : Strings.not_available.tr(),
-                    style: context.textTheme.bodyLarge?.copyWith(
-                      color: context.colors.onSurfaceVariant,
+                    UIConstants.smallHeight,
+                    Text(
+                      lawyer.workplace?.trim().isNotNullOrEmpty == true
+                          ? lawyer.workplace ?? ''
+                          : Strings.not_available.tr(),
+                      style: context.textTheme.bodyLarge?.copyWith(
+                        color: context.colors.onSurfaceVariant,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-              Column(
-                children: [
-                  Text(
-                    'اسم المكتب',
-                    style: context.textTheme.bodyMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
+              UIConstants.mediumWidth,
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'اسم المكتب',
+                      style: context.textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
-                  ),
-                  UIConstants.smallHeight,
-                  Text(
-                    lawyer.officeName?.trim().isNotNullOrEmpty == true
-                        ? lawyer.officeName ?? ''
-                        : Strings.not_available.tr(),
-                    style: context.textTheme.bodyLarge?.copyWith(
-                      color: context.colors.onSurfaceVariant,
+                    UIConstants.smallHeight,
+                    Text(
+                      lawyer.officeName?.trim().isNotNullOrEmpty == true
+                          ? lawyer.officeName ?? ''
+                          : Strings.not_available.tr(),
+                      style: context.textTheme.bodyLarge?.copyWith(
+                        color: context.colors.onSurfaceVariant,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),

@@ -33,6 +33,7 @@ class LawyerResultCard extends StatelessWidget {
       specialization: specializationLabel,
       experienceLabel: experienceLabel,
       avatarUrl: lawyer.avatarUrl,
+      officeName: lawyer.officeName,
       actions: [
         ActionPillButton(
           text: Strings.request_consultation.tr(),

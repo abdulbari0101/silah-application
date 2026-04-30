@@ -13,6 +13,7 @@ class LawyerSummaryCard extends StatelessWidget {
     this.avatarUrl,
     this.actions,
     this.onTap,
+    this.officeName,
   });
 
   final String name;
@@ -21,6 +22,7 @@ class LawyerSummaryCard extends StatelessWidget {
   final String? avatarUrl;
   final List<Widget>? actions;
   final VoidCallback? onTap;
+  final String? officeName;
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +68,16 @@ class LawyerSummaryCard extends StatelessWidget {
                         UIConstants.xsmallHeight,
                         Text(
                           experienceLabel!,
+                          style: context.textTheme.bodySmall?.copyWith(
+                            color: context.colors.onSurfaceVariant,
+                          ),
+                        ),
+                      ],
+                      if (officeName != null &&
+                          officeName!.trim().isNotEmpty) ...[
+                        UIConstants.xsmallHeight,
+                        Text(
+                          officeName!,
                           style: context.textTheme.bodySmall?.copyWith(
                             color: context.colors.onSurfaceVariant,
                           ),

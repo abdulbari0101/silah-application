@@ -2,6 +2,5 @@
   "python-envs.defaultEnvManager": "ms-python.python:venv",
   "python-envs.defaultPackageManager": "ms-python.python:pip",
   "chatgpt.openOnStartup": true,
-  "chatgpt.runCodexInWindowsSubsystemForLinux": false,
-  "dart.flutterSdkPath": "D:\\flutter_setup\\flutter"
+  "chatgpt.runCodexInWindowsSubsystemForLinux": false
 }

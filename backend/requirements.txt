@@ -1,8 +1,3 @@
-fastapi[standard]
-uvicorn[standard]
-pydantic-settings
-firebase-admin
-requests
-python-dotenv
-pytest
-pytest-mock
+cd backend
+.\.venv\Scripts\Activate
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
