@@ -11,12 +11,12 @@ abstract class VerificationService {
   factory VerificationService(Dio dio, {String? baseUrl}) =
       _VerificationService;
 
-  @POST('/verification/request')
+  @POST('/verification/request') // ياخذ رقم رخصة المحامي ومستنداته ويرسلها للأدمن 
   Future<BaseApiResponse<VerificationResponseModel>> requestVerification(
     @Body() VerificationRequestModel request,
   );
 
-  @POST('/verification/review')
+  @POST('/verification/review') // مراجعة الادمن للطلب 
   Future<BaseApiResponse<VerificationResponseModel>> reviewVerification(
     @Body() Map<String, dynamic> request,
   );

@@ -122,6 +122,8 @@ dev_dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_lints: ^5.0.0 # Recommended lint rules for Flutter projects
+  bloc_test: ^10.0.0 # Unit testing for BLoC/Cubit (emit assertions)
+  mocktail: ^1.0.4 # Lightweight mocking library (no codegen needed)
 
   # ─── Code Generation ───
   build_runner: ^2.10.1 # Runs code generators (freezed, json_serializable, etc.)

@@ -168,7 +168,7 @@ Future<void> _initFirebase() async {
   await _fatalStep('Firebase.initializeApp', () async {
     if (Firebase.apps.isEmpty) {
       if (kIsWeb) {
-        await Firebase.initializeApp(
+        await Firebase.initializeApp( 
           options: const FirebaseOptions(
             apiKey: "AIzaSyA4DrEz2NzlvxFVPEulE_PXm9IYkfN-eYA",
             authDomain: "silah-app-9acb6.firebaseapp.com",
@@ -180,7 +180,7 @@ Future<void> _initFirebase() async {
           ),
         );
       } else {
-        await Firebase.initializeApp();
+        await Firebase.initializeApp();// تهيئة الفايربيس للجوال 
       }
     }
   });
