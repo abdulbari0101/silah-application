@@ -1,0 +1,16 @@
+[
+  {
+    "_DOCUMENT_ID_": "law_firm_employee",
+    "iconUrl": "",
+    "id": "law_firm_employee",
+    "nameAr": "أعمل لدى مكتب محاماة",
+    "nameEn": "Work at a law firm"
+  },
+  {
+    "_DOCUMENT_ID_": "own_law_firm",
+    "iconUrl": "",
+    "id": "own_law_firm",
+    "nameAr": "أملك مكتب محاماة",
+    "nameEn": "Own a law firm"
+  }
+]

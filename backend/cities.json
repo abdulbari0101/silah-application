@@ -1,0 +1,72 @@
+[
+  {
+    "_DOCUMENT_ID_": "1",
+    "countryId": "1",
+    "id": "1",
+    "nameAr": "صنعاء",
+    "nameEn": "Sana'a"
+  },
+  {
+    "_DOCUMENT_ID_": "2",
+    "countryId": "1",
+    "id": "2",
+    "nameAr": "عدن",
+    "nameEn": "Aden"
+  },
+  {
+    "_DOCUMENT_ID_": "3",
+    "countryId": "1",
+    "id": "3",
+    "nameAr": "تعز",
+    "nameEn": "Taiz"
+  },
+  {
+    "_DOCUMENT_ID_": "4",
+    "countryId": "1",
+    "id": "4",
+    "nameAr": "حضرموت",
+    "nameEn": "Hadhramaut"
+  },
+  {
+    "_DOCUMENT_ID_": "5",
+    "countryId": "1",
+    "id": "5",
+    "nameAr": "إب",
+    "nameEn": "Ibb"
+  },
+  {
+    "_DOCUMENT_ID_": "6",
+    "countryId": "1",
+    "id": "6",
+    "nameAr": "الحديدة",
+    "nameEn": "Al Hudaydah"
+  },
+  {
+    "_DOCUMENT_ID_": "7",
+    "countryId": "1",
+    "id": "7",
+    "nameAr": "المكلا",
+    "nameEn": "Al Mukalla"
+  },
+  {
+    "_DOCUMENT_ID_": "8",
+    "countryId": "1",
+    "id": "8",
+    "nameAr": "ذمار",
+    "nameEn": "Dhamar"
+  },
+  {
+    "_DOCUMENT_ID_": "9",
+    "countryId": "1",
+    "id": "9",
+    "nameAr": "حجة",
+    "nameEn": "Hajjah"
+  },
+  {
+    "_DOCUMENT_ID_": "10",
+    "countryId": "1",
+    "id": "10",
+    "nameAr": "عمران",
+    "nameEn": "Amran"
+  }
+]

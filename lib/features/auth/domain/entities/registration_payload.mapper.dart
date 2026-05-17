@@ -136,10 +136,10 @@ class RegistrationPayloadMapper extends ClassMapperBase<RegistrationPayload> {
     _$cityId,
     opt: true,
   );
-  static String? _$areaId(RegistrationPayload v) => v.areaId;
-  static const Field<RegistrationPayload, String> _f$areaId = Field(
-    'areaId',
-    _$areaId,
+  static String? _$countryId(RegistrationPayload v) => v.countryId;
+  static const Field<RegistrationPayload, String> _f$countryId = Field(
+    'countryId',
+    _$countryId,
     opt: true,
   );
   static String? _$workplace(RegistrationPayload v) => v.workplace;
@@ -200,7 +200,7 @@ class RegistrationPayloadMapper extends ClassMapperBase<RegistrationPayload> {
     #legalFieldIds: _f$legalFieldIds,
     #city: _f$city,
     #cityId: _f$cityId,
-    #areaId: _f$areaId,
+    #countryId: _f$countryId,
     #workplace: _f$workplace,
     #workDestinationId: _f$workDestinationId,
     #officeName: _f$officeName,
@@ -226,7 +226,7 @@ class RegistrationPayloadMapper extends ClassMapperBase<RegistrationPayload> {
       legalFieldIds: data.dec(_f$legalFieldIds),
       city: data.dec(_f$city),
       cityId: data.dec(_f$cityId),
-      areaId: data.dec(_f$areaId),
+      countryId: data.dec(_f$countryId),
       workplace: data.dec(_f$workplace),
       workDestinationId: data.dec(_f$workDestinationId),
       officeName: data.dec(_f$officeName),
@@ -323,7 +323,7 @@ abstract class RegistrationPayloadCopyWith<
     List<String>? legalFieldIds,
     String? city,
     String? cityId,
-    String? areaId,
+    String? countryId,
     String? workplace,
     String? workDestinationId,
     String? officeName,
@@ -377,7 +377,7 @@ class _RegistrationPayloadCopyWithImpl<$R, $Out>
     Object? legalFieldIds = $none,
     Object? city = $none,
     Object? cityId = $none,
-    Object? areaId = $none,
+    Object? countryId = $none,
     Object? workplace = $none,
     Object? workDestinationId = $none,
     Object? officeName = $none,
@@ -399,7 +399,7 @@ class _RegistrationPayloadCopyWithImpl<$R, $Out>
       if (legalFieldIds != $none) #legalFieldIds: legalFieldIds,
       if (city != $none) #city: city,
       if (cityId != $none) #cityId: cityId,
-      if (areaId != $none) #areaId: areaId,
+      if (countryId != $none) #countryId: countryId,
       if (workplace != $none) #workplace: workplace,
       if (workDestinationId != $none) #workDestinationId: workDestinationId,
       if (officeName != $none) #officeName: officeName,
@@ -423,7 +423,7 @@ class _RegistrationPayloadCopyWithImpl<$R, $Out>
     legalFieldIds: data.get(#legalFieldIds, or: $value.legalFieldIds),
     city: data.get(#city, or: $value.city),
     cityId: data.get(#cityId, or: $value.cityId),
-    areaId: data.get(#areaId, or: $value.areaId),
+    countryId: data.get(#countryId, or: $value.countryId),
     workplace: data.get(#workplace, or: $value.workplace),
     workDestinationId: data.get(
       #workDestinationId,

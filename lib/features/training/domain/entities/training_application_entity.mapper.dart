@@ -72,10 +72,10 @@ class TrainingApplicationEntityMapper
     _$city,
     opt: true,
   );
-  static String? _$areaId(TrainingApplicationEntity v) => v.areaId;
-  static const Field<TrainingApplicationEntity, String> _f$areaId = Field(
-    'areaId',
-    _$areaId,
+  static String? _$countryId(TrainingApplicationEntity v) => v.countryId;
+  static const Field<TrainingApplicationEntity, String> _f$countryId = Field(
+    'countryId',
+    _$countryId,
     opt: true,
   );
   static int? _$graduationYear(TrainingApplicationEntity v) => v.graduationYear;
@@ -116,7 +116,7 @@ class TrainingApplicationEntityMapper
     #faculty: _f$faculty,
     #cityId: _f$cityId,
     #city: _f$city,
-    #areaId: _f$areaId,
+    #countryId: _f$countryId,
     #graduationYear: _f$graduationYear,
     #cvUrl: _f$cvUrl,
     #status: _f$status,
@@ -135,7 +135,7 @@ class TrainingApplicationEntityMapper
       faculty: data.dec(_f$faculty),
       cityId: data.dec(_f$cityId),
       city: data.dec(_f$city),
-      areaId: data.dec(_f$areaId),
+      countryId: data.dec(_f$countryId),
       graduationYear: data.dec(_f$graduationYear),
       cvUrl: data.dec(_f$cvUrl),
       status: data.dec(_f$status),
@@ -226,7 +226,7 @@ abstract class TrainingApplicationEntityCopyWith<
     String? faculty,
     String? cityId,
     String? city,
-    String? areaId,
+    String? countryId,
     int? graduationYear,
     String? cvUrl,
     TrainingApplicationStatus? status,
@@ -256,7 +256,7 @@ class _TrainingApplicationEntityCopyWithImpl<$R, $Out>
     Object? faculty = $none,
     Object? cityId = $none,
     Object? city = $none,
-    Object? areaId = $none,
+    Object? countryId = $none,
     Object? graduationYear = $none,
     Object? cvUrl = $none,
     TrainingApplicationStatus? status,
@@ -271,7 +271,7 @@ class _TrainingApplicationEntityCopyWithImpl<$R, $Out>
       if (faculty != $none) #faculty: faculty,
       if (cityId != $none) #cityId: cityId,
       if (city != $none) #city: city,
-      if (areaId != $none) #areaId: areaId,
+      if (countryId != $none) #countryId: countryId,
       if (graduationYear != $none) #graduationYear: graduationYear,
       if (cvUrl != $none) #cvUrl: cvUrl,
       if (status != null) #status: status,
@@ -289,7 +289,7 @@ class _TrainingApplicationEntityCopyWithImpl<$R, $Out>
         faculty: data.get(#faculty, or: $value.faculty),
         cityId: data.get(#cityId, or: $value.cityId),
         city: data.get(#city, or: $value.city),
-        areaId: data.get(#areaId, or: $value.areaId),
+        countryId: data.get(#countryId, or: $value.countryId),
         graduationYear: data.get(#graduationYear, or: $value.graduationYear),
         cvUrl: data.get(#cvUrl, or: $value.cvUrl),
         status: data.get(#status, or: $value.status),

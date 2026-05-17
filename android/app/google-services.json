@@ -1,21 +1,21 @@
 {
   "project_info": {
-    "project_number": "330197769102",
-    "project_id": "silah-app-9acb6",
-    "storage_bucket": "silah-app-9acb6.firebasestorage.app"
+    "project_number": "373457574991",
+    "project_id": "silah-application",
+    "storage_bucket": "silah-application.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:330197769102:android:ea9147f7cff63ead4de2df",
+        "mobilesdk_app_id": "1:373457574991:android:e265d593e892da8b829e3a",
         "android_client_info": {
-          "package_name": "com.example.silah_app"
+          "package_name": "com.appari.silah_application"
         }
       },
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDy6HZxbBWQXHQw2GGAYN0uUMTXY_3BEY8"
+          "current_key": "AIzaSyAm4rreirfZ6QMmVH4UhBIDd_mtsnPFlAo"
         }
       ],
       "services": {

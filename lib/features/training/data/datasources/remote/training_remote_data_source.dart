@@ -160,7 +160,7 @@ class TrainingRemoteDataSourceImpl implements TrainingRemoteDataSource {
       faculty: data['faculty'] as String?,
       cityId: data['cityId'] as String?,
       city: data['city'] as String?,
-      areaId: data['areaId'] as String?,
+      countryId: data['countryId'] as String?,
       graduationYear: parseFirestoreInt(data['graduationYear']),
       cvUrl: data['cvUrl'] as String?,
       status:

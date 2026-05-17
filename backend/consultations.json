@@ -1,0 +1,424 @@
+[
+  {
+    "_DOCUMENT_ID_": "0kSWMi9qYpXgmKF3qX2k",
+    "createdAt": "2026-02-28T17:55:11.717388+00:00",
+    "lawyerUid": "mock_lawyer_013",
+    "caseText": "marhaba",
+    "clientUid": "1bvGvYARnCf2AeStRUetvTtnskj2",
+    "specializationId": "fraud",
+    "status": "pending"
+  },
+  {
+    "_DOCUMENT_ID_": "2Q0OQUmWxqldrQVulorH",
+    "createdAt": "2026-02-28T18:03:16.629441+00:00",
+    "caseText": "asfdsdafasfasfdasf",
+    "lawyerUid": "mock_lawyer_013",
+    "clientUid": "1bvGvYARnCf2AeStRUetvTtnskj2",
+    "specializationId": "aml-cft-compliance",
+    "status": "pending"
+  },
+  {
+    "_DOCUMENT_ID_": "3hP095VrFDAgLA4uuEiJ",
+    "createdAt": "2026-03-07T12:32:07.382301+00:00",
+    "lawyerUid": "PcgIcK6usLemgDvh5pfKXE6lwZY2",
+    "updatedAt": "2026-03-07T12:37:19.652435+00:00",
+    "caseText": "لدي مشكلة ارجوك رد",
+    "clientUid": "ZYPrKExvziWyATadG053ahvMMhj2",
+    "specializationId": "cybercrime",
+    "status": "closed"
+  },
+  {
+    "_DOCUMENT_ID_": "4qrxS9cZrx40osQlrayY",
+    "createdAt": "2026-03-06T23:17:56.424207+00:00",
+    "caseText": "مرحبا",
+    "lawyerUid": "hBRC4oX8xGaMeIXMYv3cuHVdtZD2",
+    "status": "pending",
+    "specializationId": "personal_status",
+    "clientUid": "1bvGvYARnCf2AeStRUetvTtnskj2"
+  },
+  {
+    "_DOCUMENT_ID_": "4rdV7O2cmLiDebroo4hW",
+    "closedAt": "2026-03-14T21:50:43.739130+00:00",
+    "caseText": "مرحبا اريدك في قضية ميراث",
+    "updatedAt": "2026-03-14T21:50:43.739114+00:00",
+    "clientUid": "h0t1lqjGqTR4B0Uk8Sei88zePw43",
+    "specializationId": "personal_status",
+    "createdAt": "2026-03-14T21:48:49.593760+00:00",
+    "lawyerUid": "I347hV7AgKYQ1syxKqbnzdhyYfu1",
+    "closeReason": "legal_procedures_started_outside_platform",
+    "status": "closed"
+  },
+  {
+    "_DOCUMENT_ID_": "5kbqzFkK303FgTMiJvQ6",
+    "createdAt": "2026-03-14T22:20:56.893180+00:00",
+    "caseText": "marhaba",
+    "updatedAt": "2026-03-14T22:21:18.382338+00:00",
+    "lawyerUid": "I347hV7AgKYQ1syxKqbnzdhyYfu1",
+    "clientUid": "h0t1lqjGqTR4B0Uk8Sei88zePw43",
+    "specializationId": "commercial_law",
+    "status": "accepted"
+  },
+  {
+    "_DOCUMENT_ID_": "6H8TmdtNFQCCSxze5XB6",
+    "createdAt": "2026-03-06T20:00:23.349465+00:00",
+    "lawyerUid": "hBRC4oX8xGaMeIXMYv3cuHVdtZD2",
+    "caseText": "مىنت",
+    "status": "pending",
+    "specializationId": "personal_status",
+    "clientUid": "1bvGvYARnCf2AeStRUetvTtnskj2"
+  },
+  {
+    "_DOCUMENT_ID_": "91Vaei5iEqoAFrgDK4nO",
+    "createdAt": "2026-03-06T20:13:44.988285+00:00",
+    "caseText": "مرحبا",
+    "lawyerUid": "hBRC4oX8xGaMeIXMYv3cuHVdtZD2",
+    "status": "pending",
+    "specializationId": "personal_status",
+    "clientUid": "1bvGvYARnCf2AeStRUetvTtnskj2"
+  },
+  {
+    "_DOCUMENT_ID_": "9AYTCTYyAk7VgMNVu16V",
+    "createdAt": "2026-03-02T22:43:28.251980+00:00",
+    "lawyerUid": "hBRC4oX8xGaMeIXMYv3cuHVdtZD2",
+    "updatedAt": "2026-03-07T01:24:18.947590+00:00",
+    "caseText": "marhaba",
+    "clientUid": "1bvGvYARnCf2AeStRUetvTtnskj2",
+    "specializationId": "personal_status",
+    "status": "closed"
+  },
+  {
+    "_DOCUMENT_ID_": "AupaWesLUXpRo6NpwipF",
+    "closedAt": "2026-04-27T20:49:10.806171+00:00",
+    "caseText": "أنا صاحب شركة تقنية معلومات أبرمت عقدًا بتاريخ 10 يناير 2025 لتطوير نظام إلكتروني.\nأخلّ الطرف الآخر بالتزاماته عبر التأخير وعدم مطابقة المواصفات رغم محاولات الحل الودي.\nترتب على ذلك خسائر مالية وتعطل في العمل وضرر بالسمعة.",
+    "updatedAt": "2026-04-27T20:49:10.806132+00:00",
+    "clientUid": "XBAcm6vcnoVsqBtgNio5RZPHX1t1",
+    "specializationId": "commercial_law",
+    "createdAt": "2026-04-23T19:16:44.589173+00:00",
+    "lawyerUid": "KxxTKZLmlpRRge4B5g8ABiGhgxF3",
+    "status": "closed"
+  },
+  {
+    "_DOCUMENT_ID_": "Bw7RyOAGbwh7MKQsQsj5",
+    "createdAt": "2026-03-08T18:55:09.958592+00:00",
+    "lawyerUid": "0NJyXTNnHfeU57AfQcjVJe05aXk1",
+    "caseText": "مرحبا شهد لدي مشكلة شخصيه",
+    "status": "pending",
+    "specializationId": "commercial_law",
+    "clientUid": "h0t1lqjGqTR4B0Uk8Sei88zePw43"
+  },
+  {
+    "_DOCUMENT_ID_": "GoTh00jGoHnCNhFnQIDL",
+    "closedAt": "2026-03-08T18:35:06.063735+00:00",
+    "caseText": "uopuipui",
+    "updatedAt": "2026-03-08T18:35:06.063702+00:00",
+    "clientUid": "1bvGvYARnCf2AeStRUetvTtnskj2",
+    "specializationId": "personal_status",
+    "createdAt": "2026-03-04T18:42:25.567278+00:00",
+    "lawyerUid": "hBRC4oX8xGaMeIXMYv3cuHVdtZD2",
+    "closeReason": "client_inactive_for_long_time",
+    "status": "closed"
+  },
+  {
+    "_DOCUMENT_ID_": "Hcdr6tibPmhoEo9Jf5vu",
+    "createdAt": "2026-03-04T18:38:18.917012+00:00",
+    "lawyerUid": "hBRC4oX8xGaMeIXMYv3cuHVdtZD2",
+    "caseText": "jlsa;jfdlfsj",
+    "clientUid": "1bvGvYARnCf2AeStRUetvTtnskj2",
+    "specializationId": "personal_status",
+    "status": "pending"
+  },
+  {
+    "_DOCUMENT_ID_": "HtJgry11PRgeEkPBmZOx",
+    "closedAt": "2026-03-08T19:00:09.410187+00:00",
+    "caseText": "مرحبا امل لدي مشكلة ميراث",
+    "updatedAt": "2026-03-08T19:00:09.410172+00:00",
+    "clientUid": "h0t1lqjGqTR4B0Uk8Sei88zePw43",
+    "specializationId": "personal_status",
+    "createdAt": "2026-03-08T18:53:29.017326+00:00",
+    "lawyerUid": "jyb78jgRnlYu3RzCbNojBcfqnSN2",
+    "closeReason": "client_inactive_for_long_time",
+    "status": "closed"
+  },
+  {
+    "_DOCUMENT_ID_": "IRQwDzaixl4WopNDo0cW",
+    "closedAt": "2026-04-27T20:49:31.725982+00:00",
+    "caseText": "أنا",
+    "updatedAt": "2026-04-27T20:49:31.725947+00:00",
+    "clientUid": "XBAcm6vcnoVsqBtgNio5RZPHX1t1",
+    "specializationId": "real_estate_law",
+    "createdAt": "2026-04-27T20:46:34.662849+00:00",
+    "lawyerUid": "KxxTKZLmlpRRge4B5g8ABiGhgxF3",
+    "status": "closed"
+  },
+  {
+    "_DOCUMENT_ID_": "Oq00cG6InSKn5QuxuTRj",
+    "createdAt": "2026-05-05T20:06:39.263191+00:00",
+    "lawyerUid": "XhWRYNN3XGXt9lAwvxUvBGxnX5j2",
+    "updatedAt": "2026-05-05T20:07:06.612800+00:00",
+    "caseText": "انا ام ل٣ أطفال وارغب باخذ حضانتهم من طليقي",
+    "clientUid": "hRQ70cTGShRrA1biLCSHVE8h1WH3",
+    "specializationId": "personal_status",
+    "status": "accepted"
+  },
+  {
+    "_DOCUMENT_ID_": "RIS46w0DGxZ25EhFFb7D",
+    "createdAt": "2026-03-03T13:31:29.145203+00:00",
+    "lawyerUid": "mock_lawyer_027",
+    "caseText": "تاا",
+    "status": "pending",
+    "specializationId": "cybercrime",
+    "clientUid": "ZYPrKExvziWyATadG053ahvMMhj2"
+  },
+  {
+    "_DOCUMENT_ID_": "RZUV98Uekyv0QRtdVMoI",
+    "closedAt": "2026-04-27T20:49:25.286571+00:00",
+    "caseText": "مشكلة مع طليقتي حول الحضانه والنفقه وأود رفع قضية",
+    "updatedAt": "2026-04-27T20:49:25.286538+00:00",
+    "clientUid": "hRQ70cTGShRrA1biLCSHVE8h1WH3",
+    "specializationId": "commercial_law",
+    "createdAt": "2026-04-23T19:22:53.330446+00:00",
+    "lawyerUid": "KxxTKZLmlpRRge4B5g8ABiGhgxF3",
+    "status": "closed"
+  },
+  {
+    "_DOCUMENT_ID_": "TdDhSMREea1ZPq4csggP",
+    "createdAt": "2026-03-06T19:58:01.496219+00:00",
+    "lawyerUid": "hBRC4oX8xGaMeIXMYv3cuHVdtZD2",
+    "caseText": "سلام",
+    "status": "pending",
+    "specializationId": "personal_status",
+    "clientUid": "1bvGvYARnCf2AeStRUetvTtnskj2"
+  },
+  {
+    "_DOCUMENT_ID_": "YPhh4RjY3v235h9uX4Uy",
+    "createdAt": "2026-02-28T17:56:07.431349+00:00",
+    "lawyerUid": "mock_lawyer_013",
+    "caseText": "marhaba",
+    "clientUid": "1bvGvYARnCf2AeStRUetvTtnskj2",
+    "specializationId": "aml-cft-compliance",
+    "status": "pending"
+  },
+  {
+    "_DOCUMENT_ID_": "ZHxpUpiG9QZe0oVZ0fHh",
+    "createdAt": "2026-03-06T19:25:21.371463+00:00",
+    "lawyerUid": "mock_lawyer_027",
+    "caseText": "مرحبا",
+    "status": "pending",
+    "specializationId": "cybercrime",
+    "clientUid": "1bvGvYARnCf2AeStRUetvTtnskj2"
+  },
+  {
+    "_DOCUMENT_ID_": "ZjuMipqoTvq3NDfql1wN",
+    "closedAt": "2026-03-27T22:26:30.418684+00:00",
+    "caseText": "تقدمت بدعوى بسبب خلافات مستمرة وعدم استقرار الحياة الزوجية, وطلبت الانفصال وحضانة اطفالي",
+    "updatedAt": "2026-03-27T22:26:30.418660+00:00",
+    "clientUid": "XBAcm6vcnoVsqBtgNio5RZPHX1t1",
+    "specializationId": "personal_status",
+    "createdAt": "2026-03-27T22:23:07.388167+00:00",
+    "lawyerUid": "qdBgVjZs4zgnSMy7mX0QP7fHj5C2",
+    "closeReason": "consultation_completed",
+    "status": "closed"
+  },
+  {
+    "_DOCUMENT_ID_": "bn7393G3xR24jMqjU8c4",
+    "createdAt": "2026-03-08T18:44:13.408428+00:00",
+    "lawyerUid": "hBRC4oX8xGaMeIXMYv3cuHVdtZD2",
+    "caseText": "مرحبا لدي مشكلة بالميراث",
+    "status": "pending",
+    "specializationId": "personal_status",
+    "clientUid": "1bvGvYARnCf2AeStRUetvTtnskj2"
+  },
+  {
+    "_DOCUMENT_ID_": "bvniJEb09yTbvTmhKKmy",
+    "createdAt": "2026-03-07T13:30:51.609885+00:00",
+    "lawyerUid": "PcgIcK6usLemgDvh5pfKXE6lwZY2",
+    "caseText": "هاي",
+    "status": "pending",
+    "specializationId": "real_estate_law",
+    "clientUid": "ZYPrKExvziWyATadG053ahvMMhj2"
+  },
+  {
+    "_DOCUMENT_ID_": "drQozBO6tBRbO3uovcvK",
+    "createdAt": "2026-03-06T19:57:43.969114+00:00",
+    "lawyerUid": "hBRC4oX8xGaMeIXMYv3cuHVdtZD2",
+    "caseText": "مرحبا استشاره جديده",
+    "status": "pending",
+    "specializationId": "personal_status",
+    "clientUid": "1bvGvYARnCf2AeStRUetvTtnskj2"
+  },
+  {
+    "_DOCUMENT_ID_": "eDJR2dT90O2uHRRoMPP4",
+    "createdAt": "2026-03-06T20:09:20.738798+00:00",
+    "caseText": "مرحبا",
+    "lawyerUid": "hBRC4oX8xGaMeIXMYv3cuHVdtZD2",
+    "status": "pending",
+    "specializationId": "personal_status",
+    "clientUid": "1bvGvYARnCf2AeStRUetvTtnskj2"
+  },
+  {
+    "_DOCUMENT_ID_": "ehjfSiLocr766nZx5hj8",
+    "createdAt": "2026-05-05T19:02:14.968991+00:00",
+    "lawyerUid": "IyE0PlcVawXC4cVAbN1rH1lo4tJ2",
+    "caseText": "الو",
+    "status": "pending",
+    "specializationId": "commercial_law",
+    "clientUid": "XBAcm6vcnoVsqBtgNio5RZPHX1t1"
+  },
+  {
+    "_DOCUMENT_ID_": "fS35NIfI7B0tfxfD74jF",
+    "createdAt": "2026-03-06T20:10:17.101856+00:00",
+    "caseText": "ىخاهىا",
+    "lawyerUid": "hBRC4oX8xGaMeIXMYv3cuHVdtZD2",
+    "status": "pending",
+    "specializationId": "personal_status",
+    "clientUid": "1bvGvYARnCf2AeStRUetvTtnskj2"
+  },
+  {
+    "_DOCUMENT_ID_": "hBmTe4EvQBtGcLZzm158",
+    "closedAt": "2026-04-20T20:39:57.460468+00:00",
+    "caseText": "نزاع حول الحضاره والنفقه مع طليقتي",
+    "updatedAt": "2026-04-20T20:39:57.460438+00:00",
+    "clientUid": "apCbvRp3o6XjBOSkAbghMvpuSUs1",
+    "specializationId": "personal_status",
+    "createdAt": "2026-04-20T20:38:18.757473+00:00",
+    "lawyerUid": "KxxTKZLmlpRRge4B5g8ABiGhgxF3",
+    "closeReason": "client_inactive_for_long_time",
+    "status": "closed"
+  },
+  {
+    "_DOCUMENT_ID_": "iDqFTR9GLMtUzFGIbcKz",
+    "createdAt": "2026-02-28T17:58:28.617687+00:00",
+    "caseText": "jgjgjhghjg",
+    "lawyerUid": "mock_lawyer_013",
+    "clientUid": "1bvGvYARnCf2AeStRUetvTtnskj2",
+    "specializationId": "aml-cft-compliance",
+    "status": "pending"
+  },
+  {
+    "_DOCUMENT_ID_": "j0zpkSpSQUbSS8xQCer9",
+    "createdAt": "2026-03-02T00:30:59.747645+00:00",
+    "lawyerUid": "sXGZRREio4TQ9j5je6Kc7dxiEUM2",
+    "caseText": "لدي قضية نصب",
+    "status": "pending",
+    "specializationId": "استشارة - النصب والاحتيال",
+    "clientUid": "xo8GE3DFwwcjXPKE1uWMjBRFiGu2"
+  },
+  {
+    "_DOCUMENT_ID_": "jvHHJScBQEzjwCdEjgBE",
+    "createdAt": "2026-04-30T15:46:48.249969+00:00",
+    "lawyerUid": "J6PkU6g9hSeOT51xpX1j6iiLcMK2",
+    "caseText": "ا",
+    "status": "pending",
+    "specializationId": "personal_status",
+    "clientUid": "XBAcm6vcnoVsqBtgNio5RZPHX1t1"
+  },
+  {
+    "_DOCUMENT_ID_": "kTSwVjMaBDSGaxHvEoB3",
+    "createdAt": "2026-03-06T19:25:52.524954+00:00",
+    "lawyerUid": "hBRC4oX8xGaMeIXMYv3cuHVdtZD2",
+    "caseText": "مرحبا لدي طلب لك",
+    "status": "pending",
+    "specializationId": "personal_status",
+    "clientUid": "1bvGvYARnCf2AeStRUetvTtnskj2"
+  },
+  {
+    "_DOCUMENT_ID_": "kmAkGnCVdAkyphdw3VnL",
+    "closedAt": "2026-05-05T20:13:13.913455+00:00",
+    "caseText": "أرغب في فسخ عقد تطوير نظام إلكتروني انا صاحبة شركة تقنية معلومات أبرمت عقدًا بتاريخ 10 يناير 2025 لتطوير نظام إلكتروني ولم يلتزم الطرف الثاني بوقت تسليم المشروع",
+    "updatedAt": "2026-05-05T20:13:13.913438+00:00",
+    "clientUid": "XW9D6vm1frYNQyCfNPoPzj8GTDP2",
+    "specializationId": "commercial_law",
+    "createdAt": "2026-05-05T20:00:15.487552+00:00",
+    "lawyerUid": "XhWRYNN3XGXt9lAwvxUvBGxnX5j2",
+    "closeReason": "legal_procedures_started_outside_platform",
+    "status": "closed"
+  },
+  {
+    "_DOCUMENT_ID_": "l60f0sb57rCBAishi0Df",
+    "createdAt": "2026-03-06T19:38:18.195855+00:00",
+    "lawyerUid": "hBRC4oX8xGaMeIXMYv3cuHVdtZD2",
+    "caseText": "طلب جديد",
+    "status": "pending",
+    "specializationId": "personal_status",
+    "clientUid": "1bvGvYARnCf2AeStRUetvTtnskj2"
+  },
+  {
+    "_DOCUMENT_ID_": "og57Zhyw1hQ0bWoiH7vA",
+    "createdAt": "2026-04-23T18:44:14.382376+00:00",
+    "lawyerUid": "qdBgVjZs4zgnSMy7mX0QP7fHj5C2",
+    "caseText": "أنا صاحب شركة تقنية معلومات أبرمت عقدًا بتاريخ 10 يناير 2025 لتطوير نظام إلكتروني.\nأخلّ الطرف الآخر بالتزاماته عبر التأخير وعدم مطابقة المواصفات رغم محاولات الحل الودي.\nترتب على ذلك خسائر مالية وتعطل في العمل وضرر بالسمعة.",
+    "status": "pending",
+    "specializationId": "commercial_law",
+    "clientUid": "XBAcm6vcnoVsqBtgNio5RZPHX1t1"
+  },
+  {
+    "_DOCUMENT_ID_": "pl0U4UN2fQprzFRWyj46",
+    "createdAt": "2026-02-28T18:06:29.774467+00:00",
+    "caseText": "kl;fjdl;kasl;dfsajk",
+    "lawyerUid": "mock_lawyer_013",
+    "clientUid": "1bvGvYARnCf2AeStRUetvTtnskj2",
+    "specializationId": "fraud",
+    "status": "pending"
+  },
+  {
+    "_DOCUMENT_ID_": "qQW7kqBU1w6RGAKDNgVZ",
+    "createdAt": "2026-04-25T19:48:12.572033+00:00",
+    "lawyerUid": "KxxTKZLmlpRRge4B5g8ABiGhgxF3",
+    "updatedAt": "2026-04-25T19:49:52.090780+00:00",
+    "caseText": "أنا صاحبة شركة تقنية معلومات أبرمت عقدًا بتاريخ 10 يناير 2025 لتطوير نظام إلكتروني.\nأخلّ الطرف الآخر بالتزاماته عبر التأخير وعدم مطابقة المواصفات رغم محاولات الحل الودي.",
+    "clientUid": "hRQ70cTGShRrA1biLCSHVE8h1WH3",
+    "specializationId": "commercial_law",
+    "status": "accepted"
+  },
+  {
+    "_DOCUMENT_ID_": "s1b1vknHnqlX2ktyzAhF",
+    "createdAt": "2026-05-05T20:24:34.931466+00:00",
+    "lawyerUid": "XhWRYNN3XGXt9lAwvxUvBGxnX5j2",
+    "updatedAt": "2026-05-05T20:25:01.716613+00:00",
+    "caseText": "أرغب في فسخ عقد تطوير نظام إلكتروني",
+    "clientUid": "XW9D6vm1frYNQyCfNPoPzj8GTDP2",
+    "specializationId": "commercial_law",
+    "status": "accepted"
+  },
+  {
+    "_DOCUMENT_ID_": "sBlPbZWeW3xpkdNbsxZX",
+    "createdAt": "2026-04-20T16:00:53.728387+00:00",
+    "lawyerUid": "J6PkU6g9hSeOT51xpX1j6iiLcMK2",
+    "caseText": "مشكلة مع طليقتي حول الحضانه",
+    "status": "pending",
+    "specializationId": "personal_status",
+    "clientUid": "ZYPrKExvziWyATadG053ahvMMhj2"
+  },
+  {
+    "_DOCUMENT_ID_": "uLSvXbYWGE41OucRiH20",
+    "closedAt": "2026-03-19T00:28:56.664354+00:00",
+    "caseText": "كيف حالك",
+    "updatedAt": "2026-03-19T00:28:56.664340+00:00",
+    "clientUid": "ZYPrKExvziWyATadG053ahvMMhj2",
+    "specializationId": "medical_malpractice",
+    "createdAt": "2026-03-19T00:24:23.801163+00:00",
+    "lawyerUid": "AMfmJOmTINXY1wmWvb6cMIRinIy2",
+    "closeReason": "outside_service_scope",
+    "status": "closed"
+  },
+  {
+    "_DOCUMENT_ID_": "uPmhSbCluiskHBv3Rs4T",
+    "createdAt": "2026-03-04T18:50:45.898129+00:00",
+    "lawyerUid": "hBRC4oX8xGaMeIXMYv3cuHVdtZD2",
+    "caseText": "new request for testing notificatoin",
+    "clientUid": "1bvGvYARnCf2AeStRUetvTtnskj2",
+    "specializationId": "personal_status",
+    "status": "pending"
+  },
+  {
+    "_DOCUMENT_ID_": "ucWaqlPIaCgjlZ55z653",
+    "closedAt": "2026-04-27T20:49:45.141005+00:00",
+    "caseText": "أنا صاحبة شركة تقنية معلومات أبرمت عقدًا بتاريخ 10 يناير 2025 لتطوير نظام إلكتروني.\nأخلّ الطرف الآخر بالتزاماته عبر التأخير وعدم مطابقة المواصفات رغم محاولات الحل الودي.",
+    "updatedAt": "2026-04-27T20:49:45.140936+00:00",
+    "clientUid": "hRQ70cTGShRrA1biLCSHVE8h1WH3",
+    "specializationId": "commercial_law",
+    "createdAt": "2026-04-25T19:42:10.160041+00:00",
+    "lawyerUid": "KxxTKZLmlpRRge4B5g8ABiGhgxF3",
+    "status": "closed"
+  }
+]

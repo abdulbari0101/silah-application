@@ -33,19 +33,6 @@ service cloud.firestore {
         && get(/databases/$(database)/documents/training_applications/$(applicationId)).data.status == "accepted";
     }
 
-    function traineeProfileAllowsTraining(traineeUid) {
-      return traineeUid != null
-        && exists(/databases/$(database)/documents/users/$(traineeUid))
-        && get(/databases/$(database)/documents/users/$(traineeUid)).data.isTrainee == true;
-    }
-
-    function lawyerAllowsTrainees(lawyerUid) {
-      return lawyerUid != null
-        && exists(/databases/$(database)/documents/lawyers/$(lawyerUid))
-        && get(/databases/$(database)/documents/lawyers/$(lawyerUid)).data.verified == true
-        && get(/databases/$(database)/documents/lawyers/$(lawyerUid)).data.acceptsTrainees == true;
-    }
-
     function existingChatAllowsWrite(chatData) {
       return isAdmin()
         || (chatData.trainingApplicationId != null
@@ -114,28 +101,13 @@ service cloud.firestore {
     }
 
     match /training_applications/{applicationId} {
-      allow create: if isSignedIn()
-        && request.auth.uid == request.resource.data.traineeUid
-        && request.resource.data.lawyerUid != null
-        && request.resource.data.traineeUid != null
-        && traineeProfileAllowsTraining(request.resource.data.traineeUid)
-        && lawyerAllowsTrainees(request.resource.data.lawyerUid)
-        && applicationId == (request.resource.data.lawyerUid + "_" + request.resource.data.traineeUid);
+      allow create: if isSignedIn() && request.auth.uid == request.resource.data.traineeUid;
       // Keep list/get query-compatible by using explicit equality checks.
       allow read: if isAdmin()
         || (isSignedIn()
           && (request.auth.uid == resource.data.traineeUid
             || request.auth.uid == resource.data.lawyerUid));
-      allow update: if isAdmin()
-        || (isSignedIn()
-          && request.auth.uid == resource.data.lawyerUid
-          && request.resource.data.traineeUid == resource.data.traineeUid
-          && request.resource.data.lawyerUid == resource.data.lawyerUid
-          && request.resource.data.opportunityId == resource.data.opportunityId
-          && request.resource.data.submittedAt == resource.data.submittedAt
-          && request.resource.data.status in ["pending", "accepted", "rejected", "cancelled"]
-          && (request.resource.data.status != "accepted"
-            || lawyerAllowsTrainees(resource.data.lawyerUid)));
+      allow update: if isAdmin() || (isSignedIn() && request.auth.uid == resource.data.lawyerUid);
       allow delete: if isAdmin();
     }
 
@@ -147,13 +119,8 @@ service cloud.firestore {
     }
 
     match /support_reports/{reportId} {
-      allow create: if isSignedIn()
-        && request.auth.uid == request.resource.data.reporterUid
-        && request.resource.data.status == "open"
-        && request.resource.data.adminNotes == null
-        && request.resource.data.role in ["user", "lawyer"];
-      allow read: if isAdmin() || request.auth.uid == resource.data.reporterUid;
-      allow update: if isAdmin();
+      allow create: if isSignedIn();
+      allow read, update: if isAdmin() || request.auth.uid == resource.data.reporterUid;
     }
 
     match /admin_tasks/{taskId} {

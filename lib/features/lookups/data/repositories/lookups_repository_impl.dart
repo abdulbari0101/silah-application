@@ -22,18 +22,18 @@ class LookupsRepositoryImpl implements LookupsRepository {
   }
 
   @override
-  Future<Either<Failure, List<LookupItemEntity>>> fetchAreas() {
+  Future<Either<Failure, List<LookupItemEntity>>> fetchcountries() {
     return executor.runOnline(() async {
-      return remoteDataSource.fetchAreas();
-    }, from: 'LookupsRepository.fetchAreas');
+      return remoteDataSource.fetchcountries();
+    }, from: 'LookupsRepository.fetchcountries');
   }
 
   @override
   Future<Either<Failure, List<LookupItemEntity>>> fetchCities({
-    String? areaId,
+    String? countryId,
   }) {
     return executor.runOnline(() async {
-      return remoteDataSource.fetchCities(areaId: areaId);
+      return remoteDataSource.fetchCities(countryId: countryId);
     }, from: 'LookupsRepository.fetchCities');
   }
 

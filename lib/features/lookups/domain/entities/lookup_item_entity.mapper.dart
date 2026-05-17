@@ -46,10 +46,10 @@ class LookupItemEntityMapper extends ClassMapperBase<LookupItemEntity> {
     _$iconUrl,
     opt: true,
   );
-  static String? _$areaId(LookupItemEntity v) => v.areaId;
-  static const Field<LookupItemEntity, String> _f$areaId = Field(
-    'areaId',
-    _$areaId,
+  static String? _$countryId(LookupItemEntity v) => v.countryId;
+  static const Field<LookupItemEntity, String> _f$countryId = Field(
+    'countryId',
+    _$countryId,
     opt: true,
   );
 
@@ -59,7 +59,7 @@ class LookupItemEntityMapper extends ClassMapperBase<LookupItemEntity> {
     #nameAr: _f$nameAr,
     #nameEn: _f$nameEn,
     #iconUrl: _f$iconUrl,
-    #areaId: _f$areaId,
+    #countryId: _f$countryId,
   };
   @override
   final bool ignoreNull = true;
@@ -70,7 +70,7 @@ class LookupItemEntityMapper extends ClassMapperBase<LookupItemEntity> {
       nameAr: data.dec(_f$nameAr),
       nameEn: data.dec(_f$nameEn),
       iconUrl: data.dec(_f$iconUrl),
-      areaId: data.dec(_f$areaId),
+      countryId: data.dec(_f$countryId),
     );
   }
 
@@ -141,7 +141,7 @@ abstract class LookupItemEntityCopyWith<$R, $In extends LookupItemEntity, $Out>
     String? nameAr,
     String? nameEn,
     String? iconUrl,
-    String? areaId,
+    String? countryId,
   });
   LookupItemEntityCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
     Then<$Out2, $R2> t,
@@ -162,14 +162,14 @@ class _LookupItemEntityCopyWithImpl<$R, $Out>
     Object? nameAr = $none,
     Object? nameEn = $none,
     Object? iconUrl = $none,
-    Object? areaId = $none,
+    Object? countryId = $none,
   }) => $apply(
     FieldCopyWithData({
       if (id != $none) #id: id,
       if (nameAr != $none) #nameAr: nameAr,
       if (nameEn != $none) #nameEn: nameEn,
       if (iconUrl != $none) #iconUrl: iconUrl,
-      if (areaId != $none) #areaId: areaId,
+      if (countryId != $none) #countryId: countryId,
     }),
   );
   @override
@@ -178,7 +178,7 @@ class _LookupItemEntityCopyWithImpl<$R, $Out>
     nameAr: data.get(#nameAr, or: $value.nameAr),
     nameEn: data.get(#nameEn, or: $value.nameEn),
     iconUrl: data.get(#iconUrl, or: $value.iconUrl),
-    areaId: data.get(#areaId, or: $value.areaId),
+    countryId: data.get(#countryId, or: $value.countryId),
   );
 
   @override

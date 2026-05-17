@@ -64,7 +64,7 @@ class _TrainingApplicationFormBodyState
     if (!(_formKey.currentState?.validate() ?? false)) return;
 
     final ready = lookupsState.maybeWhen(
-      ready: (areas, cities, selectedArea, selectedCity) =>
+      ready: (countries, cities, selectedArea, selectedCity) =>
           (selectedArea, selectedCity),
       orElse: () => null,
     );
@@ -80,7 +80,7 @@ class _TrainingApplicationFormBodyState
       fullName: _nameController.text.trim(),
       university: _universityController.text.trim(),
       faculty: _facultyController.text.trim(),
-      areaId: selectedArea?.id,
+      countryId: selectedArea?.id,
       cityId: selectedCity?.id,
       city: _displayName(selectedCity),
       graduationYear: graduationYear,
@@ -108,7 +108,7 @@ class _TrainingApplicationFormBodyState
               onRetry: () => context.read<TrainingLookupsCubit>().load(),
             ),
           ),
-          ready: (areas, cities, selectedArea, selectedCity) {
+          ready: (countries, cities, selectedArea, selectedCity) {
             return SingleChildScrollView(
               padding: const EdgeInsets.symmetric(
                 horizontal: UIConstants.screenHorizantalPadding,
@@ -142,7 +142,7 @@ class _TrainingApplicationFormBodyState
                     ),
                     UIConstants.mediumHeight,
                     FDropDown<LookupItemEntity>(
-                      items: areas,
+                      items: countries,
                       initialValue: selectedArea,
                       labelBuilder: _displayName,
                       label: Strings.label_area.tr(),

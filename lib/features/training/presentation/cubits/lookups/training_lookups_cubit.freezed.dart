@@ -125,11 +125,11 @@ return failure(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loading,TResult Function( List<LookupItemEntity> areas,  List<LookupItemEntity> cities,  LookupItemEntity? selectedArea,  LookupItemEntity? selectedCity)?  ready,TResult Function( String message)?  failure,required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>({TResult Function()?  loading,TResult Function( List<LookupItemEntity> countries,  List<LookupItemEntity> cities,  LookupItemEntity? selectedArea,  LookupItemEntity? selectedCity)?  ready,TResult Function( String message)?  failure,required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _TrainingLookupsLoading() when loading != null:
 return loading();case _TrainingLookupsReady() when ready != null:
-return ready(_that.areas,_that.cities,_that.selectedArea,_that.selectedCity);case _TrainingLookupsFailure() when failure != null:
+return ready(_that.countries,_that.cities,_that.selectedArea,_that.selectedCity);case _TrainingLookupsFailure() when failure != null:
 return failure(_that.message);case _:
   return orElse();
 
@@ -148,11 +148,11 @@ return failure(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loading,required TResult Function( List<LookupItemEntity> areas,  List<LookupItemEntity> cities,  LookupItemEntity? selectedArea,  LookupItemEntity? selectedCity)  ready,required TResult Function( String message)  failure,}) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>({required TResult Function()  loading,required TResult Function( List<LookupItemEntity> countries,  List<LookupItemEntity> cities,  LookupItemEntity? selectedArea,  LookupItemEntity? selectedCity)  ready,required TResult Function( String message)  failure,}) {final _that = this;
 switch (_that) {
 case _TrainingLookupsLoading():
 return loading();case _TrainingLookupsReady():
-return ready(_that.areas,_that.cities,_that.selectedArea,_that.selectedCity);case _TrainingLookupsFailure():
+return ready(_that.countries,_that.cities,_that.selectedArea,_that.selectedCity);case _TrainingLookupsFailure():
 return failure(_that.message);case _:
   throw StateError('Unexpected subclass');
 
@@ -170,11 +170,11 @@ return failure(_that.message);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loading,TResult? Function( List<LookupItemEntity> areas,  List<LookupItemEntity> cities,  LookupItemEntity? selectedArea,  LookupItemEntity? selectedCity)?  ready,TResult? Function( String message)?  failure,}) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>({TResult? Function()?  loading,TResult? Function( List<LookupItemEntity> countries,  List<LookupItemEntity> cities,  LookupItemEntity? selectedArea,  LookupItemEntity? selectedCity)?  ready,TResult? Function( String message)?  failure,}) {final _that = this;
 switch (_that) {
 case _TrainingLookupsLoading() when loading != null:
 return loading();case _TrainingLookupsReady() when ready != null:
-return ready(_that.areas,_that.cities,_that.selectedArea,_that.selectedCity);case _TrainingLookupsFailure() when failure != null:
+return ready(_that.countries,_that.cities,_that.selectedArea,_that.selectedCity);case _TrainingLookupsFailure() when failure != null:
 return failure(_that.message);case _:
   return null;
 
@@ -219,14 +219,14 @@ String toString() {
 
 
 class _TrainingLookupsReady implements TrainingLookupsState {
-  const _TrainingLookupsReady({required final  List<LookupItemEntity> areas, required final  List<LookupItemEntity> cities, this.selectedArea, this.selectedCity}): _areas = areas,_cities = cities;
+  const _TrainingLookupsReady({required final  List<LookupItemEntity> countries, required final  List<LookupItemEntity> cities, this.selectedArea, this.selectedCity}): _countries = countries,_cities = cities;
   
 
- final  List<LookupItemEntity> _areas;
- List<LookupItemEntity> get areas {
-  if (_areas is EqualUnmodifiableListView) return _areas;
+ final  List<LookupItemEntity> _countries;
+ List<LookupItemEntity> get countries {
+  if (_countries is EqualUnmodifiableListView) return _countries;
   // ignore: implicit_dynamic_type
-  return EqualUnmodifiableListView(_areas);
+  return EqualUnmodifiableListView(_countries);
 }
 
  final  List<LookupItemEntity> _cities;
@@ -249,16 +249,16 @@ _$TrainingLookupsReadyCopyWith<_TrainingLookupsReady> get copyWith => __$Trainin
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TrainingLookupsReady&&const DeepCollectionEquality().equals(other._areas, _areas)&&const DeepCollectionEquality().equals(other._cities, _cities)&&(identical(other.selectedArea, selectedArea) || other.selectedArea == selectedArea)&&(identical(other.selectedCity, selectedCity) || other.selectedCity == selectedCity));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _TrainingLookupsReady&&const DeepCollectionEquality().equals(other._countries, _countries)&&const DeepCollectionEquality().equals(other._cities, _cities)&&(identical(other.selectedArea, selectedArea) || other.selectedArea == selectedArea)&&(identical(other.selectedCity, selectedCity) || other.selectedCity == selectedCity));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_areas),const DeepCollectionEquality().hash(_cities),selectedArea,selectedCity);
+int get hashCode => Object.hash(runtimeType,const DeepCollectionEquality().hash(_countries),const DeepCollectionEquality().hash(_cities),selectedArea,selectedCity);
 
 @override
 String toString() {
-  return 'TrainingLookupsState.ready(areas: $areas, cities: $cities, selectedArea: $selectedArea, selectedCity: $selectedCity)';
+  return 'TrainingLookupsState.ready(countries: $countries, cities: $cities, selectedArea: $selectedArea, selectedCity: $selectedCity)';
 }
 
 
@@ -269,7 +269,7 @@ abstract mixin class _$TrainingLookupsReadyCopyWith<$Res> implements $TrainingLo
   factory _$TrainingLookupsReadyCopyWith(_TrainingLookupsReady value, $Res Function(_TrainingLookupsReady) _then) = __$TrainingLookupsReadyCopyWithImpl;
 @useResult
 $Res call({
- List<LookupItemEntity> areas, List<LookupItemEntity> cities, LookupItemEntity? selectedArea, LookupItemEntity? selectedCity
+ List<LookupItemEntity> countries, List<LookupItemEntity> cities, LookupItemEntity? selectedArea, LookupItemEntity? selectedCity
 });
 
 
@@ -286,9 +286,9 @@ class __$TrainingLookupsReadyCopyWithImpl<$Res>
 
 /// Create a copy of TrainingLookupsState
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') $Res call({Object? areas = null,Object? cities = null,Object? selectedArea = freezed,Object? selectedCity = freezed,}) {
+@pragma('vm:prefer-inline') $Res call({Object? countries = null,Object? cities = null,Object? selectedArea = freezed,Object? selectedCity = freezed,}) {
   return _then(_TrainingLookupsReady(
-areas: null == areas ? _self._areas : areas // ignore: cast_nullable_to_non_nullable
+countries: null == countries ? _self._countries : countries // ignore: cast_nullable_to_non_nullable
 as List<LookupItemEntity>,cities: null == cities ? _self._cities : cities // ignore: cast_nullable_to_non_nullable
 as List<LookupItemEntity>,selectedArea: freezed == selectedArea ? _self.selectedArea : selectedArea // ignore: cast_nullable_to_non_nullable
 as LookupItemEntity?,selectedCity: freezed == selectedCity ? _self.selectedCity : selectedCity // ignore: cast_nullable_to_non_nullable

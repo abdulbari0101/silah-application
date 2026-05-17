@@ -1,0 +1,140 @@
+[
+  {
+    "_DOCUMENT_ID_": "1uLjUN6oMLYE7Ao7IznN",
+    "type": "license_review",
+    "createdAt": "2026-03-07T13:17:08.913311+00:00",
+    "targetId": "pqlYpWlwg3cx3YsieHfhXWIvUA33",
+    "status": "pending",
+    "notes": "Auto-verification needs review"
+  },
+  {
+    "_DOCUMENT_ID_": "4v2dDdwsDoIaRqHzeZ1E",
+    "type": "license_review",
+    "createdAt": "2026-03-19T19:28:47.716961+00:00",
+    "updatedAt": "2026-03-19T19:30:31.186034+00:00",
+    "targetId": "jLpBfF3UX4cUhniXx6ubYua4n433",
+    "status": "approved",
+    "notes": "Auto-verification needs review"
+  },
+  {
+    "_DOCUMENT_ID_": "8f7PkSORJ7atFxla4XI3",
+    "type": "license_review",
+    "createdAt": "2026-03-27T22:10:33.297964+00:00",
+    "updatedAt": "2026-03-27T22:12:35.685063+00:00",
+    "targetId": "qdBgVjZs4zgnSMy7mX0QP7fHj5C2",
+    "status": "approved",
+    "notes": "Auto-verification needs review"
+  },
+  {
+    "_DOCUMENT_ID_": "DEe1IsRHl40Y1pjHXkby",
+    "type": "support_report",
+    "createdAt": "2026-03-07T13:20:47.531501+00:00",
+    "updatedAt": "2026-03-08T00:49:24.922181Z",
+    "targetId": "Jvudby0BaQ4Zzfy0FnW1",
+    "status": "approved",
+    "notes": "New support report"
+  },
+  {
+    "_DOCUMENT_ID_": "ELIKwj90ARchfOcrtFP6",
+    "type": "license_review",
+    "createdAt": "2026-03-19T19:58:20.946027+00:00",
+    "updatedAt": "2026-03-19T19:59:48.119474+00:00",
+    "targetId": "W8Xkw790OFTrb13Bvb782gE5oO93",
+    "status": "approved",
+    "notes": "Auto-verification needs review"
+  },
+  {
+    "_DOCUMENT_ID_": "X1iGWiQ7y84365rCJF3Y",
+    "type": "support_report",
+    "createdAt": "2026-03-07T13:21:03.198260+00:00",
+    "targetId": "HW3RU4dzJX3HkVzo0hju",
+    "status": "pending",
+    "notes": "New support report"
+  },
+  {
+    "_DOCUMENT_ID_": "aSCvUjuZuOCLABeoe59Y",
+    "type": "support_report",
+    "createdAt": "2026-03-19T00:41:45.184373+00:00",
+    "updatedAt": "2026-03-19T00:43:46.836672+00:00",
+    "targetId": "ctjY94GJCbU5AVP24ZIz",
+    "status": "approved",
+    "notes": "New support report"
+  },
+  {
+    "_DOCUMENT_ID_": "b4QjnKA0NJEuRTSn3pv4",
+    "type": "support_report",
+    "createdAt": "2026-03-06T23:19:49.779552+00:00",
+    "targetId": "uMAjxlB9ZL96ZzF9LMWh",
+    "status": "pending",
+    "notes": "New support report"
+  },
+  {
+    "_DOCUMENT_ID_": "jUZhrBs8X9W5wseU5tkZ",
+    "type": "license_review",
+    "createdAt": "2026-04-20T20:27:51.137838+00:00",
+    "updatedAt": "2026-04-20T20:29:12.258323+00:00",
+    "targetId": "KxxTKZLmlpRRge4B5g8ABiGhgxF3",
+    "status": "approved",
+    "notes": "Auto-verification needs review"
+  },
+  {
+    "_DOCUMENT_ID_": "oCW3MzQfwQLuJ5YIs8Ke",
+    "createdAt": "2026-03-14T20:28:14.805326+00:00",
+    "type": "license_review",
+    "updatedAt": "2026-03-14T20:54:44.381892Z",
+    "targetId": "foX4ueJLl2UDi2H556YQZ81Vjhv1",
+    "status": "approved",
+    "notes": "Auto-verification needs review"
+  },
+  {
+    "_DOCUMENT_ID_": "oKnXjAez59SbpNrbqWE5",
+    "createdAt": "2026-03-03T00:38:42.617737+00:00",
+    "type": "support_report",
+    "targetId": "w1BOwCy6rI7wzuPu50ja",
+    "status": "pending",
+    "notes": "New support report"
+  },
+  {
+    "_DOCUMENT_ID_": "pFYRE3oNyKuN0cTeCKDi",
+    "createdAt": "2026-03-08T18:04:06.794949+00:00",
+    "type": "support_report",
+    "updatedAt": "2026-03-08T18:13:35.974781Z",
+    "targetId": "C5V64n4y5402x4aI1Mnp",
+    "status": "approved",
+    "notes": "New support report"
+  },
+  {
+    "_DOCUMENT_ID_": "pthDw4KVw7mEcxhzMh9P",
+    "createdAt": "2026-03-08T18:00:54.652298+00:00",
+    "type": "support_report",
+    "targetId": "AoZ5uRE3ZNhcrsfmpLzT",
+    "status": "pending",
+    "notes": "New support report"
+  },
+  {
+    "_DOCUMENT_ID_": "qG7uILSrBzJTW9LuPaT1",
+    "createdAt": "2026-03-14T21:23:51.831750+00:00",
+    "type": "license_review",
+    "updatedAt": "2026-03-14T21:24:43.992071+00:00",
+    "targetId": "I347hV7AgKYQ1syxKqbnzdhyYfu1",
+    "status": "approved",
+    "notes": "Auto-verification needs review"
+  },
+  {
+    "_DOCUMENT_ID_": "x7BzVvIBmLesj3Xfe7me",
+    "createdAt": "2026-03-02T21:23:52.577348+00:00",
+    "type": "license_review",
+    "targetId": "LvmAaken8INWYOImHElYnj1fB272",
+    "status": "pending",
+    "notes": "Auto-verification needs review"
+  },
+  {
+    "_DOCUMENT_ID_": "y84NIuCS8aGEozQArGmb",
+    "type": "support_report",
+    "createdAt": "2026-03-19T00:07:53.953702+00:00",
+    "updatedAt": "2026-03-19T00:12:50.390153+00:00",
+    "targetId": "EMBPkzziZnleT4QJ18LZ",
+    "status": "approved",
+    "notes": "New support report"
+  }
+]

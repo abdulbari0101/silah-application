@@ -1,10 +1,15 @@
 import 'package:phone_numbers_parser/phone_numbers_parser.dart';
 
 extension StringPhoneUtils on String {
-  String normalizePhone() => PhoneUtils.normalizeToLocalNsn(this);
+  String normalizePhone() {
+    final western = replaceArabicDigits();
+    final trimmed = western.trim();
+    return trimmed.startsWith('0') ? trimmed.substring(1) : trimmed;
+  }
 
   /// Replaces Arabic-Indic digits (٠١٢٣٤٥٦٧٨٩) with Western digits (0-9).
-  String replaceArabicDigits() => _arabicToWestern[this] ?? _replaceArabic(this);
+  String replaceArabicDigits() =>
+      _arabicToWestern[this] ?? _replaceArabic(this);
 
   String toPrettyPhone({IsoCode? country, bool intl = true}) =>
       formatPhoneNumber(this, country: country, international: intl);
@@ -36,64 +41,37 @@ String _replaceArabic(String input) => input
     .replaceAll('٩', '9');
 
 class PhoneUtils {
-  static const IsoCode localIso = IsoCode.SA;
-  static const String _ksaCountryCode = '966';
-  static const int _ksaMobileNsnLength = 9;
+  static final List<String> _turkeyPrefixes = ['5 , 05']; // +90
+  static final List<String> _yemenPrefixes = [
+    '77',
+    '78',
+    '71',
+    '73',
+    '70',
+  ]; // +967
+  static final List<String> _saudiPrefixes = ['5', '05']; // +966
 
-  static final List<String> _ksaPrefixes = ['05', '5', '+9665'];
-  static final RegExp _ksaMobileRegExp = RegExp(r'^5');
+  static final RegExp _turkeyRegExp = RegExp(r'^0?5'); // 5… or 05…
+  static final RegExp _yemenRegExp = RegExp(r'^0?(77|78|71|73|70)');
+  static final RegExp _saudiRegExp = RegExp(r'^0?5'); // 5… or 05…
+
+  /// Combined regex: matches Yemen OR Saudi prefixes.
+  static final RegExp _combinedRegExp = RegExp(r'^0?(77|78|71|73|70|5)');
 
   /// Returns the correct RegExp based on the active server.
-  static RegExp get localPrefixRegExp => _ksaMobileRegExp;
+  static RegExp get localPrefixRegExp => _combinedRegExp;
 
   /// List of valid prefixes for the active server.
-  static List<String> get localPrefixes => _ksaPrefixes;
+  static List<String> get localPrefixes => [
+    ..._yemenPrefixes,
+    ..._saudiPrefixes,
+  ];
 
   /// Comma separated prefixes for error messages.
   static String get localPrefixesString => localPrefixes.join(', ');
 
-  static String normalizeToLocalNsn(String phone) {
-    final western = phone.replaceArabicDigits();
-    final digits = western.replaceAll(RegExp(r'\D'), '');
-    if (digits.isEmpty) return digits;
-
-    var normalized = digits;
-    if (normalized.startsWith('00')) {
-      normalized = normalized.substring(2);
-    }
-    if (normalized.startsWith(_ksaCountryCode)) {
-      normalized = normalized.substring(_ksaCountryCode.length);
-    }
-    if (normalized.startsWith('0')) {
-      normalized = normalized.substring(1);
-    }
-    return normalized;
-  }
-
   static bool hasValidPrefix(String phone) =>
-      localPrefixRegExp.hasMatch(normalizeToLocalNsn(phone));
-
-  static bool hasValidLength(String phone) =>
-      normalizeToLocalNsn(phone).length == _ksaMobileNsnLength;
-
-  static bool isValidMobile(String phone) {
-    final parsed = _tryParse(phone);
-    return parsed?.isValid(type: PhoneNumberType.mobile) ?? false;
-  }
-
-  static PhoneNumber? _tryParse(String phone) {
-    final normalized = phone.replaceArabicDigits().trim();
-    if (normalized.isEmpty) return null;
-    try {
-      return PhoneNumber.parse(
-        normalized,
-        callerCountry: localIso,
-        destinationCountry: localIso,
-      );
-    } catch (_) {
-      return null;
-    }
-  }
+      localPrefixRegExp.hasMatch(phone.normalizePhone());
 }
 
 String formatPhoneNumber(

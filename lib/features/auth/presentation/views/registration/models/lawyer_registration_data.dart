@@ -23,7 +23,7 @@ class LawyerProfessionalInfo {
   final List<LegalSpecializationEntity> legalFields;
   final String city;
   final String? cityId;
-  final String? areaId;
+  final String? countryId;
   final String workplace;
   final String? workDestinationId;
   final String officeName;
@@ -34,7 +34,7 @@ class LawyerProfessionalInfo {
     required this.legalFields,
     required this.city,
     this.cityId,
-    this.areaId,
+    this.countryId,
     required this.workplace,
     this.workDestinationId,
     required this.officeName,

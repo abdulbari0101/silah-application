@@ -16,7 +16,7 @@ from app.firebase import firestore_client  # noqa: E402
 COLLECTION_MAP = {
     "genders": "genders",
     "cities": "cities",
-    "areas": "areas",
+    "countries": "countries",
     "workDestinations": "work_destinations",
 }
 

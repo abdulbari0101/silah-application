@@ -1,0 +1,90 @@
+[
+  {
+    "_DOCUMENT_ID_": "AoZ5uRE3ZNhcrsfmpLzT",
+    "reporterUid": "1bvGvYARnCf2AeStRUetvTtnskj2",
+    "subject": "أرسل مشكلتك",
+    "updatedAt": "2026-03-08T18:00:54.453888+00:00",
+    "createdAt": "2026-03-08T18:00:54.453888+00:00",
+    "details": "التطبيق سيئ جدا",
+    "status": "open",
+    "role": "user",
+    "adminNotes": null
+  },
+  {
+    "_DOCUMENT_ID_": "C5V64n4y5402x4aI1Mnp",
+    "reporterUid": "1bvGvYARnCf2AeStRUetvTtnskj2",
+    "subject": "أرسل مشكلتك",
+    "updatedAt": "2026-03-08T18:04:06.551823+00:00",
+    "createdAt": "2026-03-08T18:04:06.551823+00:00",
+    "details": "لدي مشكلة في رفع الصور",
+    "status": "open",
+    "role": "user",
+    "adminNotes": null
+  },
+  {
+    "_DOCUMENT_ID_": "EMBPkzziZnleT4QJ18LZ",
+    "reporterUid": "AMfmJOmTINXY1wmWvb6cMIRinIy2",
+    "subject": "أرسل مشكلتك",
+    "updatedAt": "2026-03-19T00:12:50.390153+00:00",
+    "createdAt": "2026-03-19T00:07:53.777381+00:00",
+    "details": "لدي مشكله في التوثييق",
+    "role": "lawyer",
+    "adminNotes": null,
+    "status": "resolved"
+  },
+  {
+    "_DOCUMENT_ID_": "HW3RU4dzJX3HkVzo0hju",
+    "reporterUid": "ZYPrKExvziWyATadG053ahvMMhj2",
+    "updatedAt": "2026-03-07T13:21:02.994792+00:00",
+    "subject": "أرسل مشكلتك",
+    "createdAt": "2026-03-07T13:21:02.994792+00:00",
+    "details": "هاي",
+    "status": "open",
+    "role": "user",
+    "adminNotes": null
+  },
+  {
+    "_DOCUMENT_ID_": "Jvudby0BaQ4Zzfy0FnW1",
+    "reporterUid": "ZYPrKExvziWyATadG053ahvMMhj2",
+    "updatedAt": "2026-03-07T13:20:47.328861+00:00",
+    "subject": "أرسل مشكلتك",
+    "createdAt": "2026-03-07T13:20:47.328861+00:00",
+    "details": "لدي مشكلة في تسجيل الدخول",
+    "status": "open",
+    "role": "user",
+    "adminNotes": null
+  },
+  {
+    "_DOCUMENT_ID_": "ctjY94GJCbU5AVP24ZIz",
+    "reporterUid": "PcgIcK6usLemgDvh5pfKXE6lwZY2",
+    "subject": "أرسل مشكلتك",
+    "updatedAt": "2026-03-19T00:43:46.836672+00:00",
+    "createdAt": "2026-03-19T00:41:44.993941+00:00",
+    "details": "هاي وث",
+    "role": "lawyer",
+    "adminNotes": null,
+    "status": "resolved"
+  },
+  {
+    "_DOCUMENT_ID_": "uMAjxlB9ZL96ZzF9LMWh",
+    "reporterUid": "1bvGvYARnCf2AeStRUetvTtnskj2",
+    "updatedAt": "2026-03-06T23:19:49.568579+00:00",
+    "subject": "أرسل مشكلتك",
+    "createdAt": "2026-03-06T23:19:49.568579+00:00",
+    "details": "رساله جديد",
+    "status": "open",
+    "role": "user",
+    "adminNotes": null
+  },
+  {
+    "_DOCUMENT_ID_": "w1BOwCy6rI7wzuPu50ja",
+    "reporterUid": "hBRC4oX8xGaMeIXMYv3cuHVdtZD2",
+    "subject": "أرسل مشكلتك",
+    "updatedAt": "2026-03-03T00:38:41.319617+00:00",
+    "createdAt": "2026-03-03T00:38:41.319617+00:00",
+    "details": "sidfj;alsjflksfj;",
+    "role": "lawyer",
+    "adminNotes": null,
+    "status": "open"
+  }
+]

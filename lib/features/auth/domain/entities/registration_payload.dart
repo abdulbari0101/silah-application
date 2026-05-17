@@ -21,7 +21,7 @@ class RegistrationPayload with RegistrationPayloadMappable {
   final List<String>? legalFieldIds;
   final String? city;
   final String? cityId;
-  final String? areaId;
+  final String? countryId;
   final String? workplace;
   final String? workDestinationId;
   final String? officeName;
@@ -43,7 +43,7 @@ class RegistrationPayload with RegistrationPayloadMappable {
     this.legalFieldIds,
     this.city,
     this.cityId,
-    this.areaId,
+    this.countryId,
     this.workplace,
     this.workDestinationId,
     this.officeName,

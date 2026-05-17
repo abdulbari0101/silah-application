@@ -6,8 +6,8 @@ import 'package:silah_app/features/lookups/domain/entities/lookup_item_entity.da
 
 abstract class LookupsRemoteDataSource {
   Future<List<LookupItemEntity>> fetchGenders();
-  Future<List<LookupItemEntity>> fetchAreas();
-  Future<List<LookupItemEntity>> fetchCities({String? areaId});
+  Future<List<LookupItemEntity>> fetchcountries();
+  Future<List<LookupItemEntity>> fetchCities({String? countryId});
   Future<List<LookupItemEntity>> fetchWorkDestinations();
 }
 
@@ -24,17 +24,18 @@ class LookupsRemoteDataSourceImpl implements LookupsRemoteDataSource {
   Future<List<LookupItemEntity>> fetchGenders() => _fetchCollection('genders');
 
   @override
-  Future<List<LookupItemEntity>> fetchAreas() => _fetchCollection('areas');
+  Future<List<LookupItemEntity>> fetchcountries() =>
+      _fetchCollection('countries');
 
   @override
-  Future<List<LookupItemEntity>> fetchCities({String? areaId}) {
+  Future<List<LookupItemEntity>> fetchCities({String? countryId}) {
     return firebaseCall<List<LookupItemEntity>>(
       method: 'LookupsRemoteDataSource.fetchCities',
       logger: logger,
       call: () async {
         Query<Map<String, dynamic>> query = firestore.collection('cities');
-        if (areaId != null && areaId.trim().isNotEmpty) {
-          query = query.where('areaId', isEqualTo: areaId.trim());
+        if (countryId != null && countryId.trim().isNotEmpty) {
+          query = query.where('countryId', isEqualTo: countryId.trim());
         }
         final snapshot = await query.get();
         return snapshot.docs.map(_mapDoc).toList();
@@ -64,7 +65,7 @@ class LookupsRemoteDataSourceImpl implements LookupsRemoteDataSource {
       nameAr: data['nameAr'] as String?,
       nameEn: data['nameEn'] as String?,
       iconUrl: data['iconUrl'] as String?,
-      areaId: data['areaId'] as String?,
+      countryId: data['countryId'] as String?,
     ).toEntity();
   }
 }

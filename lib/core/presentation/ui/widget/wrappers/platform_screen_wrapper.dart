@@ -7,7 +7,7 @@ import 'package:silah_app/core/presentation/ui/widget/appbar/android_app_bar.dar
 /// for both iOS and Android.
 ///
 /// - Provides default app bars when a [title] is supplied and no custom bars are set.
-/// - Automatically handles safe areas and input focus dismissal.
+/// - Automatically handles safe countries and input focus dismissal.
 class PlatformScreenWrapper extends StatelessWidget {
   /// Main content widget for iOS.
   final Widget? iosBody;

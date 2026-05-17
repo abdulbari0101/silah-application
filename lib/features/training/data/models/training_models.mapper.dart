@@ -54,9 +54,10 @@ class TrainingApplicationCreateRequestModelMapper
   static String? _$city(TrainingApplicationCreateRequestModel v) => v.city;
   static const Field<TrainingApplicationCreateRequestModel, String> _f$city =
       Field('city', _$city, opt: true);
-  static String? _$areaId(TrainingApplicationCreateRequestModel v) => v.areaId;
-  static const Field<TrainingApplicationCreateRequestModel, String> _f$areaId =
-      Field('areaId', _$areaId, opt: true);
+  static String? _$countryId(TrainingApplicationCreateRequestModel v) =>
+      v.countryId;
+  static const Field<TrainingApplicationCreateRequestModel, String>
+  _f$countryId = Field('countryId', _$countryId, opt: true);
   static int? _$graduationYear(TrainingApplicationCreateRequestModel v) =>
       v.graduationYear;
   static const Field<TrainingApplicationCreateRequestModel, int>
@@ -72,7 +73,7 @@ class TrainingApplicationCreateRequestModelMapper
     #faculty: _f$faculty,
     #cityId: _f$cityId,
     #city: _f$city,
-    #areaId: _f$areaId,
+    #countryId: _f$countryId,
     #graduationYear: _f$graduationYear,
   };
   @override
@@ -88,7 +89,7 @@ class TrainingApplicationCreateRequestModelMapper
       faculty: data.dec(_f$faculty),
       cityId: data.dec(_f$cityId),
       city: data.dec(_f$city),
-      areaId: data.dec(_f$areaId),
+      countryId: data.dec(_f$countryId),
       graduationYear: data.dec(_f$graduationYear),
     );
   }
@@ -182,7 +183,7 @@ abstract class TrainingApplicationCreateRequestModelCopyWith<
     String? faculty,
     String? cityId,
     String? city,
-    String? areaId,
+    String? countryId,
     int? graduationYear,
   });
   TrainingApplicationCreateRequestModelCopyWith<$R2, $In, $Out2>
@@ -216,7 +217,7 @@ class _TrainingApplicationCreateRequestModelCopyWithImpl<$R, $Out>
     Object? faculty = $none,
     Object? cityId = $none,
     Object? city = $none,
-    Object? areaId = $none,
+    Object? countryId = $none,
     Object? graduationYear = $none,
   }) => $apply(
     FieldCopyWithData({
@@ -228,7 +229,7 @@ class _TrainingApplicationCreateRequestModelCopyWithImpl<$R, $Out>
       if (faculty != $none) #faculty: faculty,
       if (cityId != $none) #cityId: cityId,
       if (city != $none) #city: city,
-      if (areaId != $none) #areaId: areaId,
+      if (countryId != $none) #countryId: countryId,
       if (graduationYear != $none) #graduationYear: graduationYear,
     }),
   );
@@ -243,7 +244,7 @@ class _TrainingApplicationCreateRequestModelCopyWithImpl<$R, $Out>
         faculty: data.get(#faculty, or: $value.faculty),
         cityId: data.get(#cityId, or: $value.cityId),
         city: data.get(#city, or: $value.city),
-        areaId: data.get(#areaId, or: $value.areaId),
+        countryId: data.get(#countryId, or: $value.countryId),
         graduationYear: data.get(#graduationYear, or: $value.graduationYear),
       );
 

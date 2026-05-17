@@ -85,7 +85,7 @@ class AuthRepoImpl implements AuthRepo {
             .toList();
         final city = payload.city?.trim();
         final cityId = payload.cityId?.trim();
-        final areaId = payload.areaId?.trim();
+        final countryId = payload.countryId?.trim();
         final workplace = payload.workplace?.trim();
         final workDestinationId = payload.workDestinationId?.trim();
         final officeName = payload.officeName?.trim();
@@ -126,7 +126,7 @@ class AuthRepoImpl implements AuthRepo {
             'legalFieldIds': legalFieldIds,
             'city': city ?? cityId ?? '',
             'cityId': cityId,
-            'areaId': areaId,
+            'countryId': countryId,
             'workplace': workplace ?? workDestinationId ?? '',
             'workDestinationId': workDestinationId,
             'officeName': officeName,

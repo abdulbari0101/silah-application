@@ -83,7 +83,7 @@ class _LawyerLicenseVerificationFormState
       legalFieldIds: legalFieldIds.isNotEmpty ? legalFieldIds : null,
       city: widget.professionalInfo.city,
       cityId: widget.professionalInfo.cityId,
-      areaId: widget.professionalInfo.areaId,
+      countryId: widget.professionalInfo.countryId,
       workplace: widget.professionalInfo.workplace,
       workDestinationId: widget.professionalInfo.workDestinationId,
       officeName: widget.professionalInfo.officeName,

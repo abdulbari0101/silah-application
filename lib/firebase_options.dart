@@ -30,10 +30,7 @@ class DefaultFirebaseOptions {
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -46,32 +43,45 @@ class DefaultFirebaseOptions {
     }
   }
 
-  /// Web FirebaseOptions (silah-app-9acb6)
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyA4DrEz2NzlvxFVPEulE_PXm9IYkfN-eYA',
-    authDomain: 'silah-app-9acb6.firebaseapp.com',
-    projectId: 'silah-app-9acb6',
-    storageBucket: 'silah-app-9acb6.firebasestorage.app',
-    messagingSenderId: '330197769102',
-    appId: '1:330197769102:web:9f34f333b7d0bcd34de2df',
-    measurementId: 'G-970DHKL9G1',
+    apiKey: 'AIzaSyDOqj9jbfffKXXzkXlHqqwUO998ErDh_4M',
+    appId: '1:373457574991:web:e5fd18c3655977b3829e3a',
+    messagingSenderId: '373457574991',
+    projectId: 'silah-application',
+    authDomain: 'silah-application.firebaseapp.com',
+    storageBucket: 'silah-application.firebasestorage.app',
+    measurementId: 'G-8B0BBEWLXQ',
   );
 
-  // Mobile FirebaseOptions (silah-app-9acb6)
+  /// Web FirebaseOptions (silah-application)
+
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDy6HZxbBWQXHQw2GGAYN0uUMTXY_3BEY8',
-    appId: '1:330197769102:android:ea9147f7cff63ead4de2df',
-    messagingSenderId: '330197769102',
-    projectId: 'silah-app-9acb6',
-    storageBucket: 'silah-app-9acb6.firebasestorage.app',
+    apiKey: 'AIzaSyAm4rreirfZ6QMmVH4UhBIDd_mtsnPFlAo',
+    appId: '1:373457574991:android:e265d593e892da8b829e3a',
+    messagingSenderId: '373457574991',
+    projectId: 'silah-application',
+    storageBucket: 'silah-application.firebasestorage.app',
   );
+
+  // Mobile FirebaseOptions (silah-application)
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAB827UqWeIlP2SkZFLsQwiWPglwXCkuqk',
-    appId: '1:330197769102:ios:31251950f8a783384de2df',
-    messagingSenderId: '330197769102',
-    projectId: 'silah-app-9acb6',
-    storageBucket: 'silah-app-9acb6.firebasestorage.app',
-    iosBundleId: 'com.example.silahApp',
+    apiKey: 'AIzaSyC_U6Xv8Usfq7LkfT-OfQ4eWJG0ju3myCM',
+    appId: '1:373457574991:ios:463612783c06579e829e3a',
+    messagingSenderId: '373457574991',
+    projectId: 'silah-application',
+    storageBucket: 'silah-application.firebasestorage.app',
+    iosBundleId: 'com.appari.silah-application',
   );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyDOqj9jbfffKXXzkXlHqqwUO998ErDh_4M',
+    appId: '1:373457574991:web:2de68530d07837c8829e3a',
+    messagingSenderId: '373457574991',
+    projectId: 'silah-application',
+    authDomain: 'silah-application.firebaseapp.com',
+    storageBucket: 'silah-application.firebasestorage.app',
+    measurementId: 'G-CHBWNC4EJN',
+  );
+
 }

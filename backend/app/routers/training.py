@@ -191,7 +191,7 @@ def create_training_application(
         "faculty": payload.faculty,
         "cityId": payload.cityId,
         "city": payload.city,
-        "areaId": payload.areaId,
+        "countryId": payload.countryId,
         "area": payload.area,
         "graduationYear": payload.graduationYear,
         "cvUrl": payload.cvUrl,

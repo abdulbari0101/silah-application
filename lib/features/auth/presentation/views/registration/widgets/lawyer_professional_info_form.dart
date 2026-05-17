@@ -80,7 +80,7 @@ class _LawyerProfessionalInfoFormState
         ),
         city: _displayLookup(selectedCity),
         cityId: selectedCity.id,
-        areaId: selectedCity.areaId,
+        countryId: selectedCity.countryId,
         workplace: _displayLookup(selectedWorkplace),
         workDestinationId: selectedWorkplace.id,
         officeName: _officeNameCtrl.text.trim(),

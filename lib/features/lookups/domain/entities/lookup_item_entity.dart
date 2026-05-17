@@ -8,13 +8,13 @@ class LookupItemEntity with LookupItemEntityMappable {
   final String? nameAr;
   final String? nameEn;
   final String? iconUrl;
-  final String? areaId;
+  final String? countryId;
 
   const LookupItemEntity({
     this.id,
     this.nameAr,
     this.nameEn,
     this.iconUrl,
-    this.areaId,
+    this.countryId,
   });
 }

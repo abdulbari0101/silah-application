@@ -322,7 +322,7 @@ class SpecificationsRemoteDataSourceImpl
       legalFieldIds: legalFieldIds,
       city: (cityName != null && cityName.isNotEmpty) ? cityName : cityId,
       cityId: cityId,
-      areaId: (data['areaId'] as String?)?.trim(),
+      countryId: (data['countryId'] as String?)?.trim(),
       workplace: (workplaceName != null && workplaceName.isNotEmpty)
           ? workplaceName
           : workDestinationId,

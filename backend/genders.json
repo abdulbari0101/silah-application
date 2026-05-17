@@ -1,0 +1,16 @@
+[
+  {
+    "_DOCUMENT_ID_": "female",
+    "iconUrl": "",
+    "id": "female",
+    "nameAr": "أنثى",
+    "nameEn": "Female"
+  },
+  {
+    "_DOCUMENT_ID_": "male",
+    "iconUrl": "",
+    "id": "male",
+    "nameAr": "ذكر",
+    "nameEn": "Male"
+  }
+]

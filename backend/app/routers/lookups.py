@@ -43,9 +43,9 @@ def get_cities() -> dict:
     return success_response({"items": _fetch_collection("cities")})
 
 
-@router.get("/areas")
-def get_areas() -> dict:
-    return success_response({"items": _fetch_collection("areas")})
+@router.get("/countries")
+def get_countries() -> dict:
+    return success_response({"items": _fetch_collection("countries")})
 
 
 @router.get("/work-destinations")

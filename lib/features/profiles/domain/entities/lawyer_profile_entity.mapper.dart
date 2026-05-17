@@ -63,10 +63,10 @@ class LawyerProfileEntityMapper extends ClassMapperBase<LawyerProfileEntity> {
     _$cityId,
     opt: true,
   );
-  static String? _$areaId(LawyerProfileEntity v) => v.areaId;
-  static const Field<LawyerProfileEntity, String> _f$areaId = Field(
-    'areaId',
-    _$areaId,
+  static String? _$countryId(LawyerProfileEntity v) => v.countryId;
+  static const Field<LawyerProfileEntity, String> _f$countryId = Field(
+    'countryId',
+    _$countryId,
     opt: true,
   );
   static String? _$workplace(LawyerProfileEntity v) => v.workplace;
@@ -126,7 +126,7 @@ class LawyerProfileEntityMapper extends ClassMapperBase<LawyerProfileEntity> {
     #legalFieldIds: _f$legalFieldIds,
     #city: _f$city,
     #cityId: _f$cityId,
-    #areaId: _f$areaId,
+    #countryId: _f$countryId,
     #workplace: _f$workplace,
     #officeName: _f$officeName,
     #workDestinationId: _f$workDestinationId,
@@ -147,7 +147,7 @@ class LawyerProfileEntityMapper extends ClassMapperBase<LawyerProfileEntity> {
       legalFieldIds: data.dec(_f$legalFieldIds),
       city: data.dec(_f$city),
       cityId: data.dec(_f$cityId),
-      areaId: data.dec(_f$areaId),
+      countryId: data.dec(_f$countryId),
       workplace: data.dec(_f$workplace),
       officeName: data.dec(_f$officeName),
       workDestinationId: data.dec(_f$workDestinationId),
@@ -239,7 +239,7 @@ abstract class LawyerProfileEntityCopyWith<
     List<String>? legalFieldIds,
     String? city,
     String? cityId,
-    String? areaId,
+    String? countryId,
     String? workplace,
     String? officeName,
     String? workDestinationId,
@@ -288,7 +288,7 @@ class _LawyerProfileEntityCopyWithImpl<$R, $Out>
     Object? legalFieldIds = $none,
     Object? city = $none,
     Object? cityId = $none,
-    Object? areaId = $none,
+    Object? countryId = $none,
     Object? workplace = $none,
     Object? officeName = $none,
     Object? workDestinationId = $none,
@@ -305,7 +305,7 @@ class _LawyerProfileEntityCopyWithImpl<$R, $Out>
       if (legalFieldIds != $none) #legalFieldIds: legalFieldIds,
       if (city != $none) #city: city,
       if (cityId != $none) #cityId: cityId,
-      if (areaId != $none) #areaId: areaId,
+      if (countryId != $none) #countryId: countryId,
       if (workplace != $none) #workplace: workplace,
       if (officeName != $none) #officeName: officeName,
       if (workDestinationId != $none) #workDestinationId: workDestinationId,
@@ -324,7 +324,7 @@ class _LawyerProfileEntityCopyWithImpl<$R, $Out>
     legalFieldIds: data.get(#legalFieldIds, or: $value.legalFieldIds),
     city: data.get(#city, or: $value.city),
     cityId: data.get(#cityId, or: $value.cityId),
-    areaId: data.get(#areaId, or: $value.areaId),
+    countryId: data.get(#countryId, or: $value.countryId),
     workplace: data.get(#workplace, or: $value.workplace),
     officeName: data.get(#officeName, or: $value.officeName),
     workDestinationId: data.get(

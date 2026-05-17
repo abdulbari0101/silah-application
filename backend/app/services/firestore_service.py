@@ -141,7 +141,7 @@ def _serialize_lawyer_profile(
         "legalFieldIds": legal_field_ids,
         "city": city_name or city_id,
         "cityId": city_id,
-        "areaId": str(data.get("areaId") or "").strip() or None,
+        "countryId": str(data.get("countryId") or "").strip() or None,
         "workplace": workplace_name or work_destination_id,
         "workDestinationId": work_destination_id,
         "yearsOfExperience": _parse_int(

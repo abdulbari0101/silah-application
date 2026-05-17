@@ -26,7 +26,7 @@ class LawyerProfilePayload(BaseModel):
     legalFieldIds: list[str] = Field(default_factory=list)
     city: Optional[str] = None
     cityId: Optional[str] = None
-    areaId: Optional[str] = None
+    countryId: Optional[str] = None
     workplace: Optional[str] = None
     workDestinationId: Optional[str] = None
     yearsOfExperience: Optional[int] = None
@@ -119,7 +119,7 @@ class TrainingApplicationCreateRequest(BaseModel):
     faculty: Optional[str] = None
     cityId: Optional[str] = None
     city: Optional[str] = None
-    areaId: Optional[str] = None
+    countryId: Optional[str] = None
     area: Optional[str] = None
     graduationYear: Optional[int] = None
 

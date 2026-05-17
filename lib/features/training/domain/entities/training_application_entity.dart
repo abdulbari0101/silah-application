@@ -14,7 +14,7 @@ class TrainingApplicationEntity with TrainingApplicationEntityMappable {
   final String? faculty;
   final String? cityId;
   final String? city;
-  final String? areaId;
+  final String? countryId;
   final int? graduationYear;
   final String? cvUrl;
   final TrainingApplicationStatus status;
@@ -29,7 +29,7 @@ class TrainingApplicationEntity with TrainingApplicationEntityMappable {
     this.faculty,
     this.cityId,
     this.city,
-    this.areaId,
+    this.countryId,
     this.graduationYear,
     this.cvUrl,
     this.status = TrainingApplicationStatus.pending,

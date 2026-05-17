@@ -17,7 +17,7 @@ class TrainingApplicationCreateRequestModel
   final String? faculty;
   final String? cityId;
   final String? city;
-  final String? areaId;
+  final String? countryId;
   final int? graduationYear;
 
   const TrainingApplicationCreateRequestModel({
@@ -29,7 +29,7 @@ class TrainingApplicationCreateRequestModel
     this.faculty,
     this.cityId,
     this.city,
-    this.areaId,
+    this.countryId,
     this.graduationYear,
   });
 
@@ -45,7 +45,7 @@ class TrainingApplicationCreateRequestModel
       faculty: entity.faculty,
       cityId: entity.cityId ?? entity.city,
       city: entity.city,
-      areaId: entity.areaId,
+      countryId: entity.countryId,
       graduationYear: entity.graduationYear,
     );
   }

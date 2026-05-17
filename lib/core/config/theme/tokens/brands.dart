@@ -4,13 +4,13 @@ import 'package:flutter/material.dart';
 import 'brand_tokens.dart';
 
 const silahBrandTokens = BrandTokens(
-  seed: Color(0xFF3C6F2F),
-  pageBg: Color(0xFFE9F2EB),
-  card: Color(0xFFD9E8DC),
-  bottomSheetBg: Color(0xFFFBFDFB),
-  bottomNavBg: Color(0xFFFBFDFB),
-  fieldFill: Color(0xFFF2F4F4),
-  outline: Color(0xFFCADACD),
-  onSurface: Color(0xFF1F2A1B),
-  onSurfaceVariant: Color(0xFF5B6B5B),
+  seed: Color(0xFFAD312F),
+  pageBg: Color(0xFFFDF8F8),
+  card: Color(0xFFF6EBEB),
+  bottomSheetBg: Color(0xFFFFFFFF),
+  bottomNavBg: Color(0xFFFFFFFF),
+  fieldFill: Color(0xFFF5F0F0),
+  outline: Color(0xFFDAC7C6),
+  onSurface: Color(0xFF2C2D2E),
+  onSurfaceVariant: Color(0xFF6B5E5D),
 );

@@ -9,14 +9,14 @@ class LookupItemModel with LookupItemModelMappable {
   final String? nameAr;
   final String? nameEn;
   final String? iconUrl;
-  final String? areaId;
+  final String? countryId;
 
   const LookupItemModel({
     this.id,
     this.nameAr,
     this.nameEn,
     this.iconUrl,
-    this.areaId,
+    this.countryId,
   });
 
   LookupItemEntity toEntity() => LookupItemEntity(
@@ -24,6 +24,6 @@ class LookupItemModel with LookupItemModelMappable {
     nameAr: nameAr,
     nameEn: nameEn,
     iconUrl: iconUrl,
-    areaId: areaId,
+    countryId: countryId,
   );
 }

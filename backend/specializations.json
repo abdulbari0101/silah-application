@@ -1,0 +1,155 @@
+[
+  {
+    "_DOCUMENT_ID_": "administrative_law",
+    "iconUrl": null,
+    "order": 10,
+    "active": true,
+    "nameAr": "القضايا الإدارية",
+    "nameEn": "Administrative Law"
+  },
+  {
+    "_DOCUMENT_ID_": "civil_rights",
+    "iconUrl": null,
+    "order": 16,
+    "active": true,
+    "nameAr": "القضايا الحقوقية",
+    "nameEn": "Civil Rights"
+  },
+  {
+    "_DOCUMENT_ID_": "commercial_law",
+    "iconUrl": null,
+    "order": 2,
+    "active": true,
+    "nameAr": "القضايا التجارية",
+    "nameEn": "Commercial Law"
+  },
+  {
+    "_DOCUMENT_ID_": "criminal_law",
+    "iconUrl": null,
+    "order": 7,
+    "active": true,
+    "nameAr": "القضايا الجنائية",
+    "nameEn": "Criminal Law"
+  },
+  {
+    "_DOCUMENT_ID_": "cybercrime",
+    "iconUrl": null,
+    "order": 4,
+    "active": true,
+    "nameAr": "الجرائم المعلوماتية",
+    "nameEn": "Cybercrime"
+  },
+  {
+    "_DOCUMENT_ID_": "endowments_wills",
+    "iconUrl": null,
+    "order": 15,
+    "active": true,
+    "nameAr": "الأوقاف والوصايا",
+    "nameEn": "Endowments and Wills"
+  },
+  {
+    "_DOCUMENT_ID_": "enforcement_law",
+    "iconUrl": null,
+    "order": 17,
+    "active": true,
+    "nameAr": "قضايا التنفيذ",
+    "nameEn": "Enforcement Law"
+  },
+  {
+    "_DOCUMENT_ID_": "finance_law",
+    "iconUrl": null,
+    "order": 12,
+    "active": true,
+    "nameAr": "القضايا التمويلية",
+    "nameEn": "Finance Law"
+  },
+  {
+    "_DOCUMENT_ID_": "fraud",
+    "iconUrl": null,
+    "order": 14,
+    "active": true,
+    "nameAr": "النصب والاحتيال",
+    "nameEn": "Fraud"
+  },
+  {
+    "_DOCUMENT_ID_": "inheritance_division",
+    "iconUrl": null,
+    "order": 6,
+    "active": true,
+    "nameAr": "قسمة التركات",
+    "nameEn": "Inheritance Division"
+  },
+  {
+    "_DOCUMENT_ID_": "insurance_law",
+    "iconUrl": null,
+    "order": 11,
+    "active": true,
+    "nameAr": "القضايا التأمينية",
+    "nameEn": "Insurance Law"
+  },
+  {
+    "_DOCUMENT_ID_": "intellectual_property",
+    "iconUrl": null,
+    "order": 18,
+    "active": true,
+    "nameAr": "الملكية الفكرية",
+    "nameEn": "Intellectual Property"
+  },
+  {
+    "_DOCUMENT_ID_": "labor_disputes",
+    "iconUrl": null,
+    "order": 3,
+    "active": true,
+    "nameAr": "الخلافات العمالية",
+    "nameEn": "Labor Disputes"
+  },
+  {
+    "_DOCUMENT_ID_": "medical_malpractice",
+    "iconUrl": null,
+    "order": 8,
+    "active": true,
+    "nameAr": "الأخطاء الطبية",
+    "nameEn": "Medical Malpractice"
+  },
+  {
+    "_DOCUMENT_ID_": "najiz_consultations",
+    "iconUrl": null,
+    "order": 19,
+    "active": true,
+    "nameAr": "استشارات منصة ناجز",
+    "nameEn": "Najiz Platform Consultations"
+  },
+  {
+    "_DOCUMENT_ID_": "personal_status",
+    "order": 1,
+    "iconUrl": "https://firebasestorage.googleapis.com/v0/b/silah-application.firebasestorage.app/o/specializations%2Fpersonal_status%2Ficon_1772497677990.jpg?alt=media&token=4ed9723d-b464-4f58-a313-6136cc6a264e",
+    "active": true,
+    "updatedAt": "2026-03-03T00:28:03.528000+00:00",
+    "nameAr": "الأحوال الشخصية",
+    "nameEn": "Personal Status Law"
+  },
+  {
+    "_DOCUMENT_ID_": "real_estate_law",
+    "iconUrl": null,
+    "order": 5,
+    "active": true,
+    "nameAr": "القضايا العقارية",
+    "nameEn": "Real Estate Law"
+  },
+  {
+    "_DOCUMENT_ID_": "traffic_accidents",
+    "iconUrl": null,
+    "order": 13,
+    "active": true,
+    "nameAr": "حوادث مرورية",
+    "nameEn": "Traffic Accidents"
+  },
+  {
+    "_DOCUMENT_ID_": "zakat_tax",
+    "iconUrl": null,
+    "order": 9,
+    "active": true,
+    "nameAr": "الزكاة والضريبة",
+    "nameEn": "Zakat and Tax"
+  }
+]

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'firebase_options.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -167,21 +168,9 @@ Future<void> _lockOrientation() async {
 Future<void> _initFirebase() async {
   await _fatalStep('Firebase.initializeApp', () async {
     if (Firebase.apps.isEmpty) {
-      if (kIsWeb) {
-        await Firebase.initializeApp( 
-          options: const FirebaseOptions(
-            apiKey: "AIzaSyA4DrEz2NzlvxFVPEulE_PXm9IYkfN-eYA",
-            authDomain: "silah-app-9acb6.firebaseapp.com",
-            projectId: "silah-app-9acb6",
-            storageBucket: "silah-app-9acb6.firebasestorage.app",
-            messagingSenderId: "330197769102",
-            appId: "1:330197769102:web:9f34f333b7d0bcd34de2df",
-            measurementId: "G-970DHKL9G1",
-          ),
-        );
-      } else {
-        await Firebase.initializeApp();// تهيئة الفايربيس للجوال 
-      }
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
     }
   });
 }

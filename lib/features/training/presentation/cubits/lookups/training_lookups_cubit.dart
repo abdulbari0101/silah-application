@@ -13,7 +13,7 @@ part 'training_lookups_cubit.freezed.dart';
 class TrainingLookupsState with _$TrainingLookupsState {
   const factory TrainingLookupsState.loading() = _TrainingLookupsLoading;
   const factory TrainingLookupsState.ready({
-    required List<LookupItemEntity> areas,
+    required List<LookupItemEntity> countries,
     required List<LookupItemEntity> cities,
     LookupItemEntity? selectedArea,
     LookupItemEntity? selectedCity,
@@ -31,21 +31,21 @@ class TrainingLookupsCubit extends Cubit<TrainingLookupsState> {
   Future<void> load() async {
     emit(const TrainingLookupsState.loading());
 
-    final areasResult = await repository.fetchAreas();
-    await areasResult.fold(
+    final countriesResult = await repository.fetchcountries();
+    await countriesResult.fold(
       (failure) async =>
           emit(TrainingLookupsState.failure(message: _mapFailure(failure))),
-      (areas) async {
-        final firstArea = areas.isNotEmpty ? areas.first : null;
+      (countries) async {
+        final firstArea = countries.isNotEmpty ? countries.first : null;
         final citiesResult = await repository.fetchCities(
-          areaId: firstArea?.id,
+          countryId: firstArea?.id,
         );
         citiesResult.fold(
           (failure) =>
               emit(TrainingLookupsState.failure(message: _mapFailure(failure))),
           (cities) => emit(
             TrainingLookupsState.ready(
-              areas: areas,
+              countries: countries,
               cities: cities,
               selectedArea: firstArea,
               selectedCity: cities.isNotEmpty ? cities.first : null,
@@ -58,8 +58,8 @@ class TrainingLookupsCubit extends Cubit<TrainingLookupsState> {
 
   Future<void> selectArea(LookupItemEntity? area) async {
     final current = state.maybeWhen(
-      ready: (areas, cities, selectedArea, selectedCity) => _ReadyData(
-        areas: areas,
+      ready: (countries, cities, selectedArea, selectedCity) => _ReadyData(
+        countries: countries,
         cities: cities,
         selectedArea: selectedArea,
         selectedCity: selectedCity,
@@ -71,20 +71,22 @@ class TrainingLookupsCubit extends Cubit<TrainingLookupsState> {
     final resolvedArea = area;
     emit(
       TrainingLookupsState.ready(
-        areas: current.areas,
+        countries: current.countries,
         cities: const [],
         selectedArea: resolvedArea,
         selectedCity: null,
       ),
     );
 
-    final citiesResult = await repository.fetchCities(areaId: resolvedArea?.id);
+    final citiesResult = await repository.fetchCities(
+      countryId: resolvedArea?.id,
+    );
     citiesResult.fold(
       (failure) =>
           emit(TrainingLookupsState.failure(message: _mapFailure(failure))),
       (cities) => emit(
         TrainingLookupsState.ready(
-          areas: current.areas,
+          countries: current.countries,
           cities: cities,
           selectedArea: resolvedArea,
           selectedCity: cities.isNotEmpty ? cities.first : null,
@@ -95,9 +97,9 @@ class TrainingLookupsCubit extends Cubit<TrainingLookupsState> {
 
   void selectCity(LookupItemEntity? city) {
     state.maybeWhen(
-      ready: (areas, cities, selectedArea, _) => emit(
+      ready: (countries, cities, selectedArea, _) => emit(
         TrainingLookupsState.ready(
-          areas: areas,
+          countries: countries,
           cities: cities,
           selectedArea: selectedArea,
           selectedCity: city,
@@ -118,13 +120,13 @@ class TrainingLookupsCubit extends Cubit<TrainingLookupsState> {
 }
 
 class _ReadyData {
-  final List<LookupItemEntity> areas;
+  final List<LookupItemEntity> countries;
   final List<LookupItemEntity> cities;
   final LookupItemEntity? selectedArea;
   final LookupItemEntity? selectedCity;
 
   _ReadyData({
-    required this.areas,
+    required this.countries,
     required this.cities,
     required this.selectedArea,
     required this.selectedCity,
