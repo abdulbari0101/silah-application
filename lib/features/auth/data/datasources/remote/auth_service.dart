@@ -38,8 +38,9 @@ class AuthService {
     );
 
     final user = _requireUser(credential.user, Strings.err_login.tr());
+    final didSyncRole = await _syncRoleClaim(user);
     final profile = await _fetchProfile(user.uid);
-    final idToken = await _safeIdToken(user);
+    final idToken = await _safeIdToken(user, forceRefresh: didSyncRole);
 
     AppLogger().networkInfo("token = $idToken", tag: "signIn");
 

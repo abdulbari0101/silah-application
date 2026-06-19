@@ -220,6 +220,10 @@ def resolve_user_role(uid: str, db: firestore.Client | None = None) -> str:
             return "lawyer"
         user_doc = db.collection("users").document(uid).get()
         if user_doc.exists:
+            data = user_doc.to_dict() or {}
+            role = data.get("role") or data.get("accountType")
+            if role == "admin":
+                return "admin"
             return "user"
     except Exception:
         return "user"
