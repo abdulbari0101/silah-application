@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Iterable
 
+# pyrefly: ignore [missing-import]
 from firebase_admin import auth, firestore, messaging
 
 from ..firebase import firestore_client, init_firebase, messaging_client
