@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+# pyrefly: ignore [missing-import]
 from fastapi import Depends, Header, HTTPException, status
 
+# pyrefly: ignore [missing-import]
 from firebase_admin import auth
 
 from .firebase import init_firebase
