@@ -23,6 +23,7 @@ import 'package:silah_app/core/presentation/ui/widget/state_widgets/error_widget
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/progress_state_widget.dart';
 import 'package:silah_app/features/auth/domain/repositories/auth_repository.dart';
 import 'package:silah_app/core/domain/enums/app_theme_mode.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:silah_app/features/profiles/domain/entities/profile_entity.dart';
 import 'package:silah_app/features/profiles/presentation/cubits/profile/profile_cubit.dart';
 
@@ -210,6 +211,15 @@ class Body extends StatelessWidget {
                       ),
                     ),
                   ],
+                  UIConstants.xbigHeight,
+                  Center(
+                    child: Text(
+                      'v${locator<PackageInfo>().version}',
+                      style: context.textTheme.bodySmall?.copyWith(
+                        color: context.colors.onSurfaceVariant,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
