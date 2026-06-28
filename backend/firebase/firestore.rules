@@ -147,6 +147,11 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
+    match /countries/{countryId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
     match /work_destinations/{workDestinationId} {
       allow read: if true;
       allow write: if isAdmin();
