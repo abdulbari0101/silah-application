@@ -26,7 +26,8 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
 
       if (state == SessionTimeoutState.userInactivityTimeout ||
           state == SessionTimeoutState.appFocusTimeout) {
-        add(const InteractionTimedOutEvent());
+        // Inactivity timeout navigation is disabled as requested by the user.
+        // add(const InteractionTimedOutEvent());
       }
     });
 

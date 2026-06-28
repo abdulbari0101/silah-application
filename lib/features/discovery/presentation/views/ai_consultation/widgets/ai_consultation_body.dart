@@ -267,6 +267,52 @@ class _AiConsultationBodyState extends State<AiConsultationBody> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        if (recommendation.reason != null && recommendation.reason!.trim().isNotEmpty) ...[
+          Container(
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: context.colors.primaryContainer.withAlphaOpacity(0.12),
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(
+                color: context.colors.primary.withAlphaOpacity(0.15),
+              ),
+            ),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.auto_awesome,
+                  color: context.colors.primary,
+                  size: 20,
+                ),
+                UIConstants.mediumWidth,
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        Strings.explanation.tr(),
+                        style: context.textTheme.titleSmall?.copyWith(
+                          color: context.colors.primary,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      UIConstants.xsmallHeight,
+                      Text(
+                        recommendation.reason!.trim(),
+                        style: context.textTheme.bodyMedium?.copyWith(
+                          color: context.colors.onSurface,
+                          height: 1.4,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+          UIConstants.bigHeight,
+        ],
         Text(
           Strings.specializations.tr(),
           style: context.textTheme.titleMedium?.copyWith(

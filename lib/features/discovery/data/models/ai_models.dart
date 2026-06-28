@@ -37,12 +37,14 @@ class AiRecommendResponseModel extends BaseRespWrapper
   final LegalSpecializationModel? specialization;
   final String? specializationId;
   final List<LawyerProfileEntity>? lawyers;
+  final String? reason;
 
   const AiRecommendResponseModel({
     required super.result,
     this.specialization,
     this.specializationId,
     this.lawyers,
+    this.reason,
   });
 
   AiRecommendationEntity toEntity() {
@@ -54,6 +56,7 @@ class AiRecommendResponseModel extends BaseRespWrapper
     return AiRecommendationEntity(
       specialization: specializationEntity,
       lawyers: lawyers ?? const <LawyerProfileEntity>[],
+      reason: reason,
     );
   }
 }

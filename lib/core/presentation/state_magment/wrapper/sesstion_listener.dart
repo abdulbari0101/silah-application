@@ -40,9 +40,9 @@ class SessionBlocListener extends StatelessWidget {
 
         switch (state) {
           case SessionIdleTimedOut():
-            if (goRouteContext.isTimeoutExempt()) return;
-
-            goToLogin(ctx: goRouteContext, isNewUser: ctx.customer == null);
+            // Inactivity timeout navigation is disabled as requested by the user.
+            // if (goRouteContext.isTimeoutExempt()) return;
+            // goToLogin(ctx: goRouteContext, isNewUser: ctx.customer == null);
             break;
 
           case SessionTokenExpired():

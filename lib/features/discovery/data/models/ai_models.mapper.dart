@@ -357,6 +357,9 @@ class AiRecommendResponseModelMapper
       v.lawyers;
   static const Field<AiRecommendResponseModel, List<LawyerProfileEntity>>
   _f$lawyers = Field('lawyers', _$lawyers, opt: true);
+  static String? _$reason(AiRecommendResponseModel v) => v.reason;
+  static const Field<AiRecommendResponseModel, String> _f$reason =
+      Field('reason', _$reason, opt: true);
 
   @override
   final MappableFields<AiRecommendResponseModel> fields = const {
@@ -364,6 +367,7 @@ class AiRecommendResponseModelMapper
     #specialization: _f$specialization,
     #specializationId: _f$specializationId,
     #lawyers: _f$lawyers,
+    #reason: _f$reason,
   };
   @override
   final bool ignoreNull = true;
@@ -374,6 +378,7 @@ class AiRecommendResponseModelMapper
       specialization: data.dec(_f$specialization),
       specializationId: data.dec(_f$specializationId),
       lawyers: data.dec(_f$lawyers),
+      reason: data.dec(_f$reason),
     );
   }
 
@@ -467,6 +472,7 @@ abstract class AiRecommendResponseModelCopyWith<
     LegalSpecializationModel? specialization,
     String? specializationId,
     List<LawyerProfileEntity>? lawyers,
+    String? reason,
   });
   AiRecommendResponseModelCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
     Then<$Out2, $R2> t,
@@ -512,12 +518,14 @@ class _AiRecommendResponseModelCopyWithImpl<$R, $Out>
     Object? specialization = $none,
     Object? specializationId = $none,
     Object? lawyers = $none,
+    Object? reason = $none,
   }) => $apply(
     FieldCopyWithData({
       if (result != $none) #result: result,
       if (specialization != $none) #specialization: specialization,
       if (specializationId != $none) #specializationId: specializationId,
       if (lawyers != $none) #lawyers: lawyers,
+      if (reason != $none) #reason: reason,
     }),
   );
   @override
@@ -526,6 +534,7 @@ class _AiRecommendResponseModelCopyWithImpl<$R, $Out>
     specialization: data.get(#specialization, or: $value.specialization),
     specializationId: data.get(#specializationId, or: $value.specializationId),
     lawyers: data.get(#lawyers, or: $value.lawyers),
+    reason: data.get(#reason, or: $value.reason),
   );
 
   @override

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+# pyrefly: ignore [missing-import]
 from fastapi import APIRouter, Depends
 
 from ..auth import verify_id_token
@@ -65,6 +66,7 @@ def recommend_lawyers(
         specialization=resolved,
         specializationId=specialization_id,
         lawyers=lawyers,
+        reason=classification.reason,
     )
     return success_response(response.model_dump(exclude_none=True))
 

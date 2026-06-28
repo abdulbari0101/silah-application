@@ -34,11 +34,15 @@ class AiRecommendationEntityMapper
       v.lawyers;
   static const Field<AiRecommendationEntity, List<LawyerProfileEntity>>
   _f$lawyers = Field('lawyers', _$lawyers, opt: true);
+  static String? _$reason(AiRecommendationEntity v) => v.reason;
+  static const Field<AiRecommendationEntity, String> _f$reason =
+      Field('reason', _$reason, opt: true);
 
   @override
   final MappableFields<AiRecommendationEntity> fields = const {
     #specialization: _f$specialization,
     #lawyers: _f$lawyers,
+    #reason: _f$reason,
   };
   @override
   final bool ignoreNull = true;
@@ -47,6 +51,7 @@ class AiRecommendationEntityMapper
     return AiRecommendationEntity(
       specialization: data.dec(_f$specialization),
       lawyers: data.dec(_f$lawyers),
+      reason: data.dec(_f$reason),
     );
   }
 
@@ -135,6 +140,7 @@ abstract class AiRecommendationEntityCopyWith<
   $R call({
     LegalSpecializationEntity? specialization,
     List<LawyerProfileEntity>? lawyers,
+    String? reason,
   });
   AiRecommendationEntityCopyWith<$R2, $In, $Out2> $chain<$R2, $Out2>(
     Then<$Out2, $R2> t,
@@ -172,16 +178,22 @@ class _AiRecommendationEntityCopyWithImpl<$R, $Out>
         )
       : null;
   @override
-  $R call({Object? specialization = $none, Object? lawyers = $none}) => $apply(
+  $R call({
+    Object? specialization = $none,
+    Object? lawyers = $none,
+    Object? reason = $none,
+  }) => $apply(
     FieldCopyWithData({
       if (specialization != $none) #specialization: specialization,
       if (lawyers != $none) #lawyers: lawyers,
+      if (reason != $none) #reason: reason,
     }),
   );
   @override
   AiRecommendationEntity $make(CopyWithData data) => AiRecommendationEntity(
     specialization: data.get(#specialization, or: $value.specialization),
     lawyers: data.get(#lawyers, or: $value.lawyers),
+    reason: data.get(#reason, or: $value.reason),
   );
 
   @override

@@ -56,6 +56,7 @@ class AIRecommendResponse(BaseModel):
     specialization: Optional[LegalSpecializationPayload] = None
     specializationId: Optional[str] = None
     lawyers: list[LawyerProfilePayload] = Field(default_factory=list)
+    reason: Optional[str] = None
 
 
 class AIClassifyResponse(BaseModel):
