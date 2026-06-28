@@ -31,7 +31,8 @@ class OpenAIClassifier:
             "You are a legal specialization classifier. "
             "Return a JSON object with keys: specialization, confidence, reason. "
             "specialization must be one of the provided list. "
-            "confidence must be between 0 and 1."
+            "confidence must be between 0 and 1. "
+            "Write the reason field in the same language as the user's input case description (e.g. if the input is in Arabic, the reason must be in Arabic)."
         )
         user_prompt = (
             "Case description (Arabic):\n"
