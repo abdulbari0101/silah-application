@@ -9,9 +9,11 @@ import 'package:silah_app/core/config/theme/extentions/theme_context_extension.d
 import 'package:silah_app/core/infrastructure/errors/error_utils.dart';
 import 'package:silah_app/core/injection/injection_container.dart';
 import 'package:silah_app/core/presentation/state_magment/bloc_utils/bloc_utils.dart';
+import 'package:silah_app/core/presentation/state_magment/blocs/app_setting/app_setting_bloc.dart';
 import 'package:silah_app/core/presentation/state_magment/blocs/app_setting/extensions/app_setting_context_extension.dart';
 import 'package:silah_app/core/presentation/state_magment/blocs/app_state/app_state_bloc.dart';
 import 'package:silah_app/core/presentation/state_magment/blocs/app_state/state_data/app_auth_status.dart';
+import 'package:silah_app/core/presentation/ui/overlays/dialogs/dialog_service.dart';
 import 'package:silah_app/core/presentation/ui/overlays/sheets/image_picker_sheet.dart';
 import 'package:silah_app/core/presentation/ui/overlays/toasts.dart';
 import 'package:silah_app/core/presentation/ui/widget/cards/custom_card.dart';
@@ -20,6 +22,7 @@ import 'package:silah_app/core/presentation/ui/widget/image/app_remote_avatar.da
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/error_widget.dart';
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/progress_state_widget.dart';
 import 'package:silah_app/features/auth/domain/repositories/auth_repository.dart';
+import 'package:silah_app/core/domain/enums/app_theme_mode.dart';
 import 'package:silah_app/features/profiles/domain/entities/profile_entity.dart';
 import 'package:silah_app/features/profiles/presentation/cubits/profile/profile_cubit.dart';
 
@@ -60,6 +63,11 @@ class Body extends StatelessWidget {
     required bool isSaving,
     String? errorMessage,
   }) {
+    final activeThemeMode = context
+        .watch<AppSettingBloc>()
+        .state
+        .data
+        .appAppThemeMode;
     final name = profile.name?.trim().isNotEmpty == true
         ? profile.name!.trim()
         : Strings.user.tr();
@@ -169,6 +177,8 @@ class Body extends StatelessWidget {
                                 context.pushNamed(AppRoutes.adminTasks.name),
                           ),
                         ],
+                        _buildDivider(),
+                        _ThemeModeTile(currentMode: activeThemeMode),
                         _buildDivider(),
                         _buildTile(
                           context,
@@ -289,7 +299,7 @@ class Body extends StatelessWidget {
     );
   }
 
-  Widget _buildTile(
+  static Widget _buildTile(
     BuildContext context, {
     required String title,
     required IconData icon,
@@ -297,6 +307,7 @@ class Body extends StatelessWidget {
     Color? titleColor,
     Color? iconColor,
     bool showChevron = true,
+    Widget? trailing,
   }) {
     return ListTile(
       onTap: onTap,
@@ -318,12 +329,14 @@ class Body extends StatelessWidget {
           fontWeight: FontWeight.w600,
         ),
       ),
-      trailing: showChevron
-          ? Icon(
-              context.isRTL ? Icons.chevron_left : Icons.chevron_right,
-              color: context.colors.onSurfaceVariant,
-            )
-          : null,
+      trailing:
+          trailing ??
+          (showChevron
+              ? Icon(
+                  context.isRTL ? Icons.chevron_left : Icons.chevron_right,
+                  color: context.colors.onSurfaceVariant,
+                )
+              : null),
     );
   }
 
@@ -391,5 +404,87 @@ class Body extends StatelessWidget {
     if (!context.mounted || !didSubmitReport) return;
 
     Toasts.success(context, Strings.sent_successfully.tr());
+  }
+}
+
+class _ThemeModeTile extends StatelessWidget {
+  final AppThemeMode currentMode;
+
+  const _ThemeModeTile({required this.currentMode});
+
+  static const _modes = [
+    AppThemeMode.system,
+    AppThemeMode.light,
+    AppThemeMode.dark,
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+
+    IconData iconFor(AppThemeMode mode) => switch (mode) {
+      AppThemeMode.system => Icons.brightness_auto_rounded,
+      AppThemeMode.light => Icons.light_mode_rounded,
+      AppThemeMode.dark => Icons.dark_mode_rounded,
+    };
+
+    String labelFor(AppThemeMode mode) => switch (mode) {
+      AppThemeMode.system => Strings.system_mode.tr(),
+      AppThemeMode.light => Strings.light_mode.tr(),
+      AppThemeMode.dark => Strings.dark_mode.tr(),
+    };
+
+    return Body._buildTile(
+      context,
+      icon: iconFor(currentMode),
+      title: Strings.theme.tr(),
+      showChevron: false,
+      trailing: Container(
+        decoration: BoxDecoration(
+          color: cs.surfaceContainerHighest.withValues(alpha: 0.72),
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(color: cs.outlineVariant.withValues(alpha: 0.45)),
+        ),
+        padding: const EdgeInsets.all(3),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: _modes.map((mode) {
+            final isSelected = currentMode == mode;
+            return Tooltip(
+              message: labelFor(mode),
+              child: GestureDetector(
+                onTap: () {
+                  if (!isSelected) {
+                    context.read<AppSettingBloc>().add(
+                      ChangeThemeEvent(
+                        appAppThemeMode: mode,
+                        fromWhere: 'AccountSettings',
+                      ),
+                    );
+                  }
+                },
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  curve: Curves.easeInOut,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 9,
+                    vertical: 6,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isSelected ? cs.primary : Colors.transparent,
+                    borderRadius: BorderRadius.circular(11),
+                  ),
+                  child: Icon(
+                    iconFor(mode),
+                    size: 16,
+                    color: isSelected ? cs.onPrimary : cs.onSurfaceVariant,
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      ),
+    );
   }
 }

@@ -106,7 +106,7 @@ class _LoginFormState extends State<LoginForm> {
                   ),
 
                   SizedBox(height: AppDimension(context).height * 0.02),
-                  ForgetPasswordField(),
+                  // ForgetPasswordField(),
                   SizedBox(height: AppDimension(context).height * 0.02),
                 ],
               ),

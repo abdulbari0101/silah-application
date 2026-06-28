@@ -9,20 +9,42 @@ import 'package:silah_app/core/presentation/ui/widget/state_widgets/empty_widget
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/error_widget.dart';
 import 'package:silah_app/core/presentation/ui/widget/headers/specialization_header.dart';
 import 'package:silah_app/core/presentation/ui/widget/state_widgets/progress_state_widget.dart';
+import 'package:silah_app/core/presentation/ui/widget/text_fields/f_search_text_field.dart';
 import 'package:silah_app/features/consultations/presentation/views/create_request/models/consultation_request_args.dart';
 import 'package:silah_app/features/discovery/domain/entities/legal_specialization_entity.dart';
 import 'package:silah_app/features/discovery/presentation/blocs/search/discovery_results_cubit.dart';
 import 'package:silah_app/features/discovery/presentation/views/search/widgets/lawyer_result_card.dart';
 import 'package:silah_app/features/profiles/domain/entities/lawyer_profile_entity.dart';
 
-class SearchResultsBody extends StatelessWidget {
+class SearchResultsBody extends StatefulWidget {
   const SearchResultsBody({super.key, required this.specialization});
 
   final LegalSpecializationEntity specialization;
 
   @override
+  State<SearchResultsBody> createState() => _SearchResultsBodyState();
+}
+
+class _SearchResultsBodyState extends State<SearchResultsBody> {
+  late final TextEditingController _searchController;
+  String _searchQuery = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _searchController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final title = specialization.name ?? specialization.code ?? '';
+    final title =
+        widget.specialization.name ?? widget.specialization.code ?? '';
     return SafeArea(
       child: BlocBuilder<DiscoveryResultsCubit, DiscoveryResultsState>(
         builder: (context, state) {
@@ -34,41 +56,63 @@ class SearchResultsBody extends StatelessWidget {
                 onRetry: () => context.read<DiscoveryResultsCubit>().load(),
               ),
             ),
-            ready: (_, lawyers) => SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(
-                horizontal: UIConstants.screenHorizantalPadding,
-                vertical: UIConstants.bigPadding,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SpecializationHeader(title: title),
-                  UIConstants.bigHeight,
-                  if (lawyers.isEmpty)
-                    EmptyWidget(title: Strings.no_data_to_display.tr())
-                  else
-                    ListView.separated(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: lawyers.length,
-                      separatorBuilder: (_, __) => UIConstants.mediumHeight,
-                      itemBuilder: (context, index) {
-                        final lawyer = lawyers[index];
-                        return LawyerResultCard(
-                          lawyer: lawyer,
-                          specializationLabel: title,
-                          specializationId:
-                              specialization.id ??
-                              specialization.code ??
-                              specialization.name,
-                          onRequestConsultation: () =>
-                              _openRequest(context, lawyer),
-                        );
+            ready: (_, lawyers) {
+              final filteredLawyers = lawyers.where((lawyer) {
+                final name = (lawyer.fullName ?? '').toLowerCase();
+                return name.contains(_searchQuery.toLowerCase());
+              }).toList();
+
+              return SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: UIConstants.screenHorizantalPadding,
+                  vertical: UIConstants.bigPadding,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    SpecializationHeader(title: title),
+                    UIConstants.bigHeight,
+                    FSearchTextField(
+                      controller: _searchController,
+                      hintText: Strings.search.tr(),
+                      onChanged: (val) {
+                        setState(() {
+                          _searchQuery = val;
+                        });
+                      },
+                      onCleared: () {
+                        setState(() {
+                          _searchQuery = '';
+                        });
                       },
                     ),
-                ],
-              ),
-            ),
+                    UIConstants.bigHeight,
+                    if (filteredLawyers.isEmpty)
+                      EmptyWidget(title: Strings.no_data_to_display.tr())
+                    else
+                      ListView.separated(
+                        shrinkWrap: true,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: filteredLawyers.length,
+                        separatorBuilder: (_, __) => UIConstants.mediumHeight,
+                        itemBuilder: (context, index) {
+                          final lawyer = filteredLawyers[index];
+                          return LawyerResultCard(
+                            lawyer: lawyer,
+                            specializationLabel: title,
+                            specializationId:
+                                widget.specialization.id ??
+                                widget.specialization.code ??
+                                widget.specialization.name,
+                            onRequestConsultation: () =>
+                                _openRequest(context, lawyer),
+                          );
+                        },
+                      ),
+                  ],
+                ),
+              );
+            },
           );
         },
       ),
@@ -81,9 +125,13 @@ class SearchResultsBody extends StatelessWidget {
       extra: ConsultationRequestArgs(
         lawyer: lawyer,
         specializationId:
-            specialization.id ?? specialization.code ?? specialization.name,
+            widget.specialization.id ??
+            widget.specialization.code ??
+            widget.specialization.name,
         specializationLabel:
-            specialization.name ?? specialization.code ?? specialization.id,
+            widget.specialization.name ??
+            widget.specialization.code ??
+            widget.specialization.id,
       ),
     );
   }

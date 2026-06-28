@@ -10,7 +10,6 @@ import 'package:silah_app/core/domain/repositories/app_setting_repo.dart';
 import 'package:silah_app/core/infrastructure/errors/error_utils.dart';
 import 'package:silah_app/core/infrastructure/errors/failures.dart';
 import 'package:silah_app/core/presentation/state_magment/bloc_utils/bloc_utils.dart';
-import 'package:silah_app/core/presentation/ui/theme/brightness_utils.dart';
 
 part 'app_setting_bloc.freezed.dart';
 part 'app_setting_event.dart';
@@ -71,10 +70,6 @@ class AppSettingBloc extends Bloc<AppSettingEvent, AppSettingState> {
       appAppThemeMode: event.appAppThemeMode ?? current.appAppThemeMode,
     );
 
-    emit(AppSettingState.loading(data: state.data));
-
-    await Future.delayed(const Duration(milliseconds: 400));
-
     final result = await settingRep.updateSetting(updated);
 
     result.fold((failure) => _emitFailure(emit, failure), (_) {
@@ -130,20 +125,17 @@ class AppSettingBloc extends Bloc<AppSettingEvent, AppSettingState> {
 
   void _initSystemThemeListener() {
     PlatformDispatcher.instance.onPlatformBrightnessChanged = () {
-      final isDark = BrightnessUtils.isSystemDark();
-      const appAppThemeMode = AppThemeMode.system;
       final current = state.data;
 
-      if (current.appAppThemeMode != AppThemeMode.system ||
-          current.isDarkTheme != isDark) {
-        if (state is AppSettingLoaded) {
-          add(
-            const ChangeThemeEvent(
-              appAppThemeMode: appAppThemeMode,
-              fromWhere: 'systemThemeChanged',
-            ),
-          );
-        }
+      // Only react if we are currently in system mode.
+      // If the user explicitly chose Light or Dark, we should stay there.
+      if (current.appAppThemeMode == AppThemeMode.system) {
+        add(
+          const ChangeThemeEvent(
+            appAppThemeMode: AppThemeMode.system,
+            fromWhere: 'systemThemeChanged',
+          ),
+        );
       }
     };
   }
