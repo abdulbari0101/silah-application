@@ -6,17 +6,24 @@ import 'package:silah_app/core/injection/injection_container.dart';
 import 'package:silah_app/core/presentation/ui/widget/wrappers/platform_screen_wrapper.dart';
 import 'package:silah_app/features/consultations/presentation/cubits/requests/consultation_requests_cubit.dart';
 import 'package:silah_app/features/consultations/presentation/views/requests/widgets/requests_body.dart';
+import 'package:silah_app/features/training/presentation/cubits/application/trainee_applications_cubit.dart';
 
 class RequestsScreen extends StatelessWidget {
   const RequestsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => ConsultationRequestsCubit(repository: locator())..load(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => ConsultationRequestsCubit(repository: locator())..load(),
+        ),
+        BlocProvider(
+          create: (_) => TraineeApplicationsCubit(repository: locator())..load(),
+        ),
+      ],
       child: PlatformScreenWrapper(
         title: Strings.orders.tr(),
-
         body: const RequestsBody(),
       ),
     );

@@ -578,6 +578,7 @@ class Strings {
       "provide_legal_services_and_training";
   static const String trainees = "trainees";
   static const String training_requests = "training_requests";
+  static const String consultation_requests = "consultation_requests";
   static const String trainee_toggle_title = "trainee_toggle_title";
   static const String trainee_toggle_subtitle = "trainee_toggle_subtitle";
   static const String trainee_prompt_title = "trainee_prompt_title";

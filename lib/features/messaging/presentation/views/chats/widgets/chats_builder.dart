@@ -20,8 +20,12 @@ import 'package:silah_app/features/messaging/domain/entities/chat_thread_entity.
 import 'package:silah_app/features/messaging/presentation/cubits/chat_threads/chat_threads_cubit.dart';
 import 'package:silah_app/features/messaging/presentation/views/conversation/models/chat_conversation_args.dart';
 
+enum ChatCategory { consultation, training }
+
 class ChatThreadsBuilder extends StatelessWidget {
-  const ChatThreadsBuilder({super.key});
+  const ChatThreadsBuilder({super.key, required this.category});
+
+  final ChatCategory category;
 
   @override
   Widget build(BuildContext context) {
@@ -45,15 +49,37 @@ class ChatThreadsBuilder extends StatelessWidget {
               onRetry: () => context.read<ChatThreadsCubit>().load(),
             ),
           ),
-          loaded: (threads) => ListView.separated(
-            physics: const AlwaysScrollableScrollPhysics(),
-            itemCount: threads.length,
-            separatorBuilder: (_, __) => UIConstants.smallHeight,
-            itemBuilder: (context, index) {
-              final thread = threads[index];
-              return _ChatThreadTile(thread: thread);
-            },
-          ),
+          loaded: (threads) {
+            final filteredThreads = threads.where((thread) {
+              if (category == ChatCategory.consultation) {
+                return thread.consultationId != null;
+              } else {
+                return thread.trainingApplicationId != null;
+              }
+            }).toList();
+
+            if (filteredThreads.isEmpty) {
+              return _ScrollableState(
+                child: EmptyWidget(
+                  retryWidget: PrimaryButtonWithProgress(
+                    text: Strings.try_again.tr(),
+                    onTap: () => context.read<ChatThreadsCubit>().load(),
+                    isLoading: false,
+                  ),
+                ),
+              );
+            }
+
+            return ListView.separated(
+              physics: const AlwaysScrollableScrollPhysics(),
+              itemCount: filteredThreads.length,
+              separatorBuilder: (_, __) => UIConstants.smallHeight,
+              itemBuilder: (context, index) {
+                final thread = filteredThreads[index];
+                return _ChatThreadTile(thread: thread);
+              },
+            );
+          },
         );
       },
     );

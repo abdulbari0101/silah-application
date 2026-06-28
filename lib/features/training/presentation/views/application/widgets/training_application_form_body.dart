@@ -130,7 +130,7 @@ class _TrainingApplicationFormBodyState
                     FTextField(
                       controller: _universityController,
                       labelText: Strings.label_university.tr(),
-                      hintText: 'مثال جامعة الملك عبدالعزيز',
+                      hintText: 'مثال جامعة عدن',
                       validator: (value) => _requiredValidator(value),
                     ),
                     UIConstants.mediumHeight,

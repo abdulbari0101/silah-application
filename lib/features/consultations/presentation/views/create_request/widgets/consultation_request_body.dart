@@ -113,7 +113,7 @@ class _ConsultationRequestBodyState extends State<ConsultationRequestBody> {
               maxLines: 6,
               keyboardType: TextInputType.multiline,
               textInputAction: TextInputAction.newline,
-              hintText: Strings.describe_case_choose_best_lawyer.tr(),
+              hintText: 'اكتب مشكلتك باختصار ',
               validator: (value) {
                 final text = value?.trim() ?? '';
                 return text.isEmpty ? Strings.error_fill_form.tr() : null;
