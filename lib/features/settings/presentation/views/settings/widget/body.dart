@@ -97,7 +97,10 @@ class Body extends StatelessWidget {
                 name: name,
                 email: email,
                 avatarUrl: profile.avatarUrl,
-                onAvatarTap: isSaving ? null : () => _showAvatarPicker(context),
+                onAvatarTap: () => Toasts.info(
+                  context,
+                  'الميزة تحت التطوير',
+                ), //isSaving ? null : () => _showAvatarPicker(context),
               ),
             ),
             Padding(
