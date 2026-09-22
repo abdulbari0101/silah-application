@@ -55,13 +55,6 @@ The application also provides **training opportunities for law graduates**, whil
 | ![User Registration](https://github.com/user-attachments/assets/49d1c82f-ffc2-4695-98f9-6e1aabd7b9ef) | ![Client Home](https://github.com/user-attachments/assets/f4274d71-58a2-4cb6-bf43-ab8f9a043e08) | ![AI Recommendation](https://github.com/user-attachments/assets/d5271507-e20c-490f-97f9-bbe3eae0e668) |
 | **User Registration** | **Client Home** | **AI Lawyer Recommendation** |
 
-### Lawyer Search & Consultation
-
-| Lawyer Profile | Consultation Request | My Requests |
-|:---:|:---:|:---:|
-| ![Lawyer Profile](images/lawyer-profile.png) | ![Consultation Request](images/consultation-request.png) | ![Client Requests](images/client-requests.png) |
-| **Lawyer Profile** | **Consultation Request** | **My Requests** |
-
 ### Consultation Details & Chat
 
 | Request Details | Chat |
