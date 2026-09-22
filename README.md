@@ -57,9 +57,10 @@ The application also provides **training opportunities for law graduates**, whil
 
 ### Consultation Details & Chat
 
-| Request Details | Chat |
+| Request Details | Notifications & Chat |
 |:---:|:---:|
-| ![Request Details](https://github.com/user-attachments/assets/4990ee67-04a4-4489-a63d-5533cceb9689) | ![Chat](https://github.com/user-attachments/assets/2c23b644-1f3a-4953-8ef6-a73f93dbfdb0) |
+| ![Request Details](https://github.com/user-attachments/assets/4990ee67-04a4-4489-a63d-5533cceb9689) | ![Chat](<img width="873" height="629" alt="image" src="https://github.com/user-attachments/assets/cf5a7b84-bcdb-484a-b46f-dc08a5501bd7" />
+) |
 | **Request Details** | **Real-Time Chat** |
 
 ---
